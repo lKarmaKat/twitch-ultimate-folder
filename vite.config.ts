@@ -15,4 +15,16 @@ export default defineConfig({
       ]
     })
   ],
+  build: {
+    rollupOptions: {
+      input: {
+        background: 'src/service_worker/background.ts'
+      },
+      output: {
+        entryFileNames: (chunk) => {
+          return chunk.name === 'background' ? 'background.js' : '[name].[hash].js'
+        }
+      }
+    }
+  },
 })
