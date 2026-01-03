@@ -27,6 +27,8 @@ export let STARTUP_CONF = {
             }
           }
         };
+
+export interface CONFIG { [key: string]: string; }
 export let currentConfig = 'currentConfig';
 // export let UPDATE_STREAM_INFO = 'UPDATE_STREAM_INFO';
 // export let UPDATE_STREAM_INFO = 'UPDATE_STREAM_INFO';

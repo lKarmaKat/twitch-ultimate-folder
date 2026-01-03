@@ -1,0 +1,147 @@
+<script>
+    import { writable } from 'svelte/store';
+	import { configChangeEvent } from "./event.js";
+
+    export let channelConfig;
+    let listeId;
+    let config;
+
+    let colorsList = [
+    { colorName: 'grey', colorCode: "#808080" },
+    { colorName: 'black', colorCode: "#000000" },
+    { colorName: 'purple', colorCode: "#800080" },
+    { colorName: 'lightgreen', colorCode: "#90ee90" },
+    { colorName: 'darkgrey', colorCode: "#a9a9a9" }
+];
+
+    configChangeEvent.subscribe((value) => {
+        listeId = value;
+        config = $channelConfig[listeId];
+    })
+
+    function updateListName() {
+        channelConfig.update(configEl => {
+            configEl[listeId].name = config.name;   
+            return configEl;
+        });
+    }
+
+    function capitalizeFirstLetter(val) {
+        return String(val).charAt(0).toUpperCase() + String(val).slice(1);
+    }
+
+    function updateConfig() {
+        console.log($channelConfig[listeId])
+        channelConfig.update(configEl => {
+            configEl[listeId].behavior = config.behavior;
+            configEl[listeId].style = config.style;
+            return configEl;
+        });
+
+    }
+</script>
+
+<div class="pannel-container">
+    {#if config}
+    <div class="pannel-header">
+        <!-- svelte-ignore missing-declaration -->
+        <input type="text" 
+        name="liste-name" 
+        id="liste-name" 
+        bind:value={config.name} placeholder="Enter list name"
+        on:input={updateListName} />
+    </div>
+    {#if config.behavior}
+    <div class="pannel-body">
+        <div class="bloc">
+            <p>Behavior</p>
+            <div class="row">
+                <p><strong>Permettre à une liste d'afficher les chaines hors lignes</strong></p>
+                <p><strong>Permettre à une liste d'afficher les chaines hors lignes</strong></p>
+                <p><strong>Permettre à une liste d'afficher les chaines hors lignes</strong></p>
+                <p><strong>Permettre à une liste d'afficher les chaines hors lignes</strong></p>
+                <input type="checkbox" id="extendedOnStartup" bind:checked={config.behavior.extendedOnStartup} on:change={updateConfig} ><label for="extendedOnStartup">extendedOnStartup</label>
+                <input type="checkbox" id="extendOnHover" bind:checked={config.behavior.extendOnHover} on:change={updateConfig}><label for="extendOnHover">extendOnHover</label>
+            </div>
+            <div class="row">
+                <input type="checkbox" id="extendOnClick" bind:checked={config.behavior.extendOnClick} on:change={updateConfig}><label for="extendOnClick">extendOnClick</label>
+                <input type="checkbox" id="isPinnable" bind:checked={config.behavior.isPinnable} on:change={updateConfig}><label for="isPinnable">isPinnable</label>
+            </div>
+        </div>
+        <div class="bloc">
+            <p>Style</p>
+            <div class="row">
+                <p>Header color</p>
+                <select name="header-color" id="header-color" bind:value={config.style.headerColor} on:change={updateConfig}>
+                    {#each colorsList as color}
+                        <option value={color.colorCode}>
+                           {capitalizeFirstLetter(color.colorName)}
+                        </option>
+                    {/each}
+                </select>
+                <input type="color" name="header-color" id="header-color"
+                bind:value={config.style.headerColor} on:change={updateConfig}><label for="header-color"></label>
+            </div>
+            <div class="row">
+                <p>Content color</p>
+                <select name="header-color" id="header-color" bind:value={config.style.contentColor} on:change={updateConfig}>
+                    {#each colorsList as color}
+                        <option value={color.colorCode}>
+                            {capitalizeFirstLetter(color.colorName)}
+                        </option>
+                    {/each}
+                </select>
+                <input type="color" name="header-color" id="content-color"
+                bind:value={config.style.contentColor} on:change={updateConfig}><label for="content-color"></label>
+
+            </div>
+        </div>
+    </div>
+    {/if}
+
+
+    {/if}
+</div>
+
+
+<style>
+    .pannel-container {
+        box-sizing: border-box;
+        width: 100%;
+        border: 1px solid grey;
+        padding: 0.3em 0.8em;
+    }
+    .pannel-header {
+        display: flex;
+        flex-direction: row;
+        padding: 0.3em .8em;
+        background-color: rgb(116, 71, 26);
+    }
+    .pannel-header input {
+        width: 90%;
+    }
+    .bloc {
+        margin: 0.5em 1.5em;
+        padding: 0.5em 1em;
+        border: 1px solid grey;
+        border-radius: .5em .5em .5em .5em;
+    }
+    .pannel-body {
+        display: flex;
+        flex-direction: column;
+    }
+    p {
+        font-size: 1em;
+        /* To keep the alignment when the p becomes an input */
+        padding-bottom: 1px; 
+    }
+    input[type=text] {
+        font-size: 1em;
+        background: transparent;
+        border: none;
+        border-bottom: 1px solid #000000;
+    }
+    input[type="text"]:focus {
+        outline: none;
+    }
+</style>
