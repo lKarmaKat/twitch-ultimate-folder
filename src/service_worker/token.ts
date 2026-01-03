@@ -49,9 +49,9 @@ export class TokenManager {
     }
 
 
-    getToken() {
+    getToken(): Promise<string> {
         if (this.isTokenValid()) {
-            return new Promise(resolve => resolve(this.token));
+            return new Promise(resolve => resolve(this.token!));
         }
         if (this.fetchingPromise) return this.fetchingPromise;
         this.fetchingPromise =  new Promise((resolve) => {
