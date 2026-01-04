@@ -1,6 +1,6 @@
 const iframe1 = document.createElement('iframe');
 iframe1.id = "iframe";
-iframe1.src = chrome.runtime.getURL('content_script/config-popup/config-popup.html');
+iframe1.src = chrome.runtime.getURL('src/iframe/config-popup.html');
 iframe1.allowTransparency="true";
 // document.body.appendChild(iframe1);
 
@@ -11,7 +11,7 @@ let shadowParent = maindiv.attachShadow({mode:'closed'})
 
 const link = document.createElement('link');
 link.rel = 'stylesheet';
-link.href = chrome.runtime.getURL('content_script/config-popup/iframe.css');
+link.href = chrome.runtime.getURL('assets/iframe.css');
 
 chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
   if (msg.type === "DISPLAY_POPUP") {
@@ -86,12 +86,13 @@ function injectScript(file) {
 
   const script = document.createElement('script');
   script.src = chrome.runtime.getURL(file);
-  script.type = 'text/javascript';
+  script.id = 'sidebar-inject';
+  script.type = 'module';
   script.onload = () => script.remove(); // optionnel
   (document.head || document.documentElement).appendChild(script);
 }
 
-injectScript('sidebar.js');
+injectScript('sidebar_inject.js');
 
 
 /**

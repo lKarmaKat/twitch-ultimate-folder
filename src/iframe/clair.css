@@ -1,0 +1,82 @@
+
+
+.popup .header {
+    background-color: #ffffff;
+}
+
+h2,
+.popup .header .left {
+    color: rgb(92, 22, 197);
+    font-family: Roobert, Tajawal, Inter, "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+.popup .header .right {
+    color: rgb(14, 14, 16);
+}
+
+.popup {
+    background-color: #f7f7f8;
+}
+
+.list-container {
+    background-color: #efeff1 !important;
+}
+
+
+.allOthers,
+a.card {
+    color: rgb(14, 14, 16) !important;
+}
+a.card .game-name {
+    color: rgb(83, 83, 95) !important;
+}
+
+a.card div.offline {
+    color: rgb(14, 14, 16);
+}
+
+
+/* twitch icon color #9147ff */
+/* twitch icon color a970ff */
+
+/* header bg color #ffffff */
+/* header bg color 18181b */
+
+/* page bg color #f7f7f8 */
+/* page bg color 0e0e10 */
+
+/* channel pannel bg color #efeff1 */
+/* channel pannel bg color 26262c */
+
+/* header text purple color #a27ade  rgb(92, 22, 197)*/
+/* header text purple rgb(191, 148, 255) */
+
+/* header text black rgb(14, 14, 16) */
+/* header text white rgb(239, 239, 241) */
+
+
+/* channel name text color rgb(14, 14, 16) */
+/* channel name text color rgb(239, 239, 241) */
+
+/* channel game text color rgb(83, 83, 95) */
+/* channel game text color rgb(173, 173, 184) */
+
+/* viewer count text color rgb(14, 14, 16) */
+/* viewer count text color rgb(239, 239, 241) */
+
+/* light offline text rgb(14, 14, 16) */
+/* dark offline text rgb(239, 239, 241) */
+
+/* title popup bg color ffffff */
+/* title popup bg color 3b3b44 */
+
+/* claire title popup text color 5d5d5f */
+
+
+
+
+
+
+
+
+

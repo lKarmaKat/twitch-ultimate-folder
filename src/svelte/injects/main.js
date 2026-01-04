@@ -1,21 +1,28 @@
-import ConfigPopup from './ConfigPopup.svelte';
-import TitlePopup from "./TitlePopup.svelte";
+import ConfigPopup from '../ConfigPopup.svelte';
+import TitlePopup from "../TitlePopup.svelte";
+// import DisplayWrapper from "../DisplayWrapper.svelte";
+import { mount } from 'svelte'
 
 
 
-function mountConfigPopup() {
-  let t = document.body
 
-  if (!t) return;
 
-  new ConfigPopup({
-    target: t
-
-  });
+  const app = mount(ConfigPopup, {
+    target: document.body,
+  })
   
-    new TitlePopup({
-      target: document.body
-    })
-}
+  mount(TitlePopup, {
+    target: document.body,
+  })
+  
+export default app
+  // new ConfigPopup({
+  //   target: document.body
 
-mountConfigPopup();
+  // });
+  
+    // new TitlePopup({
+    //   target: document.body
+    // })
+// }
+

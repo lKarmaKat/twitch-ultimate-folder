@@ -276,7 +276,7 @@ function tooltip(node, params) {
 		background: inherit;
 		/* clip-path: polygon(0% 0%, 100% 0%, 50% 100%); */
 		clip-path: polygon(0 0, 0 100%, 100% 50%); -->
-<a class="card" use:maybeTooltip={title} href={ !blockNavigation ? "https://www.twitch.tv/" + channelName : null } on:click={navigate}>
+<a class="card" id="cd" use:maybeTooltip={title} href={ !blockNavigation ? "https://www.twitch.tv/" + channelName : null } on:click={navigate}>
     <!-- <div class="layout-container" style="background-color: {color};"> -->
         <div class="flex-profile-picture">
             <div class="profile-picture">

@@ -1,5 +1,6 @@
 <script>
   import Display from './Display.svelte';
+  // import { ConfigManager } from './configManager';
   import ConfigManager from '../content_script/configManager';
   import PortConnector from '../content_script/portConnector';
   import { writable } from 'svelte/store';
@@ -35,16 +36,16 @@
 
 </script>
 
-<svelte:head>
+<!-- <svelte:head>
   {#if themeName}
-	<link rel="stylesheet" href="sombre.css">
+	<link rel="stylesheet" href="/assets/sombre.css">
 	{:else}
-	<link rel="stylesheet" href="clair.css">
+	<link rel="stylesheet" href="/assets/clair.css">
 	{/if}
-</svelte:head>
+</svelte:head> -->
 
 <div class="tea">
-  {#if $channelsConfig?.listeRacine?.style}
-    <Display listId={"listeRacine"} bind:channelConfig={channelsConfig} bind:channelRef={channelsPickRef} />
+  {#if $channelsPickRef.length}
+    <Display listId={"rootList"} bind:channelConfig={channelsConfig} bind:channelRef={channelsPickRef} />
   {/if}
 </div>

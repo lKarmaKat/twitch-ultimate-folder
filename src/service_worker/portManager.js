@@ -1,0 +1,67 @@
+class PortManager {
+    ports = [];
+    externalPorts = [];
+    constructor(sendCurrentConfigOnConnect, sendStreamInfoOnConnect, sendCurrentTheme) {
+        console.log("##### Port manager constr");
+        chrome.runtime.onConnect.addListener((port) => {
+            this.ports.push(port);
+            console.log("+ new connection", port);
+            port.onMessage.addListener((message, port) => {
+                console.log("+ received :", message, "from ", port);
+                this.sendMessageToTabs({message: "received"});
+            });
+
+            port.onDisconnect.addListener(() => {
+                console.log("+ Port disconnected", port.sender);
+                
+                let indexToRemove = this.ports.indexOf(port);
+                this.ports.splice(indexToRemove, 1);
+                console.log("+ ports are now", this.ports);
+            });
+            if (port.name === 'eventbus') {
+                sendCurrentConfigOnConnect(port);
+                sendStreamInfoOnConnect(port);
+            } else if (port.name === 'theme') {
+                sendCurrentTheme(port);
+            }
+        });
+
+        chrome.runtime.onConnectExternal.addListener((port) => {
+            if (port.name === "eventbus") {
+                this.externalPorts.push(port);
+                console.log("+ new connection external port", port);
+                port.onMessage.addListener((message, port) => {
+                    console.log("+ received :", message, "from ", port);
+                    this.sendMessageToTabs({message: "received"});
+                });
+                
+                port.onDisconnect.addListener(() => {
+                    console.log("+ Port disconnected external port", port.sender);
+                    
+                    let indexToRemove = this.externalPorts.indexOf(port);
+                    this.externalPorts.splice(indexToRemove, 1);
+                    console.log("+ ports are now", this.externalPorts);
+                });
+                sendCurrentConfigOnConnect(port);
+                sendStreamInfoOnConnect(port);
+            }
+        });
+    }
+
+    sendMessageToTabs(type, message, name = "eventbus", ports = this.ports) {
+        for (let port of ports) {
+            if (port.name === name)
+                port.postMessage({
+                    "type": type,
+                    "data": message
+                });
+        }
+    }
+
+    sendMessageToAllTabs(type, message, name = "eventbus") {
+        this.sendMessageToTabs(type, message, name);
+        this.sendMessageToTabs(type, message, name, this.externalPorts);
+    }
+}
+
+export default PortManager;

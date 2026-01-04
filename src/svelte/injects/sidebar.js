@@ -1,5 +1,6 @@
-import DisplayWrapper from "./DisplayWrapper.svelte";
-import TitlePopup from "./TitlePopup.svelte";
+import DisplayWrapper from "../DisplayWrapper.svelte";
+import TitlePopup from "../TitlePopup.svelte";
+import { mount } from 'svelte'
 
 
 function mountSidebar() {
@@ -7,17 +8,23 @@ function mountSidebar() {
   let t = document.querySelector("div[aria-label='Followed Channels']")
 
   if (!t) return;
-
-
-  new DisplayWrapper({
-    target: t
+  mount(DisplayWrapper, {
+    target: t,
   })
 
-  new TitlePopup({
-    target: document.body
-  })
+  mount(TitlePopup, {
+     target: document.body,
+   })
+
+  // new DisplayWrapper({
+  //   target: t
+  // })
+
+  // new TitlePopup({
+  //   target: document.body
+  // })
 }
-
+// export default app
 
 const observer = new MutationObserver((mut, obs) => {
   // let t = document.body

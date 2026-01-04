@@ -2,7 +2,7 @@
   	import DraggableChannel from './DraggableChannel.svelte';
     import { ALL_OTHER_CHANNELS } from '../constantes'
 
-    export let listId = "listeRacine";
+    export let listId = "rootList";
     export let channelConfig;
     export let channelRef;
     let behavior = $channelConfig[listId]?.behavior;
@@ -51,7 +51,6 @@
 	}
 
 	function getNodeIfLive(item) {
-		
 	 	counter = document.querySelectorAll(".channel-overlay.li" + listId ).length;
 		return $channelRef.find(e => {
 			return e.channel_id === item.channel_id && e.isLive
@@ -75,7 +74,7 @@
 				}
 			}
 		}
-		c($channelConfig.listeRacine.items);
+		c($channelConfig.rootList.items);
 		return set;
 	}
 
@@ -111,7 +110,7 @@
 	<!-- svelte-ignore a11y-no-static-element-interactions -->
 	<!-- svelte-ignore a11y-click-events-have-key-events -->
 	<div class="list-container">
-		{#if listId !== 'listeRacine'}
+		{#if listId !== 'rootList'}
 		<div class="list-header" style="background-color: {headerColor};" on:click={toggleAutoCollapse}>
 			<div class="left">
 				<p class="list-title">{$channelConfig[listId]?.name}</p>

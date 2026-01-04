@@ -2,7 +2,7 @@
 	import { dndzone } from 'svelte-dnd-action';
   	import DraggableChannel from './DraggableChannel.svelte'
 	import { parentFinalizeEvent, configChangeEvent } from "./event.js";
-  	import { ALL_OTHER_CHANNELS } from '../../../constantes.js'
+  	import { ALL_OTHER_CHANNELS } from '../constantes.js'
 	
 	export let channelConfig;
 	export let listId;
@@ -137,7 +137,7 @@
 	</div>
 	{#if $channelConfig[listId]?.hasOwnProperty("items")}
 	<div class="list-body" >
-		<section 
+		<section class="dnd-zone-r"
 		use:dndzone={{items:$channelConfig[listId].items, flipDurationMs, centreDraggedOnCursor: false, transformDraggedElement,
 			dropTargetClasses: ['increased-drop-margin']
 		}} 
@@ -235,7 +235,7 @@
 		margin: 0;
 		padding: 0;
 		/* padding: 0.6em 0.3em 0 0.5em; */
-		border: 1px solid rgb(121, 36, 121);;
+		border: 1px solid rgb(121, 36, 121);
 		/* border-radius: 7%; */
 	}
 	.list-container {

@@ -6,7 +6,7 @@
   import Display from './Display.svelte';
   import { writable } from 'svelte/store';
   // import { onMount } from 'svelte';
-  import { ALL_OTHER_CHANNELS } from '../../../constantes.js'
+  import { ALL_OTHER_CHANNELS } from '../constantes.js'
   import { dndzone, TRIGGERS, SHADOW_ITEM_MARKER_PROPERTY_NAME, DRAGGED_ELEMENT_ID } from "svelte-dnd-action";
 
   let configManager = new ConfigManager();
@@ -83,7 +83,7 @@
     allOtherItems = e.detail.items;
   }
   let themeName = writable(true);
-  import PortConnector from '../../portConnector.js';
+  import PortConnector from '../content_script/portConnector.js';
 
   let theme = (data) => {
       themeName = data.data;
@@ -94,9 +94,9 @@
 
 <svelte:head>
   {#if themeName}
-	<link rel="stylesheet" href="sombre.css">
+	<link rel="stylesheet" href="/assets/sombre.css">
 	{:else}
-	<link rel="stylesheet" href="clair.css">
+	<link rel="stylesheet" href="/assets/clair.css">
 	{/if}
 </svelte:head>
 
@@ -131,7 +131,7 @@
           </div>
           {#if $channelsPickRef.length}
           <div class="channels-container">
-            <ConfigList listId={"listeRacine"}
+            <ConfigList listId={"rootList"}
             bind:channelConfig={channelsConfig}
             bind:channelRef={channelsPickRef}
             requestDeleteToParent={promptResetConfig} />
@@ -142,7 +142,7 @@
           </div>
           {#if $channelsPickRef.length}
           <div class="display-container">
-            <Display listId={"listeRacine"} bind:channelConfig={channelsConfig} bind:channelRef={channelsPickRef} />
+            <Display listId={"rootList"} bind:channelConfig={channelsConfig} bind:channelRef={channelsPickRef} />
           </div>
           {/if}
         </div>
