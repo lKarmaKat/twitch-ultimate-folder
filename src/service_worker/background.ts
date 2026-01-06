@@ -13,7 +13,7 @@ console.log("####################");
 
 setInterval(() => {
   dataFormatter.updateAll().then((info) => {
-    // console.log("updating bg", info);
+    console.log("updating bg", info);
     portManager.sendMessageToAllTabs(CST.UPDATE_STREAM_INFO, info);
   })
 }, 6000);
@@ -54,7 +54,7 @@ let sendCurrentConfigOnConnect = (port: chrome.runtime.Port) => {
   });
 }
 
-let themeSombre = false;
+let themeSombre = true;
 let sendCurrentTheme = (port: chrome.runtime.Port) => {
   port.postMessage({
     "type": "theme",
@@ -80,7 +80,8 @@ if (msg.type === CST.GET_STREAM_INFO) {
     return false;
   } 
   else if (msg.type === CST.RESET_CONFIG) {
-      chrome.storage.local.set({currentConfig: CST.STARTUP_CONF});
+      let resetConf = CST.STARTUP_CONF;
+      chrome.storage.local.set({currentConfig: resetConf});
     return false;
   } else if (msg.type === CST.DISPLAY_POPUP) {
     chrome.tabs.query({ active: true, currentWindow: true }, tabs => {

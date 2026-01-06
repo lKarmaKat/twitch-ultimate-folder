@@ -8,16 +8,20 @@
     let behavior = $channelConfig[listId]?.behavior;
     let style = $channelConfig[listId]?.style;
 	
-	console.log(`liste ${listId}`, $channelConfig)
+	// console.log(`liste ${listId}`, $channelConfig)
 	let extendedOnStartup=false;
 	let extendOnHover=false;
 	let extendOnClick=false;
 	let isPinnable=false;
 
-	let headerColor;
-	let contentColor;
+	let header;
+	let content;
 
 	channelConfig.subscribe(config => {
+		updateStyleVars(listId, config);
+	});
+
+	function updateStyleVars(listId, config) {
 		behavior = config[listId]?.behavior;
 		style = config[listId]?.style;
 		if (behavior) {
@@ -26,25 +30,18 @@
 			extendOnClick = $channelConfig[listId].behavior.extendOnClick;
 			isPinnable = $channelConfig[listId].behavior.isPinnable;
 		}
-		if (style) {
-			headerColor = style.headerColor;
-			contentColor = style.contentColor;
+		
+		if (style && style.theme === 'CUSTOM') {
+			header = style.header;
+			content = style.content;
+		} else {
+			header = '';
+			content = '';
 		}
-	});
-
-
-    if (behavior) {
-        extendedOnStartup = $channelConfig[listId].behavior.extendedOnStartup;
-        extendOnHover = $channelConfig[listId].behavior.extendOnHover;
-        extendOnClick = $channelConfig[listId].behavior.extendOnClick;
-        isPinnable = $channelConfig[listId].behavior.isPinnable;
-    }
+	}
+	updateStyleVars(listId, $channelConfig[listId]);
 	let extended = extendedOnStartup;
 
-	if (style) {
-		headerColor = style.headerColor;
-		contentColor = style.contentColor;
-	}
     let counter = 0;
 	function getNode(item) {
 		return $channelRef.find(e => e.channel_id === item.channel_id);
@@ -111,7 +108,7 @@
 	<!-- svelte-ignore a11y-click-events-have-key-events -->
 	<div class="list-container">
 		{#if listId !== 'rootList'}
-		<div class="list-header" style="background-color: {headerColor};" on:click={toggleAutoCollapse}>
+		<div class="list-header" style="background-color: {header.headerColor};" on:click={toggleAutoCollapse}>
 			<div class="left">
 				<p class="list-title">{$channelConfig[listId]?.name}</p>
 			</div>
@@ -121,7 +118,7 @@
 		</div>
 		{/if}
 		{#if $channelConfig[listId]?.hasOwnProperty("items")}
-			<div class="list-body" class:extended style="background-color: {contentColor};">
+			<div class="list-body" class:extended style="background-color: {content.contentColor};">
 				<div>
 					{#each $channelConfig[listId].items as item(item.id)}
 						{#if item.type === "liste"}
@@ -199,7 +196,7 @@
 		justify-content: space-between;
 		padding: 0.6em 0 0 0.3em;
 		position: relative;
-		background-color: rgb(119, 56, 119);
+		/* background-color: rgb(119, 56, 119); */
 		width: 100%;
 		margin: 0;
 		padding: 0;

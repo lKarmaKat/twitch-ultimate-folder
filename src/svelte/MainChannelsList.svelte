@@ -58,7 +58,7 @@ function show() {
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <!-- svelte-ignore a11y-no-static-element-interactions -->
-<section on:click={show} class="channels" use:dndzone={{items: $items, flipDurationMs, dropFromOthersDisabled: true}} on:consider={handleDndConsider} on:finalize={handleDndFinalize}>
+<section on:click={show}  id="main-channels-list" class="channels" use:dndzone={{items: $items, flipDurationMs, dropFromOthersDisabled: true}} on:consider={handleDndConsider} on:finalize={handleDndFinalize}>
             {#each $items as item(item.id)}
             <DraggableChannel 
             channelId={item.channel_id} 

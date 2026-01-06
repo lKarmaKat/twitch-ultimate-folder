@@ -1,0 +1,19 @@
+.list-header {
+    background-color: #ffffff;
+}
+.list-body {
+    background-color: #efeff1;
+}
+
+.card {
+    background-color: #efeff1;
+}
+.channel-name {
+    color: rgb(14, 14, 16);
+}
+.game-name {
+    color: rgb(83, 83, 95);
+}
+.viewer-count {
+    color: rgb(14, 14, 16);
+}

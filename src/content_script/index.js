@@ -24,7 +24,13 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
   else if (msg.type === "HIDE_POPUP") {
     console.log("hide index.js");
     document.querySelector("#iframe-rem")?.remove();
-  }
+  } else if (msg.type === 'THEME') {
+    addStyle(msg.data);
+  } 
+});
+
+chrome.runtime.sendMessage({type: 'GET_THEME'}, (data) => {
+  addStyle(data.data);
 });
 
 // setTimeout(() => {
@@ -49,41 +55,6 @@ window.addEventListener("message", (event) => {
 
 
 function injectScript(file) {
-  // const iframe1 = document.createElement('iframe');
-  // iframe1.id = "iframe";
-  // iframe1.src = chrome.runtime.getURL('content_script/config-popup/sidebar.html');
-  // iframe1.allowTransparency="true";
-  // const link = document.createElement('link');
-  // link.rel = 'stylesheet';
-  // link.href = chrome.runtime.getURL('content_script/config-popup/sidebar.css');
-  // const maindiv = document.createElement('div')
-  // maindiv.classList.add('test-iframe');
-  // let shadowParent = maindiv.attachShadow({mode:'closed'})
-  // shadowParent.appendChild(iframe1);
-  // shadowParent.appendChild(link);
-
-    // function mountSidebar() {
-    //   let t = document.querySelector("div[aria-label='Followed Channels']")
-      
-    //   if (!t) return;
-    //   t.insertBefore(maindiv, t.firstElementChild);
-
-    // }
-
-    // const observer = new MutationObserver((mlist, obs) => {
-    //   let t = document.querySelector("div[aria-label='Followed Channels']")
-    //   if (t) {
-    //     mountSidebar();
-    //     obs.disconnect();
-    //   }
-    // });
-
-    // observer.observe(document.body, {
-    //   childList: true,
-    //   subtree: true
-    // });
-
-
   const script = document.createElement('script');
   script.src = chrome.runtime.getURL(file);
   script.id = 'sidebar-inject';
@@ -92,24 +63,23 @@ function injectScript(file) {
   (document.head || document.documentElement).appendChild(script);
 }
 
+
+function addStyle(msg) {
+  let existingTag = document.head.querySelector('.injected-sidebar-css');
+  if (existingTag) {
+    document.head.querySelector('.monCSS').remove()
+  }
+  
+  const link = document.createElement('link');
+  link.rel = 'stylesheet';
+  link.classList.add('injected-sidebar-css');
+  if (msg === true)
+    link.href = chrome.runtime.getURL('assets/dark_channel.css');
+  else
+    link.href = chrome.runtime.getURL('assets/light_channel.css');
+
+  document.head.appendChild(link);
+
+}
+
 injectScript('sidebar_inject.js');
-
-
-/**
- * 
- * Le service_worker :
- *  met à disposition la configuration actuelle.
- *  récupère les listes des chaines en ligne, hors ligne ainsi que les infos (profil pic' url)
- *  s'abonne aux websocket stream.online et stream.offline approprié.
- *  il construit un référentiel de chaines qu'il met à disposition.
- *  attend l'ouverture de port pour diffuser les changements (changement de status, update titre/viewer count)
- *  
- * 
- * 
- * 
- * les contents_scripts injecte :
- *  l'iframe de configuration
- *  l'iframe d'affichage
- *  
- *  
- */

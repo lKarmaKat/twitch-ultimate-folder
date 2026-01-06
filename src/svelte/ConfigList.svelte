@@ -2,7 +2,7 @@
 	import { dndzone } from 'svelte-dnd-action';
   	import DraggableChannel from './DraggableChannel.svelte'
 	import { parentFinalizeEvent, configChangeEvent } from "./event.js";
-  	import { ALL_OTHER_CHANNELS } from '../constantes.js'
+  	import * as CST from '../constantes.js'
 	
 	export let channelConfig;
 	export let listId;
@@ -64,26 +64,14 @@
 	let currentId = 10;
 	function addNode() {
 		channelConfig.update(liste => {
-			let nodeExist = liste[currentId];
+			let nodeExist;
 			do {
 				nodeExist = liste[currentId];
 				if (!nodeExist) {
-					liste[currentId] = {
-						name: 'list ' + currentId,
-						id: 'list ' + currentId,
-						items: [],
-						type: 'liste',
-						behavior: {
-							extendedOnStartup: true,
-							extendOnHover: true,
-							extendOnClick: false,
-							isPinnable: false
-						},
-						style: {
-							headerColor: "#808080",
-							contentColor: "#808080"
-						}
-					}
+					let newNode = CST.NEW_LIST;
+					newNode.id = 'list ' + currentId;
+					newNode.name = 'list ' + currentId;
+					liste[currentId] = newNode;
 					liste[listId]["items"].push({id: currentId, type: 'liste'});
 				}
 				currentId++;
@@ -149,7 +137,7 @@
 			<div class="nested-list">
 				<svelte:self requestDeleteToParent={removeChild} bind:channelConfig={channelConfig} listId={item.id} bind:channelRef={channelRef}></svelte:self>
 			</div>
-			{:else if item.id === ALL_OTHER_CHANNELS}
+			{:else if item.id === CST.ALL_OTHER_CHANNELS}
 				<p>AllOthers</p>
 			{:else}
 			{@const i = getNode(item)}

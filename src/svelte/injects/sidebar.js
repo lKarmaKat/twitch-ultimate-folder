@@ -5,12 +5,27 @@ import { mount } from 'svelte'
 
 function mountSidebar() {
   // let t = document.body
-  let t = document.querySelector("div[aria-label='Followed Channels']")
-
+  let bt = document.querySelector("div[aria-label='Followed Channels']")
+  
+  let before = document.createElement('div');
+  before.id = 'before-inject-sidebar';
+  bt.insertBefore(before, bt.firstElementChild);
+  
+  
+  let t = document.querySelector("div.scrollable-area")
+  // let t = document.querySelector("div.side-bar-contents")
+  // t.style.position = "relative";
+  let side = document.createElement('div');
+  t.insertBefore(side, t.firstElementChild);
   if (!t) return;
+
+  // mount(WaitingConfig, {
+  //   target: side,
+  // })
+
   mount(DisplayWrapper, {
-    target: t,
-  })
+     target: side,
+   })
 
   mount(TitlePopup, {
      target: document.body,

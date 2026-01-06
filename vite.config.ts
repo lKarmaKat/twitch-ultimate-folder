@@ -1,7 +1,9 @@
-import { defineConfig } from 'vite'
+// import { defineConfig } from 'vite'
 import { svelte } from '@sveltejs/vite-plugin-svelte'
 import { viteStaticCopy } from 'vite-plugin-static-copy';
 import webExtension from 'vite-plugin-web-extension'
+import { defineConfig } from 'vitest/config';
+import { expect, test } from 'vitest';
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -25,6 +27,12 @@ export default defineConfig({
           dest: 'assets'
         },{
           src: 'src/iframe/sombre.css',
+          dest: 'assets'
+        },{
+          src: 'src/assets/dark_channel.css',
+          dest: 'assets'
+        },{
+          src: 'src/assets/light_channel.css',
           dest: 'assets'
         }
       ]
@@ -61,4 +69,16 @@ export default defineConfig({
       }
     }
   },
+	test: {
+		// If you are testing components client-side, you need to setup a DOM environment.
+		// If not all your files should have this environment, you can use a
+		// `// @vitest-environment jsdom` comment at the top of the test files instead.
+		environment: 'jsdom'
+	},
+	// Tell Vitest to use the `browser` entry points in `package.json` files, even though it's running in Node
+	resolve: process.env.VITEST
+		? {
+				conditions: ['browser']
+			}
+		: undefined
 })

@@ -71,30 +71,37 @@
         <div class="bloc">
             <p>Style</p>
             <div class="row">
-                <p>Header color</p>
-                <select name="header-color" id="header-color" bind:value={config.style.headerColor} on:change={updateConfig}>
-                    {#each colorsList as color}
-                        <option value={color.colorCode}>
-                           {capitalizeFirstLetter(color.colorName)}
-                        </option>
-                    {/each}
+                <select name="theme" id="theme" bind:value={config.style.theme}>
+                    <option value="SYSTEM">System theme</option>
+                    <option value="CUSTOM">Custom</option>
                 </select>
-                <input type="color" name="header-color" id="header-color"
-                bind:value={config.style.headerColor} on:change={updateConfig}><label for="header-color"></label>
             </div>
+            {#if config.style.theme === 'CUSTOM'}
             <div class="row">
-                <p>Content color</p>
-                <select name="header-color" id="header-color" bind:value={config.style.contentColor} on:change={updateConfig}>
+                <p>Header color</p>
+                <select name="header-color" id="header-color" bind:value={config.style.header.headerColor} on:change={updateConfig}>
                     {#each colorsList as color}
                         <option value={color.colorCode}>
                             {capitalizeFirstLetter(color.colorName)}
                         </option>
                     {/each}
                 </select>
-                <input type="color" name="header-color" id="content-color"
-                bind:value={config.style.contentColor} on:change={updateConfig}><label for="content-color"></label>
-
+                <input type="color" name="header-color" id="header-color"
+                bind:value={config.style.header.headerColor} on:change={updateConfig}><label for="header-color"></label>
             </div>
+            <div class="row">
+                <p>Content color</p>
+                <select name="header-color" id="header-color" bind:value={config.style.content.contentColor} on:change={updateConfig}>
+                    {#each colorsList as color}
+                    <option value={color.colorCode}>
+                        {capitalizeFirstLetter(color.colorName)}
+                    </option>
+                    {/each}
+                </select>
+                <input type="color" name="header-color" id="content-color"
+                bind:value={config.style.content.contentColor} on:change={updateConfig}><label for="content-color"></label>   
+            </div>
+            {/if}
         </div>
     </div>
     {/if}

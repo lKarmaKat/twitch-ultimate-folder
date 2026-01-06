@@ -130,7 +130,7 @@
             {/if}
           </div>
           {#if $channelsPickRef.length}
-          <div class="channels-container">
+          <div id="config-list" class="channels-container">
             <ConfigList listId={"rootList"}
             bind:channelConfig={channelsConfig}
             bind:channelRef={channelsPickRef}
@@ -140,7 +140,8 @@
           <div class="config-container">
             <ConfigPannel bind:channelConfig={channelsConfig}/>
           </div>
-          {#if $channelsPickRef.length}
+          <p class="el">{Object.getOwnPropertyNames($channelsConfig).length}</p>
+          {#if $channelsPickRef.length && Object.getOwnPropertyNames($channelsConfig).length > 0}
           <div class="display-container">
             <Display listId={"rootList"} bind:channelConfig={channelsConfig} bind:channelRef={channelsPickRef} />
           </div>

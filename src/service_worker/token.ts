@@ -90,7 +90,6 @@ export class TokenManager {
                 this.getFromStorage('nextValidationDate')
             ])
             .then((fulfillments: string[]) => {
-                console.log(fulfillments)
                 const [twitchToken, tokenExpirationDate, nextValidationDate] = fulfillments;
                 this.token = twitchToken;
                 this.tokenExpirationDate = parseInt(tokenExpirationDate);

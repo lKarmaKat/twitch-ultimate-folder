@@ -22,11 +22,48 @@ export let STARTUP_CONF = {
                 isPinnable: true
             },
             style: {
-                headerColor: "#808080",
-                contentColor: "#808080"
+                theme: 'SYSTEM',
+                header: {
+                  backgroundColor: "#808080",
+                  borderColor: "#808080",
+                  borderWidth: "1px",
+                  borderRadius: 0
+                },
+                content: {
+                  backgroundColor: "#808080",
+                  borderColor: "#808080",
+                  borderWidth: "1px",
+                  borderRadius: 0
+                }
             }
           }
         };
+export let NEW_LIST = {
+            id:'node1',
+            name:'liste principale',
+            items:[
+            ],
+            behavior: {
+                extendedOnStartup: true,
+                extendOnHover: false,
+                extendOnClick: false,
+                isPinnable: true
+            },
+            style: {
+                theme: 'SYSTEM',
+                header: {
+                  headerColor: "#808080",
+                  borderColor: null,
+                  borderWidth: null,
+                  borderRadius: null
+                },
+                content: {
+                  contentColor: "#808080",
+                  contentWidth: null,
+                  contentRadius: null
+                }
+            }
+          }
 
 export interface CONFIG { [key: string]: string; }
 export let currentConfig = 'currentConfig';

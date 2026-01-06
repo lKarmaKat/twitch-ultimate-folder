@@ -16,6 +16,7 @@ class ConfigManager {
     // display = chaines;
 
     constructor() {
+        // console.log("Constructeur config manager")
         this.startPort();
     }
 
@@ -36,6 +37,7 @@ class ConfigManager {
                     else return alphaSort(a,b);
                 })
                 this.channelsPickRef.update(c => msg.data);
+                // console.log("updating", msg.data);
                 // this.save = streamInfo;
             } else if (msg.type === "UPDATE_STREAM_INFO") {
                 msg.data.sort((a: StreamsInfos, b: StreamsInfos) => {
@@ -61,9 +63,14 @@ class ConfigManager {
                     return liste;
                 })
                 this.channelsConfig.update(liste => liste);
+                // console.log(" updating updating");
+                this.channelsPickRef.update(e => {
+                    // console.log(e)
+                    return e;
+                })
             }
         }
-
+        // console.log("starting port")
         this.bridge = new PortConnector(dataReceivedCallback);
     }
 
@@ -84,7 +91,7 @@ class ConfigManager {
             chrome.runtime.sendMessage(this.extensionId, {type: 'RESET_CONFIG'}, () => {
                 console.log("reseted");
                 chrome.runtime.sendMessage(this.extensionId, {type: 'GET_CURRENT_CONFIGURATION'}, (truc) => {
-                    if (Object.getOwnPropertyNames(truc).length > 0) {
+                    if (Object.getOwnPropertyNames(truc)?.length > 0) {
                         this.channelsConfig = writable(truc);
                         // display = truc;
                     }

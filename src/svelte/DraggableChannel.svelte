@@ -40,7 +40,8 @@
 
 function tooltip(node, params) {
     let tt = document.querySelector("#custom-tooltip");
-	tt.classList.add('tooltip');
+    if (tt)
+	    tt.classList.add('tooltip');
     
 	
 	function handleFocus() {
@@ -153,7 +154,7 @@ function tooltip(node, params) {
         text-align: -webkit-match-parent !important;
         line-height: var(--line-height-body) !important;
     }
-    .viewer-count {
+    .viewer-count-container {
         flex-shrink: 0 !important;
         margin-inline-start: 4px !important;
         position: relative;
@@ -293,12 +294,12 @@ function tooltip(node, params) {
                         {#if gameName}<p>{gameName}</p>{/if}
                     </div>
                 </div>
-                <div class="viewer-count">
+                <div class="viewer-count-containerviewer-count">
                     {#if isLive}
                         <div class="flex-viewer-count">
                             <div class="live"></div>
                             <!-- <p>{viewerCount}</p> -->
-                            <p>{formatter.format(viewerCount)}</p>
+                            <p class="viewer-count">{formatter.format(viewerCount)}</p>
                         </div>
                     {:else}
                         <div class="offline">Offline</div>
