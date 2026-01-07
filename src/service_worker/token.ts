@@ -14,9 +14,7 @@ export class TokenManager {
     constructor() {}
 
     initToken() {
-        if (this.fetchingPromise) return this.fetchingPromise;
-
-        this.fetchingPromise = new Promise((resolve, reject) => {
+        return new Promise((resolve, reject) => {
             this.chromeStorageToken()
             .then(() => {
                 if (this.isTokenValid()) {
@@ -42,10 +40,7 @@ export class TokenManager {
         })
         .catch((error) => {
             throw new Error(error);
-        }).finally(() => {
-            this.fetchingPromise = null
         });
-        return this.fetchingPromise;
     }
 
 
