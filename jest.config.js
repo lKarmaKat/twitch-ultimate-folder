@@ -1,5 +1,5 @@
 export default  {
-
+    testMatch: ['**/tests/**/*test*'],
     setupFilesAfterEnv: ['./jest.setup.js'],
     transform: {
         '^.+\\.ts$': 'babel-jest',
