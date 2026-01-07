@@ -119,15 +119,15 @@
         <h2>Channels list</h2>
         <div class="flex-container">
           <div class="channels-container">
+            {#if $channelsPickRef.length}
+            <MainChannelsList bind:items={channelsPickRef}/>
+            {/if}
+            <br />
             <section class="channels" use:dndzone={{items: allOtherItems, dropFromOthersDisabled: true}} on:consider={handleDndConsider} on:finalize={handleDndConsider}>
               {#each allOtherItems as item(item.id)}
                 <div class="allOthers">{item.name}</div>
               {/each}
             </section>
-            <br />
-            {#if $channelsPickRef.length}
-              <MainChannelsList bind:items={channelsPickRef}/>
-            {/if}
           </div>
           {#if $channelsPickRef.length}
           <div id="config-list" class="channels-container">

@@ -32,6 +32,12 @@ a.card div.offline {
     color: rgb(239, 239, 241);
 }
 
+input[type=text] {
+    border-bottom: 1px solid #ffffff !important;
+    color: white;
+    caret-color: white;
+}
+
 /* twitch icon color #9147ff */
 /* twitch icon color a970ff */
 
