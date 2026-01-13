@@ -16,19 +16,19 @@
           ([$search, $items]) => {
             let a = $items;
             if ($search.length > 0) {
-              console.log("{{{{{{{{{{search", $search);
+              // console.log("{{{{{{{{{{search", $search);
                a = $items.filter(x => {
                 if (x.channel_name.toLowerCase().includes($search.toLowerCase()))
                   console.log(x.channel_name.toLowerCase(), x.channel_name.toLowerCase().includes($search.toLowerCase()));
                 return x.channel_name.toLowerCase().includes($search.toLowerCase());
               })
             }
-            console.log('}}}}}}}}}}}}}}}}}}}}}')
+            // console.log('}}}}}}}}}}}}}}}}}}}}}')
           filteredItems.set(a);
           return a;
       }
     );
-    filtered.subscribe(e => console.log(e));
+    filtered.subscribe(e => e);
   
     let shouldIgnoreDndEvents = false;
     let count = 0;

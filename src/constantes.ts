@@ -1,3 +1,5 @@
+import type * as t from 'src/service_worker/models/userStructure';
+
 export let ALL_OTHER_CHANNELS = 'allOtherChannels';
 export let UPDATE_STREAM_INFO = 'UPDATE_STREAM_INFO';
 export let GET_STREAM_INFO = 'GET_STREAM_INFO';
@@ -9,38 +11,10 @@ export let HIDE_POPUP = 'HIDE_POPUP';
 export let THEME = 'THEME';
 export let GET_THEME = 'GET_THEME';
 
-export let STARTUP_CONF = {
-          rootList:{
+
+export let NEW_LIST: t.I_NEW_LIST = {
             id:'node1',
-            name:'liste principale',
-            items:[
-            ],
-            behavior: {
-                extendedOnStartup: true,
-                extendOnHover: false,
-                extendOnClick: false,
-                isPinnable: true
-            },
-            style: {
-                theme: 'SYSTEM',
-                header: {
-                  backgroundColor: "#808080",
-                  borderColor: "#808080",
-                  borderWidth: "1px",
-                  borderRadius: 0
-                },
-                content: {
-                  backgroundColor: "#808080",
-                  borderColor: "#808080",
-                  borderWidth: "1px",
-                  borderRadius: 0
-                }
-            }
-          }
-        };
-export let NEW_LIST = {
-            id:'node1',
-            name:'liste principale',
+            name:'default',
             items:[
             ],
             behavior: {
@@ -65,7 +39,21 @@ export let NEW_LIST = {
             }
           }
 
-export interface CONFIG { [key: string]: string; }
+export let STARTUP_CONF: t.I_CONFIG = {
+          rootList: NEW_LIST
+        };
+// export let NAMED_CONFIG: t.NamedConfig = {
+//       configName: 'default',
+//       config: STARTUP_CONF
+// }
+export let STARTUP_USER_CONFIGS: t.UserConfigs = {
+    userId: 0,
+    currentConfig: 'default',
+    configsList: [
+      STARTUP_CONF
+    ]
+}
+
 export let currentConfig = 'currentConfig';
 // export let UPDATE_STREAM_INFO = 'UPDATE_STREAM_INFO';
 // export let UPDATE_STREAM_INFO = 'UPDATE_STREAM_INFO';

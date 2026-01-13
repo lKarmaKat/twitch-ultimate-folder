@@ -69,9 +69,9 @@
 				nodeExist = liste[currentId];
 				if (!nodeExist) {
 					let newNode = CST.NEW_LIST;
-					newNode.id = 'list ' + currentId;
+					newNode.id = 'list' + currentId;
 					newNode.name = 'list ' + currentId;
-					liste[currentId] = newNode;
+					liste[currentId] = structuredClone(newNode);
 					liste[listId]["items"].push({id: currentId, type: 'liste'});
 				}
 				currentId++;

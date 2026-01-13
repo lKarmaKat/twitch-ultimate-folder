@@ -4,9 +4,9 @@
   import ConfigPannel from './ConfigPannel.svelte'
   import MainChannelsList from './MainChannelsList.svelte';
   import Display from './Display.svelte';
-  import { writable } from 'svelte/store';
+  import { writable, derived } from 'svelte/store';
   // import { onMount } from 'svelte';
-  import { ALL_OTHER_CHANNELS } from '../constantes.js'
+  import { ALL_OTHER_CHANNELS, STARTUP_CONF } from '../constantes.js'
   import { dndzone, TRIGGERS, SHADOW_ITEM_MARKER_PROPERTY_NAME, DRAGGED_ELEMENT_ID } from "svelte-dnd-action";
 
   let configManager = new ConfigManager();
@@ -15,7 +15,29 @@
   let c = configManager.getConfig()
   let channelsPickRef = c.channelsPickRef;// = writable([]);
   let channelsConfig = c.channelsConfig; // = writable({
-  $ : if ($channelsPickRef.length > 0 && Object.getOwnPropertyNames($channelsConfig).length > 0) {
+  let currentConfig = configManager.currentConfig; // = writable({
+  let selectedConfig = writable();
+  let currentConfigStr = '';
+  let selectedConfigDer = derived([currentConfig, channelsConfig], ([$currentConfig, $channelsConfig]) => {
+    console.log("update");
+    if ($currentConfig !== currentConfigStr && $channelsConfig?.configsList) {
+        currentConfigStr = $currentConfig;
+        let index = $channelsConfig.configsList.find(conf => conf.rootList.name === $currentConfig);
+        if (index) {
+          selectedConfig.set(index);
+          console.log("selected config", $selectedConfig, index)
+          return index;
+        }
+    }
+  });
+  selectedConfigDer.subscribe(e => e);
+  // currentConfig.subscribe(newConfig => {
+  //   if (newConfig) {  
+  //     let index = channelsConfig.configsList.find(conf => conf.configName === newConfig);
+  //     selectedConfig.set($channelsConfig.configsList[index].config);
+  //   }
+  // })
+  $ : if ($channelsPickRef.length > 0 && $channelsConfig && Object.getOwnPropertyNames($channelsConfig).length > 0) {
     loading = false;
   }
 
@@ -71,7 +93,7 @@
     })
   }
   function send() {
-    configManager.send($channelsConfig);
+    configManager.send($selectedConfig);
   }
 
   ////////////////////////////////////////////////
@@ -90,6 +112,33 @@
   }
   let port = new PortConnector(theme, "theme");
 
+  function newConfig() {
+    let newConfigName = "newConfig";
+    let newConfigIndex = 1;
+    let configExist;
+    do {
+      configExist = $channelsConfig.configsList.find(e => e.rootList.name === newConfigName + newConfigIndex);
+      if (!configExist) {
+        let newConfig = structuredClone(STARTUP_CONF)
+        newConfig.rootList.name = newConfigName + newConfigIndex;
+        channelsConfig.update(e => {
+          e.configsList.push(newConfig);
+          return e;
+        })
+      currentConfig.set(newConfigName + newConfigIndex);
+      currentConfigStr = newConfigName + newConfigIndex;
+      }
+      newConfigIndex++;
+    } while (configExist);
+    
+    
+  }
+
+  function selectConfig(configName) {
+    currentConfig.set(configName);
+    currentConfigStr = configName;
+    console.log(configName);
+  }
 </script>
 
 <svelte:head>
@@ -114,8 +163,28 @@
         <div class="loading-overlay"></div>
       </div>
       {:else}
-        <button on:click={filterItems}>{mode}</button>
-        <button on:click={promptResetConfig}>Reset config</button>
+        <div class="flex-config">
+          <div class="left">
+            <button on:click={filterItems}>{mode}</button>
+            <button on:click={promptResetConfig}>Reset config</button>
+          </div>
+          <div class="right">
+            {#if $channelsConfig.configsList?.length > 0}
+            <div class="configs-container">
+              <button on:click={newConfig}>
+                +
+              </button>
+              {#each $channelsConfig.configsList as conf(conf.rootList.name)}
+                <button on:click={() => { selectConfig(conf.rootList.name) }}>
+                  {conf.rootList.name}
+                </button>
+              {/each}
+            </div>
+            {:else}
+              <p>No configs {$channelsConfig.configsList?.length}</p>
+            {/if}
+          </div>
+        </div>
         <h2>Channels list</h2>
         <div class="flex-container">
           <div class="channels-container">
@@ -132,18 +201,18 @@
           {#if $channelsPickRef.length}
           <div id="config-list" class="channels-container">
             <ConfigList listId={"rootList"}
-            bind:channelConfig={channelsConfig}
+            bind:channelConfig={selectedConfig}
             bind:channelRef={channelsPickRef}
             requestDeleteToParent={promptResetConfig} />
           </div>
           {/if}
           <div class="config-container">
-            <ConfigPannel bind:channelConfig={channelsConfig}/>
+            <ConfigPannel bind:channelConfig={selectedConfig}/>
           </div>
           <p class="el">{Object.getOwnPropertyNames($channelsConfig).length}</p>
           {#if $channelsPickRef.length && Object.getOwnPropertyNames($channelsConfig).length > 0}
           <div class="display-container">
-            <Display listId={"rootList"} bind:channelConfig={channelsConfig} bind:channelRef={channelsPickRef} />
+            <Display listId={"rootList"} bind:channelConfig={selectedConfig} bind:channelRef={channelsPickRef} />
           </div>
           {/if}
         </div>
@@ -235,6 +304,9 @@
     flex: 1 1 15%;
   }
   .main {
+    /* display: flex;
+    flex-direction: column;
+    justify-content: space-between; */
     height: 80%;
     margin-top: 3em;
     margin-bottom: 3em;
@@ -245,5 +317,10 @@
     display: flex;
     flex-direction: row;
     height: 95%;
+  }
+  .flex-config {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
   }
 </style>

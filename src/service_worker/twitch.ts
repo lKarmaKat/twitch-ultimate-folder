@@ -2,14 +2,16 @@ import { TokenManager } from "./token";
 import type { ChannelsFollowed } from './models/rest/channels-followed';
 import type { ProfilePicInfos } from './models/profilePicInfos.model';
 import type { StreamsFollowed } from './models/rest/streams-followed';
+import type { User } from "./models/user";
 
 export class TwitchApi {
-    tokenManager = new TokenManager();
+    tokenManager;
     CLIENT_ID = '0cccietj726skd2jwlf39ymhmyzbi7';
     followedLiveStream = "https://api.twitch.tv/helix/streams/followed";
     allFollowedStream = "https://api.twitch.tv/helix/channels/followed";
-    
-    constructor() {
+
+    constructor(tokenManager: TokenManager) {
+      this.tokenManager = tokenManager;
       this.tokenManager.initToken();
     }
 
@@ -107,7 +109,30 @@ export class TwitchApi {
         });
     };
 
-    
+    getUserInfo(): Promise<User> {
+      return new Promise((resolve, error) => {
+        this.tokenManager.getToken().then(token => {
+          let options = {
+            method: 'GET',
+            headers: { 
+              Authorization: 'Bearer ' + token,
+              'Client-Id': this.CLIENT_ID
+            }
+          };
+          fetch('https://api.twitch.tv/helix/users?', options).then((response) => {
+            return response.json();
+          }).then(resp => {
+            resolve({
+              id: resp.data[0].id,
+              login: resp.data[0].login,
+              display_name: resp.data[0].display_name
+            })
+          }).catch(err => error(new Error("Error fetching user info", err)));
+        });
+      });
+    }
+          
+          
     fetchRecursively(token: string, url: string, accumulatedChannels: any[] = [], currentCursor = null): Promise<any> {
       let options = {
         method: 'GET',

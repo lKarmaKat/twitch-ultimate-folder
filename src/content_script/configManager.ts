@@ -2,6 +2,7 @@ import PortConnector from './portConnector.js';
 import { writable } from 'svelte/store';
 import type { StreamsInfos } from '@src/service_worker/models/streamsInfos.model';
 import * as CST from '../constantes'
+import type { UserConfigs, I_CONFIG } from '../service_worker/models/userStructure.js';
 
 class ConfigManager {
     extensionId: string = "ijodiaomnnnjljemidchdifmpnnmcnlg";
@@ -11,7 +12,8 @@ class ConfigManager {
     // currentConfigPromise;
     // channelsRef = writable([]);
     save = [];
-	channelsConfig = writable<any>({});
+	channelsConfig = writable<UserConfigs>();
+    currentConfig = writable<string>('c');
     bridge: PortConnector;
     // display = chaines;
 
@@ -23,8 +25,11 @@ class ConfigManager {
     startPort() {
         let dataReceivedCallback = (msg: any) => {
             if (msg.type === "GET_CURRENT_CONFIGURATION") {
+                // TODO voir si sauvegarder une liste ne vas pas écraser des données en cours de modif dans une autre popup.
+                this.currentConfig.set(msg.data.currentConfig);
+                console.log("Setting config in config manager", msg);
                 if (msg.data) {
-                    this.channelsConfig.update(c => structuredClone(msg.data));
+                    this.channelsConfig.set(structuredClone(msg.data));
                 }
             } else if (msg.type === "GET_STREAM_INFO") {
                 msg.data.sort((a: StreamsInfos, b: StreamsInfos) => {
@@ -82,7 +87,7 @@ class ConfigManager {
     }
 
 
-    send(toSaveChannels: CST.CONFIG) {
+    send(toSaveChannels: I_CONFIG) {
         chrome.runtime.sendMessage(this.extensionId, { type: 'SAVE_CHANNELS_LIST', data: toSaveChannels });
     }
 

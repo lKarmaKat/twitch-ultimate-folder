@@ -23,13 +23,13 @@ function mountSidebar() {
   //   target: side,
   // })
 
-  mount(DisplayWrapper, {
-     target: side,
-   })
+  // mount(DisplayWrapper, {
+  //    target: side,
+  //  })
 
-  mount(TitlePopup, {
-     target: document.body,
-   })
+  // mount(TitlePopup, {
+  //    target: document.body,
+  //  })
 
   // new DisplayWrapper({
   //   target: t

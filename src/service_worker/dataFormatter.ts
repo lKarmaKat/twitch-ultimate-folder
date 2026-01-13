@@ -6,12 +6,13 @@ import type { StreamsInfos } from './models/streamsInfos.model';
 
 export class DataFormatter {
     initComplete = false;
-    twitchApi = new TwitchApi();
+    twitchApi: TwitchApi;
     allFollowedStreams: Map<number, StreamsInfos> = new Map();
     allLiveFollowedStreams: Map<number, LiveStreamInfos> = new Map();
     profilePicInfo: Map<number, ProfilePicInfos> = new Map();
 
-    constructor() {
+    constructor(twitchApi: TwitchApi) {
+        this.twitchApi = twitchApi;
     }
 
     init(): Promise<StreamsInfos[]> {

@@ -1,10 +1,19 @@
 import { DataFormatter } from './dataFormatter'
+import { TwitchApi } from './twitch';
 import PortManager from './portManager'
+import { ConfigManager } from './configManage';
+import { TokenManager } from "./token";
 import * as CST from '../constantes.js'
+import { writable } from 'svelte/store';
+import type { UserConfigs, NamedConfig } from './models/userStructure'
 
+const userUpdate = writable(false);
+const userAuthAutoFailed = writable(false);
 
-
-let dataFormatter = new DataFormatter();
+let tokenManager = new TokenManager(userUpdate, userAuthAutoFailed);
+let twitchApi = new TwitchApi(tokenManager);
+let configManager = new ConfigManager(twitchApi, userUpdate);
+let dataFormatter = new DataFormatter(twitchApi);
 
 console.log("####################");
 console.log("Background.js");
@@ -13,7 +22,7 @@ console.log("####################");
 
 setInterval(() => {
   dataFormatter.updateAll().then((info) => {
-    console.log("updating bg", info);
+    //console.log("updating bg", info);
     portManager.sendMessageToAllTabs(CST.UPDATE_STREAM_INFO, info);
   })
 }, 6000);
@@ -32,26 +41,12 @@ let sendStreamInfoOnConnect = (port: chrome.runtime.Port) => {
 };
 
 let sendCurrentConfigOnConnect = (port: chrome.runtime.Port) => {
-  new Promise((resolve, reject) => {
-    chrome.storage.local.get('currentConfig', (data) => {
-      if (data?.currentConfig) {
-          resolve(data?.currentConfig);
-      } else {
-        reject();
-      }
-    });
-  }).then(currentConfig => {
-    port.postMessage({
-      "type": CST.GET_CURRENT_CONFIGURATION,
-      "data": currentConfig
-    })
-    return;
-  }).catch(() => {
-    port.postMessage({
+    configManager.getConfigObjectForCurrentUser().then((currentConfig) => {
+      port.postMessage({
         "type": CST.GET_CURRENT_CONFIGURATION,
-        "data": CST.STARTUP_CONF
-    })
-  });
+        "data": currentConfig
+      })
+    });
 }
 
 let themeSombre = true;
@@ -75,14 +70,20 @@ if (msg.type === CST.GET_STREAM_INFO) {
   } else if (msg.type === CST.SAVE_CHANNELS_LIST) {
     // nettoyer input
     console.log("saving channels list bg", msg.data);
-    chrome.storage.local.set({ currentConfig: msg.data});
-    portManager.sendMessageToAllTabs(CST.GET_CURRENT_CONFIGURATION, msg.data)
+    // chrome.storage.local.set({ currentConfig: msg.data});
+    configManager.saveConfig(msg.data);
+    // portManager.sendMessageToAllTabs(CST.GET_CURRENT_CONFIGURATION, msg.data)
     return false;
-  } 
+  }
   else if (msg.type === CST.RESET_CONFIG) {
       let resetConf = CST.STARTUP_CONF;
       chrome.storage.local.set({currentConfig: resetConf});
     return false;
+  } else if (msg.type === CST.GET_CURRENT_CONFIGURATION) {
+    configManager.getConfigObjectForCurrentUser().then((currentConfig) => {
+      sendResponse(currentConfig);
+    });
+    return true;
   } else if (msg.type === CST.DISPLAY_POPUP) {
     chrome.tabs.query({ active: true, currentWindow: true }, tabs => {
       chrome.tabs.sendMessage(tabs[0].id!, { type: CST.DISPLAY_POPUP });

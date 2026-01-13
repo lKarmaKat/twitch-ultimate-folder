@@ -1,3 +1,4 @@
+import type { Writable } from "svelte/store";
 
 export class TokenManager {
     CLIENT_ID = '0cccietj726skd2jwlf39ymhmyzbi7';
@@ -6,55 +7,73 @@ export class TokenManager {
 
     token?: string | null;
     tokenExpirationDate = 0;
-    fetchingPromise: Promise<any> | null = null;
+    fetchingPromise: Promise<string> | null = null;
     tokenValidationInterval = 30 * 60 * 1000; // check validity every 30 minutes.
     nextValidationDate = 0;
+    userUpdate: Writable<boolean>;
+    userAuthAutoFailed: Writable<boolean>;
 
 
-    constructor() {}
+    constructor(userUpdate: Writable<boolean>, userAuthAutoFailed: Writable<boolean>) {
+        this.userUpdate = userUpdate;
+        this.userAuthAutoFailed = userAuthAutoFailed;
+    }
 
     initToken() {
         return new Promise((resolve, reject) => {
             this.chromeStorageToken()
             .then(() => {
                 if (this.isTokenValid()) {
+                    this.userUpdate.set(true);
                     resolve(this.token);
                 }
                 this.validateAuthToken()
                 .then((token) => {
+                    this.userUpdate.set(true);
                     resolve(token);
                 }).catch(() => {
                     this.getNewTokenAndValidate()
                     .then((token) => {
+                        this.userUpdate.set(true);
                         resolve(token);
                     })
-                    .catch(() => reject(new Error("Invalid token found but unable to get a new one.")));
+                    .catch(() => {
+                        this.userUpdate.set(false);
+                        reject(new Error("Invalid token found but unable to get a new one."))
+                    });
                 });
             }).catch(() => {
                 this.getNewTokenAndValidate()
                 .then((token) => {
+                    this.userUpdate.set(true);
                     resolve(token)
                 })
-                .catch(() => reject(new Error("No token found and unable to get a new one.")));
+                .catch(() => {
+                    this.userUpdate.set(false);
+                    reject(new Error("No token found and unable to get a new one."))
+                });
             })
         })
         .catch((error) => {
             throw new Error(error);
         });
     }
-
-
+    
+    
     getToken(): Promise<string> {
         if (this.isTokenValid()) {
             return new Promise(resolve => resolve(this.token!));
         }
         if (this.fetchingPromise) return this.fetchingPromise;
-        this.fetchingPromise =  new Promise((resolve) => {
+        this.fetchingPromise =  new Promise<string>((resolve, reject) => {
             this.validateAuthToken()
-            .then(() => resolve(this.token))
+            .then(() => resolve(this.token!))
             .catch(() => {
                 this.getNewTokenAndValidate().then(() => {
-                    resolve(this.token)
+                    resolve(this.token!)
+                }).catch((err) => {
+                    this.userUpdate.set(false);
+                    reject(new Error("GetToken unable to get new token"));
                 });
 
             })
@@ -117,7 +136,8 @@ export class TokenManager {
         });
     }
 
-    getNewAuthToken() {
+    getNewAuthToken(manualConnect: boolean = false) {
+        if (this.userAuthAutoFailed && !manualConnect) return Promise.reject();
         return new Promise((resolve, reject) => {
             chrome.identity.launchWebAuthFlow(
                 { url: this.AUTH_URL, interactive: true },
@@ -133,6 +153,7 @@ export class TokenManager {
                         this.token = tokenMatch[1];
                         resolve(this.token);
                     } else {
+                        this.userAuthAutoFailed.set(true);
                         reject(new Error('No token found in WebAuthFlow response'));
                     }
                 }
