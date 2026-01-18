@@ -3,7 +3,12 @@ import {jest} from '@jest/globals'
 
 
 describe('test integration getToken', () => {
-
+    const u = {
+        set: jest.fn()
+    }
+    const b = {
+        set: jest.fn()
+    }
     beforeEach(() => {
         chrome.identity = {
             getRedirectURL: jest.fn().mockReturnValue("REDIRECT_URL"),
@@ -19,7 +24,7 @@ describe('test integration getToken', () => {
     });
 
     test("doit renvoyer le token s'il est déjà en mémoire et toujours valide", async () => {
-        const tokenManager = new TokenManager();
+        const tokenManager = new TokenManager(u, b);
         tokenManager.nextValidationDate = Date.now() + 10 * 60 * 1000;
         tokenManager.tokenExpirationDate = Date.now() + 10 * 60 * 1000;
         tokenManager.token = "valid_token";
@@ -30,11 +35,8 @@ describe('test integration getToken', () => {
     });
 
 
-    // TODO à finir, est ce que je stock la date de péremption dans le storage même à l'initialisation, si le token est valide on appel juste validate
-    // voir lock si appel getToken multiple
-
     test("doit valider le token si sa période de validité est dépassée", async () => { 
-        const tokenManager = new TokenManager();
+        const tokenManager = new TokenManager(u, b);
         tokenManager.tokenExpirationDate = Date.now() + 1000000;
         tokenManager.nextValidationDate = 0;
         tokenManager.token = "valid_token";
@@ -56,7 +58,7 @@ describe('test integration getToken', () => {
 
     
     test("doit valider le token si sa période de validité ou si la date d'expiration est dépassée", async () => { 
-        const tokenManager = new TokenManager();
+        const tokenManager = new TokenManager(u, b);
         tokenManager.nextValidationDate = Date.now() + 10*60*1000;
         tokenManager.tokenExpirationDate = 0;
         tokenManager.token = "valid_token";
@@ -87,7 +89,7 @@ describe('test integration getToken', () => {
     
     
     test("doit valider le token une seule fois si sa période de validité est dépassée", async () => { 
-        const tokenManager = new TokenManager();
+        const tokenManager = new TokenManager(u, b);
         tokenManager.tokenExpirationDate = Date.now() + 1000000;
         tokenManager.nextValidationDate = 0;
         tokenManager.token = "valid_token";

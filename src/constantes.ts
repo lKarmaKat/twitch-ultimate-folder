@@ -14,7 +14,7 @@ export let GET_THEME = 'GET_THEME';
 
 export let NEW_LIST: t.I_NEW_LIST = {
             id:'node1',
-            name:'default',
+            name:'liste principale',
             items:[
             ],
             behavior: {

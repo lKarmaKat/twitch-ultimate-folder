@@ -40,6 +40,7 @@ export class ConfigManager {
 
         this.userConfigsPromise = new Promise<UserConfigs>((resolve, reject) => {
             if (!this.user) {
+                // reject(new Error("e")); not working for some reasons
                 // Get current config for default user
             }
             chrome.storage.local.get(String(this.user!.id), (data: { [key: string]: UserConfigs }) => {

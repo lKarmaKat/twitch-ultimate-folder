@@ -2,7 +2,7 @@ import PortConnector from './portConnector.js';
 import { writable } from 'svelte/store';
 import type { StreamsInfos } from '@src/service_worker/models/streamsInfos.model';
 import * as CST from '../constantes'
-import type { UserConfigs, I_CONFIG } from '../service_worker/models/userStructure.js';
+import type { UserConfigs } from '../service_worker/models/userStructure.js';
 
 class ConfigManager {
     extensionId: string = "ijodiaomnnnjljemidchdifmpnnmcnlg";
@@ -87,7 +87,8 @@ class ConfigManager {
     }
 
 
-    send(toSaveChannels: I_CONFIG) {
+
+    send(toSaveChannels: UserConfigs) {
         chrome.runtime.sendMessage(this.extensionId, { type: 'SAVE_CHANNELS_LIST', data: toSaveChannels });
     }
 

@@ -153,6 +153,7 @@
 					gameName={i?.game_name}
 					isLive={i?.isLive}
 					tick=true/>
+					<!-- <div>chaine</div> -->
 					<!-- color={contentColor}/> -->
 				</div>
 				{/if}

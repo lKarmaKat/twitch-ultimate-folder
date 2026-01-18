@@ -5,7 +5,7 @@ import { ConfigManager } from './configManage';
 import { TokenManager } from "./token";
 import * as CST from '../constantes.js'
 import { writable } from 'svelte/store';
-import type { UserConfigs, NamedConfig } from './models/userStructure'
+import type { UserConfigs } from './models/userStructure'
 
 const userUpdate = writable(false);
 const userAuthAutoFailed = writable(false);
