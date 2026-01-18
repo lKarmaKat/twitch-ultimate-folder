@@ -2,7 +2,7 @@ import { tick } from 'svelte';
 import {config, channelsRef} from './utils/const'
 import { render, screen, getAllByText, getByText } from '@testing-library/svelte';
 import { beforeAll, afterAll, vi, describe, test, beforeEach, expect } from 'vitest'
-import ConfigPopup from '../../../../src/svelte/ConfigPopup.svelte'
+import ConfigPopup from '../src/svelte/ConfigPopup.svelte'
 import * as chrome from 'sinon-chrome';
 import { chai } from 'vitest';
 
@@ -11,6 +11,7 @@ beforeEach(() => {
     var expect = chai.expect;
 })
 
+let deepClone = (obj) => JSON.parse(JSON.stringify(obj));
 beforeAll(() => {
     // vi.mock("../../../../src/content_script/portConnector")
     // vi.mock('../../../../src/content_script/configManager', () => {
@@ -83,10 +84,16 @@ describe('Test test', () => {
         
 
         // screen.getByText('loading-wrapper');
-
+        let conf = {
+            userId: 0,
+            currentConfig: "liste principale",
+            configsList: [
+                deepClone(config)
+            ]
+        }
         c({
             type: "GET_CURRENT_CONFIGURATION",
-            data: config
+            data: conf
         })
         c({
             type: "GET_STREAM_INFO",

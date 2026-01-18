@@ -41,7 +41,7 @@ class ConfigManager {
                     else if (b.isLive) return 1;
                     else return alphaSort(a,b);
                 })
-                this.channelsPickRef.update(c => msg.data);
+                this.channelsPickRef.set(msg.data);
                 // console.log("updating", msg.data);
                 // this.save = streamInfo;
             } else if (msg.type === "UPDATE_STREAM_INFO") {

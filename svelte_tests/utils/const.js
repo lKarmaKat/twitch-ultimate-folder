@@ -1,12 +1,13 @@
 export const config = {
     "10": {
+        "id": "list 10",
+        "name": "list 10",
         "behavior": {
             "extendOnClick": false,
             "extendOnHover": false,
             "extendedOnStartup": true,
             "isPinnable": true
         },
-        "id": "list 10",
         "items": [
             {
                 "channel_id": "241808969",
@@ -31,7 +32,6 @@ export const config = {
                 "viewer_count": 631
             }
         ],
-        "name": "list 10",
         "style": {
             "content": {
                 "contentColor": "#808080",
@@ -48,13 +48,14 @@ export const config = {
         }
     },
     "rootList": {
+        "id": "node1",
+        "name": "liste principale",
         "behavior": {
             "extendOnClick": false,
             "extendOnHover": false,
             "extendedOnStartup": true,
             "isPinnable": true
         },
-        "id": "node1",
         "items": [
             {
                 "channel_id": "117168642",
@@ -83,7 +84,6 @@ export const config = {
                 "type": "liste"
             }
         ],
-        "name": "liste principale",
         "style": {
             "content": {
                 "backgroundColor": "#808080",

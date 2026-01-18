@@ -39,38 +39,39 @@ export class ConfigManager {
         // if (this.userConfigs) return new Promise((resolve) => resolve(this.userConfigs!));
 
         this.userConfigsPromise = new Promise<UserConfigs>((resolve, reject) => {
+            let userId: number;
             if (!this.user) {
-                // reject(new Error("e")); not working for some reasons
-                // Get current config for default user
+                userId = 0;
+            } else {
+                userId = this.user.id;
             }
-            chrome.storage.local.get(String(this.user!.id), (data: { [key: string]: UserConfigs }) => {
-                let userStructure: any = data[String(this.user!.id)];
+            chrome.storage.local.get(String(userId), (data: { [key: string]: UserConfigs }) => {
+                let userStructure: any = data[String(userId)];
                 if (userStructure) {
                     this.userConfigs = userStructure;
                 }
                 if (this.userConfigs) {
                     if (!this.userConfigs.currentConfig) {
                         if (this.userConfigs.configsList.length === 0) {
-                            console.log(`No config list for  ${this.user} adding default`);
+                            // console.log(`No config list for  ${this.user} adding default`);
                             this.userConfigs.currentConfig = CST.NEW_LIST.name;
                             this.userConfigs.configsList = [
                                 CST.STARTUP_CONF
                             ]
                         } else {
-                            console.log(`No config found without current config ${this.user} `);
+                            // console.log(`No config found without current config ${this.user} `);
                             this.userConfigs.currentConfig = this.userConfigs.configsList[0].rootList.name;
                         }
                     }
                     resolve(this.userConfigs);
                 } else {
-                    console.log(`No config found for ${this.user} returning startup config`)
+                    // console.log(`No config found for ${this.user} returning startup config`)
                     let startConfig = CST.STARTUP_USER_CONFIGS;
                     startConfig.userId = this.user!.id;
                     resolve(CST.STARTUP_USER_CONFIGS);
                 }
                 reject(new Error("This shouldn't even be possibe"));
             });
-            // resolve(CST.STARTUP_USER_CONFIGS);
         }).finally(() => this.userConfigsPromise = null);
         return this.userConfigsPromise;
     }
@@ -86,11 +87,17 @@ export class ConfigManager {
     }
 
     saveConfig(configToSave: I_CONFIG) {
-        if (!this.user)
-            throw new Error("Unable to save namedConfig reason: no user found");
+        if (!configToSave) return;
+        
+        let userId: number;
+        if (!this.user) {
+            userId = 0;
+        } else {
+            userId = this.user.id;
+        }
 
-        chrome.storage.local.get(String(this.user!.id), (userContent: { [key: string]: UserConfigs }) => {
-            let userStructure: UserConfigs = userContent[this.user!.id];
+        chrome.storage.local.get(String(userId), (userContent: { [key: string]: UserConfigs }) => {
+            let userStructure: UserConfigs = userContent[userId];
             if (userStructure) {
                 let index = userStructure.configsList.findIndex(conf => conf.rootList.name === configToSave.rootList.name);
                 if (index >= 0) {
@@ -101,11 +108,10 @@ export class ConfigManager {
                 console.log("Saving config in existing config struc", userStructure);
                 chrome.storage.local.set(userContent);
             } else {
-                // const id = this.user!.id;
                 let c: any = {};
-                c[this.user!.id] = {
-                    userId: this.user!.id, 
-                    currentConfig: 'default',
+                c[userId] = {
+                    userId: userId, 
+                    currentConfig: configToSave.rootList.name,
                     configsList: [ configToSave ]
                 }
                 console.log("Saving new configObject", c);

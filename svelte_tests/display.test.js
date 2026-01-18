@@ -2,7 +2,7 @@ import { tick } from 'svelte';
 import {config, channelsRef} from './utils/const'
 import { render, screen } from '@testing-library/svelte';
 import { beforeAll, afterAll, vi, describe, test, beforeEach, expect } from 'vitest'
-import DisplayWrapper from '../../../../src/svelte/DisplayWrapper.svelte'
+import DisplayWrapper from '../src/svelte/DisplayWrapper.svelte'
 // import { chrome } from 'jest-chrome';
 import * as chrome from 'sinon-chrome';
 
