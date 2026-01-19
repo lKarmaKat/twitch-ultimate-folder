@@ -13,7 +13,7 @@ class ConfigManager {
     // channelsRef = writable([]);
     save = [];
 	channelsConfig = writable<UserConfigs>();
-    currentConfig = writable<string>('c');
+    currentConfig = writable<string>('');
     bridge: PortConnector;
     // display = chaines;
 

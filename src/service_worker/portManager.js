@@ -62,6 +62,12 @@ class PortManager {
         this.sendMessageToTabs(type, message, name);
         this.sendMessageToTabs(type, message, name, this.externalPorts);
     }
+
+    closeAllPorts() {
+        for (let port of [...this.port, ...this.externalPorts]) {
+            port.disconnect();
+        }
+    }
 }
 
 export default PortManager;

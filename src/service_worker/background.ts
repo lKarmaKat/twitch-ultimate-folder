@@ -50,6 +50,9 @@ let sendCurrentConfigOnConnect = (port: chrome.runtime.Port) => {
 }
 
 let themeSombre = true;
+chrome.storage.local.get("theme").then((data) => {
+  themeSombre = data.theme === 1 ? true : false;
+});
 let sendCurrentTheme = (port: chrome.runtime.Port) => {
   port.postMessage({
     "type": "theme",
@@ -59,6 +62,9 @@ let sendCurrentTheme = (port: chrome.runtime.Port) => {
 
 let portManager = new PortManager(sendCurrentConfigOnConnect, sendStreamInfoOnConnect, sendCurrentTheme);
 
+self.addEventListener('beforeunload', () => {
+  portManager.closeAllPorts();
+});
 
 chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
     console.log("MESSAGE", msg.type, msg.data);    
@@ -100,6 +106,9 @@ if (msg.type === CST.GET_STREAM_INFO) {
     sendResponse({
       type: CST.THEME,
       data: themeSombre
+    });
+    chrome.storage.local.set({
+      "theme": themeSombre ? 1 : 0
     });
     portManager.sendMessageToTabs(CST.THEME, themeSombre, "theme");
     return true;

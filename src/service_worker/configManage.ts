@@ -164,7 +164,6 @@ export class ConfigManager {
  * l'utilisateur peut créer plusieurs configurations avec un nom.
  * si aucune configuration n'existe, une config par défaut nommée 'défaut' est renvoyée (mais pas encore sauvegardée)
  *      une fois sauvegardée la config par défaut devient la currentConfig (si aucune autre config).
- * si une config est demandée et qu'elle n'est pas trouvée, un message d'erreur est envoyé (port spécifique ?)
  * si la config n'existe pas en mémoire au moment de la sauvegarde, elle est créée
  * l'utilisateur peut sauvegarder une config spécifique
  * si une config currentConfig est supprimée, la première config de la liste devient la currentConfig
