@@ -49,7 +49,7 @@ export default defineConfig({
         popup_hmtl: 'src/iframe/config-popup.html',
         sidebar_inject: 'src/svelte/injects/sidebar.js',
         popup: 'src/action_popup/popup.html',
-        // popup_inject: 'src/svelte/injects/main.js',
+        popup_inject: 'src/svelte/injects/main.js',
         
 
       },
