@@ -22,22 +22,25 @@
 	});
 
 	function updateStyleVars(listId, config) {
-		behavior = config[listId]?.behavior;
-		style = config[listId]?.style;
-		if (behavior) {
-			extendedOnStartup = $channelConfig[listId].behavior.extendedOnStartup;
-			extendOnHover = $channelConfig[listId].behavior.extendOnHover;
-			extendOnClick = $channelConfig[listId].behavior.extendOnClick;
-			isPinnable = $channelConfig[listId].behavior.isPinnable;
+		if (config) {
+			behavior = config[listId]?.behavior;
+			style = config[listId]?.style;
+			if (behavior) {
+				extendedOnStartup = $channelConfig[listId].behavior.extendedOnStartup;
+				extendOnHover = $channelConfig[listId].behavior.extendOnHover;
+				extendOnClick = $channelConfig[listId].behavior.extendOnClick;
+				isPinnable = $channelConfig[listId].behavior.isPinnable;
+			}
+			
+			if (style && style.theme === 'CUSTOM') {
+				header = style.header;
+				content = style.content;
+			} else {
+				header = '';
+				content = '';
+			}
 		}
 		
-		if (style && style.theme === 'CUSTOM') {
-			header = style.header;
-			content = style.content;
-		} else {
-			header = '';
-			content = '';
-		}
 	}
 	updateStyleVars(listId, $channelConfig[listId]);
 	let extended = extendedOnStartup;
@@ -104,17 +107,20 @@
 	function atLeastOneLiveChannel() {
 		let hasAllOthers = false;
 		liveChannels.clear();
-		for (let ch of $channelConfig[listId].items) {
-			if (ch.id === ALL_OTHER_CHANNELS) {
-				hasAllOthers = true;
-			} else {
-				let liveChannel = getNodeIfLive(ch);
-				if (liveChannel) {
-					liveChannels.add(ch);
+		if ($channelConfig[listId] && $channelConfig[listId].items) {
+
+			for (let ch of $channelConfig[listId].items) {
+				if (ch.id === ALL_OTHER_CHANNELS) {
+					hasAllOthers = true;
+				} else {
+					let liveChannel = getNodeIfLive(ch);
+					if (liveChannel) {
+						liveChannels.add(ch);
+					}
 				}
 			}
+			return liveChannels.size > 0 || hasAllOthers;
 		}
-		return liveChannels.size > 0 || hasAllOthers;
 	}
 
 </script>

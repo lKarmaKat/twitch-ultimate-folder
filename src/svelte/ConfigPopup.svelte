@@ -210,7 +210,7 @@
             <ConfigPannel bind:channelConfig={selectedConfig}/>
           </div>
           <p class="el">{Object.getOwnPropertyNames($channelsConfig).length}</p>
-          {#if $channelsPickRef.length && Object.getOwnPropertyNames($channelsConfig).length > 0}
+          {#if $channelsPickRef.length && Object.getOwnPropertyNames($channelsConfig).length > 0 && $selectedConfig && Object.getOwnPropertyNames($selectedConfig).length > 0}
           <div class="display-container">
             <Display listId={"rootList"} bind:channelConfig={selectedConfig} bind:channelRef={channelsPickRef} />
           </div>
