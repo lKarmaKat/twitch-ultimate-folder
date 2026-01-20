@@ -24,7 +24,7 @@
                 "assets/dark_channel.css",
                 "assets/TitlePopup.js",
                 "assets/TitlePopup.css",
-                "assets/constantes.js",
+                "assets/index.js",
                 "popup_inject.js"
         ],
             "matches": ["*://*.twitch.tv/*"]

@@ -12,9 +12,35 @@
   let configManager = new ConfigManager();
 
   let c = configManager.getConfig();
-  let channelsPickRef = c.channelsPickRef;
-  let channelsConfig = c.channelsConfig;
-
+  let channelsPickRef = c.channelsPickRef;// = writable([]);
+  let channelsConfig = c.channelsConfig; // = writable({
+  let currentConfig = configManager.currentConfig; // = writable({
+  let selectedConfig = writable();
+  let currentConfigStr = '';
+  channelsConfig.subscribe(e => {
+    console.log("Config found", e);
+    if ($currentConfig) {
+      let index = $channelsConfig?.configsList.find(conf => conf.rootList?.name === $currentConfig);
+        if (index) {
+          selectedConfig.set(index);
+          console.log("selected config", $selectedConfig, index)
+          return index;
+        }
+    }
+  })
+  // let selectedConfigDer = derived([currentConfig, channelsConfig], ([$currentConfig, $channelsConfig]) => {
+  //   console.log("update");
+  //   if ($currentConfig !== currentConfigStr && $channelsConfig?.configsList) {
+  //       currentConfigStr = $currentConfig;
+  //       let index = $channelsConfig.configsList.find(conf => conf.rootList.name === $currentConfig);
+  //       if (index) {
+  //         selectedConfig.set(index);
+  //         console.log("selected config", $selectedConfig, index)
+  //         return index;
+  //       }
+  //   }
+  // });
+  // selectedConfigDer.subscribe(e => e);
   // channelsPickRef.subscribe(e => console.log("new channelpic", e))
   // channelsConfig.subscribe(e => console.log("new channelsConfig", e))
   //   });
@@ -58,9 +84,9 @@
 	{/if}
 </svelte:head> -->
 
-{#if $channelsConfig?.rootList?.items?.length > 0 && $channelsPickRef.length}
+{#if $selectedConfig && Object.getOwnPropertyNames($selectedConfig).length > 0 && $channelsPickRef?.length > 0}
   <div class="display-wrapper">
-    <Display listId={"rootList"} bind:channelConfig={channelsConfig} bind:channelRef={channelsPickRef} />
+    <Display listId={"rootList"} bind:channelConfig={selectedConfig} bind:channelRef={channelsPickRef} />
   </div>
 {:else}
   <WaitingConfig />

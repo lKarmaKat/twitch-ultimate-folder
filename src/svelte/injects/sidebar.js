@@ -6,7 +6,6 @@ import { mount } from 'svelte'
 function mountSidebar() {
   // let t = document.body
   let bt = document.querySelector("div[aria-label='Followed Channels']")
-  
   let before = document.createElement('div');
   before.id = 'before-inject-sidebar';
   bt.insertBefore(before, bt.firstElementChild);
@@ -23,13 +22,13 @@ function mountSidebar() {
   //   target: side,
   // })
 
-  // mount(DisplayWrapper, {
-  //    target: side,
-  //  })
+  mount(DisplayWrapper, {
+     target: side,
+   })
 
-  // mount(TitlePopup, {
-  //    target: document.body,
-  //  })
+  mount(TitlePopup, {
+     target: document.body,
+   })
 
   // new DisplayWrapper({
   //   target: t

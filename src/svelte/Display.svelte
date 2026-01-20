@@ -100,12 +100,30 @@
 		return list;
 	}
 
+	let liveChannels = new Set();
+	function atLeastOneLiveChannel() {
+		let hasAllOthers = false;
+		liveChannels.clear();
+		for (let ch of $channelConfig[listId].items) {
+			if (ch.id === ALL_OTHER_CHANNELS) {
+				hasAllOthers = true;
+			} else {
+				let liveChannel = getNodeIfLive(ch);
+				if (liveChannel) {
+					liveChannels.add(ch);
+				}
+			}
+		}
+		return liveChannels.size > 0 || hasAllOthers;
+	}
+
 </script>
 	<!-- <div class="width-test">
 
 	</div> -->
 	<!-- svelte-ignore a11y-no-static-element-interactions -->
 	<!-- svelte-ignore a11y-click-events-have-key-events -->
+	 {#if atLeastOneLiveChannel()}
 	<div class="list-container">
 		{#if listId !== 'rootList'}
 		<div class="list-header" style="background-color: {header.headerColor};" on:click={toggleAutoCollapse}>
@@ -165,7 +183,7 @@
 			</div>
 		{/if}
 	</div>
-			
+	{/if}
 			
 <style>
 	div.width-test {
