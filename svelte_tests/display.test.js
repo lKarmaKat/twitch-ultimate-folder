@@ -10,6 +10,7 @@ beforeEach(() => {
     global.chrome = chrome;
 })
 
+let deepClone = (obj) => JSON.parse(JSON.stringify(obj));
 beforeAll(() => {
 
     // vi.mock('../../../../src/content_script/configManager', () => {
@@ -38,7 +39,7 @@ describe('Test test', () => {
     test('réagit à une mise à jour du store', async () => {
 
         let c;
-        chrome.runtime.connect.returns({
+        let ch = chrome.runtime.connect.returns({
             name: 'test-port',
             onMessage: {
                 addListener: vi.fn((callback) => {
@@ -54,10 +55,16 @@ describe('Test test', () => {
 
         // WaitingConfig
         screen.getByText('Waiting for config');
-
+        let conf = {
+            userId: 0,
+            currentConfig: "liste principale",
+            configsList: [
+                deepClone(config)
+            ]
+        }
         c({
             type: "GET_CURRENT_CONFIGURATION",
-            data: config
+            data: conf
         })
         c({
             type: "GET_STREAM_INFO",
@@ -66,6 +73,7 @@ describe('Test test', () => {
 
         await tick();
         
+        expect(chrome.runtime.connect.callCount).toBe(1);
         // Display
         screen.getByText('chowh1');
         screen.getByText('631');
@@ -78,11 +86,25 @@ describe('Test test', () => {
         })
         
         await tick();
-        
-        // screen.getByText('631');
         screen.getByText('222');
 
+        channelsRef[3].viewer_count = 225;
+        // console.log(channelsRef)
+        c({
+            type: "UPDATE_STREAM_INFO",
+            data: channelsRef
+        })
+        
+        await tick();
+        
+        // screen.getByText('631');
+        screen.getByText('225');
 
+        await new Promise((resolve) => setTimeout(() => resolve(), 2000));
+
+
+        expect(1, 1)
+        expect(chrome.runtime.connect.callCount).toBe(1);
 
     });
 });

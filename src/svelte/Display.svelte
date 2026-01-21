@@ -51,7 +51,7 @@
 	}
 
 	function getNodeIfLive(item) {
-	 	counter = document.querySelectorAll(".channel-overlay.li" + listId ).length;
+	 	// counter = document.querySelectorAll(".channel-overlay.li" + listId ).length;
 		return $channelRef.find(e => {
 			return e.channel_id === item.channel_id && e.isLive
 		});
@@ -119,6 +119,7 @@
 					}
 				}
 			}
+			counter = liveChannels.size;
 			return liveChannels.size > 0 || hasAllOthers;
 		}
 	}

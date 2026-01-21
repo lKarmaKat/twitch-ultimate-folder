@@ -4,7 +4,7 @@
   import ConfigManager from '../content_script/configManager';
   // import PortConnector from '../content_script/portConnector';
   import WaitingConfig from './WaitingConfig.svelte';
-  import { writable } from 'svelte/store';
+  import { writable, derived } from 'svelte/store';
 
   // import { onMount } from 'svelte';
   // import { writable } from 'svelte/store';
@@ -17,30 +17,30 @@
   let currentConfig = configManager.currentConfig; // = writable({
   let selectedConfig = writable();
   let currentConfigStr = '';
-  channelsConfig.subscribe(e => {
-    console.log("Config found", e);
-    if ($currentConfig) {
-      let index = $channelsConfig?.configsList.find(conf => conf.rootList?.name === $currentConfig);
-        if (index) {
-          selectedConfig.set(index);
-          console.log("selected config", $selectedConfig, index)
-          return index;
-        }
-    }
-  })
-  // let selectedConfigDer = derived([currentConfig, channelsConfig], ([$currentConfig, $channelsConfig]) => {
-  //   console.log("update");
-  //   if ($currentConfig !== currentConfigStr && $channelsConfig?.configsList) {
-  //       currentConfigStr = $currentConfig;
-  //       let index = $channelsConfig.configsList.find(conf => conf.rootList.name === $currentConfig);
+  // channelsConfig.subscribe(e => {
+  //   console.log("Config found", e);
+  //   if ($currentConfig) {
+  //     let index = $channelsConfig?.configsList.find(conf => conf.rootList?.name === $currentConfig);
   //       if (index) {
   //         selectedConfig.set(index);
   //         console.log("selected config", $selectedConfig, index)
   //         return index;
   //       }
   //   }
-  // });
-  // selectedConfigDer.subscribe(e => e);
+  // })
+  let selectedConfigDer = derived([currentConfig, channelsConfig], ([$currentConfig, $channelsConfig]) => {
+    console.log("update");
+    if ($channelsConfig?.configsList) {
+        currentConfigStr = $currentConfig;
+        let index = $channelsConfig.configsList.find(conf => conf.rootList.name === $currentConfig);
+        if (index) {
+          selectedConfig.set(index);
+          console.log("selected config", $selectedConfig, index)
+          return index;
+        }
+    }
+  });
+  selectedConfigDer.subscribe(e => e);
   // channelsPickRef.subscribe(e => console.log("new channelpic", e))
   // channelsConfig.subscribe(e => console.log("new channelsConfig", e))
   //   });

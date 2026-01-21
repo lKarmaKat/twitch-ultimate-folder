@@ -45,6 +45,7 @@ class ConfigManager {
                 // console.log("updating", msg.data);
                 // this.save = streamInfo;
             } else if (msg.type === "UPDATE_STREAM_INFO") {
+                console.log("UPDATING")
                 msg.data.sort((a: StreamsInfos, b: StreamsInfos) => {
                     let alphaSort = (a: StreamsInfos, b: StreamsInfos) => {
                         return a.channel_name.localeCompare(b.channel_name);
@@ -67,12 +68,12 @@ class ConfigManager {
                     }
                     return liste;
                 })
-                this.channelsConfig.update(liste => liste);
                 // console.log(" updating updating");
                 this.channelsPickRef.update(e => {
                     // console.log(e)
                     return e;
                 })
+                this.channelsConfig.update(liste => liste);
             }
         }
         // console.log("starting port")
