@@ -97,7 +97,7 @@ describe('Test test', () => {
         })
         c({
             type: "GET_STREAM_INFO",
-            data: channelsRef
+            data: deepClone(channelsRef)
         })
 
         await tick();
@@ -106,7 +106,7 @@ describe('Test test', () => {
         screen.getAllByText('Cyqop');
         
         let mainChannelsList = document.querySelector("section#main-channels-list");
-        expect(mainChannelsList);
+        expect(mainChannelsList.length).not.null;
         let draggableChannel = mainChannelsList.querySelectorAll("a.card");
         expect(draggableChannel.length).toBe(4);
         expect(draggableChannel[0].querySelector('.channel-name').textContent).toBe('AVAMind')
@@ -136,6 +136,37 @@ describe('Test test', () => {
         getByText(draggableChannel[3].querySelector('.viewer-count'), '222');
 
         screen.getAllByText('222');
+
+
+        let chConf = deepClone(channelsRef);
+        chConf[3].isLive = false;
+        // console.log(chConf2)
+
+        c({
+            type: "UPDATE_STREAM_INFO",
+            data: chConf
+        })
+
+        await tick();
+
+        let chaines = document.querySelector('.display-container').querySelectorAll('.card');
+        expect(chaines.length).toBe(3);
+
+        chConf = deepClone(channelsRef);
+        chConf[3].isLive = true;
+        chConf[3].game_name = 'gameTest';
+
+        c({
+            type: "UPDATE_STREAM_INFO",
+            data: chConf
+        })
+
+        await tick();
+
+        chaines = document.querySelector('.display-container').querySelectorAll('.card');
+        expect(chaines.length).toBe(4);
+        expect(chaines[3].querySelector('.game-name').innerHTML).toContain('gameTest');
+
     });
 });
 

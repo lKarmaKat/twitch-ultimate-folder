@@ -70,7 +70,7 @@ export class DataFormatter {
                             id: channel.broadcaster_id + Math.round(Math.random()*100000),
                             channel_id: channel.broadcaster_id,
                             channel_name: channel.broadcaster_name,
-                            isLive: false
+                            isLive: false,
                         } as StreamsInfos);
                 })
                 resolve(this.allFollowedStreams);

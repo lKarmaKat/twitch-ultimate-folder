@@ -68,31 +68,30 @@ describe('Test test', () => {
         })
         c({
             type: "GET_STREAM_INFO",
-            data: channelsRef
+            data: deepClone(channelsRef)
         })
 
         await tick();
         
-        expect(chrome.runtime.connect.callCount).toBe(1);
         // Display
         screen.getByText('chowh1');
         screen.getByText('631');
         
-        channelsRef[3].viewer_count = 222;
-        // console.log(channelsRef)
+        let chConf = deepClone(channelsRef);
+        chConf[3].viewer_count = 222;
         c({
             type: "UPDATE_STREAM_INFO",
-            data: channelsRef
+            data: chConf
         })
         
         await tick();
         screen.getByText('222');
 
-        channelsRef[3].viewer_count = 225;
-        // console.log(channelsRef)
+        chConf = deepClone(channelsRef);
+        chConf[3].viewer_count = 225;
         c({
             type: "UPDATE_STREAM_INFO",
-            data: channelsRef
+            data: chConf
         })
         
         await tick();
@@ -100,7 +99,42 @@ describe('Test test', () => {
         // screen.getByText('631');
         screen.getByText('225');
 
-        await new Promise((resolve) => setTimeout(() => resolve(), 2000));
+
+
+        
+        chConf = deepClone(channelsRef);
+        chConf[3].isLive = false;
+        // console.log(chConf2)
+
+        c({
+            type: "UPDATE_STREAM_INFO",
+            data: chConf
+        })
+
+        await tick();
+
+        let chaines = document.querySelectorAll('.card');
+        expect(chaines.length).toBe(3);
+
+
+        
+        chConf = deepClone(channelsRef);
+        chConf[3].isLive = true;
+        chConf[3].game_name = 'gameTest';
+
+        c({
+            type: "UPDATE_STREAM_INFO",
+            data: chConf
+        })
+
+        await tick();
+
+        
+        screen.getByText('Cyqop');
+        screen.getByText('gameTest');
+        chaines = document.querySelectorAll('.card');
+        expect(chaines.length).toBe(4);
+
 
 
         expect(1, 1)

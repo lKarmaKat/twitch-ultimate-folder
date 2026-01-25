@@ -18,7 +18,6 @@ export const config = {
                 "language": "fr",
                 "profile_image_url": "https://static-cdn.jtvnw.net/jtv_user_pictures/7611726d-3398-4231-8a33-cae5c0edad15-profile_image-300x300.png",
                 "title": "04.01 || BG3 + MOD ||  EP21 - Liberer un dragon géant ? OK",
-                "viewer_count": 3361
             },
             {
                 "channel_id": "91122178",
@@ -29,7 +28,6 @@ export const config = {
                 "language": "fr",
                 "profile_image_url": "https://static-cdn.jtvnw.net/jtv_user_pictures/cf0e90b4-6263-46a9-8673-31cd3409473e-profile_image-300x300.jpg",
                 "title": "HEY DONT SHOOOOOOOOOOOT",
-                "viewer_count": 631
             }
         ],
         "style": {
@@ -66,7 +64,6 @@ export const config = {
                 "language": "fr",
                 "profile_image_url": "https://static-cdn.jtvnw.net/jtv_user_pictures/80cc24b8-558c-440c-b5ef-05d12869019b-profile_image-300x300.png",
                 "title": "🚨 TRAHISON, AMITIÉ, PVP - 0 PUB en 2026 🚨 !Insta !doigt",
-                "viewer_count": 2492
             },
             {
                 "channel_id": "105458682",
@@ -77,7 +74,6 @@ export const config = {
                 "language": "en",
                 "profile_image_url": "https://static-cdn.jtvnw.net/jtv_user_pictures/bobross-profile_image-0b9dd167a9bb16b5-300x300.jpeg",
                 "title": "New Year Marathon!",
-                "viewer_count": 675
             },
             {
                 "id": 10,

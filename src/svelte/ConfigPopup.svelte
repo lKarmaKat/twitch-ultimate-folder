@@ -17,15 +17,13 @@
   let channelsConfig = c.channelsConfig; // = writable({
   let currentConfig = configManager.currentConfig; // = writable({
   let selectedConfig = writable();
-  let currentConfigStr = '';
   let selectedConfigDer = derived([currentConfig, channelsConfig], ([$currentConfig, $channelsConfig]) => {
-    console.log("update");
-    if ($currentConfig !== currentConfigStr && $channelsConfig?.configsList) {
-        currentConfigStr = $currentConfig;
+    // console.log("update");
+    if ($channelsConfig?.configsList) {
         let index = $channelsConfig.configsList.find(conf => conf.rootList.name === $currentConfig);
         if (index) {
           selectedConfig.set(index);
-          console.log("selected config", $selectedConfig, index)
+          // console.log("selected config", $selectedConfig, index)
           return index;
         }
     }
@@ -126,7 +124,6 @@
           return e;
         })
       currentConfig.set(newConfigName + newConfigIndex);
-      currentConfigStr = newConfigName + newConfigIndex;
       }
       newConfigIndex++;
     } while (configExist);
@@ -136,7 +133,6 @@
 
   function selectConfig(configName) {
     currentConfig.set(configName);
-    currentConfigStr = configName;
     console.log(configName);
   }
 </script>

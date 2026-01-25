@@ -16,7 +16,7 @@ class ConfigManager {
     currentConfig = writable<string>('');
     bridge: PortConnector;
     // display = chaines;
-
+    f : boolean = true;
     constructor() {
         // console.log("Constructeur config manager")
         this.startPort();
@@ -46,24 +46,51 @@ class ConfigManager {
                 // this.save = streamInfo;
             } else if (msg.type === "UPDATE_STREAM_INFO") {
                 console.log("UPDATING")
-                msg.data.sort((a: StreamsInfos, b: StreamsInfos) => {
-                    let alphaSort = (a: StreamsInfos, b: StreamsInfos) => {
-                        return a.channel_name.localeCompare(b.channel_name);
-                    }
-                    if (a.isLive && b.isLive) return alphaSort(a,b);
-                    else if (a.isLive) return -1;
-                    else if (b.isLive) return 1;
-                    else return alphaSort(a,b);
-                })
+                // msg.data.sort((a: StreamsInfos, b: StreamsInfos) => {
+                //     let alphaSort = (a: StreamsInfos, b: StreamsInfos) => {
+                //         return a.channel_name.localeCompare(b.channel_name);
+                //     }
+                //     if (a.isLive && b.isLive) return alphaSort(a,b);
+                //     else if (a.isLive) return -1;
+                //     else if (b.isLive) return 1;
+                //     else return alphaSort(a,b);
+                // })
                 // );
+                // msg.data.forEach((d: StreamsInfos) => {
+                //     if (d.channel_name.toLowerCase().includes("alphacast")) {
+                //         if (this.f) {
+                //             d.isLive = false;
+                //             this.f = !this.f
+                //         } else {
+                //             this.f = !this.f
+                //             d.isLive = true;
+                //         }
+                //         console.log(d);
+                //     }
+                //     // if (Math.random() > 0.5) {
+                //     //     d.viewer_count = d.viewer_count + 5;
+                //     // } else {
+                //     //     d.viewer_count = d.viewer_count - 5;
+                //     // }
+                // })
                 let m = new Map();
                 for (const onlineChannel of msg.data.filter((i: StreamsInfos) => i.isLive)) {
-                    m.set(onlineChannel.channel_id, onlineChannel.viewer_count);
+                    m.set(onlineChannel.channel_id, onlineChannel);
                 }
                 this.channelsPickRef.update(liste => {
                     for (let chaine in liste) {
-                        if (liste[chaine].isLive) {
-                            liste[chaine].viewer_count = m.get(liste[chaine].channel_id);
+                        if (liste[chaine]) {
+                            // liste[chaine].viewer_count = 666;
+                            let currentRef = m.get(liste[chaine].channel_id);
+                            if (currentRef) {
+                                liste[chaine].isLive = true;
+                                liste[chaine].viewer_count = currentRef.viewer_count;
+                                liste[chaine].title = currentRef.title;
+                                liste[chaine].game_name = currentRef.game_name;
+                            } else {
+                                liste[chaine].isLive = false;
+                                liste[chaine].viewer_count = 0;
+                            }
                         }
                     }
                     return liste;

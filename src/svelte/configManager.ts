@@ -1,7 +1,7 @@
 import { writable } from 'svelte/store';
 import type { StreamsInfos } from '@src/service_worker/models/streamsInfos.model';
 
-export class ConfigManager {
+export class ConfigManagfer {
     channelsPickRef = writable<StreamsInfos[]>([
             {
                     id: 123456789, 
