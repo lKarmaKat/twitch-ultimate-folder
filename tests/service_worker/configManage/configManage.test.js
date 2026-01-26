@@ -132,6 +132,23 @@ describe('test integration getToken', () => {
         expect(configStructure.currentConfig).toBe("liste principale");
     });
 
+    test("Première récupération de config, rien dans le store", async () => {
+        const writ = writable();
+        chrome.storage.local.get = jest.fn().mockImplementation((key, callback) => {
+            expect(key).toBe('0');
+            callback({ 0: {} })
+        });
+
+        const configManage = new ConfigManager(null, writ);
+        const configStructure = await configManage.getConfigObjectForCurrentUser()
+        
+        expect(configStructure).toBeDefined();
+        expect(chrome.storage.local.get).toHaveBeenCalledTimes(1);
+        expect(configStructure.configsList.length).toBe(1);
+        expect(configStructure.userId).toBe(0);
+        expect(configStructure.currentConfig).toBe("liste principale");
+    });
+
 
     test("Pas d'utilisateur, save config par défaut", async () => {
         const writ = writable();

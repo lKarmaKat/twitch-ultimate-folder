@@ -73,10 +73,10 @@
 
 
   function showDisplayConf() {
-  console.log("display", $channelsConfig);
+    console.log("display", $channelsConfig);
   }
   function closePopup() {
-  chrome.runtime.sendMessage({type: 'HIDE_POPUP'});
+    chrome.runtime.sendMessage({type: 'HIDE_POPUP'});
   }
 
   function promptResetConfig() {
@@ -212,7 +212,7 @@
           </div>
           {/if}
         </div>
-        <button on:click={showDisplayConf}>Show display conf</button>
+        <button id="showC" on:click={showDisplayConf}>Show display conf</button>
         <button on:click={() => send()}>Enregistrer</button>
       {/if}
     </div>

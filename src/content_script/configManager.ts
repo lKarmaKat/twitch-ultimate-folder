@@ -2,7 +2,7 @@ import PortConnector from './portConnector.js';
 import { writable } from 'svelte/store';
 import type { StreamsInfos } from '@src/service_worker/models/streamsInfos.model';
 import * as CST from '../constantes'
-import type { UserConfigs } from '../service_worker/models/userStructure.js';
+import type { UserConfigs, I_CONFIG } from '../service_worker/models/userStructure.js';
 
 class ConfigManager {
     extensionId: string = "ijodiaomnnnjljemidchdifmpnnmcnlg";
@@ -27,7 +27,7 @@ class ConfigManager {
             if (msg.type === "GET_CURRENT_CONFIGURATION") {
                 // TODO voir si sauvegarder une liste ne vas pas écraser des données en cours de modif dans une autre popup.
                 this.currentConfig.set(msg.data.currentConfig);
-                console.log("Setting config in config manager", msg);
+                // console.log("Setting config in config manager", msg);
                 if (msg.data) {
                     this.channelsConfig.set(structuredClone(msg.data));
                 }
@@ -45,7 +45,7 @@ class ConfigManager {
                 // console.log("updating", msg.data);
                 // this.save = streamInfo;
             } else if (msg.type === "UPDATE_STREAM_INFO") {
-                console.log("UPDATING")
+                // console.log("UPDATING")
                 // msg.data.sort((a: StreamsInfos, b: StreamsInfos) => {
                 //     let alphaSort = (a: StreamsInfos, b: StreamsInfos) => {
                 //         return a.channel_name.localeCompare(b.channel_name);
@@ -116,8 +116,29 @@ class ConfigManager {
 
 
 
-    send(toSaveChannels: UserConfigs) {
-        chrome.runtime.sendMessage(this.extensionId, { type: 'SAVE_CHANNELS_LIST', data: toSaveChannels });
+    send(toSaveChannels: I_CONFIG) {
+        let copy = this.cleanRecursively('rootList', toSaveChannels);  
+        chrome.runtime.sendMessage(this.extensionId, { type: 'SAVE_CHANNELS_LIST', data: copy });
+    }
+
+    cleanRecursively(listId: string, toSaveChannels: I_CONFIG) {
+        let copy = JSON.parse(JSON.stringify(toSaveChannels));
+        if (copy[listId].items.length > 0) {
+            for (let item of copy[listId].items) {
+                if ((item as any).type === 'liste') {
+                    this.cleanRecursively((item as any).id, copy);
+                } else {
+                    delete (item as any).channel_name;
+                    delete (item as any).game_name;
+                    delete (item as any).isLive;
+                    delete (item as any).language;
+                    delete (item as any).profile_image_url;
+                    delete (item as any).title;
+                    delete (item as any).viewer_count;
+                }
+            }
+        }
+        return copy;
     }
 
     resetConfig() {

@@ -112,14 +112,14 @@
 </script>
 
 
-<div class="list-container">
+<div id="list-{listId}" class="list-container">
 	<!-- svelte-ignore a11y-click-events-have-key-events -->
 	<!-- svelte-ignore a11y-no-static-element-interactions -->
 	<div class="list-header" on:click={selectConfig}>
 		<!-- <div class="header" style="background-color: {headerColor};"> -->
 		<p class="list-title">{$channelConfig[listId]?.name}</p>
 		<div class="list-side-menu">
-			<button class="add" on:click={() => addNode()} title="Add new list in {listId}">+</button>
+			<button id="add-list-{listId}" class="add" on:click={() => addNode()} title="Add new list in {listId}">+</button>
 			<button class="delete" on:click={()=>{requestDeleteToParent(listId)}}>x</button>
 		</div>
 	</div>
@@ -143,7 +143,7 @@
 			{@const i = getNode(item)}
 				<div class="channel">
 					<div class="">
-						<button class="delete" on:click={()=>{removeChannel(i?.channel_id)}}>x</button>
+						<button class="delete" id="remove-{i?.channel_id}" on:click={()=>{removeChannel(i?.channel_id)}}>x</button>
 					</div>
 					<DraggableChannel 
 					channelId={i?.channel_id} 

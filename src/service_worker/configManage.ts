@@ -50,24 +50,25 @@ export class ConfigManager {
                 if (userStructure) {
                     this.userConfigs = userStructure;
                 }
-                if (this.userConfigs) {
+                if (this.userConfigs && Object.getOwnPropertyNames(this.userConfigs).length > 0) {
                     if (!this.userConfigs.currentConfig) {
                         if (this.userConfigs.configsList.length === 0) {
-                            // console.log(`No config list for  ${this.user} adding default`);
+                            console.log(`No config list for  ${this.user} adding default`);
                             this.userConfigs.currentConfig = CST.NEW_LIST.name;
                             this.userConfigs.configsList = [
                                 CST.STARTUP_CONF
                             ]
                         } else {
-                            // console.log(`No config found without current config ${this.user} `);
+                            console.log(`No config found without current config ${this.user} `);
                             this.userConfigs.currentConfig = this.userConfigs.configsList[0].rootList.name;
                         }
                     }
                     resolve(this.userConfigs);
                 } else {
-                    // console.log(`No config found for ${this.user} returning startup config`)
+                    console.log(`No config found for ${this.user} returning startup config`)
                     let startConfig = CST.STARTUP_USER_CONFIGS;
-                    startConfig.userId = this.user!.id;
+                    startConfig.currentConfig = startConfig.configsList[0].rootList.name;
+                    startConfig.userId = userId;
                     resolve(CST.STARTUP_USER_CONFIGS);
                 }
                 reject(new Error("This shouldn't even be possibe"));
