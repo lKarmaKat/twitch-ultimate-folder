@@ -7,7 +7,7 @@ import { expect, test } from 'vitest';
 
 // https://vite.dev/config/
 export default defineConfig({
-  base: '',
+  base: './',
   plugins: [
     svelte({
       compilerOptions: {
@@ -50,6 +50,7 @@ export default defineConfig({
         sidebar_inject: 'src/svelte/injects/sidebar.js',
         popup: 'src/action_popup/popup.html',
         popup_inject: 'src/svelte/injects/main.js',
+        e2e: 'index.html'
         
 
       },

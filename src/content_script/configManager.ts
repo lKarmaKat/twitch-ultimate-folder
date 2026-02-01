@@ -103,7 +103,7 @@ class ConfigManager {
                 this.channelsConfig.update(liste => liste);
             }
         }
-        // console.log("starting port")
+        // console.log("ConfigManager starting port")
         this.bridge = new PortConnector(dataReceivedCallback);
     }
 
