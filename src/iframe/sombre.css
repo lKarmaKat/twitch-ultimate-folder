@@ -31,7 +31,9 @@ a.card .game-name {
 a.card div.offline {
     color: rgb(239, 239, 241);
 }
-
+.pannel-container {
+    color: rgb(239, 239, 241);
+}
 input[type=text] {
     border-bottom: 1px solid #ffffff !important;
     color: white;

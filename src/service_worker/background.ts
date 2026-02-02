@@ -110,6 +110,14 @@ if (msg.type === CST.GET_STREAM_INFO) {
     chrome.storage.local.set({
       "theme": themeSombre ? 1 : 0
     });
+    chrome.tabs.query({
+          url: ['https://www.twitch.tv/*']
+        }, tabs => {
+      console.log("UPDATE THEME " + tabs);
+      for (let tab of tabs) {
+        chrome.tabs.sendMessage(tab.id!, { type: CST.THEME, data: themeSombre });
+      }
+    });
     portManager.sendMessageToTabs(CST.THEME, themeSombre, "theme");
     return true;
   }

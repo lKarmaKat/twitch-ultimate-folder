@@ -65,9 +65,10 @@ function injectScript(file) {
 
 
 function addStyle(msg) {
+  console.log("UPDATING THEME " + msg)
   let existingTag = document.head.querySelector('.injected-sidebar-css');
   if (existingTag) {
-    document.head.querySelector('.monCSS').remove()
+    document.head.querySelector('.injected-sidebar-css').remove()
   }
   
   const link = document.createElement('link');

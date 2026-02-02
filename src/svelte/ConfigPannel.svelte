@@ -56,10 +56,6 @@
         <div class="bloc">
             <p>Behavior</p>
             <div class="row">
-                <p><strong>Permettre à une liste d'afficher les chaines hors lignes</strong></p>
-                <p><strong>Permettre à une liste d'afficher les chaines hors lignes</strong></p>
-                <p><strong>Permettre à une liste d'afficher les chaines hors lignes</strong></p>
-                <p><strong>Permettre à une liste d'afficher les chaines hors lignes</strong></p>
                 <input type="checkbox" id="extendedOnStartup" bind:checked={config.behavior.extendedOnStartup} on:change={updateConfig} ><label for="extendedOnStartup">extendedOnStartup</label>
                 <input type="checkbox" id="extendOnHover" bind:checked={config.behavior.extendOnHover} on:change={updateConfig}><label for="extendOnHover">extendOnHover</label>
             </div>

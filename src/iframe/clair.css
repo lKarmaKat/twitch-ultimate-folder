@@ -36,7 +36,8 @@ a.card div.offline {
 }
 
 input[type=text] {
-        border-bottom: 1px solid #000000 !important;
+    border-bottom: 1px solid #000000 !important;
+    color: rgb(14, 14, 16);
 }
 #main-channels-list .card::after {
     content: '';
