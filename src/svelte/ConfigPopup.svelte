@@ -97,7 +97,7 @@
   ////////////////////////////////////////////////
   ////////////////////////////////////////////////
   ////////////////////////////////////////////////
-  let allOtherItems = [{id: ALL_OTHER_CHANNELS, name: "allOthers"}];
+  let allOtherItems = [{id: ALL_OTHER_CHANNELS, name: "allOthers", sort: 'ALPHA'}];
 
   function handleDndConsider(e) {
     allOtherItems = e.detail.items;

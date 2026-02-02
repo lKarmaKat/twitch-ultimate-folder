@@ -34,6 +34,9 @@ export default defineConfig({
         },{
           src: 'src/assets/light_channel.css',
           dest: 'assets'
+        }, {
+          src: 'src/assets/profil.png',
+          dest: 'assets'
         }
       ]
     })
@@ -49,8 +52,7 @@ export default defineConfig({
         popup_hmtl: 'src/iframe/config-popup.html',
         sidebar_inject: 'src/svelte/injects/sidebar.js',
         popup: 'src/action_popup/popup.html',
-        popup_inject: 'src/svelte/injects/main.js',
-        e2e: 'index.html'
+        popup_inject: 'src/svelte/injects/main.js'
         
 
       },
@@ -69,6 +71,9 @@ export default defineConfig({
 
       }
     }
+  },
+  server: {
+    open: 'src/iframe/config-popup.html'
   },
 	test: {
     include: ["./svelte_tests/*"],

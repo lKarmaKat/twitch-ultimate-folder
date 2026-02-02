@@ -17,12 +17,16 @@
 	const flipDurationMs = 80;
 	let error = false;
 	function handleDndConsider(e) {
-		$channelConfig[listId].items = e.detail.items;
-		if (itemAlreadyInList(e)) {
-			error = true;
-		} else {
-			error = false;
-		}
+		// Use an immutable update to ensure subscribers and dnd-action
+		// get a new object/array reference instead of mutating in place.
+		const newItems = e.detail.items;
+		$channelConfig[listId].items = newItems;
+		// channelConfig.update(current => {
+		// 	const copy = structuredClone(current);
+		// 	copy[listId] = { ...(copy[listId] || {}), items: newItems };
+		// 	return copy;
+		// });
+		error = itemAlreadyInList(e);
 	}
 
 	function itemAlreadyInList(e) {
@@ -37,11 +41,14 @@
 	function handleDndFinalize(e) {
 		error = false;
 		let id = e.detail.info.id;
-		if (itemAlreadyInList(e)) {
-			$channelConfig[listId].items = e.detail.items.filter(i => i.id !== id);
-		} else {
-			$channelConfig[listId].items = e.detail.items;
-		}
+		const newItems = itemAlreadyInList(e) ? e.detail.items.filter(i => i.id !== id) : e.detail.items;
+		$channelConfig[listId].items = newItems;
+		// channelConfig.update(liste => liste);
+		// channelConfig.update(current => {
+		// 	const copy = structuredClone(current);
+		// 	copy[listId] = { ...(copy[listId] || {}), items: newItems };
+		// 	return copy;
+		// });
 	}
 
 	function transformDraggedElement(draggedEl, draggedData, draggedIndex) {

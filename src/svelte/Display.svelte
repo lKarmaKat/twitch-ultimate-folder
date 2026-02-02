@@ -78,15 +78,33 @@
 		return set;
 	}
 
-	function getAllOtherChannels(ref) {
+	function getAllOtherChannels(ref, item) {
 		let set = getSetAllChannelsInConfig();
 		let list = [];
+		let c = 0;
 		for (let ch of ref) {
 			if (!set.has(ch.channel_id)) {
+				if (ch.isLive)
+					c++;
 				list.push(ch);
 			}
 		}
-		list.sort((a,b) => {
+		const alphaSortCallback = (a, b) => {
+			if (a.isLive && b.isLive) {
+				let an = a.channel_name;
+				let bn = b.channel_name;
+				return ('' + an).localeCompare(bn)
+			} else if (a.isLive) {
+				return -1;
+			} else if (b.isLive) {
+				return 1;
+			} else {
+				let an = a.channel_name;
+				let bn = b.channel_name;
+				return ('' + an).localeCompare(bn)
+			}
+		};
+		const viewerCountSortCallback = (a,b) => {
 			if (a.isLive && b.isLive) {
 				return b.viewer_count - a.viewer_count
 			} else if (a.isLive) {
@@ -98,17 +116,23 @@
 				let bn = b.channel_name;
 				return ('' + an).localeCompare(bn)
 			}
-		});
+		};
+		if (item.sort === 'ALPHA')
+			list.sort(alphaSortCallback);
+		else 
+			list.sort(viewerCountSortCallback);
 		// console.log("all others", list.length, list)
+		counter = liveChannels.size + c;
 		return list;
 	}
 
 	let liveChannels = new Set();
-	function atLeastOneLiveChannel() {
+	$: {
+		// Reactive statement that updates whenever channelRef or channelConfig changes
+		// console.log("$ Update display " + listId);
+		liveChannels = new Set();
 		let hasAllOthers = false;
-		liveChannels.clear();
 		if ($channelConfig[listId] && $channelConfig[listId].items) {
-
 			for (let ch of $channelConfig[listId].items) {
 				if (ch.id === ALL_OTHER_CHANNELS) {
 					hasAllOthers = true;
@@ -120,8 +144,21 @@
 				}
 			}
 			counter = liveChannels.size;
-			return liveChannels.size > 0 || hasAllOthers;
 		}
+	}
+
+	function atLeastOneLiveChannel() {
+		// console.log("Update display " + listId);
+		let hasAllOthers = false;
+		if ($channelConfig[listId] && $channelConfig[listId].items) {
+			for (let ch of $channelConfig[listId].items) {
+				if (ch.id === ALL_OTHER_CHANNELS) {
+					hasAllOthers = true;
+					break;
+				}
+			}
+		}
+		return liveChannels.size > 0 || hasAllOthers;
 	}
 
 </script>
@@ -130,7 +167,7 @@
 	</div> -->
 	<!-- svelte-ignore a11y-no-static-element-interactions -->
 	<!-- svelte-ignore a11y-click-events-have-key-events -->
-	 {#if atLeastOneLiveChannel()}
+	 {#if liveChannels.size > 0 || atLeastOneLiveChannel()}
 	<div class="list-container">
 		{#if listId !== 'rootList'}
 		<div class="list-header" style="background-color: {header.headerColor};" on:click={toggleAutoCollapse}>
@@ -138,7 +175,9 @@
 				<p class="list-title">{$channelConfig[listId]?.name}</p>
 			</div>
 			<div class="right">
-				{counter}
+				<p>
+					{counter}
+				</p>
 			</div>
 		</div>
 		{/if}
@@ -152,7 +191,7 @@
 							</div>
 						{:else if item.id === ALL_OTHER_CHANNELS}
 
-							{#each getAllOtherChannels($channelRef) as other(`${other.channel_id}`)}
+							{#each getAllOtherChannels($channelRef, item) as other(`${other.channel_id}`)}
 								{@const i = getNode(other)}
 								<div class="channel-overlay li{listId}">
 									<DraggableChannel 
@@ -229,6 +268,10 @@
 		border: 1px solid rgb(121, 36, 121);
 		user-select: none;
 		/* border-radius: 7%; */
+	}
+	.right {
+		width: auto;
+		padding-right: 4px;
 	}
 	.list-container {
 		padding: 0 0 0 .1em;

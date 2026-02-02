@@ -20,6 +20,7 @@ export interface I_NEW_LIST {
   id: string,
   name: string,
   items: [],
+  sort: string,
   behavior: {},
   style: {}
 };

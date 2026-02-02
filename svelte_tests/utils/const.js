@@ -81,7 +81,7 @@ export const channelsRef = [
         "channel_name": "chowh1",
         "isLive": true,
         "game_name": "ARC Raiders",
-        "profile_image_url": "https://static-cdn.jtvnw.net/jtv_user_pictures/80cc24b8-558c-440c-b5ef-05d12869019b-profile_image-300x300.png",
+        "profile_image_url": "../../assets/profil.png",
         "title": "🚨 TRAHISON, AMITIÉ, PVP - 0 PUB en 2026 🚨 !Insta !doigt",
         "viewer_count": 2492
     },
@@ -91,7 +91,7 @@ export const channelsRef = [
         "channel_name": "BobRoss",
         "isLive": true,
         "game_name": "Art",
-        "profile_image_url": "https://static-cdn.jtvnw.net/jtv_user_pictures/bobross-profile_image-0b9dd167a9bb16b5-300x300.jpeg",
+        "profile_image_url": "../../assets/profil.png",
         "title": "New Year Marathon!",
         "viewer_count": 675
     },
@@ -101,7 +101,7 @@ export const channelsRef = [
         "channel_name": "AVAMind",
         "isLive": true,
         "game_name": "Baldur's Gate 3",
-        "profile_image_url": "https://static-cdn.jtvnw.net/jtv_user_pictures/7611726d-3398-4231-8a33-cae5c0edad15-profile_image-300x300.png",
+        "profile_image_url": "../../assets/profil.png",
         "title": "04.01 || BG3 + MOD ||  EP21 - Liberer un dragon géant ? OK",
         "viewer_count": 3361
     },
@@ -111,8 +111,35 @@ export const channelsRef = [
         "channel_name": "Cyqop",
         "isLive": true,
         "game_name": "ARC Raiders",
-        "profile_image_url": "https://static-cdn.jtvnw.net/jtv_user_pictures/cf0e90b4-6263-46a9-8673-31cd3409473e-profile_image-300x300.jpg",
+        "profile_image_url": "../../assets/profil.png",
         "title": "HEY DONT SHOOOOOOOOOOOT",
         "viewer_count": 631
     },
 ]
+
+export const newChannels = [
+    {
+        "id": "9123217886107",
+        "channel_id": "91232178",
+        "channel_name": "PierreLapin",
+        "isLive": true,
+        "game_name": "Just chatting",
+        "profile_image_url": "../../assets/profil.png",
+        "title": "ACAB",
+        "viewer_count": 12345
+    },{
+        "id": "9323217886107",
+        "channel_id": "93132178",
+        "channel_name": "Anyme023",
+        "isLive": false,
+        "profile_image_url": "../../assets/profil.png"
+    }
+]
+
+export const newChannel = {
+        "id": "8323217886107",
+        "channel_id": "83132178",
+        "channel_name": "robi",
+        "isLive": false,
+        "profile_image_url": "../../assets/profil.png"
+    }

@@ -285,10 +285,10 @@ function tooltip(node, params) {
                         <p>{channelName}</p>
                     </div>
                     <div class="game-name">
-                        {#if gameName}<p>{gameName}</p>{/if}
+                        {#if gameName && isLive}<p>{gameName}</p>{/if}
                     </div>
                 </div>
-                <div class="viewer-count-containerviewer-count">
+                <div class="viewer-count-container">
                     {#if isLive}
                         <div class="flex-viewer-count">
                             <div class="live"></div>

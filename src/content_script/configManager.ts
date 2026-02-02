@@ -77,29 +77,30 @@ class ConfigManager {
                 for (const onlineChannel of msg.data.filter((i: StreamsInfos) => i.isLive)) {
                     m.set(onlineChannel.channel_id, onlineChannel);
                 }
-                this.channelsPickRef.update(liste => {
-                    for (let chaine in liste) {
-                        if (liste[chaine]) {
-                            // liste[chaine].viewer_count = 666;
-                            let currentRef = m.get(liste[chaine].channel_id);
-                            if (currentRef) {
-                                liste[chaine].isLive = true;
-                                liste[chaine].viewer_count = currentRef.viewer_count;
-                                liste[chaine].title = currentRef.title;
-                                liste[chaine].game_name = currentRef.game_name;
-                            } else {
-                                liste[chaine].isLive = false;
-                                liste[chaine].viewer_count = 0;
-                            }
-                        }
-                    }
-                    return liste;
-                })
+                // this.channelsPickRef.update(liste => {
+                //     for (let chaine in liste) {
+                //         if (liste[chaine]) {
+                //             // liste[chaine].viewer_count = 666;
+                //             let currentRef = m.get(liste[chaine].channel_id);
+                //             if (currentRef) {
+                //                 liste[chaine].isLive = true;
+                //                 liste[chaine].viewer_count = currentRef.viewer_count;
+                //                 liste[chaine].title = currentRef.title;
+                //                 liste[chaine].game_name = currentRef.game_name;
+                //             } else {
+                //                 liste[chaine].isLive = false;
+                //                 liste[chaine].viewer_count = 0;
+                //             }
+                //         }
+                //     }
+                //     return liste;
+                // })
                 // console.log(" updating updating");
-                this.channelsPickRef.update(e => {
-                    // console.log(e)
-                    return e;
-                })
+                // this.channelsPickRef.update(e => {
+                //     // console.log(e)
+                //     return e;
+                // })
+                this.channelsPickRef.set(msg.data);
                 this.channelsConfig.update(liste => liste);
             }
         }

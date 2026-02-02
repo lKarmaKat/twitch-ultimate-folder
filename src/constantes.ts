@@ -1,18 +1,21 @@
 import type * as t from 'src/service_worker/models/userStructure';
 
-export let ALL_OTHER_CHANNELS = 'allOtherChannels';
-export let UPDATE_STREAM_INFO = 'UPDATE_STREAM_INFO';
-export let GET_STREAM_INFO = 'GET_STREAM_INFO';
-export let GET_CURRENT_CONFIGURATION = 'GET_CURRENT_CONFIGURATION';
-export let SAVE_CHANNELS_LIST = 'SAVE_CHANNELS_LIST';
-export let RESET_CONFIG = 'RESET_CONFIG';
-export let DISPLAY_POPUP = 'DISPLAY_POPUP';
-export let HIDE_POPUP = 'HIDE_POPUP';
-export let THEME = 'THEME';
-export let GET_THEME = 'GET_THEME';
+export const ALL_OTHER_CHANNELS = 'allOtherChannels';
+export const UPDATE_STREAM_INFO = 'UPDATE_STREAM_INFO';
+export const GET_STREAM_INFO = 'GET_STREAM_INFO';
+export const GET_CURRENT_CONFIGURATION = 'GET_CURRENT_CONFIGURATION';
+export const SAVE_CHANNELS_LIST = 'SAVE_CHANNELS_LIST';
+export const RESET_CONFIG = 'RESET_CONFIG';
+export const DISPLAY_POPUP = 'DISPLAY_POPUP';
+export const HIDE_POPUP = 'HIDE_POPUP';
+export const THEME = 'THEME';
+export const GET_THEME = 'GET_THEME';
+export const ALPHA_SORT = 'ALPHA';
+export const VIEWER_SORT = 'VIEWER';
 
 
-export let NEW_LIST: t.I_NEW_LIST = {
+
+export const NEW_LIST: t.I_NEW_LIST = {
             id:'node1',
             name:'liste principale',
             items:[
@@ -23,30 +26,34 @@ export let NEW_LIST: t.I_NEW_LIST = {
                 extendOnClick: false,
                 isPinnable: true
             },
+            sort: VIEWER_SORT,
             style: {
                 theme: 'SYSTEM',
                 header: {
                   headerColor: "#808080",
-                  borderColor: null,
+                  borderColor: "#808080",
                   borderWidth: null,
                   borderRadius: null
                 },
                 content: {
                   contentColor: "#808080",
                   contentWidth: null,
-                  contentRadius: null
+                  contentRadius: null,
+                  borderColor: "#808080",
+                  borderWidth: null,
+                  borderRadius: null
                 }
             }
           }
 
-export let STARTUP_CONF: t.I_CONFIG = {
+export const STARTUP_CONF: t.I_CONFIG = {
           rootList: NEW_LIST
         };
 // export let NAMED_CONFIG: t.NamedConfig = {
 //       configName: 'default',
 //       config: STARTUP_CONF
 // }
-export let STARTUP_USER_CONFIGS: t.UserConfigs = {
+export const STARTUP_USER_CONFIGS: t.UserConfigs = {
     userId: 0,
     currentConfig: 'default',
     configsList: [
@@ -54,7 +61,7 @@ export let STARTUP_USER_CONFIGS: t.UserConfigs = {
     ]
 }
 
-export let currentConfig = 'currentConfig';
+export const currentConfig = 'currentConfig';
 // export let UPDATE_STREAM_INFO = 'UPDATE_STREAM_INFO';
 // export let UPDATE_STREAM_INFO = 'UPDATE_STREAM_INFO';
 // export let UPDATE_STREAM_INFO = 'UPDATE_STREAM_INFO';
