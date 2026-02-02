@@ -145,7 +145,14 @@
 				<svelte:self requestDeleteToParent={removeChild} bind:channelConfig={channelConfig} listId={item.id} bind:channelRef={channelRef}></svelte:self>
 			</div>
 			{:else if item.id === CST.ALL_OTHER_CHANNELS}
-				<p>AllOthers</p>
+				                 <DraggableChannel 
+                  channelId={item.channel_id} 
+                  channelName={item.channel_name} 
+                  channelProfilePic={item.profile_image_url} 
+                  viewerCount={item.viewer_count}
+                  gameName={item.game_name}
+                  isLive={item.isLive}
+                  bearCard=true/>
 			{:else}
 			{@const i = getNode(item)}
 				<div class="channel">
@@ -158,8 +165,7 @@
 					channelProfilePic={i?.profile_image_url} 
 					viewerCount={i?.viewer_count}
 					gameName={i?.game_name}
-					isLive={i?.isLive}
-					tick=true/>
+					isLive={i?.isLive}/>
 					<!-- <div>chaine</div> -->
 					<!-- color={contentColor}/> -->
 				</div>
@@ -224,14 +230,15 @@
 		display: flex;
 		flex-direction: row;
 		justify-content: space-between;
-		padding: 0.6em 0 0 0.3em;
+		align-items: center;
+		padding: 0.3em 0 0.3em 0.4em !important;
 		position: relative;
-		background-color: rgb(119, 56, 119);
+		/* background-color: rgb(191, 148, 255); */
 		width: 100%;
 		margin: 0;
-		padding: 0;
+		/* padding: 0; */
 		/* padding: 0.6em 0.3em 0 0.5em; */
-		border: 1px solid rgb(121, 36, 121);
+		/* border: 1px solid rgb(121, 36, 121); */
 		/* border-radius: 7%; */
 	}
 	.list-container {

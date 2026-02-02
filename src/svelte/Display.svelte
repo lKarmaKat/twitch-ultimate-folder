@@ -17,6 +17,8 @@
 	let header;
 	let content;
 
+	let extended = extendedOnStartup;
+
 	channelConfig.subscribe(config => {
 		updateStyleVars(listId, config);
 	});
@@ -26,6 +28,8 @@
 			behavior = config[listId]?.behavior;
 			style = config[listId]?.style;
 			if (behavior) {
+				if (extendedOnStartup !== $channelConfig[listId].behavior.extendedOnStartup)
+					extended = $channelConfig[listId].behavior.extendedOnStartup;
 				extendedOnStartup = $channelConfig[listId].behavior.extendedOnStartup;
 				extendOnHover = $channelConfig[listId].behavior.extendOnHover;
 				extendOnClick = $channelConfig[listId].behavior.extendOnClick;
@@ -43,7 +47,6 @@
 		
 	}
 	updateStyleVars(listId, $channelConfig[listId]);
-	let extended = extendedOnStartup;
 
     let counter = 0;
 	function getNode(item) {
@@ -203,8 +206,7 @@
 									gameName={i?.game_name}
 									isLive={i?.isLive}
 									idbidon={i?.idbidon}
-									title={i?.title}
-									tick=true/>
+									title={i?.title}/>
 								</div>
 							{/each}
 						{:else if item.channel_id}
@@ -219,8 +221,7 @@
 									viewerCount={i?.viewer_count}
 									gameName={i?.game_name}
 									isLive={i?.isLive}
-									title={i?.title}
-									tick=true/>
+									title={i?.title}/>
 								</div>
 							{/if}
 						{/if}
@@ -258,14 +259,13 @@
 		display: flex;
 		flex-direction: row;
 		justify-content: space-between;
-		padding: 0.6em 0 0 0.3em;
+		padding: 0.6em 0 0 0.4em !important;
 		position: relative;
 		/* background-color: rgb(119, 56, 119); */
 		width: 100%;
 		margin: 0;
-		padding: 0;
+		/* padding: 0; */
 		/* padding: 0.6em 0.3em 0 0.5em; */
-		border: 1px solid rgb(121, 36, 121);
 		user-select: none;
 		/* border-radius: 7%; */
 	}

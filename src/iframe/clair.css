@@ -1,7 +1,7 @@
 
 
 .popup .header {
-    background-color: #ffffff;
+    background-color: #f7f7f8;
 }
 
 h2,
@@ -15,7 +15,7 @@ h2,
 }
 
 .popup {
-    background-color: #f7f7f8;
+    background-color: #ffffff;
 }
 
 .list-container {
@@ -38,6 +38,20 @@ a.card div.offline {
 input[type=text] {
         border-bottom: 1px solid #000000 !important;
 }
+#main-channels-list .card::after {
+    content: '';
+    position: absolute;
+    width: 90%;
+    height: 1px;
+    border-bottom: 1px solid rgb(191, 148, 255);
+    bottom: 1px;
+    left: 5%;
+}
+#config-list .list-header {
+    background-color: rgb(92, 22, 197, .4);
+    color: rgb(14, 14, 16);
+}
+
 
 /* twitch icon color #9147ff */
 /* twitch icon color a970ff */

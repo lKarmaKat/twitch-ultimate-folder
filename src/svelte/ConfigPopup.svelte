@@ -4,9 +4,10 @@
   import ConfigPannel from './ConfigPannel.svelte'
   import MainChannelsList from './MainChannelsList.svelte';
   import Display from './Display.svelte';
+  import DraggableChannel from './DraggableChannel.svelte';
   import { writable, derived } from 'svelte/store';
   // import { onMount } from 'svelte';
-  import { ALL_OTHER_CHANNELS, STARTUP_CONF } from '../constantes.js'
+  import { ALL_OTHER_CHANNELS, STARTUP_CONF, ALL_OTHER_CHANNELS_ELEMENT } from '../constantes.js'
   import { dndzone, TRIGGERS, SHADOW_ITEM_MARKER_PROPERTY_NAME, DRAGGED_ELEMENT_ID } from "svelte-dnd-action";
 
   let configManager = new ConfigManager();
@@ -97,7 +98,7 @@
   ////////////////////////////////////////////////
   ////////////////////////////////////////////////
   ////////////////////////////////////////////////
-  let allOtherItems = [{id: ALL_OTHER_CHANNELS, name: "allOthers", sort: 'ALPHA'}];
+  let allOtherItems = [ALL_OTHER_CHANNELS_ELEMENT];
 
   function handleDndConsider(e) {
     allOtherItems = e.detail.items;
@@ -190,7 +191,15 @@
             <br />
             <section class="channels" use:dndzone={{items: allOtherItems, dropFromOthersDisabled: true}} on:consider={handleDndConsider} on:finalize={handleDndConsider}>
               {#each allOtherItems as item(item.id)}
-                <div class="allOthers">{item.name}</div>
+                <!-- <div class="allOthers">{item.channel_name}</div> -->
+                 <DraggableChannel 
+                  channelId={item.channel_id} 
+                  channelName={item.channel_name} 
+                  channelProfilePic={item.profile_image_url} 
+                  viewerCount={item.viewer_count}
+                  gameName={item.game_name}
+                  isLive={item.isLive}
+                  bearCard=true/>
               {/each}
             </section>
           </div>
@@ -205,7 +214,6 @@
           <div class="config-container">
             <ConfigPannel bind:channelConfig={selectedConfig}/>
           </div>
-          <p class="el">{Object.getOwnPropertyNames($channelsConfig).length}</p>
           {#if $channelsPickRef.length && Object.getOwnPropertyNames($channelsConfig).length > 0 && $selectedConfig && Object.getOwnPropertyNames($selectedConfig).length > 0}
           <div id="display-container" class="display-container">
             <Display listId={"rootList"} bind:channelConfig={selectedConfig} bind:channelRef={channelsPickRef} />
@@ -253,7 +261,7 @@
   }
   .header {
     /* color: rgb(191, 148, 255); */
-    background-color: rgb(24, 24, 27);
+    /* background-color: rgb(24, 24, 27); */
     width: 100%;
     height: 2.5em;
     display: flex;

@@ -12,6 +12,7 @@ export const THEME = 'THEME';
 export const GET_THEME = 'GET_THEME';
 export const ALPHA_SORT = 'ALPHA';
 export const VIEWER_SORT = 'VIEWER';
+export const CUSTOM_SORT = 'CUSTOM';
 
 
 
@@ -26,7 +27,7 @@ export const NEW_LIST: t.I_NEW_LIST = {
                 extendOnClick: false,
                 isPinnable: true
             },
-            sort: VIEWER_SORT,
+            sort: CUSTOM_SORT,
             style: {
                 theme: 'SYSTEM',
                 header: {
@@ -62,6 +63,15 @@ export const STARTUP_USER_CONFIGS: t.UserConfigs = {
 }
 
 export const currentConfig = 'currentConfig';
+
+export const ALL_OTHER_CHANNELS_ELEMENT = {
+        "id": ALL_OTHER_CHANNELS,
+        "channel_id": "93132178",
+        "channel_name": "All others channels",
+        "sort": 'ALPHA',
+        "isLive": false,
+        "profile_image_url": "../../assets/profil.png"
+    }
 // export let UPDATE_STREAM_INFO = 'UPDATE_STREAM_INFO';
 // export let UPDATE_STREAM_INFO = 'UPDATE_STREAM_INFO';
 // export let UPDATE_STREAM_INFO = 'UPDATE_STREAM_INFO';

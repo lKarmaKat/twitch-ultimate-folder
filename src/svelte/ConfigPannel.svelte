@@ -71,7 +71,7 @@
         <div class="bloc">
             <p>Style</p>
             <div class="row">
-                <select name="theme" id="theme" bind:value={config.style.theme}>
+                <select name="theme" id="theme" bind:value={config.style.theme} on:change={updateConfig}>
                     <option value="SYSTEM">System theme</option>
                     <option value="CUSTOM">Custom</option>
                 </select>

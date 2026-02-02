@@ -7,9 +7,8 @@
     export let isLive;
     export let title='';
     export let color='';
-    export let tick=false;
     export let blockNavigation = true;
-    export let idbidon = 0;
+    export let bearCard = false;
 
 	function navigate(event) {
         event.preventDefault();
@@ -292,10 +291,10 @@ function tooltip(node, params) {
                     {#if isLive}
                         <div class="flex-viewer-count">
                             <div class="live"></div>
-                            <!-- <p>{viewerCount}</p> -->
+                            <!-- <p class="viewer-count">{viewerCount}</p> -->
                             <p class="viewer-count">{formatter.format(viewerCount)}</p>
                         </div>
-                    {:else}
+                    {:else if !bearCard }
                         <div class="offline">Offline</div>
                     {/if}
                 </div>

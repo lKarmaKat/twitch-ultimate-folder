@@ -24,6 +24,15 @@ class ConfigManager {
 
     startPort() {
         let dataReceivedCallback = (msg: any) => {
+            const alphaSortCallback = (a: StreamsInfos, b: StreamsInfos) => {
+                    let alphaSort = (a: StreamsInfos, b: StreamsInfos) => {
+                        return a.channel_name.localeCompare(b.channel_name);
+                    }
+                    if (a.isLive && b.isLive) return alphaSort(a,b);
+                    else if (a.isLive) return -1;
+                    else if (b.isLive) return 1;
+                    else return alphaSort(a,b);
+                };
             if (msg.type === "GET_CURRENT_CONFIGURATION") {
                 // TODO voir si sauvegarder une liste ne vas pas écraser des données en cours de modif dans une autre popup.
                 this.currentConfig.set(msg.data.currentConfig);
@@ -32,15 +41,8 @@ class ConfigManager {
                     this.channelsConfig.set(structuredClone(msg.data));
                 }
             } else if (msg.type === "GET_STREAM_INFO") {
-                msg.data.sort((a: StreamsInfos, b: StreamsInfos) => {
-                    let alphaSort = (a: StreamsInfos, b: StreamsInfos) => {
-                        return a.channel_name.localeCompare(b.channel_name);
-                    }
-                    if (a.isLive && b.isLive) return alphaSort(a,b);
-                    else if (a.isLive) return -1;
-                    else if (b.isLive) return 1;
-                    else return alphaSort(a,b);
-                })
+
+                msg.data.sort(alphaSortCallback)
                 this.channelsPickRef.set(msg.data);
                 // console.log("updating", msg.data);
                 // this.save = streamInfo;
@@ -73,10 +75,10 @@ class ConfigManager {
                 //     //     d.viewer_count = d.viewer_count - 5;
                 //     // }
                 // })
-                let m = new Map();
-                for (const onlineChannel of msg.data.filter((i: StreamsInfos) => i.isLive)) {
-                    m.set(onlineChannel.channel_id, onlineChannel);
-                }
+                // let m = new Map();
+                // for (const onlineChannel of msg.data.filter((i: StreamsInfos) => i.isLive)) {
+                //     m.set(onlineChannel.channel_id, onlineChannel);
+                // }
                 // this.channelsPickRef.update(liste => {
                 //     for (let chaine in liste) {
                 //         if (liste[chaine]) {
@@ -100,6 +102,8 @@ class ConfigManager {
                 //     // console.log(e)
                 //     return e;
                 // })
+                
+                msg.data.sort(alphaSortCallback);
                 this.channelsPickRef.set(msg.data);
                 this.channelsConfig.update(liste => liste);
             }

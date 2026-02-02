@@ -177,7 +177,7 @@ test('home page has expected h1', async ({ page }) => {
 
 	await page.pause()
 
-	await page.getByText('allOthers').hover();
+	await page.getByText('All others channels').hover();
 
 	let mainListCoord = await page.getByText('x chowh1 ARC Raiders 2.5Klist').boundingBox();
 	await page.mouse.down();
