@@ -239,7 +239,7 @@
 		box-sizing: border-box;
 	}
 	div {
-		width: 100%;
+		/* width: 100%; */
 		/* padding: 0.3em;
 		margin: 0.15em 0; */
 		padding: 0.0em;
@@ -259,11 +259,12 @@
 		display: flex;
 		flex-direction: row;
 		justify-content: space-between;
-		padding: 0.6em 0 0 0.4em !important;
-		position: relative;
+		align-items: center;
+		padding: 0.4em 0 0.4em 0.4em;
+		/* position: relative; */
 		/* background-color: rgb(119, 56, 119); */
-		width: 100%;
-		margin: 0;
+		/* width: 100%; */
+		/* margin: 0; */
 		/* padding: 0; */
 		/* padding: 0.6em 0.3em 0 0.5em; */
 		user-select: none;

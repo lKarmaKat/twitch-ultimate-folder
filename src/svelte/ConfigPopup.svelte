@@ -105,6 +105,7 @@
   }
   let themeName = writable(true);
   import PortConnector from '../content_script/portConnector.js';
+    import DisplayWrapper from './DisplayWrapper.svelte';
 
   let theme = (data) => {
       themeName = data.data;
@@ -216,7 +217,7 @@
           </div>
           {#if $channelsPickRef.length && Object.getOwnPropertyNames($channelsConfig).length > 0 && $selectedConfig && Object.getOwnPropertyNames($selectedConfig).length > 0}
           <div id="display-container" class="display-container">
-            <Display listId={"rootList"} bind:channelConfig={selectedConfig} bind:channelRef={channelsPickRef} />
+            <DisplayWrapper configManager={configManager} />
           </div>
           {/if}
         </div>

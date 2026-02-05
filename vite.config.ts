@@ -23,6 +23,9 @@ export default defineConfig({
           src: 'src/iframe/iframe.css',
           dest: 'assets'
         },{
+          src: 'src/iframe/sidebar.css',
+          dest: 'assets'
+        },{
           src: 'src/iframe/clair.css',
           dest: 'assets'
         },{
@@ -50,7 +53,9 @@ export default defineConfig({
         background: 'src/service_worker/background.ts',
         content_script: 'src/content_script/index.js',
         popup_hmtl: 'src/iframe/config-popup.html',
+        // sidebar: 'src/iframe/sidebar.html',
         sidebar_inject: 'src/svelte/injects/sidebar.js',
+        title_inject: 'src/svelte/injects/title.js',
         popup: 'src/action_popup/popup.html',
         popup_inject: 'src/svelte/injects/main.js'
         

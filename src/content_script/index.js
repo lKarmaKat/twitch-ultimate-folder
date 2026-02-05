@@ -1,37 +1,62 @@
-const iframe1 = document.createElement('iframe');
-iframe1.id = "iframe";
-iframe1.src = chrome.runtime.getURL('src/iframe/config-popup.html');
-iframe1.allowTransparency="true";
-// document.body.appendChild(iframe1);
+// const iframe1 = document.createElement('iframe');
+// iframe1.id = "iframe";
+// iframe1.src = chrome.runtime.getURL('src/iframe/config-popup.html');
+// iframe1.allowTransparency="true";
+// // document.body.appendChild(iframe1);
 
-const maindiv = document.createElement('div')
-maindiv.id = 'iframe-rem';
-maindiv.classList.add('test-iframe');
-let shadowParent = maindiv.attachShadow({mode:'closed'})
+// const maindiv = document.createElement('div')
+// maindiv.id = 'iframe-rem';
+// maindiv.classList.add('test-iframe');
+// let shadowParent = maindiv.attachShadow({mode:'closed'})
 
-const link = document.createElement('link');
-link.rel = 'stylesheet';
-link.href = chrome.runtime.getURL('assets/iframe.css');
+// const link = document.createElement('link');
+// link.rel = 'stylesheet';
+// link.href = chrome.runtime.getURL('assets/iframe.css');
 
+function createDivWithIframeInShwadowDom(mainDivId, iframeSrcUrl, cssUrl = '', allowTransparency = false) {
+  const iframe = document.createElement('iframe');
+  iframe.src = iframeSrcUrl;
+  iframe.id = "iframe";
+  iframe.allowTransparency = allowTransparency ? "true" : "false";
+
+  const maindiv = document.createElement('div')
+  maindiv.id = mainDivId;
+  let shadowParent = maindiv.attachShadow({mode:'closed'})
+
+  const link = document.createElement('link');
+  link.rel = 'stylesheet';
+  link.href = cssUrl;
+
+  shadowParent.appendChild(iframe);
+  shadowParent.appendChild(link);
+
+  return maindiv;
+}
+
+const maindiv = createDivWithIframeInShwadowDom('iframe-rem', chrome.runtime.getURL('src/iframe/config-popup.html'),  chrome.runtime.getURL('assets/iframe.css'), true)
 chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
   if (msg.type === "DISPLAY_POPUP") {
     if (!document.querySelector("#iframe-rem")) {
-      shadowParent.appendChild(iframe1);
-      shadowParent.appendChild(link);
+      // shadowParent.appendChild(iframe1);
+      // shadowParent.appendChild(link);
       document.body.appendChild(maindiv);
     }
   } 
   else if (msg.type === "HIDE_POPUP") {
     console.log("hide index.js");
     document.querySelector("#iframe-rem")?.remove();
-  } else if (msg.type === 'THEME') {
+  } 
+  else if (msg.type === 'THEME') {
     addStyle(msg.data);
   } 
 });
 
-chrome.runtime.sendMessage({type: 'GET_THEME'}, (data) => {
-  addStyle(data.data);
-});
+
+
+
+// chrome.runtime.sendMessage({type: 'GET_THEME'}, (data) => {
+//   addStyle(data.data);
+// });
 
 // setTimeout(() => {
 //   window.history.pushState({}, '', '/akytio');
@@ -54,21 +79,68 @@ window.addEventListener("message", (event) => {
 });
 
 
-function injectScript(file) {
+function injectScript() {
+  // let bt = document.querySelector("div[aria-label='Followed Channels']")
+  // let before = document.createElement('div');
+  // before.id = 'before-inject-sidebar';
+  // bt.insertBefore(before, bt.firstElementChild);
+  
+  
+  let t = document.querySelector("div[aria-label='Followed Channels']")
+  // let t = document.querySelector("div.scrollable-area")
+  // let t = document.querySelector("div.side-bar-contents")
+  // t.style.position = "relative";
+  // let newDiv = createDivWithIframeInShwadowDom('sidebar-inject', chrome.runtime.getURL('src/iframe/sidebar.html'), chrome.runtime.getURL('assets/sidebar.css'))
+
+  const maindiv = document.createElement('div')
+  maindiv.id = "sidebar_shadow";
+  let shadowParent = maindiv.attachShadow({mode:'open'})
+
+  const script2 = document.createElement('script');
+  script2.src = chrome.runtime.getURL("sidebar_inject.js");
+  script2.id = 'sidebar_inject';
+  script2.type = 'module';
+  shadowParent.appendChild(script2);
+
+
+  const link = document.createElement('link');
+  link.rel = 'stylesheet';
+  link.href = chrome.runtime.getURL('assets/sidebar.css');
+
+  shadowParent.appendChild(link);
+
+  // newDiv.style.height = '100vh';
+  t.insertBefore(maindiv, t.firstElementChild);
+
+  // const script1 = document.createElement('script');
+  // script1.src = chrome.runtime.getURL("sidebar_inject.js");
+  // script1.id = 'sidebar_inject';
+  // script1.type = 'module';
+  // script1.onload = () => script1.remove();
+  // (document.head || document.documentElement).appendChild(script1);
+
   const script = document.createElement('script');
-  script.src = chrome.runtime.getURL(file);
-  script.id = 'sidebar-inject';
+  script.src = chrome.runtime.getURL("title_inject.js");
+  script.id = 'title_inject';
   script.type = 'module';
-  script.onload = () => script.remove(); // optionnel
+  script.onload = () => script.remove();
   (document.head || document.documentElement).appendChild(script);
+
+
+  const link2 = document.createElement('link');
+  link2.rel = 'stylesheet';
+  link2.classList.add('injected-sidebar-css')
+  link2.href = chrome.runtime.getURL('assets/dark_channel.css');
+  shadowParent.appendChild(link2);
 }
 
 
 function addStyle(msg) {
   console.log("UPDATING THEME " + msg)
-  let existingTag = document.head.querySelector('.injected-sidebar-css');
+  let shadow = document.querySelector('#sidebar_shadow').shadowRoot;
+  let existingTag = shadow.querySelector('.injected-sidebar-css');
   if (existingTag) {
-    document.head.querySelector('.injected-sidebar-css').remove()
+    existingTag.remove()
   }
   
   const link = document.createElement('link');
@@ -79,8 +151,20 @@ function addStyle(msg) {
   else
     link.href = chrome.runtime.getURL('assets/light_channel.css');
 
-  document.head.appendChild(link);
+  shadow.appendChild(link);
 
 }
+const observer = new MutationObserver((mut, obs) => {
+  // let t = document.body
+  let t = document.querySelector("div[aria-label='Followed Channels']")
+  if (t) {
+    injectScript();
+    obs.disconnect();
+  }
+});
 
-injectScript('sidebar_inject.js');
+observer.observe(document.body, {
+  childList: true,
+  subtree: true
+});
+

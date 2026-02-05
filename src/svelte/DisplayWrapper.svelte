@@ -9,7 +9,7 @@
   // import { onMount } from 'svelte';
   // import { writable } from 'svelte/store';
 
-  let configManager = new ConfigManager();
+  export let configManager = new ConfigManager();
 
   let c = configManager.getConfig();
   let channelsPickRef = c.channelsPickRef;// = writable([]);
@@ -67,23 +67,43 @@
   // let dark = chrome.runtime.getURL("assets/dark_channel.css")
   
   // import dark from '../assets/dark_channel.css?inline';
+  let themeName = writable(true);
+  import PortConnector from '../content_script/portConnector.js';
 
+  let theme = (data) => {
+      themeName = data.data;
+  }
+  let port = new PortConnector(theme, "theme");
+import { onMount } from 'svelte';
+
+let darkUrl = 'assets/dark_channel.css';
+let lightUrl = 'assets/dark_channel.css';
+let mounted = false;
+onMount(() => {
+  if (typeof chrome !== 'undefined' && chrome.runtime && chrome.runtime.getURL) {
+    darkUrl = chrome.runtime.getURL('assets/dark_channel.css');
+    lightUrl = chrome.runtime.getURL('assets/light_channel.css');
+    mounted = true;
+  }
+});
 </script>
 
 <!-- <svelte:head>
   {#if themeName}
-  <style>
-    {dark}
-  </style>
-	<link rel="stylesheet" type="text/css" href={dark}>
 	<link rel="stylesheet" type="text/css" href="assets/dark_channel.css">
 	{:else}
-	<link rel="stylesheet" type="text/css" href="./assets/dark_channel.css">
+	<link rel="stylesheet" type="text/css" href="assets/dark_channel.css">
 	{/if}
 </svelte:head> -->
-
+<!-- <svelte:head>
+  {#if $themeName && mounted}
+	<link rel="stylesheet" type="text/css"  href={darkUrl}>
+	{:else if mounted}
+	<link rel="stylesheet" type="text/css"  href={lightUrl}>
+	{/if}
+</svelte:head> -->
 {#if $selectedConfig && Object.getOwnPropertyNames($selectedConfig).length > 0 && $channelsPickRef?.length > 0}
-  <div class="display-wrapper">
+  <div id="display-container" class="display-wrapper">
     <Display listId={"rootList"} bind:channelConfig={selectedConfig} bind:channelRef={channelsPickRef} />
   </div>
 {:else}

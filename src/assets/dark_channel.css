@@ -1,25 +1,21 @@
-.list-header {
+#display-container .list-header {
     background-color: #393941;
     color: rgb(239, 239, 241);
     /* background-color: #18181b; */
 }
-.list-body {
+#display-container .list-body {
     background-color: #26262c;
 }
 
-.card {
+#display-container .card {
     background-color: #26262c;
 }
-.channel-name {
+#display-container .channel-name {
     color: rgb(239, 239, 241);
 }
-.game-name {
+#display-container .game-name {
     color: rgb(173, 173, 184);
 }
-.viewer-count {
+#display-container .viewer-count {
     color: rgb(239, 239, 241);
-}
-
-a.card {
-    /* border: 1px solid red !important; */
 }

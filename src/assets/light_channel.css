@@ -1,20 +1,20 @@
-.list-header {
+#display-container .list-header {
     background-color: #ffffff;
     color: rgb(14, 14, 16);
 }
-.list-body {
+#display-container .list-body {
     background-color: #efeff1;
 }
 
-.card {
+#display-container .card {
     background-color: #efeff1;
 }
-.channel-name {
+#display-container .channel-name {
     color: rgb(14, 14, 16);
 }
-.game-name {
+#display-container .game-name {
     color: rgb(83, 83, 95);
 }
-.viewer-count {
+#display-container .viewer-count {
     color: rgb(14, 14, 16);
 }
