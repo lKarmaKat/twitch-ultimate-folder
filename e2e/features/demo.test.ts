@@ -1,0 +1,134 @@
+import { expect, test } from '@playwright/test';
+import { beforeAll, afterAll, vi, describe, beforeEach} from 'vitest'
+import { mount } from 'svelte';
+import * as sinon from 'sinon';
+import { addListener } from 'process';
+import { PopupPage } from '../pages/popup.page';
+import {config, channelsRef, newChannels, newChannel} from '../../svelte_tests/utils/const';
+
+
+
+let popupPage: PopupPage;
+let deepClone = (obj: any) => JSON.parse(JSON.stringify(obj));
+
+
+test.beforeEach(async ({ page }) => {
+	popupPage = new PopupPage(page);
+	await page.addInitScript(() => {
+		const port = {
+			onMessage: {
+				addListener: (callback: () => {}) => {
+					if (!(window as any).__onMessageCallback)
+							(window as any).__onMessageCallback = callback;
+				}
+			},
+			onDisconnect: {
+				addListener: () => {}
+			}
+		};
+
+		window.chrome = {
+			runtime: {
+				id: 'fake-extension-id',
+				getURL: (path: string) => `chrome-extension://fake-id/${path}`,
+				onMessage: {
+					addListener: () => {},
+					removeListener: () => {},
+					hasListener: () => false,
+					hasListeners: () => false,
+					addRules: () => Promise.resolve(),
+					removeRules: () => Promise.resolve(),
+					getRules: () => Promise.resolve([]),
+				},
+				sendMessage: () => Promise.resolve(),
+				connect: () => { return port}
+			},
+		} as any;
+	
+	})
+	await page.goto('src/iframe/config-popup.html');
+
+});
+
+test('popup has a loader until datas are sent through', async ({ page }) => {
+	let loader = await popupPage.getLoaderInnerHTML();
+	expect(loader).toContain('<div class="loading-overlay');
+
+	let conf: any = {
+		userId: 0,
+		currentConfig: "liste principale",
+		configsList: [
+			deepClone(config)
+		]
+	}
+	// await page.waitForFunction(() => (window as any).__onMessageCallback && typeof (window as any).__onMessageCallback === 'function');
+
+	await popupPage.sendDefaultConf(conf, channelsRef);
+
+	let mainChannelListCount = await popupPage.getMainChannelListElementCount();
+	expect(mainChannelListCount).toBe(4);
+
+	let configChannelListCount = await popupPage.getConfigChannelListElementCount();
+	expect(configChannelListCount).toBe(4);
+
+	let displayConfigListCount = await popupPage.getDisplayConfigListElementCount();
+	expect(displayConfigListCount).toBe(4);
+});
+
+
+
+test.describe('popup with config already injected', async () => {
+	test.beforeEach(async ({ page }) => {
+
+		let conf: any = {
+			userId: 0,
+			currentConfig: "liste principale",
+			configsList: [
+				deepClone(config)
+			]
+		}
+		// await page.waitForFunction(() => (window as any).__onMessageCallback && typeof (window as any).__onMessageCallback === 'function');
+
+		await popupPage.sendDefaultConf(conf, channelsRef);
+	});
+
+	test('popup configChannelList\'s elements should have a button to remove the element', async ({ page }) => {
+		await popupPage.clickRemoveList('list-10')
+		expect(await popupPage.countNumberDirectSubLists('list-rootList')).toBe(1);
+	});
+
+	test('click on \'+\' sign adds a new list', async () => {
+		await popupPage.clickAddList("list-10");
+		let list11 = await popupPage.getListInConfigChannelList("list-11");
+		expect(await list11.textContent()).toBeDefined();
+	});
+
+	test('dragging an element that is already in a list should\'nt add it', async ({ page }) => {
+		await popupPage.dragElementToList('Cyqop', 'list-10', 0);
+		await page.waitForTimeout(500);
+		expect(await popupPage.getConfigChannelListElementCount()).toBe(4)
+	})
+
+	test('dragging to already existing shouldn\'t add, removing and adding back should add', async ({ page }) => {
+		await popupPage.dragElementToList('Cyqop', 'list-10', 0);
+		await page.waitForTimeout(500);
+		expect(await popupPage.getConfigChannelListElementCount()).toBe(4)
+		await popupPage.clickRemoveChannel('#remove-91122178')
+		expect(await popupPage.getConfigChannelListElementCount()).toBe(3)
+		await popupPage.dragElementToList('Cyqop', 'list-10', 0);
+		expect(await popupPage.getConfigChannelListElementCount()).toBe(4)
+		await page.waitForTimeout(500);
+	});
+
+	test('dragging an element in the config list should add it and display it in the display list', async ({ page }) => {
+		await popupPage.dragElementToList('Cyqop', 'list-rootList', 3);
+		expect(await popupPage.getConfigChannelListElementCount()).toBe(5)
+		await page.waitForTimeout(500);
+
+		expect(await popupPage.getDisplayConfigListElementCount()).toBe(5)
+		page.pause();
+	})
+
+
+
+})

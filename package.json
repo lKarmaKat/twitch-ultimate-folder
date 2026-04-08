@@ -13,7 +13,13 @@
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js tests/service_worker/configManage/configManage.test.js && npm run test:e2e",
     "test:coverage": "node --experimental-vm-modules node_modules/jest/bin/jest.js --coverage",
     "test:svelte": "npx vitest",
-    "test:e2e": "npx playwright test --headed"
+    "e2e": "npx playwright test",
+    "e2e:headed": "npx playwright test --headed",
+    "e2e:chromium": "npx playwright test --project=chromium",
+    "e2e:chromium-beta": "npx playwright test --project=chromium-beta",
+    "e2e:msedge": "npx playwright test --project=msedge",
+    "e2e:firefox": "npx playwright test --project=firefox",
+    "e2e:webkit": "npx playwright test --project=webkit"
   },
   "devDependencies": {
     "@babel/core": "^7.28.6",
@@ -38,6 +44,8 @@
     "svelte-check": "^4.3.4",
     "svelte-jester": "^5.0.0",
     "svelte-preprocess": "^6.0.3",
+    "ts-node": "^10.9.2",
+    "tsx": "^4.21.0",
     "typescript": "~5.9.3",
     "vite": "^6.0.0",
     "vite-plugin-static-copy": "^3.1.4",
