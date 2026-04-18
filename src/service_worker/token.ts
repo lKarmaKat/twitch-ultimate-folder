@@ -10,53 +10,44 @@ export class TokenManager {
     fetchingPromise: Promise<string> | null = null;
     tokenValidationInterval = 30 * 60 * 1000; // check validity every 30 minutes.
     nextValidationDate = 0;
-    userUpdate: Writable<boolean>;
-    userAuthAutoFailed: Writable<boolean>;
+    authAutoFailed = false;
+    userUpdate?: Writable<boolean>;
+    userAuthAutoFailed?: Writable<boolean>;
 
 
-    constructor(userUpdate: Writable<boolean>, userAuthAutoFailed: Writable<boolean>) {
+    constructor(userUpdate?: Writable<boolean>, userAuthAutoFailed?: Writable<boolean>) {
         this.userUpdate = userUpdate;
         this.userAuthAutoFailed = userAuthAutoFailed;
     }
 
-    initToken() {
-        return new Promise((resolve, reject) => {
-            this.chromeStorageToken()
-            .then(() => {
-                if (this.isTokenValid()) {
-                    this.userUpdate.set(true);
-                    resolve(this.token);
-                }
-                this.validateAuthToken()
-                .then((token) => {
-                    this.userUpdate.set(true);
-                    resolve(token);
-                }).catch(() => {
-                    this.getNewTokenAndValidate()
-                    .then((token) => {
-                        this.userUpdate.set(true);
-                        resolve(token);
-                    })
-                    .catch(() => {
-                        this.userUpdate.set(false);
-                        reject(new Error("Invalid token found but unable to get a new one."))
-                    });
-                });
-            }).catch(() => {
-                this.getNewTokenAndValidate()
-                .then((token) => {
-                    this.userUpdate.set(true);
-                    resolve(token)
-                })
-                .catch(() => {
-                    this.userUpdate.set(false);
-                    reject(new Error("No token found and unable to get a new one."))
-                });
-            })
-        })
-        .catch((error) => {
-            throw new Error(error);
-        });
+    async initToken(): Promise<string> {
+        try {
+            await this.chromeStorageToken();
+        } catch {
+            try {
+                await this.getNewTokenAndValidate();
+                this.userUpdate?.set(true);
+                return this.token!;
+            } catch {
+                this.userUpdate?.set(false);
+                throw new Error("No token found and unable to get a new one.");
+            }
+        }
+
+        try {
+            await this.validateAuthToken();
+            this.userUpdate?.set(true);
+            return this.token!;
+        } catch {
+            try {
+                await this.getNewTokenAndValidate();
+                this.userUpdate?.set(true);
+                return this.token!;
+            } catch {
+                this.userUpdate?.set(false);
+                throw new Error("Invalid token found but unable to get a new one.");
+            }
+        }
     }
     
     
@@ -72,7 +63,7 @@ export class TokenManager {
                 this.getNewTokenAndValidate().then(() => {
                     resolve(this.token!)
                 }).catch((err) => {
-                    this.userUpdate.set(false);
+                    this.userUpdate?.set(false);
                     reject(new Error("GetToken unable to get new token"));
                 });
 
@@ -124,20 +115,19 @@ export class TokenManager {
         return false
     }
 
-    getNewTokenAndValidate() {
-        return this.getNewAuthToken()
-        .then(() => {
-            return this.validateAuthToken()
-            .then(() => {
-            })
-            .catch(() => {
-                throw new Error("Token validation error")
-            });
-        });
+    async getNewTokenAndValidate(): Promise<string> {
+        await this.getNewAuthToken();
+
+        try {
+            await this.validateAuthToken();
+            return this.token!;
+        } catch {
+            throw new Error("Token validation error");
+        }
     }
 
     getNewAuthToken(manualConnect: boolean = false) {
-        if (this.userAuthAutoFailed && !manualConnect) return Promise.reject();
+        if (this.authAutoFailed && !manualConnect) return Promise.reject();
         return new Promise((resolve, reject) => {
             chrome.identity.launchWebAuthFlow(
                 { url: this.AUTH_URL, interactive: true },
@@ -153,7 +143,8 @@ export class TokenManager {
                         this.token = tokenMatch[1];
                         resolve(this.token);
                     } else {
-                        this.userAuthAutoFailed.set(true);
+                        this.authAutoFailed = true;
+                        this.userAuthAutoFailed?.set(true);
                         reject(new Error('No token found in WebAuthFlow response'));
                     }
                 }

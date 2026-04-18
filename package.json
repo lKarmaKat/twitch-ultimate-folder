@@ -10,7 +10,7 @@
     "watch": "vite build --watch",
     "preview": "vite preview",
     "check": "svelte-check --tsconfig ./tsconfig.app.json && tsc -p tsconfig.node.json",
-    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js tests/service_worker/configManage/configManage.test.js && npm run test:e2e",
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js tests/service_worker/token/token.it.test.js",
     "test:coverage": "node --experimental-vm-modules node_modules/jest/bin/jest.js --coverage",
     "test:svelte": "npx vitest",
     "e2e": "npx playwright test",
