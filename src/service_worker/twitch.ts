@@ -1,4 +1,5 @@
 import { TokenManager } from "./token";
+import { logErrorChain, wrapError } from "./errors";
 import type { ChannelsFollowed } from './models/rest/channels-followed';
 import type { ProfilePicInfos } from './models/profilePicInfos.model';
 import type { StreamsFollowed } from './models/rest/streams-followed';
@@ -12,7 +13,9 @@ export class TwitchApi {
 
     constructor(tokenManager: TokenManager) {
       this.tokenManager = tokenManager;
-      this.tokenManager.initToken();
+      this.tokenManager.initToken().catch((error) => {
+        logErrorChain("TwitchApi.constructor.initToken", wrapError("TwitchApi initial token loading failed", error));
+      });
     }
 
     /*
@@ -41,7 +44,9 @@ export class TwitchApi {
         .then(token => {
             return this.fetchRecursively(token, this.followedLiveStream);
         })
-        .catch(err => console.log("Error getUserFollowedLiveStream", err));
+        .catch(error => {
+            throw wrapError("TwitchApi.getUserFollowedLiveStream failed", error);
+        });
     };
     
     /*
@@ -57,7 +62,9 @@ export class TwitchApi {
         .then(token => {
             return this.fetchRecursively(token, this.allFollowedStream);
         })
-        .catch(err => console.log("Error getuserAllFollowedStream", err));
+        .catch(error => {
+            throw wrapError("TwitchApi.getuserAllFollowedStream failed", error);
+        });
     };
 
     /*
@@ -74,43 +81,46 @@ export class TwitchApi {
         "created_at": "2013-08-27T15:51:43Z"
       },
     */
-    getUsersProfilPic(ids: number[]): Promise<ProfilePicInfos[]> {
-        return new Promise(resolve => {
-          this.tokenManager.getToken().then(token => {
-            let options = {
-              method: 'GET',
-              headers: { 
-                Authorization: 'Bearer ' + token,
-                'Client-Id': this.CLIENT_ID
-              }
-            };
-            
-            let results: ProfilePicInfos[] = [];
-            let promiseList = [];
-            for (let i = 0; i < ids.length; i += 100) {
-              let subIds = ids.slice(i, i + 100);
-              let queryParams = new URLSearchParams();
-              for(let j = 0; j < subIds.length; j++) {
-                queryParams.append('id', String(subIds[j]));
-              }
-              
-              let p = fetch(`https://api.twitch.tv/helix/users?${queryParams}`, options).then((response) => {
-                return response.json();
-              }).then(resp => {
+    async getUsersProfilPic(ids: number[]): Promise<ProfilePicInfos[]> {
+        try {
+          const token = await this.tokenManager.getToken();
+          const options = {
+            method: 'GET',
+            headers: {
+              Authorization: 'Bearer ' + token,
+              'Client-Id': this.CLIENT_ID
+            }
+          };
+
+          const results: ProfilePicInfos[] = [];
+          const promiseList = [];
+
+          for (let i = 0; i < ids.length; i += 100) {
+            const subIds = ids.slice(i, i + 100);
+            const queryParams = new URLSearchParams();
+
+            for (let j = 0; j < subIds.length; j++) {
+              queryParams.append('id', String(subIds[j]));
+            }
+
+            const request = fetch(`https://api.twitch.tv/helix/users?${queryParams}`, options)
+              .then((response) => response.json())
+              .then(resp => {
                 results.push(...resp.data);
               });
-              promiseList.push(p);
-            }
-            Promise.all(promiseList).then(() => {
 
-              resolve(results);
-            })
-          }).catch(err => console.log("Error getUsersProfilPic", err));
-        });
+            promiseList.push(request);
+          }
+
+          await Promise.all(promiseList);
+          return results;
+        } catch (error) {
+          throw wrapError("TwitchApi.getUsersProfilPic failed", error);
+        }
     };
 
     getUserInfo(): Promise<User> {
-      return new Promise((resolve, error) => {
+      return new Promise((resolve, reject) => {
         this.tokenManager.getToken().then(token => {
           let options = {
             method: 'GET',
@@ -127,7 +137,7 @@ export class TwitchApi {
               login: resp.data[0].login,
               display_name: resp.data[0].display_name
             })
-          }).catch(err => error(new Error("Error fetching user info", err)));
+          }).catch(err => reject(wrapError("TwitchApi.getUserInfo failed while fetching user info", err)));
         });
       });
     }
@@ -160,6 +170,8 @@ export class TwitchApi {
           } else {
             return allChannels;
           }
+      }).catch((error) => {
+          throw wrapError(`TwitchApi.fetchRecursively failed for ${url}`, error);
       });
     };
 };

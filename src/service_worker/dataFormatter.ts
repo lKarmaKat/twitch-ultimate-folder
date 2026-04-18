@@ -1,4 +1,5 @@
 import { TwitchApi } from './twitch';
+import { wrapError } from './errors';
 import type { LiveStreamInfos } from './models/liveStreamInfos.model'
 import type { ProfilePicInfos } from './models/profilePicInfos.model'
 import type { StreamsInfos } from './models/streamsInfos.model';
@@ -15,33 +16,32 @@ export class DataFormatter {
         this.twitchApi = twitchApi;
     }
 
-    init(): Promise<StreamsInfos[]> {
-        if (!this.initComplete) {
-            return new Promise(resolve => {
-                Promise.allSettled([
-                    this.getAllFollowedStreams(),
-                    this.getAllLiveFollowedStreams()]
-                ).then(() => {
-                    return this.getChannelProfilePicture();
-                })
-                .then(() => {
-                    this.mixAllInfos();
-                    this.initComplete = true;
-                    resolve(Array.from(this.allFollowedStreams.values()));
-                });
-            });
-        } else {
-            return new Promise(resolve => {
-                resolve(Array.from(this.allFollowedStreams.values()));
-            })
+    async init(): Promise<StreamsInfos[]> {
+        if (this.initComplete) {
+            return Array.from(this.allFollowedStreams.values());
+        }
+
+        try {
+            await Promise.all([
+                this.getAllFollowedStreams(),
+                this.getAllLiveFollowedStreams()
+            ]);
+
+            await this.getChannelProfilePicture();
+            this.mixAllInfos();
+            this.initComplete = true;
+
+            return Array.from(this.allFollowedStreams.values());
+        } catch (error) {
+            throw wrapError("DataFormatter.init failed", error);
         }
     }
 
     
     updateAll(): Promise<StreamsInfos[]> {
         this.initComplete = false
-        return new Promise(resolve => {
-            resolve(this.init());
+        return this.init().catch((error) => {
+            throw wrapError("DataFormatter.updateAll failed", error);
         });
     }
 
@@ -61,26 +61,29 @@ export class DataFormatter {
     }
 
     getAllFollowedStreams() {
-        return new Promise(resolve => {        
-            this.twitchApi.getuserAllFollowedStream().then(channels => {
+        return this.twitchApi.getuserAllFollowedStream()
+            .then(channels => {
                 channels.forEach(channel => {
                     this.allFollowedStreams.set(
-                        channel.broadcaster_id, 
+                        channel.broadcaster_id,
                         {
                             id: channel.broadcaster_id + Math.round(Math.random()*100000),
                             channel_id: channel.broadcaster_id,
                             channel_name: channel.broadcaster_name,
                             isLive: false,
                         } as StreamsInfos);
-                })
-                resolve(this.allFollowedStreams);
+                });
+
+                return this.allFollowedStreams;
+            })
+            .catch((error) => {
+                throw wrapError("DataFormatter.getAllFollowedStreams failed", error);
             });
-        });
     }
 
     getAllLiveFollowedStreams() {
-        return new Promise(resolve => {
-            this.twitchApi.getUserFollowedLiveStream().then(channels => {
+        return this.twitchApi.getUserFollowedLiveStream()
+            .then(channels => {
                 channels.forEach(channel => {
                     this.allLiveFollowedStreams.set(
                         channel.user_id,
@@ -92,26 +95,33 @@ export class DataFormatter {
                             title: channel.title
                         } as LiveStreamInfos);
                 });
-                resolve(this.allLiveFollowedStreams);
+
+                return this.allLiveFollowedStreams;
+            })
+            .catch((error) => {
+                throw wrapError("DataFormatter.getAllLiveFollowedStreams failed", error);
             });
-        });
     }
 
     getChannelProfilePicture() {
-        return new Promise(resolve => {
-            let ids = Array.from(this.allFollowedStreams.keys());
-            this.twitchApi.getUsersProfilPic(ids).then(channels => {
+        const ids = Array.from(this.allFollowedStreams.keys());
+
+        return this.twitchApi.getUsersProfilPic(ids)
+            .then(channels => {
                 channels.forEach(channel => {
                     this.profilePicInfo.set(
                         channel.id,
                         {
                             profile_image_url: channel.profile_image_url
                         } as ProfilePicInfos
-                    )
+                    );
                 });
-                resolve(this.profilePicInfo);
+
+                return this.profilePicInfo;
+            })
+            .catch((error) => {
+                throw wrapError("DataFormatter.getChannelProfilePicture failed", error);
             });
-        });
     }
 }
 

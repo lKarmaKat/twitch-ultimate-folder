@@ -1,4 +1,5 @@
 import type { Writable } from "svelte/store";
+import { wrapError } from "./errors";
 
 export class TokenManager {
     CLIENT_ID = '0cccietj726skd2jwlf39ymhmyzbi7';
@@ -30,7 +31,7 @@ export class TokenManager {
                 return this.token!;
             } catch {
                 this.userUpdate?.set(false);
-                throw new Error("No token found and unable to get a new one.");
+                throw new Error("TokenManager.initToken No token found and unable to get a new one.");
             }
         }
 
@@ -45,7 +46,7 @@ export class TokenManager {
                 return this.token!;
             } catch {
                 this.userUpdate?.set(false);
-                throw new Error("Invalid token found but unable to get a new one.");
+                throw new Error("TokenManager.initToken Invalid token found but unable to get a new one.");
             }
         }
     }
@@ -66,9 +67,9 @@ export class TokenManager {
                 try {
                     await this.getNewTokenAndValidate();
                     return this.token!;
-                } catch {
+                } catch (error) {
                     this.userUpdate?.set(false);
-                    throw new Error("GetToken unable to get new token");
+                    throw wrapError("TokenManager.getToken failed to refresh token", error);
                 }
             }
         })().finally(() => {
@@ -120,13 +121,13 @@ export class TokenManager {
     }
 
     async getNewTokenAndValidate(): Promise<string> {
-        await this.getNewAuthToken();
 
         try {
+            await this.getNewAuthToken();
             await this.validateAuthToken();
             return this.token!;
-        } catch {
-            throw new Error("Token validation error");
+        } catch (error) {
+            throw wrapError("TokenManager.getNewTokenAndValidate validation failed", error);
         }
     }
 
@@ -139,7 +140,7 @@ export class TokenManager {
                     if (chrome.runtime.lastError) {
                         reject(new Error(chrome.runtime.lastError?.message));
                     } else if (!redirectUrl) {
-                        reject(new Error("No redirect url, no token found"));
+                        reject(new Error("TokenManager.getNewAuthToken No redirect url, no token found"));
                     } 
                     const tokenMatch = redirectUrl!.match(/access_token=([^&]+)/);
                     if (tokenMatch && tokenMatch[1]) {
@@ -149,7 +150,7 @@ export class TokenManager {
                     } else {
                         this.authAutoFailed = true;
                         this.userAuthAutoFailed?.set(true);
-                        reject(new Error('No token found in WebAuthFlow response'));
+                        reject(new Error('TokenManager.getNewAuthToken No token found in WebAuthFlow response'));
                     }
                 }
             );
@@ -166,7 +167,7 @@ export class TokenManager {
             }).then((response) => {
                 if (response['status'] === 401) {
                     this.token = null;
-                    reject(new Error("Token validation failed"));
+                    reject(new Error("TokenManager.validateAuthToken Token validation failed"));
                 }
                 chrome.storage.local.set({ tokenExpirationDate: response.expires_in });
                 this.setTokenExpirationDate(response.expires_in);
