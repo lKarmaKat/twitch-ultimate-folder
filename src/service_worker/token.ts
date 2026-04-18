@@ -53,24 +53,28 @@ export class TokenManager {
     
     getToken(): Promise<string> {
         if (this.isTokenValid()) {
-            return new Promise(resolve => resolve(this.token!));
+            return Promise.resolve(this.token!);
         }
-        if (this.fetchingPromise) return this.fetchingPromise;
-        this.fetchingPromise =  new Promise<string>((resolve, reject) => {
-            this.validateAuthToken()
-            .then(() => resolve(this.token!))
-            .catch(() => {
-                this.getNewTokenAndValidate().then(() => {
-                    resolve(this.token!)
-                }).catch((err) => {
-                    this.userUpdate?.set(false);
-                    reject(new Error("GetToken unable to get new token"));
-                });
 
-            })
-        }).finally(() => {
-            this.fetchingPromise = null
+        if (this.fetchingPromise) return this.fetchingPromise;
+
+        this.fetchingPromise = (async () => {
+            try {
+                await this.validateAuthToken();
+                return this.token!;
+            } catch {
+                try {
+                    await this.getNewTokenAndValidate();
+                    return this.token!;
+                } catch {
+                    this.userUpdate?.set(false);
+                    throw new Error("GetToken unable to get new token");
+                }
+            }
+        })().finally(() => {
+            this.fetchingPromise = null;
         });
+
         return this.fetchingPromise;
     }
 
