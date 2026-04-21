@@ -40,6 +40,9 @@ export default defineConfig({
         }, {
           src: 'src/assets/profil.png',
           dest: 'assets'
+        }, {
+          src: 'e2e/mock-twitch.html',
+          dest: 'assets'
         }
       ]
     })
@@ -78,7 +81,7 @@ export default defineConfig({
     }
   },
   server: {
-    open: 'src/iframe/config-popup.html'
+    open: 'assets/mock-twitch.html'
   },
 	test: {
     include: ["./svelte_tests/*"],

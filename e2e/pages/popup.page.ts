@@ -1,17 +1,20 @@
-import { Locator, Page } from '@playwright/test'
+import { FrameLocator, Locator, Page } from '@playwright/test'
 import { PopupHelper } from '../helpers/popup.helper'
 
 export class PopupPage {
     private popupHelper: PopupHelper
     private page: Page
+    private popupFrame: FrameLocator;  // Frame de l'iframe
+
     constructor(page: Page) {
         this.popupHelper = new PopupHelper(page);
         this.page = page;
+        this.popupFrame = page.frameLocator('#iframe-rem iframe');  // Accès à l'iframe
     }
     
 
     async getLoaderInnerHTML() {
-        return await this.page.locator('.loading-wrapper').first().innerHTML();
+        return await this.popupFrame.locator('.loading-wrapper').first().innerHTML();
     }
 
     async getMainChannelListElementCount() {
@@ -19,15 +22,15 @@ export class PopupPage {
     }
     
     async getMainChannelListElement() {
-        return await this.page.locator('#main-channels-list a');
+        return await this.popupFrame.locator('#main-channels-list a');
     }
 
     async getConfigChannelListElementCount() {
-        return await this.page.locator('#config-list a').count();
+        return await this.popupFrame.locator('#config-list a').count();
     }
 
     async getConfigChannelList() {
-        return await this.page.locator('#config-list');
+        return await this.popupFrame.locator('#config-list');
     }
 
     async getListInConfigChannelList(listId: string) {
@@ -51,7 +54,7 @@ export class PopupPage {
     }
 
     async clickRemoveChannel(channelId: string) {
-        await this.page.locator(channelId).click();
+        await this.popupFrame.locator(channelId).click();
     }
 
     async clickAddBtn(btnLoc: Locator) {
@@ -64,7 +67,7 @@ export class PopupPage {
     }
 
     async getDisplayConfigListElements() {
-        return await this.page.locator('#display-container.display-wrapper a')
+        return await this.popupFrame.locator('#display-container.display-wrapper a')
     }
 
     async getFirstCard(locator: Locator) {
@@ -102,14 +105,21 @@ export class PopupPage {
     }
 
     async sendDefaultConf(conf: any, channelsRef: any) {
-        await this.page.evaluate(({conf, channelsRef}) => {
+        let fr = this.page.frame({name: 'iframe'})
+        if (!fr) throw new Error('Frame not found')
+        await fr.evaluate(({conf, channelsRef}) => {
+            // const iframe = (document.querySelector('#iframe-rem') as any).shadowRoot.querySelector('#iframe') as any;
+            const callback = (window as any).__onPortCallback;
+            if (!callback) throw new Error('Port callback not found in iframe');
+
             let deepClone = (obj: any) => JSON.parse(JSON.stringify(obj));
-    
-            (window as any).__onMessageCallback({
+            console.log("sendDefault config")
+
+            callback({
                 type: "GET_CURRENT_CONFIGURATION",
                 data: conf
             });
-            (window as any).__onMessageCallback({
+            callback({
                 type: "GET_STREAM_INFO",
                 data: deepClone(channelsRef)
             });

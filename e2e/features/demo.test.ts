@@ -15,38 +15,75 @@ let deepClone = (obj: any) => JSON.parse(JSON.stringify(obj));
 test.beforeEach(async ({ page }) => {
 	popupPage = new PopupPage(page);
 	await page.addInitScript(() => {
-		const port = {
-			onMessage: {
-				addListener: (callback: () => {}) => {
-					if (!(window as any).__onMessageCallback)
-							(window as any).__onMessageCallback = callback;
-				}
-			},
-			onDisconnect: {
-				addListener: () => {}
-			}
-		};
+			// await page.evaluate(() => {
+			// const port = {
+			// 	onMessage: {
+			// 		addListener: (callback: () => {}) => {
+			// 			if (!(window as any).__onMessageCallback)
+			// 					(window as any).__onMessageCallback = callback;
+			// 		}
+			// 	},
+			// 	onDisconnect: {
+			// 		addListener: () => {}
+			// 	}
+			// };
 
-		window.chrome = {
-			runtime: {
-				id: 'fake-extension-id',
-				getURL: (path: string) => `chrome-extension://fake-id/${path}`,
-				onMessage: {
-					addListener: () => {},
-					removeListener: () => {},
-					hasListener: () => false,
-					hasListeners: () => false,
-					addRules: () => Promise.resolve(),
-					removeRules: () => Promise.resolve(),
-					getRules: () => Promise.resolve([]),
+
+
+			window.chrome = {
+				runtime: {
+					id: 'fake-extension-id',
+					getURL: (path: string) => {
+						console.log("PATH " + path)
+						return `http://localhost:4173/${path}`
+					},
+					onMessage: {
+						addListener: (callback: (msg: any) => void) => {
+							(window as any).__messageListener = callback;  // Stockez le callback ici
+						},					removeListener: () => {},
+						hasListener: () => false,
+						hasListeners: () => false,
+						addRules: () => Promise.resolve(),
+						removeRules: () => Promise.resolve(),
+						getRules: () => Promise.resolve([]),
+					},
+					sendMessage: () => Promise.resolve(),
+					connect: (extId: any, type: any) => {
+						console.log("CONNECT")
+						const port = {
+							onMessage: {
+								addListener: (callback: (msg: any) => void) => {
+									// Exposez le callback dans le contexte courant (page principale OU iframe)
+									if (type.name === 'eventbus')
+									(window as any).__onPortCallback = callback;
+								}
+							},
+							onDisconnect: {
+								addListener: () => {}
+							},
+							postMessage: (msg: any) => {}
+						};
+						return port;
+					}
 				},
-				sendMessage: () => Promise.resolve(),
-				connect: () => { return port}
-			},
-		} as any;
-	
+			} as any;
+
+		// });
 	})
-	await page.goto('src/iframe/config-popup.html');
+	// await page.waitForFunction(() => (window as any).__messageListener && typeof (window as any).__messageListener === 'function');
+    await page.goto('assets/mock-twitch.html');
+    
+	await page.addScriptTag({ url: 'http://localhost:4173/content_script.js' });  // Depuis dist/, servi par le webServer
+	await page.waitForFunction(() => (window as any).__messageListener && typeof (window as any).__messageListener === 'function');
+    // Déclenchez l'injection
+
+    await page.evaluate(() => {
+        if ((window as any).__messageListener) {
+            (window as any).__messageListener({ type: "DISPLAY_POPUP" });
+        }
+    });
+	// await page.goto('src/iframe/config-popup.html');
+    await page.waitForSelector('#iframe');
 
 });
 
@@ -97,7 +134,10 @@ test.describe('popup with config already injected', async () => {
 		expect(await popupPage.countNumberDirectSubLists('list-rootList')).toBe(1);
 	});
 
-	test('click on \'+\' sign adds a new list', async () => {
+	test('click on \'+\' sign adds a new list', async ({page}) => {
+		const frame = page.frame({name: 'iframe'});
+		// await frame?.evaluate
+
 		await popupPage.clickAddList("list-10");
 		let list11 = await popupPage.getListInConfigChannelList("list-11");
 		expect(await list11.textContent()).toBeDefined();

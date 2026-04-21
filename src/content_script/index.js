@@ -21,7 +21,8 @@ function createDivWithIframeInShwadowDom(mainDivId, iframeSrcUrl, cssUrl = '', a
 
   const maindiv = document.createElement('div')
   maindiv.id = mainDivId;
-  let shadowParent = maindiv.attachShadow({mode:'closed'})
+  maindiv.style.border = '1px solid red'
+  let shadowParent = maindiv.attachShadow({mode:'open'})
 
   const link = document.createElement('link');
   link.rel = 'stylesheet';
@@ -36,6 +37,7 @@ function createDivWithIframeInShwadowDom(mainDivId, iframeSrcUrl, cssUrl = '', a
 const maindiv = createDivWithIframeInShwadowDom('iframe-rem', chrome.runtime.getURL('src/iframe/config-popup.html'),  chrome.runtime.getURL('assets/iframe.css'), true)
 chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
   if (msg.type === "DISPLAY_POPUP") {
+    console.log("DISPLAY_POPUP cs")
     if (!document.querySelector("#iframe-rem")) {
       // shadowParent.appendChild(iframe1);
       // shadowParent.appendChild(link);
