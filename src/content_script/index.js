@@ -21,7 +21,6 @@ function createDivWithIframeInShwadowDom(mainDivId, iframeSrcUrl, cssUrl = '', a
 
   const maindiv = document.createElement('div')
   maindiv.id = mainDivId;
-  maindiv.style.border = '1px solid red'
   let shadowParent = maindiv.attachShadow({mode:'open'})
 
   const link = document.createElement('link');

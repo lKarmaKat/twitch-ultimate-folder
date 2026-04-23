@@ -71,7 +71,8 @@ test.beforeEach(async ({ page }) => {
 		// });
 	})
 	// await page.waitForFunction(() => (window as any).__messageListener && typeof (window as any).__messageListener === 'function');
-    await page.goto('assets/mock-twitch.html');
+    // await page.goto('assets/mock-twitch.html');
+    await page.goto('assets/twitch-copy.html');
     
 	await page.addScriptTag({ url: 'http://localhost:4173/content_script.js' });  // Depuis dist/, servi par le webServer
 	await page.waitForFunction(() => (window as any).__messageListener && typeof (window as any).__messageListener === 'function');

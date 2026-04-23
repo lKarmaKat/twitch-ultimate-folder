@@ -43,6 +43,9 @@ export default defineConfig({
         }, {
           src: 'e2e/mock-twitch.html',
           dest: 'assets'
+        }, {
+          src: 'e2e/twitch-copy.html',
+          dest: 'assets'
         }
       ]
     })
@@ -81,7 +84,7 @@ export default defineConfig({
     }
   },
   server: {
-    open: 'assets/mock-twitch.html'
+    open: 'assets/twitch-copy.html'
   },
 	test: {
     include: ["./svelte_tests/*"],

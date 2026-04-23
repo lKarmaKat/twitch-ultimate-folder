@@ -112,7 +112,7 @@ onMount(() => {
 
 <style>
   .display-wrapper {
-    margin-top: 50px;
+    /* margin-top: 50px; */
     /* height: 100vh; */
   }
 </style>
