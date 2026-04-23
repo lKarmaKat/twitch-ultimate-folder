@@ -223,6 +223,9 @@ function tooltip(node, params) {
         display: inline-block;
         position: relative;
     }
+    :host([collapsed]) .layout-flex {
+        display: none
+    }
 /* 	
 	:global(.tooltip:not(:focus) #tooltip::before) {
 		content: '';

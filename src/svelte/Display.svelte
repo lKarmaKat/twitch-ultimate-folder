@@ -176,6 +176,16 @@
 		<div class="list-header" style="background-color: {header.headerColor};" on:click={toggleAutoCollapse}>
 			<div class="left">
 				<p class="list-title">{$channelConfig[listId]?.name}</p>
+				<div class='list-icon'>
+					<svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+						<rect x="6" y="4" width="11" height="2" rx="1"/>
+						<rect x="6" y="9" width="11" height="2" rx="1"/>
+						<rect x="6" y="14" width="11" height="2" rx="1"/>
+						<circle cx="3" cy="5" r="1.5"/>
+						<circle cx="3" cy="10" r="1.5"/>
+						<circle cx="3" cy="15" r="1.5"/>
+					</svg>
+				</div>
 			</div>
 			<div class="right">
 				<p>
@@ -233,6 +243,15 @@
 	{/if}
 			
 <style>
+	:host([collapsed]) .list-icon {
+		display: block
+	}
+	.list-icon {
+		display: none;
+	}
+	:host([collapsed]) .list-title {
+		display: none;
+	}
 	div.width-test {
 		border: 1px solid red;
 		width: 24rem;

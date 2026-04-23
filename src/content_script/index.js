@@ -37,7 +37,6 @@ function createDivWithIframeInShwadowDom(mainDivId, iframeSrcUrl, cssUrl = '', a
 const maindiv = createDivWithIframeInShwadowDom('iframe-rem', chrome.runtime.getURL('src/iframe/config-popup.html'),  chrome.runtime.getURL('assets/iframe.css'), true)
 chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
   if (msg.type === "DISPLAY_POPUP") {
-    console.log("DISPLAY_POPUP cs")
     if (!document.querySelector("#iframe-rem")) {
       // shadowParent.appendChild(iframe1);
       // shadowParent.appendChild(link);
@@ -45,7 +44,6 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
     }
   } 
   else if (msg.type === "HIDE_POPUP") {
-    console.log("hide index.js");
     document.querySelector("#iframe-rem")?.remove();
   } 
   else if (msg.type === 'THEME') {
@@ -88,7 +86,7 @@ function injectScript() {
   // bt.insertBefore(before, bt.firstElementChild);
   
   
-  let t = document.querySelector("div[aria-label='Followed Channels']")
+  let t = document.querySelector("#side-nav .side-nav-section")
   // let t = document.querySelector("div.scrollable-area")
   // let t = document.querySelector("div.side-bar-contents")
   // t.style.position = "relative";
@@ -97,7 +95,18 @@ function injectScript() {
   const maindiv = document.createElement('div')
   maindiv.id = "sidebar_shadow";
   let shadowParent = maindiv.attachShadow({mode:'open'})
+  let c = () => {
+    const collapsed = document.querySelector('.side-nav--collapsed');
 
+    if (collapsed) {
+      maindiv.setAttribute('collapsed', collapsed);
+    } else {
+      maindiv.removeAttribute('collapsed')
+    }
+  }
+  const obs = new MutationObserver(c);
+  c();
+  obs.observe(document.querySelector('.side-nav--collapsed, .side-nav--expanded'), {attributeFilter: ['class'], attributes: true})
   const script2 = document.createElement('script');
   script2.src = chrome.runtime.getURL("sidebar_inject.js");
   script2.id = 'sidebar_inject';
@@ -158,7 +167,7 @@ function addStyle(msg) {
 }
 const observer = new MutationObserver((mut, obs) => {
   // let t = document.body
-  let t = document.querySelector("div[aria-label='Followed Channels']")
+  let t = document.querySelector("#side-nav .side-nav-section")
   if (t) {
     injectScript();
     obs.disconnect();
