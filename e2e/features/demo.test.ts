@@ -164,7 +164,6 @@ test.describe('popup with config already injected', async () => {
 	test('dragging an element in the config list should add it and display it in the display list', async ({ page }) => {
 		await popupPage.dragElementToList('Cyqop', 'list-rootList', 3);
 		expect(await popupPage.getConfigChannelListElementCount()).toBe(5)
-		await page.waitForTimeout(5000);
 
 		expect(await popupPage.getDisplayConfigListElementCount()).toBe(5)
 		page.pause();

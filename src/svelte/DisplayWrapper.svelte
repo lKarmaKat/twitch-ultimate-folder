@@ -14,8 +14,8 @@
   let c = configManager.getConfig();
   let channelsPickRef = c.channelsPickRef;// = writable([]);
   let channelsConfig = c.channelsConfig; // = writable({
-  let currentConfig = configManager.currentConfig; // = writable({
-  let selectedConfig = writable();
+  let currentConfig = c.selectedConfig; // = writable({
+  let selectedConfig = c.selectedConfig;
   // channelsConfig.subscribe(e => {
   //   console.log("Config found", e);
   //   if ($currentConfig) {
@@ -27,18 +27,18 @@
   //       }
   //   }
   // })
-  let selectedConfigDer = derived([currentConfig, channelsConfig], ([$currentConfig, $channelsConfig]) => {
-    // console.log("update");
-    if ($channelsConfig?.configsList) {
-        let index = $channelsConfig.configsList.find(conf => conf.rootList.name === $currentConfig);
-        if (index) {
-          selectedConfig.set(index);
-          // console.log("selected config", $selectedConfig, index)
-          return index;
-        }
-    }
-  });
-  selectedConfigDer.subscribe(e => e);
+  // let selectedConfigDer = derived([currentConfig, channelsConfig], ([$currentConfig, $channelsConfig]) => {
+  //   // console.log("update");
+  //   if ($channelsConfig?.configsList) {
+  //       let index = $channelsConfig.configsList.find(conf => conf.rootList.name === $currentConfig);
+  //       if (index) {
+  //         selectedConfig.set(index);
+  //         // console.log("selected config", $selectedConfig, index)
+  //         return index;
+  //       }
+  //   }
+  // });
+  // selectedConfigDer.subscribe(e => e);
   // channelsPickRef.subscribe(e => console.log("new channelpic", e))
   // channelsConfig.subscribe(e => console.log("new channelsConfig", e))
   //   });

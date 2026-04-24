@@ -16,20 +16,20 @@
   let c = configManager.getConfig()
   let channelsPickRef = c.channelsPickRef;// = writable([]);
   let channelsConfig = c.channelsConfig; // = writable({
-  let currentConfig = configManager.currentConfig; // = writable({
-  let selectedConfig = writable();
-  let selectedConfigDer = derived([currentConfig, channelsConfig], ([$currentConfig, $channelsConfig]) => {
-    // console.log("update");
-    if ($channelsConfig?.configsList) {
-        let index = $channelsConfig.configsList.find(conf => conf.rootList.name === $currentConfig);
-        if (index) {
-          selectedConfig.set(index);
-          // console.log("selected config", $selectedConfig, index)
-          return index;
-        }
-    }
-  });
-  selectedConfigDer.subscribe(e => e);
+  let currentConfig = configManager.currentConfigName; // = writable({
+  let selectedConfig = c.selectedConfig;
+  // let selectedConfigDer = derived([currentConfig, channelsConfig], ([$currentConfig, $channelsConfig]) => {
+  //   // console.log("update");
+  //   if ($channelsConfig?.configsList) {
+  //       let index = $channelsConfig.configsList.find(conf => conf.rootList.name === $currentConfig);
+  //       if (index) {
+  //         selectedConfig.set(index);
+  //         // console.log("selected config", $selectedConfig, index)
+  //         return index;
+  //       }
+  //   }
+  // });
+  // selectedConfigDer.subscribe(e => e);
   // currentConfig.subscribe(newConfig => {
   //   if (newConfig) {  
   //     let index = channelsConfig.configsList.find(conf => conf.configName === newConfig);
@@ -215,7 +215,7 @@
           <div class="config-container">
             <ConfigPannel bind:channelConfig={selectedConfig}/>
           </div>
-          {#if $channelsPickRef.length && Object.getOwnPropertyNames($channelsConfig).length > 0 && $selectedConfig && Object.getOwnPropertyNames($selectedConfig).length > 0}
+          {#if $channelsPickRef.length && Object.getOwnPropertyNames($channelsConfig).length > 0}
           <div id="display-container" class="display-container">
             <DisplayWrapper configManager={configManager} />
           </div>

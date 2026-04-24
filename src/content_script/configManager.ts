@@ -1,5 +1,5 @@
 import PortConnector from './portConnector.js';
-import { writable } from 'svelte/store';
+import { writable, derived } from 'svelte/store';
 import type { StreamsInfos } from '@src/service_worker/models/streamsInfos.model';
 import * as CST from '../constantes'
 import type { UserConfigs, I_CONFIG } from '../service_worker/models/userStructure.js';
@@ -12,14 +12,28 @@ class ConfigManager {
     // currentConfigPromise;
     // channelsRef = writable([]);
     save = [];
-	channelsConfig = writable<UserConfigs>();
-    currentConfig = writable<string>('');
+	channelsConfigList = writable<UserConfigs>();
+    currentConfigName = writable<string>('');
+    selectedConfig = writable<I_CONFIG>();
+    autre = derived([this.channelsConfigList, this.currentConfigName], ([$channelsConfigList, $currentConfigName]) => {
+    // console.log("update");
+    if ($channelsConfigList?.configsList) {
+        let index = $channelsConfigList.configsList.find(conf => conf.rootList.name === $currentConfigName);
+        if (index) {
+            this.selectedConfig.set(index);
+          // console.log("selected config", $selectedConfig, index)
+          return index;
+        }
+        throw new Error('ConfigName not found in configList');
+    }
+  });
     bridge: PortConnector;
     // display = chaines;
     f : boolean = true;
     constructor() {
         // console.log("Constructeur config manager")
         this.startPort();
+        this.autre.subscribe(e => e);
     }
 
     startPort() {
@@ -35,10 +49,10 @@ class ConfigManager {
                 };
             if (msg.type === "GET_CURRENT_CONFIGURATION") {
                 // TODO voir si sauvegarder une liste ne vas pas écraser des données en cours de modif dans une autre popup.
-                this.currentConfig.set(msg.data.currentConfig);
+                this.currentConfigName.set(msg.data.currentConfig);
                 // console.log("Setting config in config manager", msg);
                 if (msg.data) {
-                    this.channelsConfig.set(structuredClone(msg.data));
+                    this.channelsConfigList.set(structuredClone(msg.data));
                 }
             } else if (msg.type === "GET_STREAM_INFO") {
 
@@ -105,7 +119,7 @@ class ConfigManager {
                 
                 msg.data.sort(alphaSortCallback);
                 this.channelsPickRef.set(msg.data);
-                this.channelsConfig.update(liste => liste);
+                this.channelsConfigList.update(liste => liste);
             }
         }
         // console.log("ConfigManager starting port")
@@ -114,8 +128,9 @@ class ConfigManager {
 
     getConfig() {
         return {
-            channelsConfig: this.channelsConfig,
-            channelsPickRef: this.channelsPickRef
+            channelsConfig: this.channelsConfigList,
+            channelsPickRef: this.channelsPickRef,
+            selectedConfig: this.selectedConfig
         }
     }
 
@@ -152,10 +167,10 @@ class ConfigManager {
                 console.log("reseted");
                 chrome.runtime.sendMessage(this.extensionId, {type: 'GET_CURRENT_CONFIGURATION'}, (truc) => {
                     if (Object.getOwnPropertyNames(truc)?.length > 0) {
-                        this.channelsConfig = writable(truc);
+                        this.channelsConfigList = writable(truc);
                         // display = truc;
                     }
-                    resolve(this.channelsConfig);
+                    resolve(this.channelsConfigList);
                 });
             });
         });
