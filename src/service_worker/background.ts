@@ -63,14 +63,14 @@ let themeSombre = true;
 chrome.storage.local.get("theme").then((data) => {
   themeSombre = data.theme === 1 ? true : false;
 });
-let sendCurrentTheme = (port: chrome.runtime.Port) => {
+let sendCurrentThemeOnConnect = (port: chrome.runtime.Port) => {
   port.postMessage({
     "type": "theme",
     "data": themeSombre
   });
 }
 
-let portManager = new PortManager(sendCurrentConfigOnConnect, sendStreamInfoOnConnect, sendCurrentTheme);
+let portManager = new PortManager(sendCurrentConfigOnConnect, sendStreamInfoOnConnect, sendCurrentThemeOnConnect);
 
 self.addEventListener('beforeunload', () => {
   portManager.closeAllPorts();

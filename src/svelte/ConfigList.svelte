@@ -43,7 +43,10 @@
 		let id = e.detail.info.id;
 		const newItems = itemAlreadyInList(e) ? e.detail.items.filter(i => i.id !== id) : e.detail.items;
 		$channelConfig[listId].items = newItems;
-		// channelConfig.update(liste => liste);
+		channelConfig.update(liste => {
+			// console.log("UPDATE DROP")
+			return liste
+		});
 		// channelConfig.update(current => {
 		// 	const copy = structuredClone(current);
 		// 	copy[listId] = { ...(copy[listId] || {}), items: newItems };

@@ -102,17 +102,17 @@ onMount(() => {
 	<link rel="stylesheet" type="text/css"  href={lightUrl}>
 	{/if}
 </svelte:head> -->
-{#if $selectedConfig && Object.getOwnPropertyNames($selectedConfig).length > 0 && $channelsPickRef?.length > 0}
-  <div id="display-container" class="display-wrapper">
+<div id="display-container" class="display-wrapper">
+  {#if $selectedConfig && Object.getOwnPropertyNames($selectedConfig).length > 0 && $channelsPickRef?.length > 0}
     <Display listId={"rootList"} bind:channelConfig={selectedConfig} bind:channelRef={channelsPickRef} />
-  </div>
-{:else}
-  <WaitingConfig />
-{/if}
+  {:else}
+    <WaitingConfig />
+  {/if}
+</div>
 
 <style>
   .display-wrapper {
-    /* margin-top: 50px; */
+    margin-top: 5px;
     /* height: 100vh; */
   }
 </style>

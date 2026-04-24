@@ -1,7 +1,7 @@
 class PortManager {
     ports = [];
     externalPorts = [];
-    constructor(sendCurrentConfigOnConnect, sendStreamInfoOnConnect, sendCurrentTheme) {
+    constructor(sendCurrentConfigOnConnect, sendStreamInfoOnConnect, sendCurrentThemeOnConnect) {
         console.log("##### Port manager constr");
         chrome.runtime.onConnect.addListener((port) => {
             this.ports.push(port);
@@ -22,7 +22,7 @@ class PortManager {
                 sendCurrentConfigOnConnect(port);
                 sendStreamInfoOnConnect(port);
             } else if (port.name === 'theme') {
-                sendCurrentTheme(port);
+                sendCurrentThemeOnConnect(port);
             }
         });
 

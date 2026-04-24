@@ -39,7 +39,7 @@ export class DataFormatter {
 
     
     updateAll(): Promise<StreamsInfos[]> {
-        this.initComplete = false
+        // this.initComplete = false
         return this.init().catch((error) => {
             throw wrapError("DataFormatter.updateAll failed", error);
         });

@@ -1,7 +1,8 @@
 <script>
   	import DraggableChannel from './DraggableChannel.svelte';
     import { ALL_OTHER_CHANNELS } from '../constantes'
-
+    import { maybeTooltip, tooltip } from "./tooltip";
+	import { writable } from 'svelte/store'
     export let listId = "rootList";
     export let channelConfig;
     export let channelRef;
@@ -20,6 +21,7 @@
 	let extended = extendedOnStartup;
 
 	channelConfig.subscribe(config => {
+		// console.log("UPDATE DISPLAY")
 		updateStyleVars(listId, config);
 	});
 
@@ -163,7 +165,6 @@
 		}
 		return liveChannels.size > 0 || hasAllOthers;
 	}
-
 </script>
 	<!-- <div class="width-test">
 
@@ -176,7 +177,7 @@
 		<div class="list-header" style="background-color: {header.headerColor};" on:click={toggleAutoCollapse}>
 			<div class="left">
 				<p class="list-title">{$channelConfig[listId]?.name}</p>
-				<div class='list-icon'>
+				<div class='list-icon'  use:maybeTooltip={$channelConfig[listId]?.name}>
 					<svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
 						<rect x="6" y="4" width="11" height="2" rx="1"/>
 						<rect x="6" y="9" width="11" height="2" rx="1"/>

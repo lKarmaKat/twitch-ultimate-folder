@@ -24,7 +24,6 @@ class ConfigManager {
 
     startPort() {
         let dataReceivedCallback = (msg: any) => {
-            console.log("MESSAGE RECEIVED")
             const alphaSortCallback = (a: StreamsInfos, b: StreamsInfos) => {
                     let alphaSort = (a: StreamsInfos, b: StreamsInfos) => {
                         return a.channel_name.localeCompare(b.channel_name);

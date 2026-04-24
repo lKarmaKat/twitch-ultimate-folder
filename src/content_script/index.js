@@ -27,8 +27,8 @@ function createDivWithIframeInShwadowDom(mainDivId, iframeSrcUrl, cssUrl = '', a
   link.rel = 'stylesheet';
   link.href = cssUrl;
 
-  shadowParent.appendChild(iframe);
   shadowParent.appendChild(link);
+  shadowParent.appendChild(iframe)
 
   return maindiv;
 }
@@ -98,7 +98,7 @@ function injectScript() {
     const collapsed = document.querySelector('.side-nav--collapsed');
 
     if (collapsed) {
-      maindiv.setAttribute('collapsed', collapsed);
+      maindiv.setAttribute('collapsed', "true");
     } else {
       maindiv.removeAttribute('collapsed')
     }
