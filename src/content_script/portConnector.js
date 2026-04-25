@@ -7,7 +7,6 @@ class PortConnector {
     // extensionId = "pdfjeponpmleiodlfbmlhgbicfpbaoek";
 
     constructor(msgCallback, name = "eventbus") {
-        // console.log("port constructor")
         this.port = chrome.runtime.connect(this.extensionId, {
           name: name
         });

@@ -1,21 +1,42 @@
-#display-container .list-header {
+#display-container.dark .list-header {
     background-color: #393941;
     color: rgb(239, 239, 241);
     /* background-color: #18181b; */
 }
-#display-container .list-body {
+#display-container.dark .list-body {
     background-color: #26262c;
 }
 
-#display-container .card {
+#display-container.dark .card {
     background-color: #26262c;
 }
-#display-container .channel-name {
+#display-container.dark .channel-name {
     color: rgb(239, 239, 241);
 }
-#display-container .game-name {
+#display-container.dark .game-name {
     color: rgb(173, 173, 184);
 }
-#display-container .viewer-count {
+#display-container.dark .viewer-count {
     color: rgb(239, 239, 241);
+}
+
+#display-container.light .list-header {
+    background-color: #ffffff;
+    color: rgb(14, 14, 16);
+}
+#display-container.light .list-body {
+    background-color: #efeff1;
+}
+
+#display-container.light .card {
+    background-color: #efeff1;
+}
+#display-container.light .channel-name {
+    color: rgb(14, 14, 16);
+}
+#display-container.light .game-name {
+    color: rgb(83, 83, 95);
+}
+#display-container.light .viewer-count {
+    color: rgb(14, 14, 16);
 }

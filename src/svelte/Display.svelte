@@ -239,6 +239,11 @@
 	{/if}
 			
 <style>
+
+    :host([collapsed]) * {
+        padding: 0 !important;
+        margin: 0 !important;
+    }
 	:host([collapsed]) .list-icon {
 		display: block
 	}

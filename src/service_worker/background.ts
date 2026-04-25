@@ -134,7 +134,7 @@ if (msg.type === CST.GET_STREAM_INFO) {
         chrome.tabs.sendMessage(tab.id!, { type: CST.THEME, data: themeSombre });
       }
     });
-    portManager.sendMessageToTabs(CST.THEME, themeSombre, "theme");
+    portManager.sendMessageToAllTabs(CST.THEME, themeSombre, "theme");
     return true;
   }
   else if (msg.type === CST.GET_THEME) {

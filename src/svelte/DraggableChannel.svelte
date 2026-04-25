@@ -143,6 +143,13 @@
         flex-wrap: nowrap !important;
         /* width: 100% !important; */
     }
+    :global(.nested-list) a {
+        padding: 5px 0 !important;
+    }
+    :host([collapsed]) * {
+        padding: 0 !important;
+        margin: 0 !important;
+    }
 
     a .channel-name {
         font-weight: 600;

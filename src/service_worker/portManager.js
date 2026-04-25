@@ -27,7 +27,6 @@ class PortManager {
         });
 
         chrome.runtime.onConnectExternal.addListener((port) => {
-            if (port.name === "eventbus") {
                 this.externalPorts.push(port);
                 console.log("+ new connection external port", port);
                 port.onMessage.addListener((message, port) => {
@@ -42,8 +41,11 @@ class PortManager {
                     this.externalPorts.splice(indexToRemove, 1);
                     console.log("+ ports are now", this.externalPorts);
                 });
+            if (port.name === "eventbus") {
                 sendCurrentConfigOnConnect(port);
                 sendStreamInfoOnConnect(port);
+            } else if (port.name === 'theme') {
+                sendCurrentThemeOnConnect(port);
             }
         });
     }

@@ -45,24 +45,10 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
   else if (msg.type === "HIDE_POPUP") {
     document.querySelector("#iframe-rem")?.remove();
   } 
-  else if (msg.type === 'THEME') {
-    addStyle(msg.data);
-  } 
+
 });
 
 
-
-
-// chrome.runtime.sendMessage({type: 'GET_THEME'}, (data) => {
-//   addStyle(data.data);
-// });
-
-// setTimeout(() => {
-//   window.history.pushState({}, '', '/akytio');
-
-// // Déclencher l'événement que React Router écoute
-// window.dispatchEvent(new PopStateEvent('popstate'));
-// }, 5000);
 
 window.addEventListener("message", (event) => {
   // console.log("message", event);
@@ -144,26 +130,6 @@ function injectScript() {
   shadowParent.appendChild(link2);
 }
 
-
-function addStyle(msg) {
-  console.log("UPDATING THEME " + msg)
-  let shadow = document.querySelector('#sidebar_shadow').shadowRoot;
-  let existingTag = shadow.querySelector('.injected-sidebar-css');
-  if (existingTag) {
-    existingTag.remove()
-  }
-  
-  const link = document.createElement('link');
-  link.rel = 'stylesheet';
-  link.classList.add('injected-sidebar-css');
-  if (msg === true)
-    link.href = chrome.runtime.getURL('assets/dark_channel.css');
-  else
-    link.href = chrome.runtime.getURL('assets/light_channel.css');
-
-  shadow.appendChild(link);
-
-}
 const observer = new MutationObserver((mut, obs) => {
   // let t = document.body
   let t = document.querySelector("#side-nav .side-nav-section")
