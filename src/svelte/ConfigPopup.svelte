@@ -142,8 +142,10 @@
 <svelte:head>
   {#if themeName}
 	<link rel="stylesheet" href="/assets/sombre.css">
+	<link rel="stylesheet" href="/assets/dark_channel.css">
 	{:else}
 	<link rel="stylesheet" href="/assets/clair.css">
+	<link rel="stylesheet" href="/assets/light_channel.css">
 	{/if}
 </svelte:head>
 
