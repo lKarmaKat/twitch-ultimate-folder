@@ -1,6 +1,6 @@
 import { writable } from 'svelte/store';
 import type { StreamsInfos } from '@src/service_worker/models/streamsInfos.model';
-
+// reliquat ?
 export class ConfigManagfer {
     channelsPickRef = writable<StreamsInfos[]>([
             {

@@ -3,11 +3,12 @@
     import { ALL_OTHER_CHANNELS } from '../constantes'
     import { maybeTooltip, tooltip } from "./tooltip";
 	import { writable } from 'svelte/store'
-    export let listId = "rootList";
-    export let channelConfig;
-    export let channelRef;
-    let behavior = $channelConfig[listId]?.behavior;
-    let style = $channelConfig[listId]?.style;
+	import { TYPE_LIST } from '../const';
+    let { listId = "rootList", channelConfig, channelRef }  = $props();
+    // export let channelConfig;
+    // export let channelRef;
+    let behavior = $derived($channelConfig[listId]?.behavior);
+    let style = $derived($channelConfig[listId]?.style);
 	
 	// console.log(`liste ${listId}`, $channelConfig)
 	let extendedOnStartup=false;
@@ -15,10 +16,10 @@
 	let extendOnClick=false;
 	let isPinnable=false;
 
-	let header;
-	let content;
+	let header = $state('');
+	let content = $state('');
 
-	let extended = extendedOnStartup;
+	let extended = $state(extendedOnStartup);
 
 	channelConfig.subscribe(config => {
 		// console.log("UPDATE DISPLAY")
@@ -58,6 +59,7 @@
 	function getNodeIfLive(item) {
 	 	// counter = document.querySelectorAll(".channel-overlay.li" + listId ).length;
 		return $channelRef.find(e => {
+			// console.log("checking liveness for " + e.channel_name + " " + e.isLive)
 			return e.channel_id === item.channel_id && e.isLive
 		});
 	}
@@ -131,16 +133,17 @@
 		return list;
 	}
 
-	let liveChannels = new Set();
-	$: {
-		// Reactive statement that updates whenever channelRef or channelConfig changes
-		// console.log("$ Update display " + listId);
-		liveChannels = new Set();
-		let hasAllOthers = false;
+
+	let hasLiveChannelCallback = (listId) => {
+		let liveChannels = new Set();
+		let otherListWithOnlineChannel = false
+		let allOtherChannels = false;
 		if ($channelConfig[listId] && $channelConfig[listId].items) {
 			for (let ch of $channelConfig[listId].items) {
 				if (ch.id === ALL_OTHER_CHANNELS) {
-					hasAllOthers = true;
+					allOtherChannels = true;
+				} else if (ch.type === TYPE_LIST) {
+					otherListWithOnlineChannel = hasLiveChannelCallback(ch.id)
 				} else {
 					let liveChannel = getNodeIfLive(ch);
 					if (liveChannel) {
@@ -150,28 +153,20 @@
 			}
 			counter = liveChannels.size;
 		}
+		return liveChannels.size > 0 || otherListWithOnlineChannel || allOtherChannels;
 	}
 
-	function atLeastOneLiveChannel() {
-		// console.log("Update display " + listId);
-		let hasAllOthers = false;
-		if ($channelConfig[listId] && $channelConfig[listId].items) {
-			for (let ch of $channelConfig[listId].items) {
-				if (ch.id === ALL_OTHER_CHANNELS) {
-					hasAllOthers = true;
-					break;
-				}
-			}
-		}
-		return liveChannels.size > 0 || hasAllOthers;
-	}
+	let liveChannels = $derived.by(() => {
+		return hasLiveChannelCallback(listId)
+	})
+
 </script>
 	<!-- <div class="width-test">
 
 	</div> -->
 	<!-- svelte-ignore a11y-no-static-element-interactions -->
 	<!-- svelte-ignore a11y-click-events-have-key-events -->
-	 {#if liveChannels.size > 0 || atLeastOneLiveChannel()}
+	 {#if liveChannels}
 	<div class="list-container">
 		{#if listId !== 'rootList'}
 		<div class="list-header" style="background-color: {header.headerColor};" on:click={toggleAutoCollapse}>

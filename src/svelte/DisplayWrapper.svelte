@@ -104,7 +104,7 @@ onMount(() => {
 </svelte:head> -->
 <div id="display-container" class="display-wrapper">
   {#if $selectedConfig && Object.getOwnPropertyNames($selectedConfig).length > 0 && $channelsPickRef?.length > 0}
-    <Display listId={"rootList"} bind:channelConfig={selectedConfig} bind:channelRef={channelsPickRef} />
+    <Display listId={"rootList"} channelConfig={selectedConfig} channelRef={channelsPickRef} />
   {:else}
     <WaitingConfig />
   {/if}

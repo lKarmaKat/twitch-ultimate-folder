@@ -1,0 +1,1 @@
+export let TYPE_LIST = 'liste'

@@ -42,6 +42,8 @@
 		error = false;
 		let id = e.detail.info.id;
 		const newItems = itemAlreadyInList(e) ? e.detail.items.filter(i => i.id !== id) : e.detail.items;
+		let newIt = e.detail.items.findIndex(i => i.id === id)
+		e.detail.items[newIt] = {"channel_id": e.detail.items[newIt].channel_id, "id": e.detail.items[newIt].id}
 		$channelConfig[listId].items = newItems;
 		//channelConfig.update(liste => {
 			// console.log("UPDATE DROP")

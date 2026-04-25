@@ -110,8 +110,8 @@
     }
     .profile-picture {
         position: relative;
-        width: 2.5em;
-        height: 2.5em;
+        width: 2.15em;
+        height: 2.15em;
         max-height: 100%;
     }
     .profile-picture img {
