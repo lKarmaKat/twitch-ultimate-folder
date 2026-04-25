@@ -1,18 +1,3 @@
-// const iframe1 = document.createElement('iframe');
-// iframe1.id = "iframe";
-// iframe1.src = chrome.runtime.getURL('src/iframe/config-popup.html');
-// iframe1.allowTransparency="true";
-// // document.body.appendChild(iframe1);
-
-// const maindiv = document.createElement('div')
-// maindiv.id = 'iframe-rem';
-// maindiv.classList.add('test-iframe');
-// let shadowParent = maindiv.attachShadow({mode:'closed'})
-
-// const link = document.createElement('link');
-// link.rel = 'stylesheet';
-// link.href = chrome.runtime.getURL('assets/iframe.css');
-
 function createDivWithIframeInShwadowDom(mainDivId, iframeSrcUrl, cssUrl = '', allowTransparency = false) {
   const iframe = document.createElement('iframe');
   iframe.src = iframeSrcUrl;
@@ -37,8 +22,6 @@ const maindiv = createDivWithIframeInShwadowDom('iframe-rem', chrome.runtime.get
 chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
   if (msg.type === "DISPLAY_POPUP") {
     if (!document.querySelector("#iframe-rem")) {
-      // shadowParent.appendChild(iframe1);
-      // shadowParent.appendChild(link);
       document.body.appendChild(maindiv);
     }
   } 
@@ -51,35 +34,38 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
 
 
 window.addEventListener("message", (event) => {
-  // console.log("message", event);
   if (event.data.type === 'navigate') {
 
     window.history.pushState({}, '', event.data.channel);
 
-    // // Déclencher l'événement que React Router écoute
     window.dispatchEvent(new PopStateEvent('popstate'));
-  } else {
-    // console.log("unexpected message", event);
   }
 });
 
 
 function injectScript() {
-  // let bt = document.querySelector("div[aria-label='Followed Channels']")
-  // let before = document.createElement('div');
-  // before.id = 'before-inject-sidebar';
-  // bt.insertBefore(before, bt.firstElementChild);
-  
-  
   let t = document.querySelector("#side-nav .side-nav-section")
-  // let t = document.querySelector("div.scrollable-area")
-  // let t = document.querySelector("div.side-bar-contents")
-  // t.style.position = "relative";
-  // let newDiv = createDivWithIframeInShwadowDom('sidebar-inject', chrome.runtime.getURL('src/iframe/sidebar.html'), chrome.runtime.getURL('assets/sidebar.css'))
-
   const maindiv = document.createElement('div')
   maindiv.id = "sidebar_shadow";
+  t.insertBefore(maindiv, t.firstElementChild);
+
   let shadowParent = maindiv.attachShadow({mode:'open'})
+  const script2 = document.createElement('script');
+  script2.src = chrome.runtime.getURL("sidebar_inject.js");
+  script2.id = 'sidebar_inject';
+  script2.type = 'module';
+  shadowParent.appendChild(script2);
+  const link = document.createElement('link');
+  link.rel = 'stylesheet';
+  link.href = chrome.runtime.getURL('assets/sidebar.css');
+  shadowParent.appendChild(link);
+  const link2 = document.createElement('link');
+  link2.rel = 'stylesheet';
+  link2.classList.add('injected-sidebar-css')
+  link2.href = chrome.runtime.getURL('assets/dark_channel.css');
+  shadowParent.appendChild(link2);
+
+
   let c = () => {
     const collapsed = document.querySelector('.side-nav--collapsed');
 
@@ -92,42 +78,7 @@ function injectScript() {
   const obs = new MutationObserver(c);
   c();
   obs.observe(document.querySelector('.side-nav--collapsed, .side-nav--expanded'), {attributeFilter: ['class'], attributes: true})
-  const script2 = document.createElement('script');
-  script2.src = chrome.runtime.getURL("sidebar_inject.js");
-  script2.id = 'sidebar_inject';
-  script2.type = 'module';
-  shadowParent.appendChild(script2);
 
-
-  const link = document.createElement('link');
-  link.rel = 'stylesheet';
-  link.href = chrome.runtime.getURL('assets/sidebar.css');
-
-  shadowParent.appendChild(link);
-
-  // newDiv.style.height = '100vh';
-  t.insertBefore(maindiv, t.firstElementChild);
-
-  // const script1 = document.createElement('script');
-  // script1.src = chrome.runtime.getURL("sidebar_inject.js");
-  // script1.id = 'sidebar_inject';
-  // script1.type = 'module';
-  // script1.onload = () => script1.remove();
-  // (document.head || document.documentElement).appendChild(script1);
-
-  const script = document.createElement('script');
-  script.src = chrome.runtime.getURL("title_inject.js");
-  script.id = 'title_inject';
-  script.type = 'module';
-  script.onload = () => script.remove();
-  (document.head || document.documentElement).appendChild(script);
-
-
-  const link2 = document.createElement('link');
-  link2.rel = 'stylesheet';
-  link2.classList.add('injected-sidebar-css')
-  link2.href = chrome.runtime.getURL('assets/dark_channel.css');
-  shadowParent.appendChild(link2);
 }
 
 const observer = new MutationObserver((mut, obs) => {

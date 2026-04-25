@@ -2,15 +2,16 @@ import DisplayWrapper from "../DisplayWrapper.svelte";
 import TitlePopup from "../TitlePopup.svelte";
 import { mount } from 'svelte'
 
-  mount(DisplayWrapper, {
-     target: document.querySelector('#sidebar_shadow').shadowRoot,
+
+
+  mount(TitlePopup, {
+     target: document.body,
    })
 
-  // mount(TitlePopup, {
-  //    target: document.body,
-  //  })
-
 function mountSidebar() {
+    mount(DisplayWrapper, {
+     target: document.querySelector('#sidebar_shadow').shadowRoot,
+   })
   // let t = document.body
 
   // let bt = document.querySelector("div[aria-label='Followed Channels']")
@@ -52,16 +53,18 @@ function mountSidebar() {
 }
 // export default app
 
-// const observer = new MutationObserver((mut, obs) => {
-//   // let t = document.body
-//   let t = document.querySelector("div[aria-label='Followed Channels']")
-//   if (t) {
-//     mountSidebar();
-//     obs.disconnect();
-//   }
-// });
+const observer = new MutationObserver((mut, obs) => {
+  // let t = document.body
+  let sideBarShadowDiv = document.querySelector("#sidebar_shadow")
 
-// observer.observe(document.body, {
-//   childList: true,
-//   subtree: true
-// });
+  console.log("mutation found ", sideBarShadowDiv)
+  if (sideBarShadowDiv) {
+    mountSidebar();
+    obs.disconnect();
+  }
+});
+
+observer.observe(document.body, {
+  childList: true,
+  subtree: true
+});
