@@ -218,7 +218,7 @@
             <ConfigPannel bind:channelConfig={selectedConfig}/>
           </div>
           {#if $channelsPickRef.length && Object.getOwnPropertyNames($channelsConfig).length > 0}
-          <div id="sidebar_shadow" class="display-container">
+          <div id="display-container" class="display-container">
             <DisplayWrapper configManager={configManager} />
           </div>
           {/if}

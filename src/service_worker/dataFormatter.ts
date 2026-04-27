@@ -17,9 +17,9 @@ export class DataFormatter {
     }
 
     async init(): Promise<StreamsInfos[]> {
-        if (this.initComplete) {
-            return Array.from(this.allFollowedStreams.values());
-        }
+        // if (this.initComplete) {
+        //     return Array.from(this.allFollowedStreams.values());
+        // }
 
         try {
             await Promise.all([

@@ -1,5 +1,5 @@
 <script>
-	import { dndzone } from 'svelte-dnd-action';
+	import { dndzone, SHADOW_ITEM_MARKER_PROPERTY_NAME } from 'svelte-dnd-action';
   	import DraggableChannel from './DraggableChannel.svelte'
 	import { parentFinalizeEvent, configChangeEvent } from "./event.js";
   	import * as CST from '../constantes.js'
@@ -10,12 +10,12 @@
 	export let requestDeleteToParent;
 
 	$: if ($parentFinalizeEvent ) {
-		error = false;
+		duplicatedElementError = false;
 	}
 
 
 	const flipDurationMs = 80;
-	let error = false;
+	let duplicatedElementError = false;
 	function handleDndConsider(e) {
 		// Use an immutable update to ensure subscribers and dnd-action
 		// get a new object/array reference instead of mutating in place.
@@ -26,7 +26,7 @@
 		// 	copy[listId] = { ...(copy[listId] || {}), items: newItems };
 		// 	return copy;
 		// });
-		error = itemAlreadyInList(e);
+		duplicatedElementError = itemAlreadyInList(e);
 	}
 
 	function itemAlreadyInList(e) {
@@ -39,11 +39,13 @@
 	}
 
 	function handleDndFinalize(e) {
-		error = false;
+		duplicatedElementError = false;
 		let id = e.detail.info.id;
 		const newItems = itemAlreadyInList(e) ? e.detail.items.filter(i => i.id !== id) : e.detail.items;
 		let newIt = e.detail.items.findIndex(i => i.id === id)
-		e.detail.items[newIt] = {"channel_id": e.detail.items[newIt].channel_id, "id": e.detail.items[newIt].id}
+		// if (newIt) {
+		// 	e.detail.items[newIt] = {"channel_id": e.detail.items[newIt].channel_id, "id": e.detail.items[newIt].id}
+		// }
 		$channelConfig[listId].items = newItems;
 		//channelConfig.update(liste => {
 			// console.log("UPDATE DROP")
@@ -57,7 +59,7 @@
 	}
 
 	function transformDraggedElement(draggedEl, draggedData, draggedIndex) {
-		if (error) {
+		if (duplicatedElementError) {
 			if (!draggedData.save) {
 				draggedData.save = draggedEl.innerHTML;
 			}
@@ -67,6 +69,13 @@
 			draggedEl.innerHTML = draggedData.save;
 			draggedEl.style.cursor = 'grab';
 
+		} else if (draggedData.type === CST.TYPE_LIST) {
+			let chName = $channelConfig[draggedData.id];
+			draggedEl.innerHTML = `<strong>${chName.name}</strong>`;
+			// draggedEl.style.width = '200px';
+			draggedEl.style.height = '2.1em';
+			console.log(draggedEl.innerHTML)
+			// draggedEl.style.transform = 'scale(0.8)'; // ou via transform
 		}
 	}
 
@@ -140,12 +149,14 @@
 		<section class="dnd-zone-r"
 		use:dndzone={{items:$channelConfig[listId].items, flipDurationMs, centreDraggedOnCursor: false, transformDraggedElement,
 			dropTargetClasses: ['increased-drop-margin']
-		}} 
+		, morphDisabled: true, useCursorForDetection: true}} 
 		on:consider={handleDndConsider} 
 		on:finalize={handleDndFinalize}>
 		<!-- style="background-color: {contentColor};">		 -->
 			{#each $channelConfig[listId].items as item(item.id)}
-			{#if item.type === "liste"}
+			{#if item[SHADOW_ITEM_MARKER_PROPERTY_NAME]}
+				<div in:fade={{duration:200, easing: cubicIn}} class='custom-shadow-item'>test</div>
+			{:else if item.type === "liste"}
 			<div class="nested-list">
 				<svelte:self requestDeleteToParent={removeChild} bind:channelConfig={channelConfig} listId={item.id} bind:channelRef={channelRef}></svelte:self>
 			</div>
@@ -182,6 +193,9 @@
 </div>
 
 <style>
+.custom-shadow-item{
+	color: red;
+}
 	.channel {
 		position: relative;
 	}

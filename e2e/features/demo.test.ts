@@ -126,7 +126,6 @@ test.describe('popup with config already injected', async () => {
 			]
 		}
 		// await page.waitForFunction(() => (window as any).__onMessageCallback && typeof (window as any).__onMessageCallback === 'function');
-
 		await popupPage.sendDefaultConf(conf, channelsRef);
 	});
 
@@ -154,11 +153,13 @@ test.describe('popup with config already injected', async () => {
 		await popupPage.dragElementToList('Cyqop', 'list-10', 0);
 		await page.waitForTimeout(500);
 		expect(await popupPage.getConfigChannelListElementCount()).toBe(4)
+		expect(await popupPage.countNumberDirectElementInList('list-10')).toBe(2)
 		await popupPage.clickRemoveChannel('#remove-91122178')
+		expect(await popupPage.countNumberDirectElementInList('list-10')).toBe(1)
 		expect(await popupPage.getConfigChannelListElementCount()).toBe(3)
 		await popupPage.dragElementToList('Cyqop', 'list-10', 0);
 		expect(await popupPage.getConfigChannelListElementCount()).toBe(4)
-		await page.waitForTimeout(500);
+		expect(await popupPage.countNumberDirectElementInList('list-10')).toBe(2)
 	});
 
 	test('dragging an element in the config list should add it and display it in the display list', async ({ page }) => {
@@ -169,6 +170,44 @@ test.describe('popup with config already injected', async () => {
 		page.pause();
 	})
 
+	test('new channel goes live and should be displayed', async ({page}) => {
+		let channelsRef2: any[] = deepClone(channelsRef)
+		channelsRef2.push(deepClone(newChannels)[0])
+		channelsRef2.push(deepClone(newChannels)[1])
+
+		let newConf = deepClone(config);
+
+		newConf.rootList.items.push(
+            {
+                "id": "9123217886107",
+                "channel_id": "91232178"
+            })
+		let conf: any = {
+			userId: 0,
+			currentConfig: "liste principale",
+			configsList: [
+				deepClone(newConf)
+			]
+		}
+		popupPage.sendDefaultConf(conf, channelsRef2)
+		expect(await popupPage.getDisplayConfigListElementCount()).toBe(5)
+		expect(await popupPage.countNumberDirectElementInList('list-rootList')).toBe(4)
+		let channelsDisplay = await (await popupPage.getDisplayConfigListElements()).nth(4).getByText('12K');
+		expect(await channelsDisplay.textContent()).toBe('12K');
+		
+		let updatedRef = deepClone(channelsRef2);
+		updatedRef[4].viewer_count = 6
+		popupPage.updateRef(updatedRef)
+		
+		expect(await popupPage.getDisplayConfigListElementCount()).toBe(5)
+		channelsDisplay = await (await popupPage.getDisplayConfigListElements()).nth(4).getByText('6');
+		expect(await channelsDisplay.textContent()).toBe('6');
+
+		let ur = deepClone(updatedRef)
+		ur[4].isLive = false;
+		popupPage.updateRef(ur)
+		expect(await popupPage.getDisplayConfigListElementCount()).toBe(4)
+	})
 
 
 })

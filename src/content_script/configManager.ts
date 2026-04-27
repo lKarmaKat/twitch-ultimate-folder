@@ -55,6 +55,8 @@ class ConfigManager {
                     this.channelsConfigList.set(structuredClone(msg.data));
                 }
             } else if (msg.type === "GET_STREAM_INFO") {
+                // for(let i = 0; i < msg.data.length; i++)
+                //     console.log("GET_STREAM_INFO", msg.data[i].channel_name, msg.data[i].viewer_count)
 
                 msg.data.sort(alphaSortCallback)
                 this.channelsPickRef.set(msg.data);
@@ -112,10 +114,13 @@ class ConfigManager {
                 //     return liste;
                 // })
                 // console.log(" updating updating");
-                // this.channelsPickRef.update(e => {
-                //     // console.log(e)
-                //     return e;
-                // })
+
+                // for(let i = 0; i < msg.data.length; i++)
+                //     console.log("UPDATE_STREAM_INFO", msg.data[i].channel_name, msg.data[i].viewer_count)
+
+                this.channelsPickRef.update(e => {
+                    return e;
+                })
                 
                 msg.data.sort(alphaSortCallback);
                 this.channelsPickRef.set(msg.data);

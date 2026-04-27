@@ -50,10 +50,13 @@ input[type=text] {
     left: 5%;
 }
 
-#config-list .list-header {
+#config-list .list-header,
+.nested-list strong {
     background-color: rgb(31, 16, 53, .6);
     color: rgb(239, 239, 241);
 }
+
+
 
 
 /* twitch icon color #9147ff */

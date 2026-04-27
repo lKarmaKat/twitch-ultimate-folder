@@ -13,7 +13,7 @@ export const GET_THEME = 'GET_THEME';
 export const ALPHA_SORT = 'ALPHA';
 export const VIEWER_SORT = 'VIEWER';
 export const CUSTOM_SORT = 'CUSTOM';
-
+export let TYPE_LIST = 'liste'
 
 
 export const NEW_LIST: t.I_NEW_LIST = {

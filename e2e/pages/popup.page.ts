@@ -43,6 +43,12 @@ export class PopupPage {
         return await list.count();
     }
 
+    async countNumberDirectElementInList(listId: string) {
+        let list = await (await this.getListInConfigChannelList(listId))
+        let c = await list.locator(':scope > .list-body > section > div.channel, :scope > .list-body > section > div.nested-list').count()
+        return c;
+    }
+
     async clickAddList(listId: string) {
         let list = await this.getListInConfigChannelList(listId)
         await list.getByRole('button').getByText('+').click();
@@ -101,6 +107,7 @@ export class PopupPage {
             
         await this.page.mouse.up();
         await dragEl.waitFor({ state: 'visible' })
+        await this.page.waitForTimeout(500)
         // console.log(await dragEl.innerText())
     }
 
@@ -113,7 +120,6 @@ export class PopupPage {
             if (!callback) throw new Error('Port callback not found in iframe');
 
             let deepClone = (obj: any) => JSON.parse(JSON.stringify(obj));
-            console.log("sendDefault config")
 
             callback({
                 type: "GET_CURRENT_CONFIGURATION",
@@ -124,6 +130,23 @@ export class PopupPage {
                 data: deepClone(channelsRef)
             });
         }, {conf, channelsRef})
+    }
+
+    async updateRef(channelsRef: any) {
+        let fr = this.page.frame({name: 'iframe'})
+        if (!fr) throw new Error('Frame not found')
+        await fr.evaluate(({channelsRef}) => {
+            // const iframe = (document.querySelector('#iframe-rem') as any).shadowRoot.querySelector('#iframe') as any;
+            const callback = (window as any).__onPortCallback;
+            if (!callback) throw new Error('Port callback not found in iframe');
+
+            let deepClone = (obj: any) => JSON.parse(JSON.stringify(obj));
+
+            callback({
+                type: "UPDATE_STREAM_INFO",
+                data: deepClone(channelsRef)
+            });
+        }, {channelsRef})
     }
 
     

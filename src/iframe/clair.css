@@ -48,7 +48,8 @@ input[type=text] {
     bottom: 1px;
     left: 5%;
 }
-#config-list .list-header {
+#config-list .list-header,
+.nested-list strong {
     background-color: rgb(92, 22, 197, .4);
     color: rgb(14, 14, 16);
 }
