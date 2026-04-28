@@ -42,27 +42,33 @@ class ConfigManager {
                     let alphaSort = (a: StreamsInfos, b: StreamsInfos) => {
                         return a.channel_name.localeCompare(b.channel_name);
                     }
-                    if (a.isLive && b.isLive) return alphaSort(a,b);
+                    if (a.id === CST.ALL_OTHER_CHANNELS)
+                        return -1;
+                    else if (b.id === CST.ALL_OTHER_CHANNELS)
+                        return 1;
+                    else if (a.isLive && b.isLive) return alphaSort(a,b);
                     else if (a.isLive) return -1;
                     else if (b.isLive) return 1;
                     else return alphaSort(a,b);
                 };
-            if (msg.type === "GET_CURRENT_CONFIGURATION") {
+            if (msg.type === CST.GET_CURRENT_CONFIGURATION) {
                 // TODO voir si sauvegarder une liste ne vas pas écraser des données en cours de modif dans une autre popup.
                 this.currentConfigName.set(msg.data.currentConfig);
                 // console.log("Setting config in config manager", msg);
                 if (msg.data) {
                     this.channelsConfigList.set(structuredClone(msg.data));
                 }
-            } else if (msg.type === "GET_STREAM_INFO") {
+            } else if (msg.type === CST.GET_STREAM_INFO) {
                 // for(let i = 0; i < msg.data.length; i++)
                 //     console.log("GET_STREAM_INFO", msg.data[i].channel_name, msg.data[i].viewer_count)
 
-                msg.data.sort(alphaSortCallback)
-                this.channelsPickRef.set(msg.data);
+                let all = [...msg.data, CST.ALL_OTHER_CHANNELS_ELEMENT]
+                all.sort(alphaSortCallback)
+                
+                this.channelsPickRef.set(all);
                 // console.log("updating", msg.data);
                 // this.save = streamInfo;
-            } else if (msg.type === "UPDATE_STREAM_INFO") {
+            } else if (msg.type === CST.UPDATE_STREAM_INFO) {
                 // console.log("UPDATING")
                 // msg.data.sort((a: StreamsInfos, b: StreamsInfos) => {
                 //     let alphaSort = (a: StreamsInfos, b: StreamsInfos) => {
@@ -118,12 +124,12 @@ class ConfigManager {
                 // for(let i = 0; i < msg.data.length; i++)
                 //     console.log("UPDATE_STREAM_INFO", msg.data[i].channel_name, msg.data[i].viewer_count)
 
-                this.channelsPickRef.update(e => {
-                    return e;
-                })
-                
-                msg.data.sort(alphaSortCallback);
-                this.channelsPickRef.set(msg.data);
+                // this.channelsPickRef.update(e => {
+                //     return e;
+                // })
+                let all = [...msg.data, CST.ALL_OTHER_CHANNELS_ELEMENT]
+                all.sort(alphaSortCallback)
+                this.channelsPickRef.set(all);
                 this.channelsConfigList.update(liste => liste);
             }
         }
@@ -143,14 +149,14 @@ class ConfigManager {
 
     send(toSaveChannels: I_CONFIG) {
         let copy = this.cleanRecursively('rootList', toSaveChannels);  
-        chrome.runtime.sendMessage(this.extensionId, { type: 'SAVE_CHANNELS_LIST', data: copy });
+        chrome.runtime.sendMessage(this.extensionId, { type: CST.SAVE_CHANNELS_LIST, data: copy });
     }
 
     cleanRecursively(listId: string, toSaveChannels: I_CONFIG) {
         let copy = JSON.parse(JSON.stringify(toSaveChannels));
         if (copy[listId].items.length > 0) {
             for (let item of copy[listId].items) {
-                if ((item as any).type === 'liste') {
+                if ((item as any).type === CST.TYPE_LIST) {
                     this.cleanRecursively((item as any).id, copy);
                 } else {
                     delete (item as any).channel_name;
@@ -168,9 +174,9 @@ class ConfigManager {
 
     resetConfig() {
         return new Promise(resolve => {
-            chrome.runtime.sendMessage(this.extensionId, {type: 'RESET_CONFIG'}, () => {
+            chrome.runtime.sendMessage(this.extensionId, {type: CST.RESET_CONFIG}, () => {
                 console.log("reseted");
-                chrome.runtime.sendMessage(this.extensionId, {type: 'GET_CURRENT_CONFIGURATION'}, (truc) => {
+                chrome.runtime.sendMessage(this.extensionId, {type: CST.GET_CURRENT_CONFIGURATION}, (truc) => {
                     if (Object.getOwnPropertyNames(truc)?.length > 0) {
                         this.channelsConfigList = writable(truc);
                         // display = truc;

@@ -1,5 +1,6 @@
 import { FrameLocator, Locator, Page } from '@playwright/test'
 import { PopupHelper } from '../helpers/popup.helper'
+import * as CST from '../../src/constantes'
 
 export class PopupPage {
     private popupHelper: PopupHelper
@@ -122,11 +123,11 @@ export class PopupPage {
             let deepClone = (obj: any) => JSON.parse(JSON.stringify(obj));
 
             callback({
-                type: "GET_CURRENT_CONFIGURATION",
+                type: CST.GET_CURRENT_CONFIGURATION,
                 data: conf
             });
             callback({
-                type: "GET_STREAM_INFO",
+                type: CST.GET_STREAM_INFO,
                 data: deepClone(channelsRef)
             });
         }, {conf, channelsRef})
@@ -143,7 +144,7 @@ export class PopupPage {
             let deepClone = (obj: any) => JSON.parse(JSON.stringify(obj));
 
             callback({
-                type: "UPDATE_STREAM_INFO",
+                type: CST.UPDATE_STREAM_INFO,
                 data: deepClone(channelsRef)
             });
         }, {channelsRef})

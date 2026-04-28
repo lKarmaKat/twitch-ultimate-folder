@@ -63,11 +63,11 @@ describe('Test test', () => {
             ]
         }
         c({
-            type: "GET_CURRENT_CONFIGURATION",
+            type: CST.GET_CURRENT_CONFIGURATION,
             data: conf
         })
         c({
-            type: "GET_STREAM_INFO",
+            type: CST.GET_STREAM_INFO,
             data: deepClone(channelsRef)
         })
 
@@ -80,7 +80,7 @@ describe('Test test', () => {
         let chConf = deepClone(channelsRef);
         chConf[3].viewer_count = 222;
         c({
-            type: "UPDATE_STREAM_INFO",
+            type: CST.UPDATE_STREAM_INFO,
             data: chConf
         })
         
@@ -90,7 +90,7 @@ describe('Test test', () => {
         chConf = deepClone(channelsRef);
         chConf[3].viewer_count = 225;
         c({
-            type: "UPDATE_STREAM_INFO",
+            type: CST.UPDATE_STREAM_INFO,
             data: chConf
         })
         
@@ -107,7 +107,7 @@ describe('Test test', () => {
         // console.log(chConf2)
 
         c({
-            type: "UPDATE_STREAM_INFO",
+            type: CST.UPDATE_STREAM_INFO,
             data: chConf
         })
 
@@ -123,7 +123,7 @@ describe('Test test', () => {
         chConf[3].game_name = 'gameTest';
 
         c({
-            type: "UPDATE_STREAM_INFO",
+            type: CST.UPDATE_STREAM_INFO,
             data: chConf
         })
 

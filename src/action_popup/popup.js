@@ -1,9 +1,10 @@
+import * as CST from '../constantes.js'
 
 
 
 let btn = document.querySelector("#btn");
 btn.addEventListener('click', () => {
-    chrome.runtime.sendMessage({type: 'DISPLAY_POPUP'});
+    chrome.runtime.sendMessage({type: CST.DISPLAY_POPUP});
 })
 
 let checkbox = document.querySelector("input");
@@ -13,9 +14,9 @@ checkbox.addEventListener("change", () => {
     (async () => {
         let o;
         if (checkbox.checked) {
-            o = {type: 'THEME', value: true}
+            o = {type: CST.CHANGE_THEME, value: true}
         } else {
-            o = {type: 'THEME', value: false};
+            o = {type: CST.CHANGE_THEME, value: false};
         }
         const response = await chrome.runtime.sendMessage(o);
         if (!response)
@@ -23,9 +24,9 @@ checkbox.addEventListener("change", () => {
     })();
 });
 
-chrome.runtime.sendMessage({type: "GET_THEME"}, (response) => {
+chrome.runtime.sendMessage({type: CST.GET_THEME}, (response) => {
     console.log("received", response);
-    if (response.type === "THEME") {
+    if (response.type === CST.THEME) {
         checkbox.checked = response.data;
     }
 });

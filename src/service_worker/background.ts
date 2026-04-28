@@ -26,7 +26,6 @@ console.log("####################");
 
 setInterval(() => {
   dataFormatter.updateAll().then((info) => {
-    //console.log("updating bg", info);
     portManager.sendMessageToAllTabs(CST.UPDATE_STREAM_INFO, info);
   }).catch((error) => {
     logBackgroundError("background:setInterval:updateAll", wrapError("Background periodic update failed", error));
@@ -65,7 +64,7 @@ chrome.storage.local.get("theme").then((data) => {
 });
 let sendCurrentThemeOnConnect = (port: chrome.runtime.Port) => {
   port.postMessage({
-    "type": "theme",
+    "type": CST.CHANGE_THEME,
     "data": themeSombre
   });
 }
@@ -92,13 +91,16 @@ if (msg.type === CST.GET_STREAM_INFO) {
     console.log("saving channels list bg", msg.data);
     // chrome.storage.local.set({ currentConfig: msg.data});
     configManager.saveConfig(msg.data);
-    // portManager.sendMessageToAllTabs(CST.GET_CURRENT_CONFIGURATION, msg.data)
+    portManager.sendMessageToAllTabs(CST.GET_CURRENT_CONFIGURATION, msg.data)
     return false;
   }
   else if (msg.type === CST.RESET_CONFIG) {
       let resetConf = CST.STARTUP_CONF;
-      chrome.storage.local.set({currentConfig: resetConf});
-    return false;
+      // chrome.storage.local.set({currentConfig: resetConf});
+      configManager.saveConfig(resetConf);
+      portManager.sendMessageToAllTabs(CST.GET_CURRENT_CONFIGURATION, resetConf)
+      sendResponse(resetConf);
+    return true;
   } else if (msg.type === CST.GET_CURRENT_CONFIGURATION) {
     configManager.getConfigObjectForCurrentUser().then((currentConfig) => {
       sendResponse(currentConfig);
@@ -117,10 +119,10 @@ if (msg.type === CST.GET_STREAM_INFO) {
     });
     return false;
   } 
-  else if (msg.type === CST.THEME) {
+  else if (msg.type === CST.CHANGE_THEME) {
     themeSombre = !themeSombre;
     sendResponse({
-      type: CST.THEME,
+      type: CST.CHANGE_THEME,
       data: themeSombre
     });
     chrome.storage.local.set({
@@ -131,10 +133,10 @@ if (msg.type === CST.GET_STREAM_INFO) {
         }, tabs => {
       console.log("UPDATE THEME " + tabs);
       for (let tab of tabs) {
-        chrome.tabs.sendMessage(tab.id!, { type: CST.THEME, data: themeSombre });
+        chrome.tabs.sendMessage(tab.id!, { type: CST.CHANGE_THEME, data: themeSombre });
       }
     });
-    portManager.sendMessageToAllTabs(CST.THEME, themeSombre, "theme");
+    portManager.sendMessageToAllTabs(CST.CHANGE_THEME, themeSombre, "theme");
     return true;
   }
   else if (msg.type === CST.GET_THEME) {

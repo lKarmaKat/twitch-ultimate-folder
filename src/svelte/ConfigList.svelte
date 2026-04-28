@@ -32,10 +32,10 @@
 	function itemAlreadyInList(e) {
 		let map = new Map();
 		e.detail.items.forEach(i => {
-			if (i.type !== 'liste')
+			if (i.type !== CST.TYPE_LIST)
 				map.set(i.channel_id, true);
 		});
-		return e.detail.items.filter(i => i.type !== 'liste').length !== map.size;
+		return e.detail.items.filter(i => i.type !== CST.TYPE_LIST).length !== map.size;
 	}
 
 	function handleDndFinalize(e) {
@@ -93,7 +93,7 @@
 					newNode.id = 'list' + currentId;
 					newNode.name = 'list ' + currentId;
 					liste[currentId] = structuredClone(newNode);
-					liste[listId]["items"].push({id: currentId, type: 'liste'});
+					liste[listId]["items"].push({id: currentId, type: CST.TYPE_LIST});
 				}
 				currentId++;
 			} while (nodeExist);
@@ -156,7 +156,7 @@
 			{#each $channelConfig[listId].items as item(item.id)}
 			{#if item[SHADOW_ITEM_MARKER_PROPERTY_NAME]}
 				<div in:fade={{duration:200, easing: cubicIn}} class='custom-shadow-item'>test</div>
-			{:else if item.type === "liste"}
+			{:else if item.type === CST.TYPE_LIST}
 			<div class="nested-list">
 				<svelte:self requestDeleteToParent={removeChild} bind:channelConfig={channelConfig} listId={item.id} bind:channelRef={channelRef}></svelte:self>
 			</div>

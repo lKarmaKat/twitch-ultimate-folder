@@ -53,7 +53,7 @@ export const config = {
             },
             {
                 "id": 10,
-                "type": "liste"
+                "type": CST.TYPE_LIST
             }
         ],
         "style": {

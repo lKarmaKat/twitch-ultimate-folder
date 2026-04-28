@@ -1,4 +1,5 @@
 import { writable } from 'svelte/store';
+import * as CST from '../constantes'
 import type { StreamsInfos } from '@src/service_worker/models/streamsInfos.model';
 // reliquat ?
 export class ConfigManagfer {
@@ -19,7 +20,7 @@ export class ConfigManagfer {
         "10": {
             id: "10",
             name: "test",
-            type: "liste",
+            type: CST.TYPE_LIST,
             items: [                {
                     id: 123456789, 
                     channel_id: 123456789, 
@@ -34,7 +35,7 @@ export class ConfigManagfer {
             id:'node1',
             name:'liste principale',
             items:[
-                {id: 10, name: "10", type: 'liste'},
+                {id: 10, name: "10", type: CST.TYPE_LIST},
                 {
                     id: 123456789, 
                     channel_id: 123456789, 

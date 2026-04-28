@@ -1,9 +1,10 @@
 <script>
   	import DraggableChannel from './DraggableChannel.svelte';
-    import { ALL_OTHER_CHANNELS } from '../constantes'
+    import { ALL_OTHER_CHANNELS, TYPE_LIST } from '../constantes'
     import { maybeTooltip, tooltip } from "./tooltip";
 	import { writable } from 'svelte/store'
-	import { TYPE_LIST } from '../const';
+    import * as CST from '../constantes.js'
+
     let { listId = "rootList", channelConfig, channelRef }  = $props();
     // export let channelConfig;
     // export let channelRef;
@@ -39,7 +40,7 @@
 				isPinnable = $channelConfig[listId].behavior.isPinnable;
 			}
 			
-			if (style && style.theme === 'CUSTOM') {
+			if (style && style.theme === CST.CUSTOM) {
 				header = style.header;
 				content = style.content;
 			} else {
@@ -76,7 +77,7 @@
 			for (let currentItem of listItem) {
 				if (currentItem.channel_id) {
 					set.add(currentItem.channel_id)
-				} else if (currentItem.type === 'liste' && $channelConfig[currentItem.id]?.items?.length) {
+				} else if (currentItem.type === TYPE_LIST && $channelConfig[currentItem.id]?.items?.length) {
 					c($channelConfig[currentItem.id].items);
 				}
 			}
@@ -194,7 +195,7 @@
 			<div class="list-body" class:extended style="background-color: {content.contentColor};">
 				<div>
 					{#each $channelConfig[listId].items as item(item.id)}
-						{#if item.type === "liste"}
+						{#if item.type === CST.TYPE_LIST}
 							<div class="nested-list">
 								<svelte:self  bind:channelConfig={channelConfig} listId={item.id} bind:channelRef={channelRef}></svelte:self>
 							</div>

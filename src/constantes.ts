@@ -1,6 +1,6 @@
 import type * as t from 'src/service_worker/models/userStructure';
 
-export const ALL_OTHER_CHANNELS = 'allOtherChannels';
+export const ALL_OTHER_CHANNELS = -1;
 export const UPDATE_STREAM_INFO = 'UPDATE_STREAM_INFO';
 export const GET_STREAM_INFO = 'GET_STREAM_INFO';
 export const GET_CURRENT_CONFIGURATION = 'GET_CURRENT_CONFIGURATION';
@@ -8,17 +8,18 @@ export const SAVE_CHANNELS_LIST = 'SAVE_CHANNELS_LIST';
 export const RESET_CONFIG = 'RESET_CONFIG';
 export const DISPLAY_POPUP = 'DISPLAY_POPUP';
 export const HIDE_POPUP = 'HIDE_POPUP';
-export const THEME = 'THEME';
+export const CHANGE_THEME = 'CHANGE_THEME';
 export const GET_THEME = 'GET_THEME';
+export const THEME = 'THEME';
 export const ALPHA_SORT = 'ALPHA';
 export const VIEWER_SORT = 'VIEWER';
 export const CUSTOM_SORT = 'CUSTOM';
-export let TYPE_LIST = 'liste'
+export let TYPE_LIST = 'list'
 
 
 export const NEW_LIST: t.I_NEW_LIST = {
             id:'node1',
-            name:'liste principale',
+            name:'default',
             items:[
             ],
             behavior: {
@@ -66,7 +67,7 @@ export const currentConfig = 'currentConfig';
 
 export const ALL_OTHER_CHANNELS_ELEMENT = {
         "id": ALL_OTHER_CHANNELS,
-        "channel_id": "93132178",
+        "channel_id": -1,
         "channel_name": "All others channels",
         "sort": 'ALPHA',
         "isLive": false,

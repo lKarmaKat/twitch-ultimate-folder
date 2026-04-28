@@ -7,8 +7,7 @@
   import DraggableChannel from './DraggableChannel.svelte';
   import { writable, derived } from 'svelte/store';
   // import { onMount } from 'svelte';
-  import { ALL_OTHER_CHANNELS, STARTUP_CONF, ALL_OTHER_CHANNELS_ELEMENT } from '../constantes.js'
-  import { dndzone, TRIGGERS, SHADOW_ITEM_MARKER_PROPERTY_NAME, DRAGGED_ELEMENT_ID } from "svelte-dnd-action";
+  import {  STARTUP_CONF } from '../constantes.js'
 
   let configManager = new ConfigManager();
   let loading = true;
@@ -98,11 +97,7 @@
   ////////////////////////////////////////////////
   ////////////////////////////////////////////////
   ////////////////////////////////////////////////
-  let allOtherItems = [ALL_OTHER_CHANNELS_ELEMENT];
 
-  function handleDndConsider(e) {
-    allOtherItems = e.detail.items;
-  }
   let themeName = writable(true);
   import PortConnector from '../content_script/portConnector.js';
     import DisplayWrapper from './DisplayWrapper.svelte';
@@ -191,20 +186,6 @@
             {#if $channelsPickRef.length}
             <MainChannelsList bind:items={channelsPickRef}/>
             {/if}
-            <br />
-            <section class="channels" use:dndzone={{items: allOtherItems, dropFromOthersDisabled: true}} on:consider={handleDndConsider} on:finalize={handleDndConsider}>
-              {#each allOtherItems as item(item.id)}
-                <!-- <div class="allOthers">{item.channel_name}</div> -->
-                 <DraggableChannel 
-                  channelId={item.channel_id} 
-                  channelName={item.channel_name} 
-                  channelProfilePic={item.profile_image_url} 
-                  viewerCount={item.viewer_count}
-                  gameName={item.game_name}
-                  isLive={item.isLive}
-                  bearCard=true/>
-              {/each}
-            </section>
           </div>
           {#if $channelsPickRef.length}
           <div id="config-list" class="channels-container">
