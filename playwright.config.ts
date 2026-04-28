@@ -3,8 +3,10 @@ import { defineConfig ,devices} from '@playwright/test';
 export default defineConfig({
 	webServer: { command: 'npm run build && npm run preview', port: 4173 },
 	testDir: 'e2e/features',
- 	reporter: 'line',
-	retries: 3,
+ 	reporter:  [
+        ['html'],
+        ['line'],
+    ],
 	projects: [
 		{
       		name: 'chromium',
@@ -28,9 +30,9 @@ export default defineConfig({
 		},
 	],
 	use: {
-		trace: 'retain-on-failure',
-		screenshot: 'only-on-failure',
-		video: 'retain-on-failure'
+		trace: 'on',
+		screenshot: 'on',
+		video: 'on'
 		// trace: 'on-failure',      // capture la trace si le test échoue
 		// screenshot: 'on-failure', // screenshot si échec
 		// video: 'on-failure',      // video si échec
