@@ -1,3 +1,5 @@
+import * as CST from '../../src/constantes'
+
 export const config = {
     "10": {
         "id": "list 10",

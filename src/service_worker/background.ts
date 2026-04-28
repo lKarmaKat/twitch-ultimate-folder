@@ -64,7 +64,7 @@ chrome.storage.local.get("theme").then((data) => {
 });
 let sendCurrentThemeOnConnect = (port: chrome.runtime.Port) => {
   port.postMessage({
-    "type": CST.CHANGE_THEME,
+    "type": CST.THEME,
     "data": themeSombre
   });
 }

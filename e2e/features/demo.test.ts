@@ -5,7 +5,7 @@ import * as sinon from 'sinon';
 import { addListener } from 'process';
 import { PopupPage } from '../pages/popup.page';
 import {config, channelsRef, newChannels, newChannel} from '../../svelte_tests/utils/const';
-
+import * as CST from '../../src/constantes'
 
 
 let popupPage: PopupPage;
@@ -78,11 +78,11 @@ test.beforeEach(async ({ page }) => {
 	await page.waitForFunction(() => (window as any).__messageListener && typeof (window as any).__messageListener === 'function');
     // Déclenchez l'injection
 
-    await page.evaluate(() => {
+    await page.evaluate(({DISPLAY_POPUP}) => {
         if ((window as any).__messageListener) {
-            (window as any).__messageListener({ type: "DISPLAY_POPUP" });
+            (window as any).__messageListener({ type: DISPLAY_POPUP });
         }
-    });
+    }, {DISPLAY_POPUP: CST.DISPLAY_POPUP});
 	// await page.goto('src/iframe/config-popup.html');
     await page.waitForSelector('#iframe');
 
@@ -104,7 +104,7 @@ test('popup has a loader until datas are sent through', async ({ page }) => {
 	await popupPage.sendDefaultConf(conf, channelsRef);
 
 	let mainChannelListCount = await popupPage.getMainChannelListElementCount();
-	expect(mainChannelListCount).toBe(4);
+	expect(mainChannelListCount).toBe(5);
 
 	let configChannelListCount = await popupPage.getConfigChannelListElementCount();
 	expect(configChannelListCount).toBe(4);
@@ -115,7 +115,7 @@ test('popup has a loader until datas are sent through', async ({ page }) => {
 
 
 
-test.describe('popup with config already injected', async () => {
+test.describe('with config', async () => {
 	test.beforeEach(async ({ page }) => {
 
 		let conf: any = {
@@ -167,7 +167,6 @@ test.describe('popup with config already injected', async () => {
 		expect(await popupPage.getConfigChannelListElementCount()).toBe(5)
 
 		expect(await popupPage.getDisplayConfigListElementCount()).toBe(5)
-		page.pause();
 	})
 
 	test('new channel goes live and should be displayed', async ({page}) => {

@@ -104,7 +104,7 @@ export class PopupPage {
         let v = await this.popupHelper.getListDropCoord(destListId, pos);
         await this.page.mouse.move(
 			v.x,
-			v.y, { steps: 20 })
+			v.y, { steps: 50 })
             
         await this.page.mouse.up();
         await dragEl.waitFor({ state: 'visible' })
@@ -115,7 +115,7 @@ export class PopupPage {
     async sendDefaultConf(conf: any, channelsRef: any) {
         let fr = this.page.frame({name: 'iframe'})
         if (!fr) throw new Error('Frame not found')
-        await fr.evaluate(({conf, channelsRef}) => {
+        await fr.evaluate(({conf, channelsRef, GET_STREAM_INFO, GET_CURRENT_CONFIGURATION}) => {
             // const iframe = (document.querySelector('#iframe-rem') as any).shadowRoot.querySelector('#iframe') as any;
             const callback = (window as any).__onPortCallback;
             if (!callback) throw new Error('Port callback not found in iframe');
@@ -123,20 +123,20 @@ export class PopupPage {
             let deepClone = (obj: any) => JSON.parse(JSON.stringify(obj));
 
             callback({
-                type: CST.GET_CURRENT_CONFIGURATION,
+                type: GET_CURRENT_CONFIGURATION,
                 data: conf
             });
             callback({
-                type: CST.GET_STREAM_INFO,
+                type: GET_STREAM_INFO,
                 data: deepClone(channelsRef)
             });
-        }, {conf, channelsRef})
+        }, {conf, channelsRef, GET_STREAM_INFO: CST.GET_STREAM_INFO, GET_CURRENT_CONFIGURATION: CST.GET_CURRENT_CONFIGURATION})
     }
 
     async updateRef(channelsRef: any) {
         let fr = this.page.frame({name: 'iframe'})
         if (!fr) throw new Error('Frame not found')
-        await fr.evaluate(({channelsRef}) => {
+        await fr.evaluate(({channelsRef, UPDATE_STREAM_INFO}) => {
             // const iframe = (document.querySelector('#iframe-rem') as any).shadowRoot.querySelector('#iframe') as any;
             const callback = (window as any).__onPortCallback;
             if (!callback) throw new Error('Port callback not found in iframe');
@@ -144,10 +144,10 @@ export class PopupPage {
             let deepClone = (obj: any) => JSON.parse(JSON.stringify(obj));
 
             callback({
-                type: CST.UPDATE_STREAM_INFO,
+                type: UPDATE_STREAM_INFO,
                 data: deepClone(channelsRef)
             });
-        }, {channelsRef})
+        }, {channelsRef, UPDATE_STREAM_INFO: CST.UPDATE_STREAM_INFO})
     }
 
     
