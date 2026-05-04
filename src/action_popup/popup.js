@@ -19,8 +19,12 @@ checkbox.addEventListener("change", () => {
             o = {type: CST.CHANGE_THEME, value: false};
         }
         const response = await chrome.runtime.sendMessage(o);
-        if (!response)
+        if (!response) {    
             checkbox.checked = false;
+            document.body.classList.remove('dark');
+        } else {
+            document.body.classList.toggle('dark');
+        }
     })();
 });
 

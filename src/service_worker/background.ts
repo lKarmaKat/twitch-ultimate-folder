@@ -6,6 +6,8 @@ import { TokenManager } from "./token";
 import { logErrorChain, wrapError } from "./errors";
 import * as CST from '../constantes.js'
 import { writable } from 'svelte/store';
+import { ConfigPoller } from './configPoller';
+import type { StreamsInfos } from './models/streamsInfos.model';
 
 const userUpdate = writable(false);
 const userAuthAutoFailed = writable(false);
@@ -14,6 +16,9 @@ let tokenManager = new TokenManager(userUpdate, userAuthAutoFailed);
 let twitchApi = new TwitchApi(tokenManager);
 let configManager = new ConfigManager(twitchApi, userUpdate);
 let dataFormatter = new DataFormatter(twitchApi);
+let configPoller = new ConfigPoller(twitchApi, (data: StreamsInfos[]) => {
+  portManager.sendMessageToAllTabs(CST.UPDATE_STREAM_INFO, data);
+});
 
 const logBackgroundError = (context: string, error: unknown) => {
   logErrorChain(context, error);
@@ -24,13 +29,14 @@ console.log("Background.js");
 console.log("####################");
 
 
-setInterval(() => {
-  dataFormatter.updateAll().then((info) => {
-    portManager.sendMessageToAllTabs(CST.UPDATE_STREAM_INFO, info);
-  }).catch((error) => {
-    logBackgroundError("background:setInterval:updateAll", wrapError("Background periodic update failed", error));
-  });
-}, 6000);
+// setInterval(() => {
+//   dataFormatter.updateAll().then((info) => {
+//     portManager.sendMessageToAllTabs(CST.UPDATE_STREAM_INFO, info);
+//   }).catch((error) => {
+//     logBackgroundError("background:setInterval:updateAll", wrapError("Background periodic update failed", error));
+//   });
+// }, 6000);
+
 
 
 
