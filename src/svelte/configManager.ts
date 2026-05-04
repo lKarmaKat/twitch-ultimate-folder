@@ -1,7 +1,7 @@
 import PortConnector from './portConnector.js';
 import { writable, derived } from 'svelte/store';
 import type { StreamsInfos } from '@src/service_worker/models/streamsInfos.model';
-import * as CST from '../constantes'
+import * as CST from '../constantes.js'
 import type { UserConfigs, I_CONFIG } from '../service_worker/models/userStructure.js';
 
 class ConfigManager {
@@ -20,7 +20,7 @@ class ConfigManager {
             this.selectedConfig.set(index);
           return index;
         }
-        throw new Error('ConfigName not found in configList');
+        throw new Error(`ConfigName ${$currentConfigName} not found in configList`);
     }
   });
     constructor() {

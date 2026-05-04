@@ -1,4 +1,3 @@
-import { DataFormatter } from './dataFormatter'
 import { TwitchApi } from './twitch';
 import PortManager from './portManager'
 import { ConfigManager } from './configManage';
@@ -6,7 +5,7 @@ import { TokenManager } from "./token";
 import { logErrorChain, wrapError } from "./errors";
 import * as CST from '../constantes.js'
 import { writable } from 'svelte/store';
-import { ConfigPoller } from './configPoller';
+import { DataPoller } from './configPoller';
 import type { StreamsInfos } from './models/streamsInfos.model';
 
 const userUpdate = writable(false);
@@ -15,8 +14,7 @@ const userAuthAutoFailed = writable(false);
 let tokenManager = new TokenManager(userUpdate, userAuthAutoFailed);
 let twitchApi = new TwitchApi(tokenManager);
 let configManager = new ConfigManager(twitchApi, userUpdate);
-let dataFormatter = new DataFormatter(twitchApi);
-let configPoller = new ConfigPoller(twitchApi, (data: StreamsInfos[]) => {
+let configPoller = new DataPoller(twitchApi, (data: StreamsInfos[]) => {
   portManager.sendMessageToAllTabs(CST.UPDATE_STREAM_INFO, data);
 });
 
@@ -32,7 +30,7 @@ console.log("####################");
 
 
 let sendStreamInfoOnConnect = (port: chrome.runtime.Port) => {
-    dataFormatter.updateAll().then((info) => {
+    configPoller.getConfig().then((info) => {
     // console.log("updating bg");
     port.postMessage({ 
       "type": CST.GET_STREAM_INFO, 

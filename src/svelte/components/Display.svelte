@@ -51,7 +51,6 @@
 	}
 	updateStyleVars(listId, $channelConfig[listId]);
 
-    let counter = 0;
 	function getNode(item) {
 		return $channelRef.find(e => e.channel_id === item.channel_id);
 	}
@@ -84,6 +83,17 @@
 		c($channelConfig.rootList.items);
 		return set;
 	}
+
+	let counter = $derived.by(() => {
+		let set = getSetAllChannelsInConfig();
+		let count = 0;
+		for (let ch of $channelRef) {
+			if (!set.has(ch.channel_id) && ch.isLive) {
+				count++;
+			}
+		}
+		return count;
+	});
 
 	function getAllOtherChannels(ref, item) {
 		let set = getSetAllChannelsInConfig();
@@ -124,12 +134,12 @@
 				return ('' + an).localeCompare(bn)
 			}
 		};
-		if (item.sort === 'ALPHA')
+		if (item.sort === CST.ALPHA_SORT)
 			list.sort(alphaSortCallback);
 		else 
 			list.sort(viewerCountSortCallback);
 		// console.log("all others", list.length, list)
-		counter = liveChannels.size + c;
+		// counter = c;
 		return list;
 	}
 
@@ -151,7 +161,7 @@
 					}
 				}
 			}
-			counter = liveChannels.size;
+			// counter = liveChannels.size;
 		}
 		return liveChannels.size > 0 || otherListWithOnlineChannel || allOtherChannels;
 	}
@@ -185,7 +195,7 @@
 			</div>
 			<div class="right">
 				<p>
-					{counter}
+					<!-- {counter} -->
 				</p>
 			</div>
 		</div>

@@ -1,5 +1,6 @@
 import type * as t from 'src/service_worker/models/userStructure';
 
+export const POLLING_INTERVAL = 6000;
 export const ALL_OTHER_CHANNELS = -1;
 export const UPDATE_STREAM_INFO = 'UPDATE_STREAM_INFO';
 export const GET_STREAM_INFO = 'GET_STREAM_INFO';
