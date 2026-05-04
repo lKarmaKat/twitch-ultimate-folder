@@ -1,13 +1,15 @@
 <script>
   import ConfigList from './ConfigList.svelte';
-  import ConfigManager from '../content_script/configManager';
   import ConfigPannel from './ConfigPannel.svelte'
   import MainChannelsList from './MainChannelsList.svelte';
   import Display from './Display.svelte';
   import DraggableChannel from './DraggableChannel.svelte';
+  import DisplayWrapper from './DisplayWrapper.svelte';
+  import ConfigManager from '../configManager';
+  import PortConnector from '../portConnector.js';
+  import {  STARTUP_CONF } from '../../constantes.js'
   import { writable, derived } from 'svelte/store';
-  // import { onMount } from 'svelte';
-  import {  STARTUP_CONF } from '../constantes.js'
+  
 
   let configManager = new ConfigManager();
   let loading = true;
@@ -99,8 +101,6 @@
   ////////////////////////////////////////////////
 
   let themeName = writable(true);
-  import PortConnector from '../content_script/portConnector.js';
-    import DisplayWrapper from './DisplayWrapper.svelte';
 
   let theme = (data) => {
       themeName = data.data;

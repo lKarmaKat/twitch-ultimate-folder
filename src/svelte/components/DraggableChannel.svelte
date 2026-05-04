@@ -1,5 +1,5 @@
 <script>
-    import { maybeTooltip, tooltip } from "./tooltip";
+    import { maybeTooltip, tooltip } from "../tooltip";
 
 	export let channelId;
 	export let channelName;

@@ -1,8 +1,8 @@
 <script>
-	import { dndzone, SHADOW_ITEM_MARKER_PROPERTY_NAME } from 'svelte-dnd-action';
   	import DraggableChannel from './DraggableChannel.svelte'
-	import { parentFinalizeEvent, configChangeEvent } from "./event.js";
-  	import * as CST from '../constantes.js'
+	  import { parentFinalizeEvent, configChangeEvent } from "../event.js";
+  	import * as CST from '../../constantes.js'
+	  import { dndzone, SHADOW_ITEM_MARKER_PROPERTY_NAME } from 'svelte-dnd-action';
 	
 	export let channelConfig;
 	export let listId;

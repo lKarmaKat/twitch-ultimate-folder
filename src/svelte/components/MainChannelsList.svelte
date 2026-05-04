@@ -1,6 +1,6 @@
 <script>
     import DraggableChannel from './DraggableChannel.svelte';
-    import { parentFinalizeEvent } from "./event.js";
+    import { parentFinalizeEvent } from "../event.js";
     import { derived, writable } from 'svelte/store';
     import { dndzone, TRIGGERS, SHADOW_ITEM_MARKER_PROPERTY_NAME, DRAGGED_ELEMENT_ID } from "svelte-dnd-action";
 

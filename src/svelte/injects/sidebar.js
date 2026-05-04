@@ -1,5 +1,5 @@
-import DisplayWrapper from "../DisplayWrapper.svelte";
-import TitlePopup from "../TitlePopup.svelte";
+import DisplayWrapper from "../components/DisplayWrapper.svelte";
+import TitlePopup from "../components/TitlePopup.svelte";
 import { mount } from 'svelte'
 
 

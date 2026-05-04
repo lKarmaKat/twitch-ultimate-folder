@@ -1,10 +1,9 @@
 <script>
   	import DraggableChannel from './DraggableChannel.svelte';
-    import { ALL_OTHER_CHANNELS, TYPE_LIST } from '../constantes'
-    import { maybeTooltip, tooltip } from "./tooltip";
+	import { maybeTooltip, tooltip } from "../tooltip";
+    import * as CST from '../../constantes.js'
 	import { writable } from 'svelte/store'
-    import * as CST from '../constantes.js'
-
+	
     let { listId = "rootList", channelConfig, channelRef }  = $props();
     // export let channelConfig;
     // export let channelRef;
@@ -77,7 +76,7 @@
 			for (let currentItem of listItem) {
 				if (currentItem.channel_id) {
 					set.add(currentItem.channel_id)
-				} else if (currentItem.type === TYPE_LIST && $channelConfig[currentItem.id]?.items?.length) {
+				} else if (currentItem.type === CST.TYPE_LIST && $channelConfig[currentItem.id]?.items?.length) {
 					c($channelConfig[currentItem.id].items);
 				}
 			}
@@ -141,9 +140,9 @@
 		let allOtherChannels = false;
 		if ($channelConfig[listId] && $channelConfig[listId].items) {
 			for (let ch of $channelConfig[listId].items) {
-				if (ch.id === ALL_OTHER_CHANNELS) {
+				if (ch.id === CST.ALL_OTHER_CHANNELS) {
 					allOtherChannels = true;
-				} else if (ch.type === TYPE_LIST) {
+				} else if (ch.type === CST.TYPE_LIST) {
 					otherListWithOnlineChannel = hasLiveChannelCallback(ch.id)
 				} else {
 					let liveChannel = getNodeIfLive(ch);
@@ -199,7 +198,7 @@
 							<div class="nested-list">
 								<svelte:self  bind:channelConfig={channelConfig} listId={item.id} bind:channelRef={channelRef}></svelte:self>
 							</div>
-						{:else if item.id === ALL_OTHER_CHANNELS}
+						{:else if item.id === CST.ALL_OTHER_CHANNELS}
 
 							{#each getAllOtherChannels($channelRef, item) as other(`${other.channel_id}`)}
 								{@const i = getNode(other)}

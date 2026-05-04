@@ -1,6 +1,7 @@
 <script>
+	import { configChangeEvent } from "../event.js";
+    import * as CST from '../../constantes.js'
     import { writable } from 'svelte/store';
-	import { configChangeEvent } from "./event.js";
 
     export let channelConfig;
     let listeId;
@@ -72,7 +73,7 @@
                     <option value="CUSTOM">Custom</option>
                 </select>
             </div>
-            {#if config.style.theme === 'CUSTOM'}
+            {#if config.style.theme === CST.CUSTOM}
             <div class="row">
                 <p>Header color</p>
                 <select name="header-color" id="header-color" bind:value={config.style.header.headerColor} on:change={updateConfig}>
