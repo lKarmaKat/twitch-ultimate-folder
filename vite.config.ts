@@ -59,11 +59,10 @@ export default defineConfig({
         background: 'src/service_worker/background.ts',
         content_script: 'src/content_script/index.js',
         popup_hmtl: 'src/iframe/config-popup.html',
-        // sidebar: 'src/iframe/sidebar.html',
-        sidebar_inject: 'src/svelte/injects/sidebar.js',
-        title_inject: 'src/svelte/injects/title.js',
+        sidebar_inject: 'src/svelte/injects/sidebar_inject.js',
+        title_inject: 'src/svelte/injects/title_inject.js',
         popup: 'src/action_popup/popup.html',
-        popup_inject: 'src/svelte/injects/main.js'
+        popup_inject: 'src/svelte/injects/popup_inject.js'
         
 
       },
