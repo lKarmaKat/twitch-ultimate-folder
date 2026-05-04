@@ -5,7 +5,7 @@ import { TokenManager } from "./token";
 import { logErrorChain, wrapError } from "./errors";
 import * as CST from '../constantes.js'
 import { writable } from 'svelte/store';
-import { DataPoller } from './configPoller';
+import { DataPoller } from './dataPoller';
 import type { StreamsInfos } from './models/streamsInfos.model';
 
 const userUpdate = writable(false);
@@ -78,7 +78,12 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
     console.log("saving channels list bg", msg.data);
     // chrome.storage.local.set({ currentConfig: msg.data});
     configManager.saveConfig(msg.data);
-    portManager.sendMessageToAllTabs(CST.GET_CURRENT_CONFIGURATION, msg.data)
+    // TODO peux mieux faire fin ça fonctionne mais peut mieux faire
+    setTimeout(() => {
+      configManager.getConfigObjectForCurrentUser().then((currentConfig) => {
+        portManager.sendMessageToAllTabs(CST.GET_CURRENT_CONFIGURATION, currentConfig)
+      });
+    }, 1500)
     return false;
   }
   else if (msg.type === CST.RESET_CONFIG) {

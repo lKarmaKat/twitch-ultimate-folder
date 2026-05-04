@@ -14,7 +14,7 @@ class ConfigManager {
     currentConfigName = writable<string>('');
     selectedConfig = writable<I_CONFIG>();
     autre = derived([this.channelsConfigList, this.currentConfigName], ([$channelsConfigList, $currentConfigName]) => {
-    if ($channelsConfigList?.configsList) {
+    if ($channelsConfigList?.configsList && $currentConfigName) {
         let index = $channelsConfigList.configsList.find(conf => conf.rootList.name === $currentConfigName);
         if (index) {
             this.selectedConfig.set(index);
