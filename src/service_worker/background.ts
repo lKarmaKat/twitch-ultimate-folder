@@ -29,15 +29,6 @@ console.log("Background.js");
 console.log("####################");
 
 
-// setInterval(() => {
-//   dataFormatter.updateAll().then((info) => {
-//     portManager.sendMessageToAllTabs(CST.UPDATE_STREAM_INFO, info);
-//   }).catch((error) => {
-//     logBackgroundError("background:setInterval:updateAll", wrapError("Background periodic update failed", error));
-//   });
-// }, 6000);
-
-
 
 
 let sendStreamInfoOnConnect = (port: chrome.runtime.Port) => {
@@ -84,15 +75,7 @@ self.addEventListener('beforeunload', () => {
 chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
     void sender;
     console.log("MESSAGE", msg.type, msg.data);    
-if (msg.type === CST.GET_STREAM_INFO) {
-    dataFormatter.init().then((info) => {
-      sendResponse(info);
-    }).catch((error) => {
-      logBackgroundError("background:onMessage:GET_STREAM_INFO", wrapError("Background failed to handle GET_STREAM_INFO", error));
-      sendResponse({ error: "Unable to get stream info" });
-    });
-    return true;
-  } else if (msg.type === CST.SAVE_CHANNELS_LIST) {
+  if (msg.type === CST.SAVE_CHANNELS_LIST) {
     // nettoyer input
     console.log("saving channels list bg", msg.data);
     // chrome.storage.local.set({ currentConfig: msg.data});
@@ -159,15 +142,7 @@ if (msg.type === CST.GET_STREAM_INFO) {
 
 chrome.runtime.onMessageExternal.addListener((msg, sender, sendResponse) => {
   void sender;
-  if (msg.type === CST.GET_STREAM_INFO) {
-    dataFormatter.init().then((info) => {
-      sendResponse(info);
-    }).catch((error) => {
-      logBackgroundError("background:onMessageExternal:GET_STREAM_INFO", wrapError("Background failed to handle external GET_STREAM_INFO", error));
-      sendResponse({ error: "Unable to get stream info" });
-    });
-    return true;
-  } else if (msg.type === CST.GET_CURRENT_CONFIGURATION) {
+  if (msg.type === CST.GET_CURRENT_CONFIGURATION) {
     console.log("getting current conf");
     (async () => {
         chrome.storage.local.get('currentConfig', (data) => {

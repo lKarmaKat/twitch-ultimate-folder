@@ -1,5 +1,3 @@
-import type { Writable } from "svelte/store";
-import { writable } from "svelte/store";
 import { wrapError } from './errors';
 import type { TwitchApi } from "./twitch";
 import type { StreamsInfos } from "./models/streamsInfos.model";
