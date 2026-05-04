@@ -7,7 +7,7 @@ btn.addEventListener('click', () => {
     chrome.runtime.sendMessage({type: CST.DISPLAY_POPUP});
 })
 
-let checkbox = document.querySelector("input");
+let checkbox = document.querySelector("#theme");
 
 
 checkbox.addEventListener("change", () => {

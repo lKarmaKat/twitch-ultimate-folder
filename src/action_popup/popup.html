@@ -1,11 +1,86 @@
 <html>
- <head>
-   <title>Water Popup</title>
-    <link rel="stylesheet" href="popup_style.css">
- </head>
- <body>
-     <button id="btn" value="0.1">Open config popup</button>
-     <input type="checkbox" name="theme" id="theme"><label for="theme">Theme sombre ?</label>
-   <script type="module" src="./popup.js"></script>
- </body>
+
+<head>
+  <title>Water Popup</title>
+  <meta charset="UTF-8" />
+  <link rel="stylesheet" href="popup_style.css">
+</head>
+
+<body>
+  <!--  <input type="checkbox" name="theme" id="theme"><label for="theme">Theme sombre ?</label> -->
+
+  <div class="popup">
+    <div class="card">
+      <div class="card-header">
+        <h1>Préférences</h1>
+      </div>
+
+      <div class="row">
+        <div class="row-info">
+          <button id="btn" class="btn btn-primary" value="0.1">Open config popup</button>
+        </div>
+      </div>
+
+      <label class="row" for="theme">
+        <div class="row-info">
+          <div class="row-label">Thème</div>
+          <!-- <div class="row-sub">Apparence de l'interface</div> -->
+        </div>
+        <input type="checkbox" class="tgl" id="theme">
+        <span class="sw">
+          <span class="track"></span>
+          <span class="lbl-on">Dark</span>
+          <span class="lbl-off">Light</span>
+          <span class="thumb"></span>
+        </span>
+      </label>
+
+      <label class="row" for="notifs">
+        <div class="row-info">
+          <div class="row-label">Alignement des chaines</div>
+          <div class="row-sub">Si vous utilisez BTTV pour changer la disposition du chat</div>
+        </div>
+        <input type="checkbox" class="tgl" id="notifs" checked>
+        <span class="sw">
+          <span class="track"></span>
+          <span class="lbl-on">Gauche</span>
+          <span class="lbl-off">Droite</span>
+          <span class="thumb"></span>
+        </span>
+      </label>
+      <!-- 
+      <label class="row" for="sync">
+        <div class="row-info">
+          <div class="row-label">Synchronisation</div>
+          <div class="row-sub">Mise à jour automatique</div>
+        </div>
+        <input type="checkbox" class="tgl blue" id="sync">
+        <span class="sw">
+          <span class="track"></span>
+          <span class="lbl-on">On</span>
+          <span class="lbl-off">Off</span>
+          <span class="thumb"></span>
+        </span>
+      </label>
+
+      <label class="row" for="loc">
+        <div class="row-info">
+          <div class="row-label">Localisation</div>
+          <div class="row-sub">Accès à votre position</div>
+        </div>
+        <input type="checkbox" class="tgl orange" id="loc" checked>
+        <span class="sw">
+          <span class="track"></span>
+          <span class="lbl-on">On</span>
+          <span class="lbl-off">Off</span>
+          <span class="thumb"></span>
+        </span>
+      </label> -->
+
+    </div>
+  </div>
+  <script type="module" src="./popup.js"></script>
+
+</body>
+
 </html>
