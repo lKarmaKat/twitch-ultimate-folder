@@ -7,22 +7,24 @@ btn.addEventListener('click', () => {
     chrome.runtime.sendMessage({type: CST.DISPLAY_POPUP});
 })
 
-let checkbox = document.querySelector("#theme");
+let themeCheckbox = document.querySelector("#theme");
+let alignmentCheckbox = document.querySelector("#alignment");
 
 
-checkbox.addEventListener("change", () => {
+themeCheckbox.addEventListener("change", () => {
     (async () => {
         let o;
-        if (checkbox.checked) {
+        if (themeCheckbox.checked) {
             o = {type: CST.CHANGE_THEME, value: true}
         } else {
             o = {type: CST.CHANGE_THEME, value: false};
         }
         const response = await chrome.runtime.sendMessage(o);
         if (!response) {    
-            checkbox.checked = false;
+            themeCheckbox.checked = false;
             document.body.classList.remove('dark');
         } else {
+            themeCheckbox.checked = response.data;
             document.body.classList.toggle('dark');
         }
     })();
@@ -31,9 +33,36 @@ checkbox.addEventListener("change", () => {
 chrome.runtime.sendMessage({type: CST.GET_THEME}, (response) => {
     console.log("received", response);
     if (response.type === CST.THEME) {
-        checkbox.checked = response.data;
+        themeCheckbox.checked = response.data;
     }
 });
+
+
+chrome.runtime.sendMessage({type: CST.GET_ALIGNMENT}, (response) => {
+    console.log("received", response);
+    if (response.type === CST.ALIGNMENT) {
+        alignmentCheckbox.checked = response.data;
+    }
+});
+
+
+alignmentCheckbox.addEventListener("change", () => {
+    (async () => {
+        let o;
+        if (alignmentCheckbox.checked) {
+            o = {type: CST.CHANGE_ALIGNMENT, value: true}
+        } else {
+            o = {type: CST.CHANGE_ALIGNMENT, value: false};
+        }
+        const response = await chrome.runtime.sendMessage(o);
+        if (!response) {    
+            alignmentCheckbox.checked = false;
+        } else {
+            alignmentCheckbox.checked = response.data
+        }
+    })();
+});
+
 
 
 

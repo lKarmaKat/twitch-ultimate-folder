@@ -59,12 +59,23 @@ chrome.storage.local.get("theme").then((data) => {
 });
 let sendCurrentThemeOnConnect = (port: chrome.runtime.Port) => {
   port.postMessage({
-    "type": CST.THEME,
+    "type": CST.THEME, // RENVOYER LE TYPE NE SERT A RIEN ICI
     "data": themeSombre
   });
 }
+let currentAlignmentLeft = true;
+chrome.storage.local.get("alignmentLeft").then((data) => {
+  currentAlignmentLeft = data.currentAlignment === 1 ? true : false;
+})
+let sendCurrentAlignmentOnConnect = (port: chrome.runtime.Port) => {
+  port.postMessage({
+    "type": CST.THEME, // RENVOYER LE TYPE NE SERT A RIEN ICI
+    "data": currentAlignmentLeft
+  });
+}
 
-let portManager = new PortManager(sendCurrentConfigOnConnect, sendStreamInfoOnConnect, sendCurrentThemeOnConnect);
+
+let portManager = new PortManager(sendCurrentConfigOnConnect, sendStreamInfoOnConnect, sendCurrentThemeOnConnect, sendCurrentAlignmentOnConnect);
 
 self.addEventListener('beforeunload', () => {
   portManager.closeAllPorts();
@@ -133,9 +144,27 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
   }
   else if (msg.type === CST.GET_THEME) {
     sendResponse({
-      type: CST.THEME,
+      type: CST.THEME, // RENVOYER LE TYPE NE SERT A RIEN ICI
       data: themeSombre
     });
+    return true;
+  } else if (msg.type === CST.CHANGE_ALIGNMENT) {
+    currentAlignmentLeft = !currentAlignmentLeft;
+    sendResponse({
+      type: CST.ALIGNMENT,
+      data: currentAlignmentLeft
+    })
+    chrome.storage.local.set({
+      "alignmentLeft": currentAlignmentLeft ? 1 : 0
+    });
+    portManager.sendMessageToAllTabs(CST.CHANGE_THEME, currentAlignmentLeft, "alignment"); // JE PARIE QUE LE TYPE NE SERT A RIEN ICI NON PLUS
+
+    return true;
+  } else if (msg.type === CST.GET_ALIGNMENT) {
+    sendResponse({
+      type: CST.ALIGNMENT, // RENVOYER LE TYPE NE SERT A RIEN ICI
+      data: currentAlignmentLeft
+    })
     return true;
   }
 

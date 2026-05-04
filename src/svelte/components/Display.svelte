@@ -249,7 +249,9 @@
 	{/if}
 			
 <style>
-
+	:global(.al-right) .list-container {
+		margin-left: 2em;
+	}
     :host([collapsed]) * {
         padding: 0 !important;
         margin: 0 !important;
@@ -305,11 +307,11 @@
 		padding-right: 4px;
 	}
 	.list-container {
-		padding: 0 0 0 .1em;
+		/* padding: 0 0 0 .1em; */
 		/* border: 1px solid rgba(128, 128, 128, 0.295); */
 	}
 	.nested-list {
-		padding: 0.3em 0 0.3em 0.3em;
+		/* padding: 0.3em 0 0.3em 0.3em; */
 	}
 	.delete {
 		border: 1px solid rgba(216, 57, 57, 0.685);

@@ -19,9 +19,16 @@
     theme = data.data;
   }
   let port = new PortConnector(themeCb, "theme");
+
+  let alignementLeft = true;
+  let alignmentCb = (data) => {
+    console.log("#############", data.data)
+    alignementLeft = data.data
+  }
+  let alignmentPort = new PortConnector(alignmentCb, 'alignment');
 </script>
 
-<div id="display-container" class="display-wrapper" class:dark={theme} class:light={!theme}>
+<div id="display-container" class="display-wrapper" class:dark={theme} class:light={!theme} class:al-left={alignementLeft} class:al-right={!alignementLeft}>
   {#if $selectedConfig && Object.getOwnPropertyNames($selectedConfig).length > 0 && $channelsPickRef?.length > 0}
     <Display 
     listId={"rootList"} 

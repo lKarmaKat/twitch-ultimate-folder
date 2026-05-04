@@ -131,7 +131,7 @@
         color: inherit;
         text-decoration: inherit;
         margin: 0px;
-        padding: 5px 8px;
+        /* padding: 5px 8px; */
         border: 0px;
         font: inherit;
         vertical-align: baseline;
@@ -143,9 +143,9 @@
         flex-wrap: nowrap !important;
         /* width: 100% !important; */
     }
-    :global(.nested-list) a {
+    /* :global(.nested-list) a {
         padding: 5px 0 !important;
-    }
+    } */
     :host([collapsed]) * {
         padding: 0 !important;
         margin: 0 !important;
@@ -189,7 +189,7 @@
 		background: inherit;
 		/* clip-path: polygon(0% 0%, 100% 0%, 50% 100%); */
 		clip-path: polygon(0 0, 0 100%, 100% 50%); -->
-<a class="card" id="cd" use:maybeTooltip={title} href={ !blockNavigation ? "https://www.twitch.tv/" + channelName : null } on:click={navigate}>
+<a class="card" id="draggable-channel" use:maybeTooltip={title} href={ !blockNavigation ? "https://www.twitch.tv/" + channelName : null } on:click={navigate}>
     <!-- <div class="layout-container" style="background-color: {color};"> -->
         <div class="flex-profile-picture">
             <div class="profile-picture">

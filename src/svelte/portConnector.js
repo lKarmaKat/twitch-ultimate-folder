@@ -14,7 +14,7 @@ class PortConnector {
         if (this.port) this.portConnected = true;
         
         this.port.onMessage.addListener((msg) => {
-            console.log("sidebar received ", msg)
+            // console.log("sidebar received ", msg)
             msgCallback(msg);
         });
         this.port.onDisconnect.addListener(() => {

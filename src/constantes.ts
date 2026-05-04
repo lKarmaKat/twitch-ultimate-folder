@@ -9,13 +9,18 @@ export const SAVE_CHANNELS_LIST = 'SAVE_CHANNELS_LIST';
 export const RESET_CONFIG = 'RESET_CONFIG';
 export const DISPLAY_POPUP = 'DISPLAY_POPUP';
 export const HIDE_POPUP = 'HIDE_POPUP';
+export const THEME = 'THEME';
 export const CHANGE_THEME = 'CHANGE_THEME';
 export const GET_THEME = 'GET_THEME';
-export const THEME = 'THEME';
+export const ALIGNMENT = 'ALIGNMENT';
+export const CHANGE_ALIGNMENT = 'CHANGE_ALIGNMENT';
+export const GET_ALIGNMENT = 'GET_ALIGNMENT';
 export const ALPHA_SORT = 'ALPHA';
 export const VIEWER_SORT = 'VIEWER';
 export const CUSTOM_SORT = 'CUSTOM';
 export let TYPE_LIST = 'list'
+
+export const PARAM_ALIGNMENT_LEFT = 'alignmentLeft';
 
 
 export const NEW_LIST: t.I_NEW_LIST = {
