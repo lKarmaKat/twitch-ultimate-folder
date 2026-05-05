@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128">
+  <!-- Folder tab (back top) -->
+  <path d="M10 33 Q10 25 18 25 L50 25 Q56 25 58 31 L63 38 L10 38 Z" fill="#6B1FA8"/>
+
+  <!-- Folder back body -->
+  <path d="M10 38 L118 38 L118 106 Q118 113 111 113 L17 113 Q10 113 10 106 Z" fill="#7B2FBE"/>
+
+  <!-- Folder front flap (foreground, slightly lighter) -->
+  <path d="M10 46 Q10 38 18 38 L110 38 Q118 38 118 46 L118 108 Q118 115 110 115 L18 115 Q10 115 10 108 Z" fill="#9147FF"/>
+
+  <!-- Subtle top edge highlight -->
+  <path d="M18 38 L110 38 Q118 38 118 46 L118 48 Q118 40 110 40 L18 40 Q10 40 10 48 L10 46 Q10 38 18 38 Z" fill="#B05FFF" opacity="0.6"/>
+
+  <!-- Twitch Logo on the front flap -->
+  <g transform="translate(34, 51)">
+    <!-- White speech bubble background -->
+    <rect x="0" y="0" width="60" height="47" rx="6" fill="white"/>
+    <!-- Bottom-left pointing tail -->
+    <polygon points="0,47 0,60 14,47" fill="white"/>
+    <!-- Left bar -->
+    <rect x="12" y="10" width="11" height="22" rx="2.5" fill="#9147FF"/>
+    <!-- Right bar -->
+    <rect x="37" y="10" width="11" height="22" rx="2.5" fill="#9147FF"/>
+  </g>
+</svg>

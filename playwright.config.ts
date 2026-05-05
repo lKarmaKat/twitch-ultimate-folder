@@ -22,11 +22,11 @@ export default defineConfig({
 		},
 		{
       		name: 'firefox',
-			use: { ...devices['Desktop Safari'], viewport: { width: 1920, height: 1000 } },
+			use: { ...devices['Desktop Firefox'], viewport: { width: 1920, height: 1000 } },
 		},
 		{
       		name: 'webkit',
-			use: { ...devices['Desktop Chrome'], viewport: { width: 1920, height: 1000 } },
+			use: { ...devices['Desktop Safari'], viewport: { width: 1920, height: 1000 } },
 		},
 	],
 	use: {

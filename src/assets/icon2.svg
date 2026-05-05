@@ -1,0 +1,81 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128">
+
+  <!-- === BACK FOLDER (outline style, like the original) === -->
+  <!-- Back folder body outline -->
+  <path d="
+    M12 34
+    Q12 22 24 22
+    L50 22
+    Q58 22 61 28
+    L65 34
+    L108 34
+    Q120 34 120 46
+    L120 90
+    Q120 100 110 100
+    L18 100
+    Q8 100 8 90
+    L8 46
+    Q8 34 12 34 Z
+  " fill="#7B2FBE" stroke="none"/>
+
+  <!-- Back folder inner cutout (white hole to simulate outline effect) -->
+  <path d="
+    M18 40
+    Q18 34 24 34
+    L104 34
+    Q112 34 112 40
+    L112 86
+    Q112 93 106 93
+    L22 93
+    Q18 93 18 86 Z
+  " fill="white"/>
+
+  <!-- Back folder tab (top rounded tab) -->
+  <path d="
+    M18 22
+    L50 22
+    Q56 22 59 27
+    L63 34
+    L18 34
+    Q12 34 12 28
+    Q12 22 18 22 Z
+  " fill="#7B2FBE"/>
+
+  <!-- === FRONT FOLDER FLAP (solid, in perspective like original) === -->
+  <path d="
+    M8 58
+    L8 104
+    Q8 118 22 118
+    L106 118
+    Q120 118 120 104
+    L120 58
+    Q120 46 106 46
+    L22 46
+    Q8 46 8 58 Z
+  " fill="#9147FF"/>
+
+  <!-- Slight top-left perspective slant on front flap (mimics the lean in original) -->
+  <path d="
+    M8 58
+    Q8 46 22 46
+    L106 46
+    Q120 46 120 58
+    L120 62
+    Q120 50 106 50
+    L22 50
+    Q10 50 8 62 Z
+  " fill="#B06AFF" opacity="0.5"/>
+
+  <!-- === TWITCH LOGO on the front flap === -->
+  <g transform="translate(33, 56)">
+    <!-- White speech bubble -->
+    <rect x="0" y="0" width="62" height="48" rx="6" fill="white"/>
+    <!-- Chat tail bottom-left -->
+    <polygon points="0,48 0,62 15,48" fill="white"/>
+    <!-- Left bar -->
+    <rect x="12" y="10" width="12" height="23" rx="2.5" fill="#9147FF"/>
+    <!-- Right bar -->
+    <rect x="38" y="10" width="12" height="23" rx="2.5" fill="#9147FF"/>
+  </g>
+
+</svg>
