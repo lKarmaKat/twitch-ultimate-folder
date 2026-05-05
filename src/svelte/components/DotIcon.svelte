@@ -8,8 +8,8 @@
         /* padding: .2em 0.3em */
         box-sizing: border-box;
         margin: 0 0em;
-        width: 0.7em;
-        height: 0.7em;
+        width: 0.55em;
+        height: 0.55em;
     }
     .dot {
         background: #9147ff;

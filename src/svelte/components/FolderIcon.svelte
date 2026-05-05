@@ -4,18 +4,29 @@
         flex-direction: row;
         justify-content: center;
         align-items: center;
-        background: rgba(145, 71, 255, 0.2);
         /* padding: .2em 0.3em */
-
+        
         width: 100%;
         height: 100%;
-
+        
     }
     svg {
         width: 100%;
         height: 100%;
-        fill: #bf94ff;
         margin: 0 0.2em;
+    }
+    
+    :global(.dark) div {
+        background: rgba(145, 71, 255, 0.2);
+    }
+    :global(.light) div {
+        background: rgba(145,71,255,0.12);
+    }
+    :global(.dark) svg {
+        fill: #bf94ff; 
+    }
+    :global(.light) svg {
+        fill: #7b3fc9
     }
 </style>
 

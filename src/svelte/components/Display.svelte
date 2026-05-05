@@ -276,8 +276,8 @@
 	.icon-container {
 		width: 1.5em;
 		height: 1.5em;
-		margin-right: 1em;
-		margin-left: 0.4em;
+		margin-right: .28em;
+		margin-left: 0.2em;
 	}
 	.icon-container,
 	.flex-row {
