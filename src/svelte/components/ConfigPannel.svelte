@@ -36,6 +36,7 @@
         channelConfig.update(configEl => {
             configEl[listeId].behavior = config.behavior;
             configEl[listeId].style = config.style;
+            configEl[listeId].type = config.type;
             return configEl;
         });
 
@@ -68,12 +69,33 @@
         <div class="bloc">
             <p>Style</p>
             <div class="row">
-                <select name="theme" id="theme" bind:value={config.style.theme} on:change={updateConfig}>
-                    <option value="SYSTEM">System theme</option>
-                    <option value="CUSTOM">Custom</option>
+                <select name="header-size" id="header-size" bind:value={config.type.height} on:change={updateConfig}>
+                    {#each CST.HEADER_TYPE_HEIGHT as headerHeight}
+                        <option value={headerHeight.id}>{headerHeight.name}</option>
+                    {/each}
                 </select>
             </div>
-            {#if config.style.theme === CST.CUSTOM}
+            <div class="row">
+                <select name="icon-type" id="icon-type" bind:value={config.type.iconType} on:change={updateConfig}>
+                    {#each CST.ICON_TYPE as iconType}
+                        <option value={iconType.id}>{iconType.name}</option>
+                    {/each}
+                </select>
+            </div>
+            <div class="row">
+                <select name="bar-type" id="bar-type" bind:value={config.type.barType} on:change={updateConfig}>
+                    {#each CST.BAR_TYPE as iconType}
+                        <option value={iconType.id}>{iconType.color}</option>
+                    {/each}
+                </select>
+            </div>
+            <div class="row">
+                <select name="theme" id="theme" bind:value={config.style.theme} on:change={updateConfig}>
+                    <option value={CST.SYSTEM_STYLE}>System theme</option>
+                    <option value={CST.CUSTOM_STYLE}>Custom</option>
+                </select>
+            </div>
+            {#if config.style.theme === CST.CUSTOM_STYLE}
             <div class="row">
                 <p>Header color</p>
                 <select name="header-color" id="header-color" bind:value={config.style.header.headerColor} on:change={updateConfig}>

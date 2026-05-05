@@ -3,13 +3,24 @@
 	import { maybeTooltip, tooltip } from "../tooltip";
     import * as CST from '../../constantes.js'
 	import { writable } from 'svelte/store'
+    import FolderIcon from './FolderIcon.svelte';
+    import DotIcon from './DotIcon.svelte';
 	
     let { listId = "rootList", channelConfig, channelRef }  = $props();
     // export let channelConfig;
     // export let channelRef;
     let behavior = $derived($channelConfig[listId]?.behavior);
     let style = $derived($channelConfig[listId]?.style);
-	
+	let type = $derived($channelConfig[listId]?.type);
+	let barTypeColor = $derived.by(() => {
+		let color = CST.BAR_TYPE.find(e => e.id === type.barType);
+		if (!color || !color.color) {
+			throw new Error("Display: bar color not found")
+		}
+		console.log("border color", color.color, listId)
+		return color.color;
+	});
+
 	// console.log(`liste ${listId}`, $channelConfig)
 	let extendedOnStartup=false;
 	let extendOnHover=false;
@@ -39,7 +50,7 @@
 				isPinnable = $channelConfig[listId].behavior.isPinnable;
 			}
 			
-			if (style && style.theme === CST.CUSTOM) {
+			if (style && style.theme === CST.CUSTOM_STYLE) {
 				header = style.header;
 				content = style.content;
 			} else {
@@ -179,19 +190,32 @@
 	 {#if liveChannels}
 	<div class="list-container">
 		{#if listId !== 'rootList'}
-		<div class="list-header" style="background-color: {header.headerColor};" on:click={toggleAutoCollapse}>
+		<!-- svelte-ignore a11y_click_events_have_key_events -->
+		<!-- svelte-ignore a11y_no_static_element_interactions -->
+		<div class="list-header" style="background-color:{header.headerColor}; --theme-color:{barTypeColor}" class:border={barTypeColor} on:click={toggleAutoCollapse}>
 			<div class="left">
-				<p class="list-title">{$channelConfig[listId]?.name}</p>
-				<div class='list-icon'  use:maybeTooltip={$channelConfig[listId]?.name}>
-					<svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-						<rect x="6" y="4" width="11" height="2" rx="1"/>
-						<rect x="6" y="9" width="11" height="2" rx="1"/>
-						<rect x="6" y="14" width="11" height="2" rx="1"/>
-						<circle cx="3" cy="5" r="1.5"/>
-						<circle cx="3" cy="10" r="1.5"/>
-						<circle cx="3" cy="15" r="1.5"/>
-					</svg>
+				<div class="flex-row">
+					<span class="icon-container">
+						{#if type.iconType === 1}
+							<FolderIcon />
+						{:else if type.iconType === 2}	
+							<DotIcon />
+						{/if}
+					</span>
+					<p class="list-title">{$channelConfig[listId]?.name}</p>
+					<div class='list-icon'  use:maybeTooltip={$channelConfig[listId]?.name}>
+						<svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+							<rect x="6" y="4" width="11" height="2" rx="1"/>
+							<rect x="6" y="9" width="11" height="2" rx="1"/>
+							<rect x="6" y="14" width="11" height="2" rx="1"/>
+							<circle cx="3" cy="5" r="1.5"/>
+							<circle cx="3" cy="10" r="1.5"/>
+							<circle cx="3" cy="15" r="1.5"/>
+						</svg>
+					</div>
+
 				</div>
+
 			</div>
 			<div class="right">
 				<p>
@@ -249,6 +273,20 @@
 	{/if}
 			
 <style>
+	.icon-container {
+		width: 1.5em;
+		height: 1.5em;
+		margin-right: 1em;
+		margin-left: 0.4em;
+	}
+	.icon-container,
+	.flex-row {
+		display: flex;
+		flex-direction: row;
+		justify-content: center;
+		align-items: center;
+
+	}
 	/* :global(.al-right) > .list-container {
 		margin-left: 0em !important;
 	} */
@@ -316,6 +354,9 @@
 		/* padding: 0.6em 0.3em 0 0.5em; */
 		user-select: none;
 		/* border-radius: 7%; */
+	}
+	.list-header.border {
+		border-left: 3px solid var(--theme-color);
 	}
 	.right {
 		width: auto;

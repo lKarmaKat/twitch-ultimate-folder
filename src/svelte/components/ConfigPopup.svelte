@@ -93,6 +93,7 @@
     })
   }
   function send() {
+    console.log($selectedConfig)
     configManager.send($selectedConfig);
   }
 

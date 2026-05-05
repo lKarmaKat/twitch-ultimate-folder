@@ -1,6 +1,8 @@
 #display-container.dark .list-header {
-    background-color: #393941;
-    color: rgb(239, 239, 241);
+    background-color: #0e0e10;
+    /* background-color: #393941; */
+    /* color: rgb(239, 239, 241); */
+    color: #adadb8;
     /* background-color: #18181b; */
 }
 #display-container.dark .list-body {

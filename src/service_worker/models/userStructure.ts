@@ -22,7 +22,8 @@ export interface I_NEW_LIST {
   items: [],
   sort: string,
   behavior: {},
-  style: {}
+  style: {},
+  type: {}
 };
 
 export interface CONFIG { [key: string]: string; }
