@@ -92,6 +92,9 @@ function show() {
     input[type="text"]:focus {
         outline: none;
     }
+    :global(section a) {
+        padding: 0.357em 0.57em;
+    }
 </style>
 
 

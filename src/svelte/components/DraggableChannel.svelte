@@ -131,7 +131,7 @@
         color: inherit;
         text-decoration: inherit;
         margin: 0px;
-        /* padding: 5px 8px; */
+        padding: 0.357em 0.57em;
         border: 0px;
         font: inherit;
         vertical-align: baseline;

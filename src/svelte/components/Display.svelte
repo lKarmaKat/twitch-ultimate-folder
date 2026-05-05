@@ -249,8 +249,23 @@
 	{/if}
 			
 <style>
-	:global(.al-right) .list-container {
-		margin-left: 2em;
+	/* :global(.al-right) > .list-container {
+		margin-left: 0em !important;
+	} */
+	:global(.al-right  .list-container  .list-container .list-container) {
+		margin-left: 0.5em;
+	}
+	/* :global(.al-left) > .list-container {
+		margin-right: 0em !important;
+	} */
+	:global(.al-left  .list-container  .list-container .list-container) {
+		margin-right: 0.5em;
+	}
+	:global(.al-left .list-container .list-container .channel-overlay) {
+		margin-right: 0.9em
+	}
+	:global(.al-right .list-container .list-container .channel-overlay) {
+		margin-left: 0.9em
 	}
     :host([collapsed]) * {
         padding: 0 !important;

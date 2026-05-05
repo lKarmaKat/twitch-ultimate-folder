@@ -22,7 +22,6 @@
 
   let alignementLeft = true;
   let alignmentCb = (data) => {
-    console.log("#############", data.data)
     alignementLeft = data.data
   }
   let alignmentPort = new PortConnector(alignmentCb, 'alignment');
