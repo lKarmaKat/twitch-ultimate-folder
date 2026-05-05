@@ -299,10 +299,10 @@
 		margin-right: 0.5em;
 	}
 	:global(.al-left .list-container .list-container .channel-overlay) {
-		margin-right: 0.9em
+		margin-right: 0.6em
 	}
 	:global(.al-right .list-container .list-container .channel-overlay) {
-		margin-left: 0.9em
+		margin-left: 0.6em
 	}
     :host([collapsed]) * {
         padding: 0 !important;
@@ -344,7 +344,7 @@
 		flex-direction: row;
 		justify-content: space-between;
 		align-items: center;
-		padding: 0.4em 0 0.4em 0.4em;
+		padding: 0.4em 0 0.4em 0.0em;
 		/* position: relative; */
 		/* background-color: rgb(119, 56, 119); */
 		/* width: 100%; */
