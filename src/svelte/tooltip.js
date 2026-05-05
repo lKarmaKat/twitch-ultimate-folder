@@ -1,9 +1,16 @@
+import PortConnector from './portConnector.js';
+
 export function maybeTooltip(node, title) {
     if (!title) return;
     return tooltip(node, title);
   }
 export function tooltip(node, params) {
     let tt = document.querySelector("#custom-tooltip");
+	let alignedLeft = true;
+	let alignmentCb = (data) => {
+    	alignedLeft = data.data
+  	}
+	let port = new PortConnector(alignmentCb, "alignment")
     if (tt)
 	    tt.classList.add('tooltip');
     
@@ -21,11 +28,14 @@ export function tooltip(node, params) {
 		child.setAttribute('id', 'tooltip');
         let c = tt.querySelector('.content');
 		c.appendChild(child);
-        let {x, y, height} = node.getBoundingClientRect();
+        let {x, y, height, width} = node.getBoundingClientRect();
         let pos = tt.querySelector('.pos');
-        // console.log(x, y, height);
-        let y2 = child.getBoundingClientRect().height;
-        pos.style.transform = "translate(" + x +"px, " + (y + height/2 - y2/2) + "px)";
+        let y2 = child.getBoundingClientRect();
+		if (alignedLeft) {
+			pos.style.transform = "translate(" + (x + width + y2.width) +"px, " + (y + height/2 - y2.height/2) + "px)";
+		} else {
+			pos.style.transform = "translate(" + x +"px, " + (y + height/2 - y2.height/2) + "px)";
+		}
         // console.log(pos, "translate(" + x +"px, " + (y + height/2 - y2/2) + "px)")
         tt.setAttribute('tabindex', 0);
 		

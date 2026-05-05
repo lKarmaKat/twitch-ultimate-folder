@@ -6,7 +6,7 @@
     import FolderIcon from './FolderIcon.svelte';
     import DotIcon from './DotIcon.svelte';
 	
-    let { listId = "rootList", channelConfig, channelRef }  = $props();
+    let { listId = "rootList", channelConfig, channelRef, alignedLeft }  = $props();
     // export let channelConfig;
     // export let channelRef;
     let behavior = $derived($channelConfig[listId]?.behavior);
@@ -17,7 +17,6 @@
 		if (!color || !color.color) {
 			throw new Error("Display: bar color not found")
 		}
-		console.log("border color", color.color, listId)
 		return color.color;
 	});
 

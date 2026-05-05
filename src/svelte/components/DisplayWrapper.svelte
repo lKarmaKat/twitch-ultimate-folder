@@ -32,7 +32,8 @@
     <Display 
     listId={"rootList"} 
     channelConfig={selectedConfig} 
-    channelRef={channelsPickRef}/>
+    channelRef={channelsPickRef}
+    alignedLeft={alignementLeft}/>
   {:else}
     <WaitingConfig />
   {/if}
