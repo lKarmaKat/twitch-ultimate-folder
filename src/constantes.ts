@@ -2,7 +2,7 @@ import type * as t from 'src/service_worker/models/userStructure';
 
 export const POLLING_INTERVAL = 6000;
 export const ALL_OTHER_CHANNELS = -1;
-export const UPDATE_STREAM_INFO = 'UPDATE_STREAM_INFO';
+export const UPDATE_STREAMS_REF = 'UPDATE_STREAMS_REF';
 export const GET_STREAM_INFO = 'GET_STREAM_INFO';
 export const GET_CURRENT_CONFIGURATION = 'GET_CURRENT_CONFIGURATION';
 export const SAVE_CHANNELS_LIST = 'SAVE_CHANNELS_LIST';

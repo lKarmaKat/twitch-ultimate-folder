@@ -53,11 +53,11 @@ class ConfigManager {
                 all.sort(alphaSortCallback)
                 
                 this.channelsPickRef.set(all);
-            } else if (msg.type === CST.UPDATE_STREAM_INFO) {
+            } else if (msg.type === CST.UPDATE_STREAMS_REF) {
                 let all = [...msg.data, CST.ALL_OTHER_CHANNELS_ELEMENT]
                 all.sort(alphaSortCallback)
                 this.channelsPickRef.set(all);
-                this.channelsConfigList.update(liste => liste);
+                // this.channelsConfigList.update(liste => liste);
             }
         }
         this.bridge = new PortConnector(dataReceivedCallback);

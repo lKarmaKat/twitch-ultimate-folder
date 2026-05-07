@@ -147,7 +147,7 @@ export class PopupPage {
                 type: UPDATE_STREAM_INFO,
                 data: deepClone(channelsRef)
             });
-        }, {channelsRef, UPDATE_STREAM_INFO: CST.UPDATE_STREAM_INFO})
+        }, {channelsRef, UPDATE_STREAM_INFO: CST.UPDATE_STREAMS_REF})
     }
 
     

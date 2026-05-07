@@ -15,7 +15,7 @@ let tokenManager = new TokenManager(userUpdate, userAuthAutoFailed);
 let twitchApi = new TwitchApi(tokenManager);
 let configManager = new ConfigManager(twitchApi, userUpdate);
 let configPoller = new DataPoller(twitchApi, (data: StreamsInfos[]) => {
-  portManager.sendMessageToAllTabs(CST.UPDATE_STREAM_INFO, data);
+  portManager.sendMessageToAllTabs(CST.UPDATE_STREAMS_REF, data);
 });
 
 const logBackgroundError = (context: string, error: unknown) => {
