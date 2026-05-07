@@ -33,6 +33,12 @@ export const config = {
                 "headerColor": "#808080"
             },
             "theme": "SYSTEM"
+        },
+        type: {
+            height: CST.HEADER_TYPE_HEIGHT[1].id,
+            iconType: CST.ICON_TYPE[0].id,
+            barType: CST.BAR_TYPE[0].id,
+            viewerCountType: 1
         }
     },
     "rootList": {
@@ -71,7 +77,13 @@ export const config = {
                 "borderRadius": 0,
                 "borderWidth": "1px"
             },
-            "theme": "SYSTEM"
+            "theme": CST.SYSTEM_STYLE
+        },
+        type: {
+            height: CST.HEADER_TYPE_HEIGHT[1].id,
+            iconType: CST.ICON_TYPE[0].id,
+            barType: CST.BAR_TYPE[0].id,
+            viewerCountType: 1
         }
     }
 }
