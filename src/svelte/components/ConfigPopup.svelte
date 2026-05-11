@@ -12,11 +12,21 @@
   
 
   let configManager = new ConfigManager();
-  let loading = true;
+  // let loading = $derived.by(() => {
+  //   // console.log(channelsPickRefList2.length)
+  //   return false;
+  //   // return !(channelsPickRefList2.length > 0 && $channelsConfig && Object.getOwnPropertyNames($channelsConfig).length > 0)
+  // });
 
   let c = configManager.getConfig()
   let channelsPickRef = c.channelsPickRef;// = writable([]);
-  let channelsConfig = c.channelsConfig; // = writable({
+  // let channelsPickRefList = $derived.by(()=> {
+  //   if ($channelsPickRef)
+  //     return (Array.from($channelsPickRef.values()))
+  // })
+  // let channelsPickRefList2 = $state(writable(() => channelsPickRefList));
+  let channelsConfig = c.channelsConfig;
+  let channelsPickRefMap = c.channelsPickRefMap;
   let currentConfig = configManager.currentConfigName; // = writable({
   let selectedConfig = c.selectedConfig;
   // let selectedConfigDer = derived([currentConfig, channelsConfig], ([$currentConfig, $channelsConfig]) => {
@@ -37,6 +47,7 @@
   //     selectedConfig.set($channelsConfig.configsList[index].config);
   //   }
   // })
+  let loading = true;
   $ : if ($channelsPickRef.length > 0 && $channelsConfig && Object.getOwnPropertyNames($channelsConfig).length > 0) {
     loading = false;
   }
@@ -193,6 +204,7 @@
             <ConfigList listId={"rootList"}
             bind:channelConfig={selectedConfig}
             bind:channelRef={channelsPickRef}
+            bind:channelRefMap={channelsPickRefMap}
             requestDeleteToParent={promptResetConfig} />
           </div>
           {/if}
@@ -201,7 +213,7 @@
           </div>
           {#if $channelsPickRef.length && Object.getOwnPropertyNames($channelsConfig).length > 0}
           <div id="display-container" class="display-container">
-            <DisplayWrapper configManager={configManager} />
+            <DisplayWrapper configManager={configManager} channelRefMap={channelsPickRefMap}/>
           </div>
           {/if}
         </div>

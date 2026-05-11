@@ -2,8 +2,7 @@ import type * as t from 'src/service_worker/models/userStructure';
 
 export const POLLING_INTERVAL = 6000;
 export const ALL_OTHER_CHANNELS = -1;
-export const UPDATE_STREAMS_REF = 'UPDATE_STREAMS_REF';
-export const GET_STREAM_INFO = 'GET_STREAM_INFO';
+export const GET_STREAMS_REF = 'GET_STREAMS_REF';
 export const GET_CURRENT_CONFIGURATION = 'GET_CURRENT_CONFIGURATION';
 export const SAVE_CHANNELS_LIST = 'SAVE_CHANNELS_LIST';
 export const RESET_CONFIG = 'RESET_CONFIG';
@@ -127,7 +126,11 @@ export const ALL_OTHER_CHANNELS_ELEMENT = {
         "channel_name": "All others channels",
         "sort": 'ALPHA',
         "isLive": false,
-        "profile_image_url": "../../assets/profil.png"
+        "profile_image_url": "../../assets/profil.png",
+        "viewer_count": 0, 
+        "language": "", 
+        "game_name": "", 
+        "title": ""
     }
 // export let UPDATE_STREAM_INFO = 'UPDATE_STREAM_INFO';
 // export let UPDATE_STREAM_INFO = 'UPDATE_STREAM_INFO';

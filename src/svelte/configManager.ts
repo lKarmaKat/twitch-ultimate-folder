@@ -8,6 +8,7 @@ class ConfigManager {
     extensionId: string = "ijodiaomnnnjljemidchdifmpnnmcnlg";
     initComplete: boolean = false;
     channelsPickRef = writable<StreamsInfos[]>([]);
+    channelsPickRefMap = writable<Map<number, StreamsInfos>>(new Map());
     bridge: PortConnector;
     save = [];
 	channelsConfigList = writable<UserConfigs>();
@@ -30,7 +31,7 @@ class ConfigManager {
 
     startPort() {
         let dataReceivedCallback = (msg: any) => {
-            const alphaSortCallback = (a: StreamsInfos, b: StreamsInfos) => {
+            const alphaSortCallback = (a: StreamsInfos, b: StreamsInfos) => { // TODO supprimer
                     let alphaSort = (a: StreamsInfos, b: StreamsInfos) => {
                         return a.channel_name.localeCompare(b.channel_name);
                     }
@@ -48,16 +49,23 @@ class ConfigManager {
                 if (msg.data) {
                     this.channelsConfigList.set(structuredClone(msg.data));
                 }
-            } else if (msg.type === CST.GET_STREAM_INFO) {
+            } else if (msg.type === CST.GET_STREAMS_REF) {
                 let all = [...msg.data, CST.ALL_OTHER_CHANNELS_ELEMENT]
                 all.sort(alphaSortCallback)
+                this.channelsPickRef.set(all);
+                // this.channelsConfigList.update(liste => liste)
+
+
+                this.channelsPickRefMap.set(msg.data.reduce(function(map: Map<number, StreamsInfos>, obj: StreamsInfos) {
+                    map.set(obj.channel_id, obj);
+                    return map;
+                }, new Map()));
+
+                // let data: Map<number, StreamsInfos> = new Map(msg.data);
+                // if (data.size)
+                //     data.set(CST.ALL_OTHER_CHANNELS, CST.ALL_OTHER_CHANNELS_ELEMENT);
                 
-                this.channelsPickRef.set(all);
-            } else if (msg.type === CST.UPDATE_STREAMS_REF) {
-                let all = [...msg.data, CST.ALL_OTHER_CHANNELS_ELEMENT]
-                all.sort(alphaSortCallback)
-                this.channelsPickRef.set(all);
-                // this.channelsConfigList.update(liste => liste);
+                // this.channelsPickRef.set(Array.from(data.values()));
             }
         }
         this.bridge = new PortConnector(dataReceivedCallback);
@@ -67,7 +75,8 @@ class ConfigManager {
         return {
             channelsConfig: this.channelsConfigList,
             channelsPickRef: this.channelsPickRef,
-            selectedConfig: this.selectedConfig
+            selectedConfig: this.selectedConfig,
+            channelsPickRefMap: this.channelsPickRefMap
         }
     }
 

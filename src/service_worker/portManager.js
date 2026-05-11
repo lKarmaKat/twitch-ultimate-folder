@@ -59,7 +59,7 @@ class PortManager {
             if (port.name === name)
                 port.postMessage({
                     "type": type,
-                    "data": message
+                    "data": message instanceof Map ? Array.from(message.values()) : message
                 });
         }
     }

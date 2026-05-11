@@ -115,7 +115,7 @@ export class PopupPage {
     async sendDefaultConf(conf: any, channelsRef: any) {
         let fr = this.page.frame({name: 'iframe'})
         if (!fr) throw new Error('Frame not found')
-        await fr.evaluate(({conf, channelsRef, GET_STREAM_INFO, GET_CURRENT_CONFIGURATION}) => {
+        await fr.evaluate(({conf, channelsRef, GET_STREAMS_REF, GET_CURRENT_CONFIGURATION}) => {
             // const iframe = (document.querySelector('#iframe-rem') as any).shadowRoot.querySelector('#iframe') as any;
             const callback = (window as any).__onPortCallback;
             if (!callback) throw new Error('Port callback not found in iframe');
@@ -127,16 +127,16 @@ export class PopupPage {
                 data: conf
             });
             callback({
-                type: GET_STREAM_INFO,
+                type: GET_STREAMS_REF,
                 data: deepClone(channelsRef)
             });
-        }, {conf, channelsRef, GET_STREAM_INFO: CST.GET_STREAM_INFO, GET_CURRENT_CONFIGURATION: CST.GET_CURRENT_CONFIGURATION})
+        }, {conf, channelsRef, GET_STREAMS_REF: CST.GET_STREAMS_REF, GET_CURRENT_CONFIGURATION: CST.GET_CURRENT_CONFIGURATION})
     }
 
     async updateRef(channelsRef: any) {
         let fr = this.page.frame({name: 'iframe'})
         if (!fr) throw new Error('Frame not found')
-        await fr.evaluate(({channelsRef, UPDATE_STREAM_INFO}) => {
+        await fr.evaluate(({channelsRef, GET_STREAMS_REF}) => {
             // const iframe = (document.querySelector('#iframe-rem') as any).shadowRoot.querySelector('#iframe') as any;
             const callback = (window as any).__onPortCallback;
             if (!callback) throw new Error('Port callback not found in iframe');
@@ -144,10 +144,10 @@ export class PopupPage {
             let deepClone = (obj: any) => JSON.parse(JSON.stringify(obj));
 
             callback({
-                type: UPDATE_STREAM_INFO,
+                type: GET_STREAMS_REF,
                 data: deepClone(channelsRef)
             });
-        }, {channelsRef, UPDATE_STREAM_INFO: CST.UPDATE_STREAMS_REF})
+        }, {channelsRef, GET_STREAMS_REF: CST.GET_STREAMS_REF})
     }
 
     

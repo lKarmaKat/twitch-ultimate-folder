@@ -126,7 +126,7 @@ describe('Test test', () => {
             data: conf
         })
         c({
-            type: CST.GET_STREAM_INFO,
+            type: CST.GET_STREAMS_REF,
             data: deepClone(channelsRef)
         })
 
@@ -153,7 +153,7 @@ describe('Test test', () => {
 
         channelsRef[3].viewer_count = 222;
         c({
-            type: CST.UPDATE_STREAM_INFO,
+            type: CST.GET_STREAMS_REF,
             data: channelsRef
         })
 
@@ -173,7 +173,7 @@ describe('Test test', () => {
         // console.log(chConf2)
 
         c({
-            type: CST.UPDATE_STREAM_INFO,
+            type: CST.GET_STREAMS_REF,
             data: chConf
         })
 
@@ -187,7 +187,7 @@ describe('Test test', () => {
         chConf[3].game_name = 'gameTest';
 
         c({
-            type: CST.UPDATE_STREAM_INFO,
+            type: CST.GET_STREAMS_REF,
             data: chConf
         })
 

@@ -6,7 +6,7 @@
     import FolderIcon from './FolderIcon.svelte';
     import DotIcon from './DotIcon.svelte';
 	
-    let { listId = "rootList", channelConfig, channelRef, alignedLeft }  = $props();
+    let { listId = "rootList", channelConfig, channelRef, alignedLeft, channelRefMap }  = $props();
     // export let channelConfig;
     // export let channelRef;
     let behavior = $derived($channelConfig[listId]?.behavior);
@@ -62,15 +62,21 @@
 	updateStyleVars(listId, $channelConfig[listId]);
 
 	function getNode(item) {
-		return $channelRef.find(e => e.channel_id === item.channel_id);
+		return $channelRefMap.get(item.channel_id)
+		//return $channelRef.find(e => e.channel_id === item.channel_id);
 	}
 
 	function getNodeIfLive(item) {
 	 	// counter = document.querySelectorAll(".channel-overlay.li" + listId ).length;
-		return $channelRef.find(e => {
-			// console.log("checking liveness for " + e.channel_name + " " + e.isLive)
-			return e.channel_id === item.channel_id && e.isLive
-		});
+		let node = getNode(item);
+		if (node.isLive)
+			return node
+		else 
+			return undefined
+		// return $channelRef.find(e => {
+		// 	// console.log("checking liveness for " + e.channel_name + " " + e.isLive)
+		// 	return e.channel_id === item.channel_id && e.isLive
+		// });
 	}
     function toggleAutoCollapse(e) {
         console.log("display", $channelConfig[listId]);
@@ -94,14 +100,38 @@
 		return set;
 	}
 
-	let counter = $derived.by(() => {
-		let set = getSetAllChannelsInConfig();
-		let count = 0;
-		for (let ch of $channelRef) {
-			if (!set.has(ch.channel_id) && ch.isLive) {
-				count++;
+	function getChannelsInConfig() {
+		let set = new Set();
+		let currentList = $channelConfig[listId];
+		if (currentList.items?.length) {
+			for (let currentItem of currentList.items) {
+				if (currentItem.channel_id) {
+					set.add(currentItem.channel_id)
+				}
 			}
 		}
+		return set;
+	}
+
+	let counter = $derived.by(() => {
+		let set = getSetAllChannelsInConfig();
+		let set3 = getChannelsInConfig();
+		let count = 0;
+		set3.forEach(e => {
+			if ($channelRefMap.get(e)) {
+				let channel = $channelRefMap.get(e);
+				if (channel.isLive) {
+					count++;
+				}
+			}
+		})
+
+
+		// for (let ch of $channelRef) {
+		// 	if (!set.has(ch.channel_id) && ch.isLive) {
+		// 		count++;
+		// 	}
+		// }
 		return count;
 	});
 
@@ -218,7 +248,7 @@
 			</div>
 			<div class="right">
 				<p>
-					<!-- {counter} -->
+					{counter}
 				</p>
 			</div>
 		</div>
@@ -229,7 +259,7 @@
 					{#each $channelConfig[listId].items as item(item.id)}
 						{#if item.type === CST.TYPE_LIST}
 							<div class="nested-list">
-								<svelte:self  bind:channelConfig={channelConfig} listId={item.id} bind:channelRef={channelRef}></svelte:self>
+								<svelte:self  bind:channelConfig={channelConfig} listId={item.id} bind:channelRef={channelRef} channelRefMap={channelRefMap}></svelte:self>
 							</div>
 						{:else if item.id === CST.ALL_OTHER_CHANNELS}
 

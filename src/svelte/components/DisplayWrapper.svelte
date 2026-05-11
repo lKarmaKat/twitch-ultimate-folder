@@ -6,21 +6,21 @@
 
   import { writable, derived } from 'svelte/store';
 
-  export let configManager = new ConfigManager();
+  let { configManager = new ConfigManager(), channelRefMap } = $props();
 
   let c = configManager.getConfig();
   let channelsPickRef = c.channelsPickRef;
   let channelsConfig = c.channelsConfig;
   let currentConfig = c.selectedConfig;
   let selectedConfig = c.selectedConfig;
-  let theme = true;
+  let theme = $state(true);
 
   let themeCb = (data) => {
     theme = data.data;
   }
   let port = new PortConnector(themeCb, "theme");
 
-  let alignementLeft = true;
+  let alignementLeft = $state(true);
   let alignmentCb = (data) => {
     alignementLeft = data.data
   }
@@ -33,6 +33,7 @@
     listId={"rootList"} 
     channelConfig={selectedConfig} 
     channelRef={channelsPickRef}
+    channelRefMap={channelRefMap}
     alignedLeft={alignementLeft}/>
   {:else}
     <WaitingConfig />

@@ -5,6 +5,7 @@
 	  import { dndzone, SHADOW_ITEM_MARKER_PROPERTY_NAME } from 'svelte-dnd-action';
 	
 	export let channelConfig;
+	export let channelsPickRefMap;
 	export let listId;
 	export let channelRef;
 	export let requestDeleteToParent;

@@ -84,7 +84,7 @@ test('home page has expected h1', async ({ page }) => {
 			data: conf
 		});
 		(window as any).__onMessageCallback({
-			type: "GET_STREAM_INFO",
+			type: "GET_STREAMS_REF",
 			data: deepClone(channelsRef)
 		});
 	}, {conf, channelsRef})

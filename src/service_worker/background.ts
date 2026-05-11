@@ -14,8 +14,8 @@ const userAuthAutoFailed = writable(false);
 let tokenManager = new TokenManager(userUpdate, userAuthAutoFailed);
 let twitchApi = new TwitchApi(tokenManager);
 let configManager = new ConfigManager(twitchApi, userUpdate);
-let configPoller = new DataPoller(twitchApi, (data: StreamsInfos[]) => {
-  portManager.sendMessageToAllTabs(CST.UPDATE_STREAMS_REF, data);
+let streamsDatasPoller = new DataPoller(twitchApi, (data: StreamsInfos[]) => {
+  portManager.sendMessageToAllTabs(CST.GET_STREAMS_REF, data);
 });
 
 const logBackgroundError = (context: string, error: unknown) => {
@@ -30,13 +30,12 @@ console.log("####################");
 
 
 let sendStreamInfoOnConnect = (port: chrome.runtime.Port) => {
-    configPoller.getConfig().then((info) => {
+    streamsDatasPoller.getConfig().then((info) => {
     // console.log("updating bg");
     port.postMessage({ 
-      "type": CST.GET_STREAM_INFO, 
+      "type": CST.GET_STREAMS_REF, 
       "data": info
     });
-    return;
   }).catch((error) => {
     logBackgroundError("background:sendStreamInfoOnConnect", wrapError("Background failed to send stream info on connect", error));
   });
