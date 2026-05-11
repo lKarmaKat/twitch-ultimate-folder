@@ -5,7 +5,7 @@
   import Display from './Display.svelte';
   import DraggableChannel from './DraggableChannel.svelte';
   import DisplayWrapper from './DisplayWrapper.svelte';
-  import ConfigManager from '../configManager';
+  import ConfigManager from '../configManager.svelte';
   import PortConnector from '../portConnector.js';
   import {  STARTUP_CONF } from '../../constantes.js'
   import { writable, derived } from 'svelte/store';
@@ -19,16 +19,16 @@
   // });
 
   let c = configManager.getConfig()
-  let channelsPickRef = c.channelsPickRef;// = writable([]);
   // let channelsPickRefList = $derived.by(()=> {
   //   if ($channelsPickRef)
   //     return (Array.from($channelsPickRef.values()))
   // })
   // let channelsPickRefList2 = $state(writable(() => channelsPickRefList));
-  let channelsConfig = c.channelsConfig;
-  let channelsPickRefMap = c.channelsPickRefMap;
-  let currentConfig = configManager.currentConfigName; // = writable({
-  let selectedConfig = c.selectedConfig;
+  let channelsPickRef = $derived(c.channelsPickRef);// = writable([]);
+  let channelsConfig = $derived(c.channelsConfig);
+  let channelsPickRefMap = $derived(c.channelsPickRefMap);
+  let currentConfig = $derived(configManager.currentConfigName); // = writable({
+  let selectedConfig = $derived(c.selectedConfig);
   // let selectedConfigDer = derived([currentConfig, channelsConfig], ([$currentConfig, $channelsConfig]) => {
   //   // console.log("update");
   //   if ($channelsConfig?.configsList) {
@@ -47,10 +47,8 @@
   //     selectedConfig.set($channelsConfig.configsList[index].config);
   //   }
   // })
-  let loading = true;
-  $ : if ($channelsPickRef.length > 0 && $channelsConfig && Object.getOwnPropertyNames($channelsConfig).length > 0) {
-    loading = false;
-  }
+  // let loading = $derived(false)
+  let loading = $derived(!(configManager.channelsPickRef.length > 0 && configManager.channelsConfigList && Object.getOwnPropertyNames(configManager.channelsConfigList).length > 0))
 
 
 
@@ -72,7 +70,7 @@
 
 
   let a = false;
-  let mode = "all channels";
+  let mode = $state("all channels");
   function filterItems() {
   if (a) {
     channelsPickRef = save;
@@ -161,7 +159,7 @@
     <div class="header">
       <div class="left">Organisez vos favoris</div>
       <div class="right">
-        <button on:click={() => closePopup()} class="cross">X</button>
+        <button onclick={() => closePopup()} class="cross">X</button>
       </div>
     </div>
     <div class="main">
@@ -172,53 +170,53 @@
       {:else}
         <div class="flex-config">
           <div class="left">
-            <button on:click={filterItems}>{mode}</button>
-            <button on:click={promptResetConfig}>Reset config</button>
+            <button onclick={filterItems}>{mode}</button>
+            <button onclick={promptResetConfig}>Reset config</button>
           </div>
           <div class="right">
-            {#if $channelsConfig.configsList?.length > 0}
+            {#if configManager.channelsConfigList.length > 0}
             <div class="configs-container">
-              <button on:click={newConfig}>
+              <button onclick={newConfig}>
                 +
               </button>
-              {#each $channelsConfig.configsList as conf(conf.rootList.name)}
-                <button on:click={() => { selectConfig(conf.rootList.name) }}>
+              {#each configManager.channelsConfigList as conf(conf.rootList.name)}
+                <button onclick={() => { selectConfig(conf.rootList.name) }}>
                   {conf.rootList.name}
                 </button>
               {/each}
             </div>
             {:else}
-              <p>No configs {$channelsConfig.configsList?.length}</p>
+              <p>No configs {configManager.channelsConfigList?.length}</p>
             {/if}
           </div>
         </div>
         <h2>Channels list</h2>
         <div class="flex-container">
           <div class="channels-container">
-            {#if $channelsPickRef.length}
-            <MainChannelsList bind:items={channelsPickRef}/>
+            {#if configManager.channelsPickRef.length > 0}
+            <MainChannelsList bind:items={configManager.channelsPickRef}/>
             {/if}
           </div>
-          {#if $channelsPickRef.length}
+          {#if configManager.channelsPickRef.length}
           <div id="config-list" class="channels-container">
-            <ConfigList listId={"rootList"}
+            <!-- <ConfigList listId={"rootList"}
             bind:channelConfig={selectedConfig}
             bind:channelRef={channelsPickRef}
             bind:channelRefMap={channelsPickRefMap}
-            requestDeleteToParent={promptResetConfig} />
+            requestDeleteToParent={promptResetConfig} /> -->
           </div>
           {/if}
           <div class="config-container">
-            <ConfigPannel bind:channelConfig={selectedConfig}/>
+            <!-- <ConfigPannel bind:channelConfig={selectedConfig}/> -->
           </div>
-          {#if $channelsPickRef.length && Object.getOwnPropertyNames($channelsConfig).length > 0}
+          {#if configManager.channelsPickRef.length && Object.getOwnPropertyNames(configManager.channelsConfigList).length > 0}
           <div id="display-container" class="display-container">
-            <DisplayWrapper configManager={configManager} channelRefMap={channelsPickRefMap}/>
+            <!-- <DisplayWrapper configManager={configManager} channelRefMap={channelsPickRefMap}/> -->
           </div>
           {/if}
         </div>
-        <button id="showC" on:click={showDisplayConf}>Show display conf</button>
-        <button on:click={() => send()}>Enregistrer</button>
+        <button id="showC" onclick={showDisplayConf}>Show display conf</button>
+        <button onclick={() => send()}>Enregistrer</button>
       {/if}
     </div>
   </div>

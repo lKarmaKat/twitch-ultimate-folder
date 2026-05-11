@@ -7,26 +7,25 @@ import type { UserConfigs, I_CONFIG } from '../service_worker/models/userStructu
 class ConfigManager {
     extensionId: string = "ijodiaomnnnjljemidchdifmpnnmcnlg";
     initComplete: boolean = false;
-    channelsPickRef = writable<StreamsInfos[]>([]);
-    channelsPickRefMap = writable<Map<number, StreamsInfos>>(new Map());
+    channelsPickRefMap = $state<Map<number, StreamsInfos>>(new Map());
+    channelsPickRef = $derived(Array.from(this.channelsPickRefMap.values()))
     bridge: PortConnector;
     save = [];
-	channelsConfigList = writable<UserConfigs>();
-    currentConfigName = writable<string>('');
-    selectedConfig = writable<I_CONFIG>();
-    autre = derived([this.channelsConfigList, this.currentConfigName], ([$channelsConfigList, $currentConfigName]) => {
-    if ($channelsConfigList?.configsList && $currentConfigName) {
-        let index = $channelsConfigList.configsList.find(conf => conf.rootList.name === $currentConfigName);
+	channelsConfigList = $state<UserConfigs>();
+    currentConfigName = $state<string>('');
+    selectedConfig = $state<I_CONFIG>();
+    autre = $derived.by(() => {
+    if (this.channelsConfigList?.configsList && this.currentConfigName) {
+        let index = this.channelsConfigList.configsList.find(conf => conf.rootList.name === this.currentConfigName);
         if (index) {
-            this.selectedConfig.set(index);
+            this.selectedConfig = index;
           return index;
         }
-        throw new Error(`ConfigName ${$currentConfigName} not found in configList`);
+        throw new Error(`ConfigName ${this.currentConfigName} not found in configList`);
     }
   });
     constructor() {
         this.startPort();
-        this.autre.subscribe(e => e);
     }
 
     startPort() {
@@ -45,22 +44,19 @@ class ConfigManager {
                     else return alphaSort(a,b);
                 };
             if (msg.type === CST.GET_CURRENT_CONFIGURATION) {
-                this.currentConfigName.set(msg.data.currentConfig);
+                this.currentConfigName = msg.data.currentConfig;
                 if (msg.data) {
-                    this.channelsConfigList.set(structuredClone(msg.data));
+                    this.channelsConfigList = structuredClone(msg.data);
                 }
             } else if (msg.type === CST.GET_STREAMS_REF) {
-                let all = [...msg.data, CST.ALL_OTHER_CHANNELS_ELEMENT]
-                all.sort(alphaSortCallback)
-                this.channelsPickRef.set(all);
+                // let all = [...msg.data, CST.ALL_OTHER_CHANNELS_ELEMENT]
+                // all.sort(alphaSortCallback)
                 // this.channelsConfigList.update(liste => liste)
+                
+                
+                this.channelsPickRefMap = new Map(msg.data);
 
-
-                this.channelsPickRefMap.set(msg.data.reduce(function(map: Map<number, StreamsInfos>, obj: StreamsInfos) {
-                    map.set(obj.channel_id, obj);
-                    return map;
-                }, new Map()));
-
+                
                 // let data: Map<number, StreamsInfos> = new Map(msg.data);
                 // if (data.size)
                 //     data.set(CST.ALL_OTHER_CHANNELS, CST.ALL_OTHER_CHANNELS_ELEMENT);
@@ -113,7 +109,7 @@ class ConfigManager {
                 console.log("reseted");
                 chrome.runtime.sendMessage(this.extensionId, {type: CST.GET_CURRENT_CONFIGURATION}, (truc) => {
                     if (Object.getOwnPropertyNames(truc)?.length > 0) {
-                        this.channelsConfigList = writable(truc);
+                        this.channelsConfigList = truc;
                         // display = truc;
                     }
                     resolve(this.channelsConfigList);

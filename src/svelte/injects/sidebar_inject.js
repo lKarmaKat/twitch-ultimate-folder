@@ -9,9 +9,9 @@ import { mount } from 'svelte'
    })
 
 function mountSidebar() {
-    mount(DisplayWrapper, {
-     target: document.querySelector('#sidebar_shadow').shadowRoot,
-   })
+  //   mount(DisplayWrapper, {
+  //    target: document.querySelector('#sidebar_shadow').shadowRoot,
+  //  })
   // let t = document.body
 
   // let bt = document.querySelector("div[aria-label='Followed Channels']")

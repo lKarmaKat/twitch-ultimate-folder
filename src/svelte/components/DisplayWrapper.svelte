@@ -1,18 +1,18 @@
 <script>
   import Display from './Display.svelte';
   import WaitingConfig from './WaitingConfig.svelte';
-  import ConfigManager from '../configManager';
+  import ConfigManager from '../configManager.svelte';
   import PortConnector from '../portConnector.js';
 
   import { writable, derived } from 'svelte/store';
 
   let { configManager = new ConfigManager(), channelRefMap } = $props();
 
-  let c = configManager.getConfig();
-  let channelsPickRef = c.channelsPickRef;
-  let channelsConfig = c.channelsConfig;
-  let currentConfig = c.selectedConfig;
-  let selectedConfig = c.selectedConfig;
+  let c = $derived(configManager.getConfig());
+  let channelsPickRef = $derived(c.channelsPickRef);
+  let channelsConfig = $derived(c.channelsConfig);
+  let currentConfig = $derived(c.selectedConfig);
+  let selectedConfig = $derived(c.selectedConfig);
   let theme = $state(true);
 
   let themeCb = (data) => {

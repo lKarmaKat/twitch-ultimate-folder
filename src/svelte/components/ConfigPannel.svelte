@@ -3,7 +3,7 @@
     import * as CST from '../../constantes.js'
     import { writable } from 'svelte/store';
 
-    export let channelConfig;
+    let { channelConfig } = $props();
     let listeId;
     let config;
 
@@ -51,46 +51,46 @@
         name="liste-name" 
         id="liste-name" 
         bind:value={config.name} placeholder="Enter list name"
-        on:input={updateListName} />
+        oninput={updateListName} />
     </div>
     {#if config.behavior}
     <div class="pannel-body">
         <div class="bloc">
             <p>Behavior</p>
             <div class="row">
-                <input type="checkbox" id="extendedOnStartup" bind:checked={config.behavior.extendedOnStartup} on:change={updateConfig} ><label for="extendedOnStartup">extendedOnStartup</label>
-                <input type="checkbox" id="extendOnHover" bind:checked={config.behavior.extendOnHover} on:change={updateConfig}><label for="extendOnHover">extendOnHover</label>
+                <input type="checkbox" id="extendedOnStartup" bind:checked={config.behavior.extendedOnStartup} onchange={updateConfig} ><label for="extendedOnStartup">extendedOnStartup</label>
+                <input type="checkbox" id="extendOnHover" bind:checked={config.behavior.extendOnHover} onchange={updateConfig}><label for="extendOnHover">extendOnHover</label>
             </div>
             <div class="row">
-                <input type="checkbox" id="extendOnClick" bind:checked={config.behavior.extendOnClick} on:change={updateConfig}><label for="extendOnClick">extendOnClick</label>
-                <input type="checkbox" id="isPinnable" bind:checked={config.behavior.isPinnable} on:change={updateConfig}><label for="isPinnable">isPinnable</label>
+                <input type="checkbox" id="extendOnClick" bind:checked={config.behavior.extendOnClick} onchange={updateConfig}><label for="extendOnClick">extendOnClick</label>
+                <input type="checkbox" id="isPinnable" bind:checked={config.behavior.isPinnable} onchange={updateConfig}><label for="isPinnable">isPinnable</label>
             </div>
         </div>
         <div class="bloc">
             <p>Style</p>
             <div class="row">
-                <select name="header-size" id="header-size" bind:value={config.type.height} on:change={updateConfig}>
+                <select name="header-size" id="header-size" bind:value={config.type.height} onchange={updateConfig}>
                     {#each CST.HEADER_TYPE_HEIGHT as headerHeight}
                         <option value={headerHeight.id}>{headerHeight.name}</option>
                     {/each}
                 </select>
             </div>
             <div class="row">
-                <select name="icon-type" id="icon-type" bind:value={config.type.iconType} on:change={updateConfig}>
+                <select name="icon-type" id="icon-type" bind:value={config.type.iconType} onchange={updateConfig}>
                     {#each CST.ICON_TYPE as iconType}
                         <option value={iconType.id}>{iconType.name}</option>
                     {/each}
                 </select>
             </div>
             <div class="row">
-                <select name="bar-type" id="bar-type" bind:value={config.type.barType} on:change={updateConfig}>
+                <select name="bar-type" id="bar-type" bind:value={config.type.barType} onchange={updateConfig}>
                     {#each CST.BAR_TYPE as iconType}
                         <option value={iconType.id}>{iconType.color}</option>
                     {/each}
                 </select>
             </div>
             <div class="row">
-                <select name="theme" id="theme" bind:value={config.style.theme} on:change={updateConfig}>
+                <select name="theme" id="theme" bind:value={config.style.theme} onchange={updateConfig}>
                     <option value={CST.SYSTEM_STYLE}>System theme</option>
                     <option value={CST.CUSTOM_STYLE}>Custom</option>
                 </select>
@@ -98,7 +98,7 @@
             {#if config.style.theme === CST.CUSTOM_STYLE}
             <div class="row">
                 <p>Header color</p>
-                <select name="header-color" id="header-color" bind:value={config.style.header.headerColor} on:change={updateConfig}>
+                <select name="header-color" id="header-color" bind:value={config.style.header.headerColor} onchange={updateConfig}>
                     {#each colorsList as color}
                         <option value={color.colorCode}>
                             {capitalizeFirstLetter(color.colorName)}
@@ -106,11 +106,11 @@
                     {/each}
                 </select>
                 <input type="color" name="header-color" id="header-color"
-                bind:value={config.style.header.headerColor} on:change={updateConfig}><label for="header-color"></label>
+                bind:value={config.style.header.headerColor} onchange={updateConfig}><label for="header-color"></label>
             </div>
             <div class="row">
                 <p>Content color</p>
-                <select name="header-color" id="header-color" bind:value={config.style.content.contentColor} on:change={updateConfig}>
+                <select name="header-color" id="header-color" bind:value={config.style.content.contentColor} onchange={updateConfig}>
                     {#each colorsList as color}
                     <option value={color.colorCode}>
                         {capitalizeFirstLetter(color.colorName)}
@@ -118,7 +118,7 @@
                     {/each}
                 </select>
                 <input type="color" name="header-color" id="content-color"
-                bind:value={config.style.content.contentColor} on:change={updateConfig}><label for="content-color"></label>   
+                bind:value={config.style.content.contentColor} onchange={updateConfig}><label for="content-color"></label>   
             </div>
             {/if}
         </div>

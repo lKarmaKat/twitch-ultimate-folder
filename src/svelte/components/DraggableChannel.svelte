@@ -1,16 +1,10 @@
 <script>
     import { maybeTooltip, tooltip } from "../tooltip";
 
-	export let channelId;
-	export let channelName;
-	export let channelProfilePic;
-    export let viewerCount;
-    export let gameName = null;
-    export let isLive;
-    export let title='';
-    export let color='';
-    export let blockNavigation = true;
-    export let bearCard = false;
+
+    
+
+    let { channelId, channelName, channelProfilePic, viewerCount, gameName = null, isLive, title = '' , color = '', blockNavigation = true, bearCard = false } = $props();
 
 	function navigate(event) {
         event.preventDefault();
@@ -189,7 +183,7 @@
 		background: inherit;
 		/* clip-path: polygon(0% 0%, 100% 0%, 50% 100%); */
 		clip-path: polygon(0 0, 0 100%, 100% 50%); -->
-<a class="card" id="draggable-channel" use:maybeTooltip={title} href={ !blockNavigation ? "https://www.twitch.tv/" + channelName : null } on:click={navigate}>
+<a class="card" id="draggable-channel" use:maybeTooltip={title} href={ !blockNavigation ? "https://www.twitch.tv/" + channelName : null } onclick={navigate}>
     <!-- <div class="layout-container" style="background-color: {color};"> -->
         <div class="flex-profile-picture">
             <div class="profile-picture">

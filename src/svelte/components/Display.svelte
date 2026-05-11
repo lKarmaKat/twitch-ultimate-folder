@@ -221,7 +221,7 @@
 		{#if listId !== 'rootList'}
 		<!-- svelte-ignore a11y_click_events_have_key_events -->
 		<!-- svelte-ignore a11y_no_static_element_interactions -->
-		<div class="list-header" style="background-color:{header.headerColor}; --theme-color:{barTypeColor}" class:border={barTypeColor} on:click={toggleAutoCollapse}>
+		<div class="list-header" style="background-color:{header.headerColor}; --theme-color:{barTypeColor}" class:border={barTypeColor} onclick={toggleAutoCollapse}>
 			<div class="left">
 				<div class="flex-row">
 					<span class="icon-container">

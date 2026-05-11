@@ -16,7 +16,7 @@ export class DataFormatter {
         this.twitchApi = twitchApi;
     }
 
-    async updateAll(): Promise<StreamsInfos[]> {
+    async updateAll(): Promise<[number, StreamsInfos][]> {
         // if (this.initComplete) {
             // return Array.from(this.allFollowedStreams.values());
         // }
@@ -31,7 +31,7 @@ export class DataFormatter {
             this.mixAllInfos();
             this.initComplete = true;
 
-            return Array.from(this.allFollowedStreams.values());
+            return Array.from(this.allFollowedStreams.entries());
         } catch (error) {
             throw wrapError("DataFormatter.init failed", error);
         }

@@ -11,7 +11,8 @@ export default defineConfig({
   plugins: [
     svelte({
       compilerOptions: {
-        css: 'injected'
+        css: 'injected',
+        runes: true
       }
     }),
     viteStaticCopy({

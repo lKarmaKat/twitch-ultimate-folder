@@ -4,19 +4,17 @@
   	import * as CST from '../../constantes.js'
 	  import { dndzone, SHADOW_ITEM_MARKER_PROPERTY_NAME } from 'svelte-dnd-action';
 	
-	export let channelConfig;
-	export let channelsPickRefMap;
-	export let listId;
-	export let channelRef;
-	export let requestDeleteToParent;
 
-	$: if ($parentFinalizeEvent ) {
-		duplicatedElementError = false;
-	}
+
+	  
+
+	  let { channelConfig, channelsPickRefMap, listId, channelRef, requestDeleteToParent } = $props()
+
+
+	let duplicatedElementError = $derived(!$parentFinalizeEvent)
 
 
 	const flipDurationMs = 80;
-	let duplicatedElementError = false;
 	function handleDndConsider(e) {
 		// Use an immutable update to ensure subscribers and dnd-action
 		// get a new object/array reference instead of mutating in place.
@@ -137,12 +135,12 @@
 <div id="list-{listId}" class="list-container">
 	<!-- svelte-ignore a11y-click-events-have-key-events -->
 	<!-- svelte-ignore a11y-no-static-element-interactions -->
-	<div class="list-header" on:click={selectConfig}>
+	<div class="list-header" onclick={selectConfig}>
 		<!-- <div class="header" style="background-color: {headerColor};"> -->
 		<p class="list-title">{$channelConfig[listId]?.name}</p>
 		<div class="list-side-menu">
-			<button id="add-list-{listId}" class="add" on:click={() => addNode()} title="Add new list in {listId}">+</button>
-			<button class="delete" on:click={()=>{requestDeleteToParent(listId)}}>x</button>
+			<button id="add-list-{listId}" class="add" onclick={() => addNode()} title="Add new list in {listId}">+</button>
+			<button class="delete" onclick={()=>{requestDeleteToParent(listId)}}>x</button>
 		</div>
 	</div>
 	{#if $channelConfig[listId]?.hasOwnProperty("items")}
@@ -151,8 +149,8 @@
 		use:dndzone={{items:$channelConfig[listId].items, flipDurationMs, centreDraggedOnCursor: false, transformDraggedElement,
 			dropTargetClasses: ['increased-drop-margin']
 		, morphDisabled: true, useCursorForDetection: true}} 
-		on:consider={handleDndConsider} 
-		on:finalize={handleDndFinalize}>
+		onchange={handleDndConsider} 
+		onfinalize ={handleDndFinalize}>
 		<!-- style="background-color: {contentColor};">		 -->
 			{#each $channelConfig[listId].items as item(item.id)}
 			{#if item[SHADOW_ITEM_MARKER_PROPERTY_NAME]}
@@ -174,7 +172,7 @@
 			{@const i = getNode(item)}
 				<div class="channel">
 					<div class="">
-						<button class="delete" id="remove-{i?.channel_id}" on:click={()=>{removeChannel(i?.channel_id)}}>x</button>
+						<button class="delete" id="remove-{i?.channel_id}" onclick={()=>{removeChannel(i?.channel_id)}}>x</button>
 					</div>
 					<DraggableChannel 
 					channelId={i?.channel_id} 
