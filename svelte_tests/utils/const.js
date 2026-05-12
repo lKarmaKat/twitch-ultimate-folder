@@ -34,11 +34,11 @@ export const config = {
             },
             "theme": "SYSTEM"
         },
-        type: {
-            height: CST.HEADER_TYPE_HEIGHT[1].id,
-            iconType: CST.ICON_TYPE[0].id,
-            barType: CST.BAR_TYPE[0].id,
-            viewerCountType: 1
+        "type": {
+            "height": CST.HEADER_TYPE_HEIGHT[1].id,
+            "iconType": CST.ICON_TYPE[0].id,
+            "barType": CST.BAR_TYPE[0].id,
+            "viewerCountType": 1
         }
     },
     "rootList": {
@@ -89,7 +89,7 @@ export const config = {
 }
 
 export const channelsRef = [
-    {
+    ["117168642", {
         "id": "11716864220691",
         "channel_id": "117168642",
         "channel_name": "chowh1",
@@ -98,8 +98,8 @@ export const channelsRef = [
         "profile_image_url": "../../assets/profil.png",
         "title": "🚨 TRAHISON, AMITIÉ, PVP - 0 PUB en 2026 🚨 !Insta !doigt",
         "viewer_count": 2492
-    },
-    {
+    }],
+    ["105458682", {
         "id": "10545868269037",
         "channel_id": "105458682",
         "channel_name": "BobRoss",
@@ -108,8 +108,8 @@ export const channelsRef = [
         "profile_image_url": "../../assets/profil.png",
         "title": "New Year Marathon!",
         "viewer_count": 675
-    },
-    {
+    }],
+    ["241808969", {
         "id": "24180896992460",
         "channel_id": "241808969",
         "channel_name": "AVAMind",
@@ -118,8 +118,8 @@ export const channelsRef = [
         "profile_image_url": "../../assets/profil.png",
         "title": "04.01 || BG3 + MOD ||  EP21 - Liberer un dragon géant ? OK",
         "viewer_count": 3361
-    },
-    {
+    }],
+    ["91122178", {
         "id": "9112217886107",
         "channel_id": "91122178",
         "channel_name": "Cyqop",
@@ -128,11 +128,11 @@ export const channelsRef = [
         "profile_image_url": "../../assets/profil.png",
         "title": "HEY DONT SHOOOOOOOOOOOT",
         "viewer_count": 631
-    },
+    }],
 ]
 
 export const newChannels = [
-    {
+    ["91232178",{
         "id": "9123217886107",
         "channel_id": "91232178",
         "channel_name": "PierreLapin",
@@ -141,19 +141,19 @@ export const newChannels = [
         "profile_image_url": "../../assets/profil.png",
         "title": "ACAB",
         "viewer_count": 12345
-    },{
+    }],["93132178",{
         "id": "9323217886107",
         "channel_id": "93132178",
         "channel_name": "Anyme023",
         "isLive": false,
         "profile_image_url": "../../assets/profil.png"
-    }
+    }]
 ]
 
-export const newChannel = {
+export const newChannel = ["83132178", {
         "id": "8323217886107",
         "channel_id": "83132178",
         "channel_name": "robi",
         "isLive": false,
         "profile_image_url": "../../assets/profil.png"
-    }
+    }]

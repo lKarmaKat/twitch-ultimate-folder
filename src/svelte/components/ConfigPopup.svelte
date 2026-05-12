@@ -48,7 +48,13 @@
   //   }
   // })
   // let loading = $derived(false)
-  let loading = $derived(!(configManager.channelsPickRef.length > 0 && configManager.channelsConfigList && Object.getOwnPropertyNames(configManager.channelsConfigList).length > 0))
+  let loading = $derived.by(() => {
+
+    // console.log("configManager.channelsPickRef.length", configManager.channelsPickRef.length)
+    // console.log("configManager.channelsConfigList", configManager.channelsConfigList)
+    // console.log("Object.getOwnPropertyNames(configManager.channelsConfigList).length", Object.getOwnPropertyNames(configManager.channelsConfigList).length)
+    return !(configManager.channelsPickRef.length > 0 && configManager.channelsConfigList && Object.getOwnPropertyNames(configManager.channelsConfigList).length > 0)
+  })
 
 
 
@@ -183,8 +189,8 @@
           <div class="config-container">
             <!-- <ConfigPannel configManager={configManager}/> -->
           </div>
-          {#if !loading}
-          <!-- {#if configManager.channelsPickRef.length && Object.getOwnPropertyNames(configManager.channelsConfigList).length > 0} -->
+          <!-- {#if !loading} -->
+          {#if configManager.channelsPickRef.length && Object.getOwnPropertyNames(configManager.channelsConfigList).length > 0}
           <div id="display-container" class="display-container">
             <DisplayWrapper configManager={configManager} />
           </div>

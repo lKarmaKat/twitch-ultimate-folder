@@ -139,7 +139,7 @@ test.describe('with config', async () => {
 		// await frame?.evaluate
 
 		await popupPage.clickAddList("list-10");
-		let list11 = await popupPage.getListInConfigChannelList("list-11");
+		let list11 = await popupPage.getListInConfigChannelList("list-1");
 		expect(await list11.textContent()).toBeDefined();
 	});
 

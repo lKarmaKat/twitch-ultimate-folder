@@ -8,8 +8,7 @@
 	import Self from './Display.svelte'
 
     let { listId = "rootList", configManager }  = $props();
-    // export let channelConfig;
-    // export let channelRef;
+	
     let behavior = $derived(configManager.selectedConfig[listId]?.behavior);
     let style = $derived(configManager.selectedConfig[listId]?.style);
 	let type = $derived(configManager.selectedConfig[listId]?.type);

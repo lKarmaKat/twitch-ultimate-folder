@@ -10,10 +10,6 @@
 
 	  let { configManager, listId, requestDeleteToParent } = $props()
 
-	  let refMap = $derived.by(() => {
-		console.log("updated in configList ", configManager.channelsPickRefMap);
-		return configManager.channelsPickRefMap
-	});
 
 	// let duplicatedElementError = $derived(!)
 	let duplicatedElementError = $state(false)

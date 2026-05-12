@@ -9,6 +9,8 @@ class ConfigManager {
     channelsPickRefMap = $state<Map<number, StreamsInfos>>(new Map([]));
     channelsPickRef = $derived.by(() => {
         let channelsList = Array.from(this.channelsPickRefMap.values());
+        channelsList.push(CST.ALL_OTHER_CHANNELS_ELEMENT);
+        
         const alphaSortCallback = (a: StreamsInfos, b: StreamsInfos) => {
                     let alphaSort = (a: StreamsInfos, b: StreamsInfos) => {
                         return a.channel_name.localeCompare(b.channel_name);
@@ -49,7 +51,7 @@ class ConfigManager {
                 }
             } else if (msg.type === CST.GET_STREAMS_REF) {
                 this.channelsPickRefMap = new Map(msg.data);
-                }
+            }
         }
         this.bridge = new PortConnector(dataReceivedCallback);
     }

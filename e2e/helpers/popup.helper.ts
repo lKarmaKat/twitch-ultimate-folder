@@ -60,7 +60,7 @@ export class PopupHelper {
         } else {
             let coord = await this.page.frameLocator('#iframe').locator(`#config-list > #${list}`).boundingBox();
             return {
-                x: coord!.x - 10,
+                x: coord!.x + 10,
                 y: coord!.y + coord!.height - 5
             }
         }
