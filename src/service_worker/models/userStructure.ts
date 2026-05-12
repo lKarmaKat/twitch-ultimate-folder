@@ -19,7 +19,7 @@ export interface I_CONFIG {
 export interface I_NEW_LIST {
   id: string,
   name: string,
-  items: [],
+  items: any[],
   sort: string,
   behavior: {},
   style: {},

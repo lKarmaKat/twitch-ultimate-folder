@@ -181,7 +181,7 @@
           </div>
           {/if}
           <div class="config-container">
-            <ConfigPannel configManager={configManager}/>
+            <!-- <ConfigPannel configManager={configManager}/> -->
           </div>
           {#if !loading}
           <!-- {#if configManager.channelsPickRef.length && Object.getOwnPropertyNames(configManager.channelsConfigList).length > 0} -->

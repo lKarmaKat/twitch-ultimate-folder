@@ -68,23 +68,26 @@
 	function getNode(item) {
 		return configManager.channelsPickRefMap.get(item.channel_id)
 	}
-	let currentId = 10;
+
+	let currentId = 1;
 	function addNode() {
-		channelConfig.update(liste => {
-			let nodeExist;
-			do {
-				nodeExist = liste[currentId];
-				if (!nodeExist) {
-					let newNode = CST.NEW_LIST;
-					newNode.id = 'list' + currentId;
-					newNode.name = 'list ' + currentId;
-					liste[currentId] = structuredClone(newNode);
-					liste[listId]["items"].push({id: currentId, type: CST.TYPE_LIST});
-				}
+		let newNode
+		let nodeExist;
+		do {
+			nodeExist = configManager.selectedConfig[currentId];
+			if (!nodeExist) {
+				newNode = CST.NEW_LIST;
+				newNode.id = 'list' + currentId;
+				newNode.name = 'list ' + currentId;
+				// liste[currentId] = structuredClone(newNode);
+				// liste[listId]["items"].push({id: currentId, type: CST.TYPE_LIST});
+				configManager.selectedConfig[currentId] = structuredClone(newNode);
+				configManager.selectedConfig[listId]["items"].push({id: currentId, type: CST.TYPE_LIST})
+			} else {
 				currentId++;
-			} while (nodeExist);
-			return liste;
-		});
+			}
+			console.log("looking for index", currentId)
+		} while (nodeExist);
 	}
 
 	function removeChild(param) {

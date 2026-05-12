@@ -66,28 +66,29 @@ class ConfigManager {
 
 
     saveConfig(toSaveChannels: I_CONFIG) {
-        let copy = this.cleanRecursively('rootList', toSaveChannels);
+        let copy = this.cleanRecursively('rootList', JSON.parse(JSON.stringify(toSaveChannels)));
         chrome.runtime.sendMessage(this.extensionId, { type: CST.SAVE_CHANNELS_LIST, data: copy });
     }
 
     cleanRecursively(listId: string, toSaveChannels: I_CONFIG) {
-        let copy = JSON.parse(JSON.stringify(toSaveChannels));
-        if (copy[listId].items.length > 0) {
-            for (let item of copy[listId].items) {
-                if ((item as any).type === CST.TYPE_LIST) {
-                    this.cleanRecursively((item as any).id, copy);
+        // let copy = JSON.parse(JSON.stringify(toSaveChannels));
+        if (toSaveChannels[listId].items.length > 0) {
+            for (let currentId in toSaveChannels[listId].items) {
+                if ((toSaveChannels[listId].items[currentId] as any).type === CST.TYPE_LIST) {
+                    this.cleanRecursively((toSaveChannels[listId].items[currentId] as any).id, toSaveChannels);
                 } else {
-                    delete (item as any).channel_name;
-                    delete (item as any).game_name;
-                    delete (item as any).isLive;
-                    delete (item as any).language;
-                    delete (item as any).profile_image_url;
-                    delete (item as any).title;
-                    delete (item as any).viewer_count;
+                    toSaveChannels[listId].items[currentId] = {channel_id: toSaveChannels[listId].items[currentId].channel_id, id: toSaveChannels[listId].items[currentId].id}
+                    // delete (item as any).channel_name;
+                    // delete (item as any).game_name;
+                    // delete (item as any).isLive;
+                    // delete (item as any).language;
+                    // delete (item as any).profile_image_url;
+                    // delete (item as any).title;
+                    // delete (item as any).viewer_count;
                 }
             }
         }
-        return copy;
+        return toSaveChannels;
     }
 
     resetConfig() {
