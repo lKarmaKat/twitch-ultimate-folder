@@ -30,17 +30,7 @@ class ConfigManager {
     save = [];
 	channelsConfigList = $state<UserConfigs>();
     currentConfigName = $state<string>('');
-    selectedConfig = $state<I_CONFIG>();
-    autre = $derived.by(() => {
-    if (this.channelsConfigList?.configsList && this.currentConfigName) {
-        let index = this.channelsConfigList.configsList.find(conf => conf.rootList.name === this.currentConfigName);
-        if (index) {
-            this.selectedConfig = index;
-          return index;
-        }
-        throw new Error(`ConfigName ${this.currentConfigName} not found in configList`);
-    }
-  });
+    selectedConfig = $state<I_CONFIG | undefined>(undefined);
     constructor() {
         this.startPort();
     }
@@ -51,6 +41,15 @@ class ConfigManager {
                 this.currentConfigName = msg.data.currentConfig;
                 if (msg.data) {
                     this.channelsConfigList = structuredClone(msg.data);
+                    let index
+
+                    if (this.channelsConfigList?.configsList && this.currentConfigName) {
+                        index = this.channelsConfigList.configsList.find(conf => conf.rootList.name === this.currentConfigName);
+                    }
+                    // if (!index) {
+                    //     console.error(`No config named ${this.currentConfigName}found in configManager svelte`)
+                    // }
+                    this.selectedConfig = index;
                 }
             } else if (msg.type === CST.GET_STREAMS_REF) {
                 // let all = [...msg.data, CST.ALL_OTHER_CHANNELS_ELEMENT]

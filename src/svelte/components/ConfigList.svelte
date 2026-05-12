@@ -1,25 +1,32 @@
 <script>
   	import DraggableChannel from './DraggableChannel.svelte'
-	  import { parentFinalizeEvent, configChangeEvent } from "../event.js";
+	import { parentFinalizeEvent, configChangeEvent } from "../event.js";
   	import * as CST from '../../constantes.js'
-	  import { dndzone, SHADOW_ITEM_MARKER_PROPERTY_NAME } from 'svelte-dnd-action';
+	import { dndzone, SHADOW_ITEM_MARKER_PROPERTY_NAME } from 'svelte-dnd-action';
 	
 
 
 	  
 
-	  let { channelConfig, channelsPickRefMap, listId, channelRef, requestDeleteToParent } = $props()
+	  let { configManager, listId, requestDeleteToParent } = $props()
 
+	  let refMap = $derived.by(() => {
+		console.log("updated in configList ", configManager.channelsPickRefMap);
+		return configManager.channelsPickRefMap
+	});
 
-	let duplicatedElementError = $derived(!$parentFinalizeEvent)
-
+	// let duplicatedElementError = $derived(!)
+	let duplicatedElementError = $state(false)
+	parentFinalizeEvent.subscribe((value) => {
+		duplicatedElementError = !value
+	})
 
 	const flipDurationMs = 80;
 	function handleDndConsider(e) {
 		// Use an immutable update to ensure subscribers and dnd-action
 		// get a new object/array reference instead of mutating in place.
 		const newItems = e.detail.items;
-		$channelConfig[listId].items = newItems;
+		configManager.selectedConfig[listId].items = newItems;
 		// channelConfig.update(current => {
 		// 	const copy = structuredClone(current);
 		// 	copy[listId] = { ...(copy[listId] || {}), items: newItems };
@@ -45,7 +52,7 @@
 		// if (newIt) {
 		// 	e.detail.items[newIt] = {"channel_id": e.detail.items[newIt].channel_id, "id": e.detail.items[newIt].id}
 		// }
-		$channelConfig[listId].items = newItems;
+		configManager.selectedConfig[listId].items = newItems;
 		//channelConfig.update(liste => {
 			// console.log("UPDATE DROP")
 		//	return liste
@@ -69,7 +76,7 @@
 			draggedEl.style.cursor = 'grab';
 
 		} else if (draggedData.type === CST.TYPE_LIST) {
-			let chName = $channelConfig[draggedData.id];
+			let chName = configManager.selectedConfig[draggedData.id];
 			draggedEl.innerHTML = `<strong>${chName.name}</strong>`;
 			// draggedEl.style.width = '200px';
 			draggedEl.style.height = '2.1em';
@@ -79,7 +86,7 @@
 	}
 
 	function getNode(item) {
-		return $channelRef.find(e => e.channel_id === item.channel_id);
+		return configManager.channelsPickRefMap.get(item.channel_id)
 	}
 	let currentId = 10;
 	function addNode() {
@@ -104,7 +111,7 @@
 		console.log(`called from ${param} in ${listId}`)
 		channelConfig.update(liste => {
 			delete(liste[param]);
-			let toRemove = $channelConfig[listId].items.findIndex(e => e?.id === param);
+			let toRemove = channelConfig[listId].items.findIndex(e => e?.id === param);
 			if (toRemove >= 0) {
 				liste[listId].items.splice(toRemove,1);
 				// configChangeEvent.set(null);
@@ -115,7 +122,7 @@
 
 	function removeChannel(id) {
 		channelConfig.update(liste => {
-			let toRemove = $channelConfig[listId].items.findIndex(e => e?.channel_id === id);
+			let toRemove = channelConfig[listId].items.findIndex(e => e?.channel_id === id);
 			if (toRemove >= 0) {
 				liste[listId].items.splice(toRemove,1);
 				// configChangeEvent.set(null);
@@ -135,29 +142,35 @@
 <div id="list-{listId}" class="list-container">
 	<!-- svelte-ignore a11y-click-events-have-key-events -->
 	<!-- svelte-ignore a11y-no-static-element-interactions -->
+	<!-- svelte-ignore a11y_click_events_have_key_events -->
+	<!-- svelte-ignore a11y_no_static_element_interactions -->
 	<div class="list-header" onclick={selectConfig}>
 		<!-- <div class="header" style="background-color: {headerColor};"> -->
-		<p class="list-title">{$channelConfig[listId]?.name}</p>
+		<p class="list-title">{configManager.selectedConfig[listId]?.name}</p>
 		<div class="list-side-menu">
 			<button id="add-list-{listId}" class="add" onclick={() => addNode()} title="Add new list in {listId}">+</button>
 			<button class="delete" onclick={()=>{requestDeleteToParent(listId)}}>x</button>
 		</div>
 	</div>
-	{#if $channelConfig[listId]?.hasOwnProperty("items")}
+	{#if configManager.selectedConfig[listId]?.hasOwnProperty("items")}
 	<div class="list-body" >
 		<section class="dnd-zone-r"
-		use:dndzone={{items:$channelConfig[listId].items, flipDurationMs, centreDraggedOnCursor: false, transformDraggedElement,
+		use:dndzone={{items:configManager.selectedConfig[listId].items, flipDurationMs, centreDraggedOnCursor: false, transformDraggedElement,
 			dropTargetClasses: ['increased-drop-margin']
 		, morphDisabled: true, useCursorForDetection: true}} 
-		onchange={handleDndConsider} 
+		onconsider={handleDndConsider} 
 		onfinalize ={handleDndFinalize}>
 		<!-- style="background-color: {contentColor};">		 -->
-			{#each $channelConfig[listId].items as item(item.id)}
-			{#if item[SHADOW_ITEM_MARKER_PROPERTY_NAME]}
-				<div in:fade={{duration:200, easing: cubicIn}} class='custom-shadow-item'>test</div>
-			{:else if item.type === CST.TYPE_LIST}
-			<div class="nested-list">
-				<svelte:self requestDeleteToParent={removeChild} bind:channelConfig={channelConfig} listId={item.id} bind:channelRef={channelRef}></svelte:self>
+			{#each configManager.selectedConfig[listId].items as item(item.id)}
+
+			{#if item.type === CST.TYPE_LIST}
+			<div class="nested-list" id={listId + "nested"}>
+				<!-- svelte-ignore svelte_self_deprecated -->
+				<svelte:self
+					listId={item.id}
+					requestDeleteToParent={removeChild}
+					configManager={configManager}>
+				</svelte:self>
 			</div>
 			{:else if item.id === CST.ALL_OTHER_CHANNELS}
 				                 <DraggableChannel 

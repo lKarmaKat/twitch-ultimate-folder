@@ -9,7 +9,8 @@
 
     let searchString = $state('');
 
-    const filtered = $derived.by(() => {
+
+    let filtered = $derived.by(() => {
       if (!items || items.length < 1) {
         return writable([{
           id: -1,
@@ -28,30 +29,28 @@
       return a;
     }
     );
-  // filtered.subscribe(e => e);
   
     let shouldIgnoreDndEvents = false;
     let count = 0;
     function handleDndConsider(e) {
-        // count++;
-        // const {trigger, id} = e.detail.info;
-        // if (trigger === TRIGGERS.DRAG_STARTED) {
-        //     const idx = $filteredItems.findIndex(item => item.id === id);
-        //     const newId = `${id}_copy_${Math.round(Math.random()*100000)}`;
-				// 		// the line below was added in order to be compatible with version svelte-dnd-action 0.7.4 and above 
-				// 	  e.detail.items = e.detail.items.filter(item => !item[SHADOW_ITEM_MARKER_PROPERTY_NAME]);
-        //     e.detail.items.splice(idx, 0, {...$filteredItems[idx], id: newId});
-        //     // items = e.detail.items;
-        //     filteredItems.update(list => e.detail.items);
-        //     shouldIgnoreDndEvents = true;
-        // }
-        // else if (!shouldIgnoreDndEvents) {
-        //   // items = e.detail.items;
-        //   filteredItems.update(list => e.detail.items);
-        // }
+        count++;
+        const {trigger, id} = e.detail.info;
+        if (trigger === TRIGGERS.DRAG_STARTED) {
+            const idx = filtered.findIndex(item => item.id === id);
+            const newId = `${id}_copy_${Math.round(Math.random()*100000)}`;
+						// the line below was added in order to be compatible with version svelte-dnd-action 0.7.4 and above 
+					  e.detail.items = e.detail.items.filter(item => !item[SHADOW_ITEM_MARKER_PROPERTY_NAME]);
+            e.detail.items.splice(idx, 0, {...filtered[idx], id: newId});
+            // items = e.detail.items;
+            filtered = e.detail.items;
+            shouldIgnoreDndEvents = true;
+        }
+        else if (!shouldIgnoreDndEvents) {
+          filtered = e.detail.items;
+        }
         // else {
         //     // items = [...items];
-        //     filteredItems.update(list => list);
+        //     filtered = list;
         // }
     }
     function handleDndFinalize(e) {
@@ -60,11 +59,11 @@
 
         if (!shouldIgnoreDndEvents) {
             // items = e.detail.items;
-          filteredItems.update(list => e.detail.items);
+          filtered = e.detail.items;
         }
         else {
             // items = [...items];
-            filteredItems.update(list => e.detail.items);
+            filtered = e.detail.items;
             shouldIgnoreDndEvents = false;
         }
     }

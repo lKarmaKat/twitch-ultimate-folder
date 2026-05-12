@@ -24,11 +24,11 @@
   //     return (Array.from($channelsPickRef.values()))
   // })
   // let channelsPickRefList2 = $state(writable(() => channelsPickRefList));
-  let channelsPickRef = $derived(c.channelsPickRef);// = writable([]);
-  let channelsConfig = $derived(c.channelsConfig);
-  let channelsPickRefMap = $derived(c.channelsPickRefMap);
-  let currentConfig = $derived(configManager.currentConfigName); // = writable({
-  let selectedConfig = $derived(c.selectedConfig);
+  // let channelsPickRef = $derived(c.channelsPickRef);// = writable([]);
+  // let channelsConfig = $derived(c.channelsConfig);
+  // let channelsPickRefMap = $derived(c.channelsPickRefMap);
+  // let currentConfig = $derived(configManager.currentConfigName); // = writable({
+  // let selectedConfig = $derived(c.selectedConfig);
   // let selectedConfigDer = derived([currentConfig, channelsConfig], ([$currentConfig, $channelsConfig]) => {
   //   // console.log("update");
   //   if ($channelsConfig?.configsList) {
@@ -84,7 +84,7 @@
 
 
   function showDisplayConf() {
-    console.log("display", $channelsConfig);
+    console.log("display", configManager.channelsConfigList);
   }
   function closePopup() {
     chrome.runtime.sendMessage({type: 'HIDE_POPUP'});
@@ -102,8 +102,8 @@
     })
   }
   function send() {
-    console.log($selectedConfig)
-    configManager.send($selectedConfig);
+    // console.log($selectedConfig)
+    configManager.send(configManager.selectedConfig);
   }
 
   ////////////////////////////////////////////////
@@ -121,19 +121,19 @@
     let newConfigName = "newConfig";
     let newConfigIndex = 1;
     let configExist;
-    do {
-      configExist = $channelsConfig.configsList.find(e => e.rootList.name === newConfigName + newConfigIndex);
-      if (!configExist) {
-        let newConfig = structuredClone(STARTUP_CONF)
-        newConfig.rootList.name = newConfigName + newConfigIndex;
-        channelsConfig.update(e => {
-          e.configsList.push(newConfig);
-          return e;
-        })
-      currentConfig.set(newConfigName + newConfigIndex);
-      }
-      newConfigIndex++;
-    } while (configExist);
+    // do {
+    //   configExist = $channelsConfig.configsList.find(e => e.rootList.name === newConfigName + newConfigIndex);
+    //   if (!configExist) {
+    //     let newConfig = structuredClone(STARTUP_CONF)
+    //     newConfig.rootList.name = newConfigName + newConfigIndex;
+    //     channelsConfig.update(e => {
+    //       e.configsList.push(newConfig);
+    //       return e;
+    //     })
+    //   currentConfig.set(newConfigName + newConfigIndex);
+    //   }
+    //   newConfigIndex++;
+    // } while (configExist);
     
     
   }
@@ -199,11 +199,9 @@
           </div>
           {#if configManager.channelsPickRef.length}
           <div id="config-list" class="channels-container">
-            <!-- <ConfigList listId={"rootList"}
-            bind:channelConfig={selectedConfig}
-            bind:channelRef={channelsPickRef}
-            bind:channelRefMap={channelsPickRefMap}
-            requestDeleteToParent={promptResetConfig} /> -->
+            <ConfigList listId="rootList"
+            configManager={configManager}
+            requestDeleteToParent={promptResetConfig} />
           </div>
           {/if}
           <div class="config-container">
