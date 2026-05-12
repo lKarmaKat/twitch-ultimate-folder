@@ -101,8 +101,8 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
       // chrome.storage.local.set({currentConfig: resetConf});
       configManager.saveConfig(resetConf);
       portManager.sendMessageToAllTabs(CST.GET_CURRENT_CONFIGURATION, resetConf)
-      sendResponse(resetConf);
-    return true;
+      // sendResponse(resetConf);
+    return false;
   } else if (msg.type === CST.GET_CURRENT_CONFIGURATION) {
     configManager.getConfigObjectForCurrentUser().then((currentConfig) => {
       sendResponse(currentConfig);

@@ -88,27 +88,17 @@
 	}
 
 	function removeChild(param) {
-		console.log(`called from ${param} in ${listId}`)
-		channelConfig.update(liste => {
-			delete(liste[param]);
-			let toRemove = channelConfig[listId].items.findIndex(e => e?.id === param);
-			if (toRemove >= 0) {
-				liste[listId].items.splice(toRemove,1);
-				// configChangeEvent.set(null);
-			}
-			return liste;
-		})
+		let indexToRemove = configManager.selectedConfig[listId].items.findIndex(e => e?.id === param)
+		if (indexToRemove >= 0) {
+			configManager.selectedConfig[listId].items.splice(indexToRemove,1);
+		}
 	}
 
 	function removeChannel(id) {
-		channelConfig.update(liste => {
-			let toRemove = channelConfig[listId].items.findIndex(e => e?.channel_id === id);
-			if (toRemove >= 0) {
-				liste[listId].items.splice(toRemove,1);
-				// configChangeEvent.set(null);
-			}
-			return liste;
-		})
+		let indexToRemove = configManager.selectedConfig[listId].items.findIndex(e => e?.channel_id === id)
+		if (indexToRemove >= 0) {
+			configManager.selectedConfig[listId].items.splice(indexToRemove,1);
+		}
 	}
 	
 	function selectConfig() {
@@ -152,21 +142,21 @@
 					configManager={configManager} />
 			</div>
 			{:else if item.id === CST.ALL_OTHER_CHANNELS}
-				                 <DraggableChannel 
-                  channelId={item.channel_id} 
-                  channelName={item.channel_name} 
-                  channelProfilePic={item.profile_image_url} 
-                  viewerCount={item.viewer_count}
-                  gameName={item.game_name}
-                  isLive={item.isLive}
-                  bearCard=true/>
+				<DraggableChannel 
+					channelId={item.channel_id} 
+					channelName={item.channel_name} 
+					channelProfilePic={item.profile_image_url} 
+					viewerCount={item.viewer_count}
+					gameName={item.game_name}
+					isLive={item.isLive}
+					bearCard=true/>
 			{:else}
 			{@const i = getNode(item)}
 				<div class="channel">
 					<div class="">
 						<button class="delete" id="remove-{i?.channel_id}" onclick={()=>{removeChannel(i?.channel_id)}}>x</button>
 					</div>
-					<DraggableChannel 
+				<DraggableChannel 
 					channelId={i?.channel_id} 
 					channelName={i?.channel_name} 
 					channelProfilePic={i?.profile_image_url} 

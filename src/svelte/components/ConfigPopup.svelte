@@ -90,20 +90,17 @@
     chrome.runtime.sendMessage({type: 'HIDE_POPUP'});
   }
 
-  function promptResetConfig() {
-    let rep = prompt("reset config principale ?", "oui");
+  function promptResetConfig(param) {
+    let confName = configManager.selectedConfig[param].name;
+    let promptMsg = `Are you sur you want to reset the config named "${confName}""`
+    let rep = prompt(promptMsg, "oui");
     if (rep === "oui") {
-      resetConfig();
+      configManager.resetConfig()
     }
   }
-  function resetConfig() {
-    configManager.resetConfig().then(data => {
-      channelsConfig = data;
-    })
-  }
-  function send() {
-    // console.log($selectedConfig)
-    configManager.send(configManager.selectedConfig);
+  
+  function saveConfig() {
+    configManager.saveConfig(configManager.selectedConfig);
   }
 
   let themeName = $state(true);
@@ -211,7 +208,7 @@
           {/if}
         </div>
         <button id="showC" onclick={showDisplayConf}>Show display conf</button>
-        <button onclick={() => send()}>Enregistrer</button>
+        <button onclick={() => saveConfig()}>Enregistrer</button>
       {/if}
     </div>
   </div>

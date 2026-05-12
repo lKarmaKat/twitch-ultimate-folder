@@ -40,15 +40,14 @@ class ConfigManager {
                 this.currentConfigName = msg.data.currentConfig;
                 if (msg.data) {
                     this.channelsConfigList = structuredClone(msg.data);
-                    let index
 
+                    let foundConf
                     if (this.channelsConfigList?.configsList && this.currentConfigName) {
-                        index = this.channelsConfigList.configsList.find(conf => conf.rootList.name === this.currentConfigName);
+                        foundConf = this.channelsConfigList.configsList.find(conf => conf.rootList.name === this.currentConfigName);
                     }
-                    this.selectedConfig = index;
+                    this.selectedConfig = foundConf;
                 }
             } else if (msg.type === CST.GET_STREAMS_REF) {
-                console.log("got stream ref map from backend", new Map(msg.data))
                 this.channelsPickRefMap = new Map(msg.data);
                 }
         }
@@ -66,8 +65,8 @@ class ConfigManager {
 
 
 
-    send(toSaveChannels: I_CONFIG) {
-        let copy = this.cleanRecursively('rootList', toSaveChannels);  
+    saveConfig(toSaveChannels: I_CONFIG) {
+        let copy = this.cleanRecursively('rootList', toSaveChannels);
         chrome.runtime.sendMessage(this.extensionId, { type: CST.SAVE_CHANNELS_LIST, data: copy });
     }
 
@@ -92,18 +91,7 @@ class ConfigManager {
     }
 
     resetConfig() {
-        return new Promise(resolve => {
-            chrome.runtime.sendMessage(this.extensionId, {type: CST.RESET_CONFIG}, () => {
-                console.log("reseted");
-                chrome.runtime.sendMessage(this.extensionId, {type: CST.GET_CURRENT_CONFIGURATION}, (truc) => {
-                    if (Object.getOwnPropertyNames(truc)?.length > 0) {
-                        this.channelsConfigList = truc;
-                        // display = truc;
-                    }
-                    resolve(this.channelsConfigList);
-                });
-            });
-        });
+        this.selectedConfig = CST.STARTUP_CONF;
     }
 
 
