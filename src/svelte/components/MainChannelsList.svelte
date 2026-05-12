@@ -20,7 +20,6 @@
       let a = items;
       let set = new Set(items);
       if (searchString.length > 0) {
-        // console.log("{{{{{{{{{{search", $search);
         a = items.filter(x => {
           if (x.channel_name.toLowerCase().includes(searchString.toLowerCase()))
           return x.channel_name.toLowerCase().includes(searchString.toLowerCase());
@@ -48,30 +47,19 @@
         else if (!shouldIgnoreDndEvents) {
           filtered = e.detail.items;
         }
-        // else {
-        //     // items = [...items];
-        //     filtered = list;
-        // }
     }
     function handleDndFinalize(e) {
-      // console.log("finalize");
       parentFinalizeEvent.set(e.detail);
 
         if (!shouldIgnoreDndEvents) {
-            // items = e.detail.items;
           filtered = e.detail.items;
         }
         else {
-            // items = [...items];
             filtered = e.detail.items;
             shouldIgnoreDndEvents = false;
         }
     }
     const flipDurationMs = 0;
-
-    // function searchChange() {
-    //   search.update( e=> searchString)
-    // }
 
 function show() {
   console.log("list", $items);

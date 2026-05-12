@@ -106,11 +106,7 @@
     configManager.send(configManager.selectedConfig);
   }
 
-  ////////////////////////////////////////////////
-  ////////////////////////////////////////////////
-  ////////////////////////////////////////////////
-
-  let themeName = writable(true);
+  let themeName = $state(true);
 
   let theme = (data) => {
       themeName = data.data;

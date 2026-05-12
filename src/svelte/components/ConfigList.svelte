@@ -23,15 +23,8 @@
 
 	const flipDurationMs = 80;
 	function handleDndConsider(e) {
-		// Use an immutable update to ensure subscribers and dnd-action
-		// get a new object/array reference instead of mutating in place.
 		const newItems = e.detail.items;
 		configManager.selectedConfig[listId].items = newItems;
-		// channelConfig.update(current => {
-		// 	const copy = structuredClone(current);
-		// 	copy[listId] = { ...(copy[listId] || {}), items: newItems };
-		// 	return copy;
-		// });
 		duplicatedElementError = itemAlreadyInList(e);
 	}
 
@@ -48,20 +41,7 @@
 		duplicatedElementError = false;
 		let id = e.detail.info.id;
 		const newItems = itemAlreadyInList(e) ? e.detail.items.filter(i => i.id !== id) : e.detail.items;
-		let newIt = e.detail.items.findIndex(i => i.id === id)
-		// if (newIt) {
-		// 	e.detail.items[newIt] = {"channel_id": e.detail.items[newIt].channel_id, "id": e.detail.items[newIt].id}
-		// }
 		configManager.selectedConfig[listId].items = newItems;
-		//channelConfig.update(liste => {
-			// console.log("UPDATE DROP")
-		//	return liste
-		//});
-		// channelConfig.update(current => {
-		// 	const copy = structuredClone(current);
-		// 	copy[listId] = { ...(copy[listId] || {}), items: newItems };
-		// 	return copy;
-		// });
 	}
 
 	function transformDraggedElement(draggedEl, draggedData, draggedIndex) {

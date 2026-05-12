@@ -1,5 +1,4 @@
 import PortConnector from './portConnector.js';
-import { writable, derived } from 'svelte/store';
 import type { StreamsInfos } from '@src/service_worker/models/streamsInfos.model';
 import * as CST from '../constantes.js'
 import type { UserConfigs, I_CONFIG } from '../service_worker/models/userStructure.js';
@@ -46,25 +45,12 @@ class ConfigManager {
                     if (this.channelsConfigList?.configsList && this.currentConfigName) {
                         index = this.channelsConfigList.configsList.find(conf => conf.rootList.name === this.currentConfigName);
                     }
-                    // if (!index) {
-                    //     console.error(`No config named ${this.currentConfigName}found in configManager svelte`)
-                    // }
                     this.selectedConfig = index;
                 }
             } else if (msg.type === CST.GET_STREAMS_REF) {
-                // let all = [...msg.data, CST.ALL_OTHER_CHANNELS_ELEMENT]
-                // all.sort(alphaSortCallback)
-                // this.channelsConfigList.update(liste => liste)
                 console.log("got stream ref map from backend", new Map(msg.data))
                 this.channelsPickRefMap = new Map(msg.data);
-
-                
-                // let data: Map<number, StreamsInfos> = new Map(msg.data);
-                // if (data.size)
-                //     data.set(CST.ALL_OTHER_CHANNELS, CST.ALL_OTHER_CHANNELS_ELEMENT);
-                
-                // this.channelsPickRef.set(Array.from(data.values()));
-            }
+                }
         }
         this.bridge = new PortConnector(dataReceivedCallback);
     }
