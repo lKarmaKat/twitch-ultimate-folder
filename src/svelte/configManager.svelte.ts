@@ -55,6 +55,7 @@ class ConfigManager {
                 // let all = [...msg.data, CST.ALL_OTHER_CHANNELS_ELEMENT]
                 // all.sort(alphaSortCallback)
                 // this.channelsConfigList.update(liste => liste)
+                console.log("got stream ref map from backend", new Map(msg.data))
                 this.channelsPickRefMap = new Map(msg.data);
 
                 

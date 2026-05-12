@@ -6,15 +6,9 @@
 
   import { writable, derived } from 'svelte/store';
 
-  let { configManager = new ConfigManager(), channelRefMap } = $props();
+  let { configManager = new ConfigManager() } = $props();
 
-  let c = $derived(configManager.getConfig());
-  let channelsPickRef = $derived(c.channelsPickRef);
-  let channelsConfig = $derived(c.channelsConfig);
-  let currentConfig = $derived(c.selectedConfig);
-  let selectedConfig = $derived(c.selectedConfig);
   let theme = $state(true);
-
   let themeCb = (data) => {
     theme = data.data;
   }
@@ -28,13 +22,10 @@
 </script>
 
 <div id="display-container" class="display-wrapper" class:dark={theme} class:light={!theme} class:al-left={alignementLeft} class:al-right={!alignementLeft}>
-  {#if $selectedConfig && Object.getOwnPropertyNames($selectedConfig).length > 0 && $channelsPickRef?.length > 0}
+  {#if configManager.selectedConfig && Object.getOwnPropertyNames(configManager.selectedConfig).length > 0 && configManager.channelsPickRef?.length > 0}
     <Display 
-    listId={"rootList"} 
-    channelConfig={selectedConfig} 
-    channelRef={channelsPickRef}
-    channelRefMap={channelRefMap}
-    alignedLeft={alignementLeft}/>
+    listId={"rootList"}
+    configManager={configManager}/>
   {:else}
     <WaitingConfig />
   {/if}

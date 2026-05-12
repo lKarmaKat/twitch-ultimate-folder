@@ -205,11 +205,12 @@
           </div>
           {/if}
           <div class="config-container">
-            <!-- <ConfigPannel bind:channelConfig={selectedConfig}/> -->
+            <ConfigPannel configManager={configManager}/>
           </div>
-          {#if configManager.channelsPickRef.length && Object.getOwnPropertyNames(configManager.channelsConfigList).length > 0}
+          {#if !loading}
+          <!-- {#if configManager.channelsPickRef.length && Object.getOwnPropertyNames(configManager.channelsConfigList).length > 0} -->
           <div id="display-container" class="display-container">
-            <!-- <DisplayWrapper configManager={configManager} channelRefMap={channelsPickRefMap}/> -->
+            <DisplayWrapper configManager={configManager} />
           </div>
           {/if}
         </div>

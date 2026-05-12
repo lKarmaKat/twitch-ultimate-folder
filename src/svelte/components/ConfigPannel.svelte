@@ -2,10 +2,10 @@
 	import { configChangeEvent } from "../event.js";
     import * as CST from '../../constantes.js'
     import { writable } from 'svelte/store';
-
-    let { channelConfig } = $props();
+    import ConfigManager from "../configManager.svelte.js";
+    let { configManager } = $props();
     let listeId;
-    let config;
+    let config = $state();
 
     let colorsList = [
     { colorName: 'grey', colorCode: "#808080" },
@@ -17,11 +17,11 @@
 
     configChangeEvent.subscribe((value) => {
         listeId = value;
-        config = $channelConfig[listeId];
+        config = configManager.selectedConfig[listeId];
     })
 
     function updateListName() {
-        channelConfig.update(configEl => {
+        configManager.selectedConfig.update(configEl => {
             configEl[listeId].name = config.name;   
             return configEl;
         });
@@ -32,8 +32,8 @@
     }
 
     function updateConfig() {
-        console.log($channelConfig[listeId])
-        channelConfig.update(configEl => {
+        console.log(configManager.selectedConfig[listeId])
+        configManager.selectedConfig.update(configEl => {
             configEl[listeId].behavior = config.behavior;
             configEl[listeId].style = config.style;
             configEl[listeId].type = config.type;

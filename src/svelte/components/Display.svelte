@@ -5,13 +5,14 @@
 	import { writable } from 'svelte/store'
     import FolderIcon from './FolderIcon.svelte';
     import DotIcon from './DotIcon.svelte';
-	
-    let { listId = "rootList", channelConfig, channelRef, alignedLeft, channelRefMap }  = $props();
+	import Self from './Display.svelte'
+
+    let { listId = "rootList", configManager }  = $props();
     // export let channelConfig;
     // export let channelRef;
-    let behavior = $derived($channelConfig[listId]?.behavior);
-    let style = $derived($channelConfig[listId]?.style);
-	let type = $derived($channelConfig[listId]?.type);
+    let behavior = $derived(configManager.selectedConfig[listId]?.behavior);
+    let style = $derived(configManager.selectedConfig[listId]?.style);
+	let type = $derived(configManager.selectedConfig[listId]?.type);
 	let barTypeColor = $derived.by(() => {
 		let color = CST.BAR_TYPE.find(e => e.id === type.barType);
 		if (!color || !color.color) {
@@ -31,24 +32,23 @@
 
 	let extended = $state(extendedOnStartup);
 
-	channelConfig.subscribe(config => {
-		// console.log("UPDATE DISPLAY")
-		updateStyleVars(listId, config);
-	});
+	// configManager.selectedConfig.subscribe(config => {
+	// 	// console.log("UPDATE DISPLAY")
+	// 	updateStyleVars(listId, config);
+	// });
 
 	function updateStyleVars(listId, config) {
 		if (config) {
 			behavior = config[listId]?.behavior;
 			style = config[listId]?.style;
 			if (behavior) {
-				if (extendedOnStartup !== $channelConfig[listId].behavior.extendedOnStartup)
-					extended = $channelConfig[listId].behavior.extendedOnStartup;
-				extendedOnStartup = $channelConfig[listId].behavior.extendedOnStartup;
-				extendOnHover = $channelConfig[listId].behavior.extendOnHover;
-				extendOnClick = $channelConfig[listId].behavior.extendOnClick;
-				isPinnable = $channelConfig[listId].behavior.isPinnable;
+				if (extendedOnStartup !== configManager.selectedConfig[listId].behavior.extendedOnStartup)
+					extended = configManager.selectedConfig[listId].behavior.extendedOnStartup;
+				extendedOnStartup = configManager.selectedConfig[listId].behavior.extendedOnStartup;
+				extendOnHover = configManager.selectedConfig[listId].behavior.extendOnHover;
+				extendOnClick = configManager.selectedConfig[listId].behavior.extendOnClick;
+				isPinnable = configManager.selectedConfig[listId].behavior.isPinnable;
 			}
-			
 			if (style && style.theme === CST.CUSTOM_STYLE) {
 				header = style.header;
 				content = style.content;
@@ -59,10 +59,10 @@
 		}
 		
 	}
-	updateStyleVars(listId, $channelConfig[listId]);
+	updateStyleVars(listId, configManager.selectedConfig[listId]);
 
 	function getNode(item) {
-		return $channelRefMap.get(item.channel_id)
+		return configManager.channelsPickRefMap.get(item.channel_id)
 		//return $channelRef.find(e => e.channel_id === item.channel_id);
 	}
 
@@ -79,7 +79,7 @@
 		// });
 	}
     function toggleAutoCollapse(e) {
-        console.log("display", $channelConfig[listId]);
+        console.log("display", configManager.selectedConfig[listId]);
 		extended = !extended;
 		// getSetAllChannelsInConfig();
         e.stopPropagation();
@@ -91,18 +91,18 @@
 			for (let currentItem of listItem) {
 				if (currentItem.channel_id) {
 					set.add(currentItem.channel_id)
-				} else if (currentItem.type === CST.TYPE_LIST && $channelConfig[currentItem.id]?.items?.length) {
-					c($channelConfig[currentItem.id].items);
+				} else if (currentItem.type === CST.TYPE_LIST && configManager.selectedConfig[currentItem.id]?.items?.length) {
+					c(configManager.selectedConfig[currentItem.id].items);
 				}
 			}
 		}
-		c($channelConfig.rootList.items);
+		c(configManager.selectedConfig.rootList.items);
 		return set;
 	}
 
 	function getChannelsInConfig() {
 		let set = new Set();
-		let currentList = $channelConfig[listId];
+		let currentList = configManager.selectedConfig[listId];
 		if (currentList.items?.length) {
 			for (let currentItem of currentList.items) {
 				if (currentItem.channel_id) {
@@ -118,8 +118,8 @@
 		let set3 = getChannelsInConfig();
 		let count = 0;
 		set3.forEach(e => {
-			if ($channelRefMap.get(e)) {
-				let channel = $channelRefMap.get(e);
+			if (configManager.channelsPickRefMap.get(e)) {
+				let channel = configManager.channelsPickRefMap.get(e);
 				if (channel.isLive) {
 					count++;
 				}
@@ -188,8 +188,8 @@
 		let liveChannels = new Set();
 		let otherListWithOnlineChannel = false
 		let allOtherChannels = false;
-		if ($channelConfig[listId] && $channelConfig[listId].items) {
-			for (let ch of $channelConfig[listId].items) {
+		if (configManager.selectedConfig[listId] && configManager.selectedConfig[listId].items) {
+			for (let ch of configManager.selectedConfig[listId].items) {
 				if (ch.id === CST.ALL_OTHER_CHANNELS) {
 					allOtherChannels = true;
 				} else if (ch.type === CST.TYPE_LIST) {
@@ -231,8 +231,8 @@
 							<DotIcon />
 						{/if}
 					</span>
-					<p class="list-title">{$channelConfig[listId]?.name}</p>
-					<div class='list-icon'  use:maybeTooltip={$channelConfig[listId]?.name}>
+					<p class="list-title">{configManager.selectedConfig[listId]?.name}</p>
+					<div class='list-icon'  use:maybeTooltip={configManager.selectedConfig[listId]?.name}>
 						<svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
 							<rect x="6" y="4" width="11" height="2" rx="1"/>
 							<rect x="6" y="9" width="11" height="2" rx="1"/>
@@ -253,17 +253,17 @@
 			</div>
 		</div>
 		{/if}
-		{#if $channelConfig[listId]?.hasOwnProperty("items")}
+		{#if configManager.selectedConfig[listId]?.hasOwnProperty("items")}
 			<div class="list-body" class:extended style="background-color: {content.contentColor};">
 				<div>
-					{#each $channelConfig[listId].items as item(item.id)}
+					{#each configManager.selectedConfig[listId].items as item(item.id)}
 						{#if item.type === CST.TYPE_LIST}
 							<div class="nested-list">
-								<svelte:self  bind:channelConfig={channelConfig} listId={item.id} bind:channelRef={channelRef} channelRefMap={channelRefMap}></svelte:self>
+								<Self  listId={item.id} configManager={configManager} />
 							</div>
 						{:else if item.id === CST.ALL_OTHER_CHANNELS}
 
-							{#each getAllOtherChannels($channelRef, item) as other(`${other.channel_id}`)}
+							{#each getAllOtherChannels(configManager.channelsPickRef, item) as other(`${other.channel_id}`)}
 								{@const i = getNode(other)}
 								<div class="channel-overlay li{listId}">
 									<DraggableChannel 
