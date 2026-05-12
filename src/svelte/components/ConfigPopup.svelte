@@ -68,21 +68,6 @@
     // });
   // });
 
-
-  let a = false;
-  let mode = $state("all channels");
-  function filterItems() {
-  if (a) {
-    channelsPickRef = save;
-    mode = "all channels";
-  } else {
-    mode = "online only";
-    channelsPickRef = save.filter(e => e.isLive);
-  }
-  a = !a;
-  }
-
-
   function showDisplayConf() {
     console.log("display", configManager.channelsConfigList);
   }
@@ -110,31 +95,31 @@
   }
   let port = new PortConnector(theme, "theme");
 
-  function newConfig() {
-    let newConfigName = "newConfig";
-    let newConfigIndex = 1;
-    let configExist;
-    // do {
-    //   configExist = $channelsConfig.configsList.find(e => e.rootList.name === newConfigName + newConfigIndex);
-    //   if (!configExist) {
-    //     let newConfig = structuredClone(STARTUP_CONF)
-    //     newConfig.rootList.name = newConfigName + newConfigIndex;
-    //     channelsConfig.update(e => {
-    //       e.configsList.push(newConfig);
-    //       return e;
-    //     })
-    //   currentConfig.set(newConfigName + newConfigIndex);
-    //   }
-    //   newConfigIndex++;
-    // } while (configExist);
+  // function newConfig() {
+  //   let newConfigName = "newConfig";
+  //   let newConfigIndex = 1;
+  //   let configExist;
+  //   // do {
+  //   //   configExist = $channelsConfig.configsList.find(e => e.rootList.name === newConfigName + newConfigIndex);
+  //   //   if (!configExist) {
+  //   //     let newConfig = structuredClone(STARTUP_CONF)
+  //   //     newConfig.rootList.name = newConfigName + newConfigIndex;
+  //   //     channelsConfig.update(e => {
+  //   //       e.configsList.push(newConfig);
+  //   //       return e;
+  //   //     })
+  //   //   currentConfig.set(newConfigName + newConfigIndex);
+  //   //   }
+  //   //   newConfigIndex++;
+  //   // } while (configExist);
     
     
-  }
+  // }
 
-  function selectConfig(configName) {
-    currentConfig.set(configName);
-    console.log(configName);
-  }
+  // function selectConfig(configName) {
+  //   currentConfig.set(configName);
+  //   console.log(configName);
+  // }
 </script>
 
 <svelte:head>
@@ -163,11 +148,9 @@
       {:else}
         <div class="flex-config">
           <div class="left">
-            <button onclick={filterItems}>{mode}</button>
-            <button onclick={promptResetConfig}>Reset config</button>
           </div>
           <div class="right">
-            {#if configManager.channelsConfigList.length > 0}
+            <!-- {#if configManager.channelsConfigList.length > 0}
             <div class="configs-container">
               <button onclick={newConfig}>
                 +
@@ -180,7 +163,7 @@
             </div>
             {:else}
               <p>No configs {configManager.channelsConfigList?.length}</p>
-            {/if}
+            {/if} -->
           </div>
         </div>
         <h2>Channels list</h2>
