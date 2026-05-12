@@ -30,11 +30,15 @@ export class DataFormatter {
             await this.getChannelProfilePicture();
             this.mixAllInfos();
             this.initComplete = true;
-
-            return Array.from(this.allFollowedStreams.entries());
+            return this.getInfotoSend();
         } catch (error) {
             throw wrapError("DataFormatter.init failed", error);
         }
+    }
+
+
+    getInfotoSend() {
+        return Array.from(this.allFollowedStreams.entries())
     }
 
     

@@ -21,8 +21,8 @@ export class DataPoller {
 
     }
 
-    async getConfig(): Promise<StreamsInfos[]> {
-        return Array.from(this.dataFormatter.allFollowedStreams.values());
+    async getConfig(): Promise<[number, StreamsInfos][]> {
+        return this.dataFormatter.getInfotoSend();
     }
 
 }

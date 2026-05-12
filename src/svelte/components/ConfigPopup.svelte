@@ -194,7 +194,7 @@
         <div class="flex-container">
           <div class="channels-container">
             {#if configManager.channelsPickRef.length > 0}
-            <MainChannelsList bind:items={configManager.channelsPickRef}/>
+            <MainChannelsList items={configManager.channelsPickRef}/>
             {/if}
           </div>
           {#if configManager.channelsPickRef.length}

@@ -7,8 +7,25 @@ import type { UserConfigs, I_CONFIG } from '../service_worker/models/userStructu
 class ConfigManager {
     extensionId: string = "ijodiaomnnnjljemidchdifmpnnmcnlg";
     initComplete: boolean = false;
-    channelsPickRefMap = $state<Map<number, StreamsInfos>>(new Map());
-    channelsPickRef = $derived(Array.from(this.channelsPickRefMap.values()))
+    channelsPickRefMap = $state<Map<number, StreamsInfos>>(new Map([]));
+    channelsPickRef = $derived.by(() => {
+        let channelsList = Array.from(this.channelsPickRefMap.values());
+        const alphaSortCallback = (a: StreamsInfos, b: StreamsInfos) => {
+                    let alphaSort = (a: StreamsInfos, b: StreamsInfos) => {
+                        return a.channel_name.localeCompare(b.channel_name);
+                    }
+                    if (a.id === CST.ALL_OTHER_CHANNELS)
+                        return -1;
+                    else if (b.id === CST.ALL_OTHER_CHANNELS)
+                        return 1;
+                    else if (a.isLive && b.isLive) return alphaSort(a,b);
+                    else if (a.isLive) return -1;
+                    else if (b.isLive) return 1;
+                    else return alphaSort(a,b);
+                };
+        let sortedChannelsList = channelsList.sort(alphaSortCallback);
+        return sortedChannelsList;
+    })
     bridge: PortConnector;
     save = [];
 	channelsConfigList = $state<UserConfigs>();
@@ -30,19 +47,6 @@ class ConfigManager {
 
     startPort() {
         let dataReceivedCallback = (msg: any) => {
-            const alphaSortCallback = (a: StreamsInfos, b: StreamsInfos) => { // TODO supprimer
-                    let alphaSort = (a: StreamsInfos, b: StreamsInfos) => {
-                        return a.channel_name.localeCompare(b.channel_name);
-                    }
-                    if (a.id === CST.ALL_OTHER_CHANNELS)
-                        return -1;
-                    else if (b.id === CST.ALL_OTHER_CHANNELS)
-                        return 1;
-                    else if (a.isLive && b.isLive) return alphaSort(a,b);
-                    else if (a.isLive) return -1;
-                    else if (b.isLive) return 1;
-                    else return alphaSort(a,b);
-                };
             if (msg.type === CST.GET_CURRENT_CONFIGURATION) {
                 this.currentConfigName = msg.data.currentConfig;
                 if (msg.data) {
@@ -52,8 +56,6 @@ class ConfigManager {
                 // let all = [...msg.data, CST.ALL_OTHER_CHANNELS_ELEMENT]
                 // all.sort(alphaSortCallback)
                 // this.channelsConfigList.update(liste => liste)
-                
-                
                 this.channelsPickRefMap = new Map(msg.data);
 
                 
