@@ -3,10 +3,11 @@
 	import { maybeTooltip, tooltip } from "../tooltip";
     import * as CST from '../../constantes.js'
 	import { writable } from 'svelte/store'
-    import FolderIcon from './FolderIcon.svelte';
-    import DotIcon from './DotIcon.svelte';
+    import FolderIcon from './icons/FolderIcon.svelte';
+    import DotIcon from './icons/DotIcon.svelte';
 	import Self from './Display.svelte'
-    import AngleIcon from './AngleIcon.svelte';
+    import AngleIcon from './icons/AngleIcon.svelte';
+    import CrossIcon from './icons/CrossIcon.svelte';
 
     let { listId = "rootList", configManager }  = $props();
 	
@@ -203,6 +204,8 @@
 							<DotIcon />
 						{:else if type.iconType === 3}	
 							<AngleIcon />
+						{:else if type.iconType === 4}	
+							<CrossIcon />
 						{/if}
 					</span>
 					<p class="list-title">{configManager.selectedConfig[listId]?.name}</p>

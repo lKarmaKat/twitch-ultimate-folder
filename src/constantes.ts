@@ -34,19 +34,18 @@ export const HEADER_TYPE_HEIGHT = [
 export const ICON_TYPE = [
   { 
     id: 1, 
-    name: 'folder',
-    path: `<svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
-              <path d="M7 2H2a1 1 0 00-1 1v10a1 1 0 001 1h12a1 1 0 001-1V5a1 1 0 00-1-1H8L7 2z"></path>
-            </svg>` 
+    name: 'folder'
   },
   {
     id: 2, 
-    name: 'dot',
-    path: `<svg xmlns="http://www.w3.org/2000/svg" fill="#000000" width="16px" height="16px" viewBox="0 0 20 20"><path d="M7.8 10a2.2 2.2 0 0 0 4.4 0 2.2 2.2 0 0 0-4.4 0z"/></svg>` 
+    name: 'dot'
   },
   {
     id: 3,
     name: 'angle'
+  }, {
+    id: 4,
+    name: 'cross'
   }
 ]
 
