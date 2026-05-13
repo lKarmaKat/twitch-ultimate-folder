@@ -84,7 +84,7 @@ test.beforeEach(async ({ page }) => {
         }
     }, {DISPLAY_POPUP: CST.DISPLAY_POPUP});
 	// await page.goto('src/iframe/config-popup.html');
-    await page.waitForSelector('#iframe');
+    await page.waitForSelector('#inner-iframe');
 
 });
 
@@ -195,7 +195,7 @@ test.describe('with config', async () => {
 		expect(await channelsDisplay.textContent()).toBe('12K');
 		
 		let updatedRef = deepClone(channelsRef2);
-		updatedRef[4].viewer_count = 6
+		updatedRef[4][1].viewer_count = 6
 		popupPage.updateRef(updatedRef)
 		
 		expect(await popupPage.getDisplayConfigListElementCount()).toBe(5)
@@ -203,7 +203,7 @@ test.describe('with config', async () => {
 		expect(await channelsDisplay.textContent()).toBe('6');
 
 		let ur = deepClone(updatedRef)
-		ur[4].isLive = false;
+		ur[4][1].isLive = false;
 		popupPage.updateRef(ur)
 		expect(await popupPage.getDisplayConfigListElementCount()).toBe(4)
 	})

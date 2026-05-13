@@ -19,7 +19,7 @@ export class PopupHelper {
 
 
     async getListDropCoord(list: string, pos: number) {
-        let elements = this.page.frameLocator('#iframe').locator(`#${list} > div.list-body > section > div:is(.nested-list, .channel)`);
+        let elements = this.page.frameLocator('#inner-iframe').locator(`#${list} > div.list-body > section > div:is(.nested-list, .channel)`);
         // console.log(await list.innerHTML())
         let count = await elements.count();
         // const count = await list.evaluate(el => {
@@ -35,7 +35,7 @@ export class PopupHelper {
                 y: coord!.y + 10
             }
         } else {
-            let coord = await this.page.frameLocator('#iframe').locator(`#${list}`).boundingBox();
+            let coord = await this.page.frameLocator('#inner-iframe').locator(`#${list}`).boundingBox();
             return {
                 x: coord!.x + coord!.width/2,
                 y: coord!.y + coord!.height - 5
@@ -44,7 +44,7 @@ export class PopupHelper {
     }
 
     async getListApproachCoord(list: string, pos: number) {
-        let elements = this.page.frameLocator('#iframe').locator(`#${list} > div.list-body > section > div:is(.nested-list, .channel)`);
+        let elements = this.page.frameLocator('#inner-iframe').locator(`#${list} > div.list-body > section > div:is(.nested-list, .channel)`);
 
         let count = await elements.count();
         console.log(count)
@@ -58,7 +58,7 @@ export class PopupHelper {
                 y: coord!.y + 10
             }
         } else {
-            let coord = await this.page.frameLocator('#iframe').locator(`#config-list > #${list}`).boundingBox();
+            let coord = await this.page.frameLocator('#inner-iframe').locator(`#config-list > #${list}`).boundingBox();
             return {
                 x: coord!.x + 10,
                 y: coord!.y + coord!.height - 5

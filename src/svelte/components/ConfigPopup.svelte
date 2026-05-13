@@ -12,67 +12,10 @@
   
 
   let configManager = new ConfigManager();
-  // let loading = $derived.by(() => {
-  //   // console.log(channelsPickRefList2.length)
-  //   return false;
-  //   // return !(channelsPickRefList2.length > 0 && $channelsConfig && Object.getOwnPropertyNames($channelsConfig).length > 0)
-  // });
-
-  let c = configManager.getConfig()
-  // let channelsPickRefList = $derived.by(()=> {
-  //   if ($channelsPickRef)
-  //     return (Array.from($channelsPickRef.values()))
-  // })
-  // let channelsPickRefList2 = $state(writable(() => channelsPickRefList));
-  // let channelsPickRef = $derived(c.channelsPickRef);// = writable([]);
-  // let channelsConfig = $derived(c.channelsConfig);
-  // let channelsPickRefMap = $derived(c.channelsPickRefMap);
-  // let currentConfig = $derived(configManager.currentConfigName); // = writable({
-  // let selectedConfig = $derived(c.selectedConfig);
-  // let selectedConfigDer = derived([currentConfig, channelsConfig], ([$currentConfig, $channelsConfig]) => {
-  //   // console.log("update");
-  //   if ($channelsConfig?.configsList) {
-  //       let index = $channelsConfig.configsList.find(conf => conf.rootList.name === $currentConfig);
-  //       if (index) {
-  //         selectedConfig.set(index);
-  //         // console.log("selected config", $selectedConfig, index)
-  //         return index;
-  //       }
-  //   }
-  // });
-  // selectedConfigDer.subscribe(e => e);
-  // currentConfig.subscribe(newConfig => {
-  //   if (newConfig) {  
-  //     let index = channelsConfig.configsList.find(conf => conf.configName === newConfig);
-  //     selectedConfig.set($channelsConfig.configsList[index].config);
-  //   }
-  // })
-  // let loading = $derived(false)
   let loading = $derived.by(() => {
-
-    // console.log("configManager.channelsPickRef.length", configManager.channelsPickRef.length)
-    // console.log("configManager.channelsConfigList", configManager.channelsConfigList)
-    // console.log("Object.getOwnPropertyNames(configManager.channelsConfigList).length", Object.getOwnPropertyNames(configManager.channelsConfigList).length)
     return !(configManager.channelsPickRef.length > 0 && configManager.channelsConfigList && Object.getOwnPropertyNames(configManager.channelsConfigList).length > 0)
   })
 
-
-
-  //   listeRacine: {
-  //     id:'node1',
-  //     name:'liste principale',
-  //     items:[]
-  //   }
-  // });
-  // onMount(() => {
-    // console.log("onMount");
-    // channelsPickRef = c.channelsPickRef;
-    // channelsConfig = c.channelsConfig;
-    // configManager.getConfig().then(obj => {
-    //   channelsPickRef = obj.channelsPickRef;
-    //   channelsConfig = obj.channelsConfig;
-    // });
-  // });
 
   function showDisplayConf() {
     console.log("display", configManager.channelsConfigList);
@@ -101,6 +44,7 @@
   }
   let port = new PortConnector(theme, "theme");
 
+  // Ca je garde au cas où
   // function newConfig() {
   //   let newConfigName = "newConfig";
   //   let newConfigIndex = 1;

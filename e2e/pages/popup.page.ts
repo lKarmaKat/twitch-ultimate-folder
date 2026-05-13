@@ -113,7 +113,7 @@ export class PopupPage {
     }
 
     async sendDefaultConf(conf: any, channelsRef: any) {
-        let fr = this.page.frame({name: 'iframe'})
+        let fr = this.page.frame({name: 'inner-iframe'})
         if (!fr) throw new Error('Frame not found')
         await fr.evaluate(({conf, channelsRef, GET_STREAMS_REF, GET_CURRENT_CONFIGURATION}) => {
             // const iframe = (document.querySelector('#iframe-rem') as any).shadowRoot.querySelector('#iframe') as any;
@@ -134,7 +134,7 @@ export class PopupPage {
     }
 
     async updateRef(channelsRef: any) {
-        let fr = this.page.frame({name: 'iframe'})
+        let fr = this.page.frame({name: 'inner-iframe'})
         if (!fr) throw new Error('Frame not found')
         await fr.evaluate(({channelsRef, GET_STREAMS_REF}) => {
             // const iframe = (document.querySelector('#iframe-rem') as any).shadowRoot.querySelector('#iframe') as any;
@@ -142,7 +142,6 @@ export class PopupPage {
             if (!callback) throw new Error('Port callback not found in iframe');
 
             let deepClone = (obj: any) => JSON.parse(JSON.stringify(obj));
-
             callback({
                 type: GET_STREAMS_REF,
                 data: deepClone(channelsRef)

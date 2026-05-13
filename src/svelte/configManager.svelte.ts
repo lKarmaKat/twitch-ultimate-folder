@@ -2,11 +2,12 @@ import PortConnector from './portConnector.js';
 import type { StreamsInfos } from '@src/service_worker/models/streamsInfos.model';
 import * as CST from '../constantes.js'
 import type { UserConfigs, I_CONFIG } from '../service_worker/models/userStructure.js';
+import { SvelteMap } from 'svelte/reactivity';
 
 class ConfigManager {
     extensionId: string = "ijodiaomnnnjljemidchdifmpnnmcnlg";
     initComplete: boolean = false;
-    channelsPickRefMap = $state<Map<number, StreamsInfos>>(new Map([]));
+    channelsPickRefMap = new SvelteMap<string, StreamsInfos>();
     channelsPickRef = $derived.by(() => {
         let channelsList = Array.from(this.channelsPickRefMap.values());
         channelsList.push(CST.ALL_OTHER_CHANNELS_ELEMENT);
@@ -50,20 +51,25 @@ class ConfigManager {
                     this.selectedConfig = foundConf;
                 }
             } else if (msg.type === CST.GET_STREAMS_REF) {
-                this.channelsPickRefMap = new Map(msg.data);
+                this.channelsPickRefMap.clear();
+                for (const [id, streamInfo] of msg.data) {
+                    this.channelsPickRefMap.set(id, streamInfo);
+                }
+                console.log("GET_STREAMS_REF", this.channelsPickRefMap.get("91232178"))
             }
         }
         this.bridge = new PortConnector(dataReceivedCallback);
     }
 
-    getConfig() {
-        return {
-            channelsConfig: this.channelsConfigList,
-            channelsPickRef: this.channelsPickRef,
-            selectedConfig: this.selectedConfig,
-            channelsPickRefMap: this.channelsPickRefMap
-        }
+    getChannel(channelId: string) {
+        return this.channelsPickRefMap.get(channelId);
     }
+
+    getLiveChannel(channelId: string) {
+        const channel = this.getChannel(channelId);
+        return channel?.isLive ? channel : undefined;
+    }
+
 
 
 

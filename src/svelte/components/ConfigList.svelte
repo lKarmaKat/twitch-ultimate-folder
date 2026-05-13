@@ -62,7 +62,7 @@
 	}
 
 	function getNode(item) {
-		return configManager.channelsPickRefMap.get(item.channel_id)
+		return configManager.getChannel(item.channel_id)
 	}
 
 	let currentId = 1;

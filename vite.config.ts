@@ -2,12 +2,20 @@
 import { svelte } from '@sveltejs/vite-plugin-svelte'
 import { viteStaticCopy } from 'vite-plugin-static-copy';
 import webExtension from 'vite-plugin-web-extension'
-import { defineConfig } from 'vitest/config';
+import { loadEnv, defineConfig } from 'vite'
+// import { defineConfig } from 'vitest/config';
 import { expect, test } from 'vitest';
 
+
+
+
 // https://vite.dev/config/
-export default defineConfig({
+export default defineConfig(({ command, mode }) => {
+  console.log("CMD", command)
+  console.log("MODE", mode)
+  return {
   base: './',
+  dev: mode !== 'production',
   plugins: [
     svelte({
       compilerOptions: {
@@ -100,4 +108,4 @@ export default defineConfig({
 				conditions: ['browser']
 			}
 		: undefined
-})
+}})

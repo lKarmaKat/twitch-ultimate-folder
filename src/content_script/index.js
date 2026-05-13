@@ -1,12 +1,12 @@
 function createDivWithIframeInShwadowDom(mainDivId, iframeSrcUrl, cssUrl = '', allowTransparency = false) {
   const iframe = document.createElement('iframe');
   iframe.src = iframeSrcUrl;
-  iframe.id = "iframe";
+  iframe.id = "inner-iframe";
   iframe.allowTransparency = allowTransparency ? "true" : "false";
 
   const maindiv = document.createElement('div')
   maindiv.id = mainDivId;
-  let shadowParent = maindiv.attachShadow({mode:'open'})
+  let shadowParent = maindiv.attachShadow({mode:'open'});
 
   const link = document.createElement('link');
   link.rel = 'stylesheet';

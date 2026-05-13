@@ -9,9 +9,12 @@
 
     let { listId = "rootList", configManager }  = $props();
 	
-    let behavior = $derived(configManager.selectedConfig[listId]?.behavior);
-    let style = $derived(configManager.selectedConfig[listId]?.style);
-	let type = $derived(configManager.selectedConfig[listId]?.type);
+    let behavior;
+    // let behavior = $derived(configManager.selectedConfig[listId]?.behavior);
+    let style;
+	let type = $derived.by(() => {
+		return configManager.selectedConfig[listId]?.type
+	});
 	let barTypeColor = $derived.by(() => {
 		let color = CST.BAR_TYPE.find(e => e.id === type.barType);
 		if (!color || !color.color) {
@@ -26,61 +29,40 @@
 	let extendOnClick=false;
 	let isPinnable=false;
 
-	let header = $state('');
-	let content = $state('');
+	let header = $derived.by(() => {
+		return configManager.selectedConfig[listId]?.style.header;
+	});
+	let content = $derived.by(() => {
+		return configManager.selectedConfig[listId]?.style.content;
+	});
 
-	let extended = $state(extendedOnStartup);
+	let extended = $derived.by(() => {
+		return configManager.selectedConfig[listId].behavior.extendedOnStartup || false;
+	});
 
-	// configManager.selectedConfig.subscribe(config => {
-	// 	// console.log("UPDATE DISPLAY")
-	// 	updateStyleVars(listId, config);
-	// });
-
-	function updateStyleVars(listId, config) {
-		if (config) {
-			behavior = config[listId]?.behavior;
-			style = config[listId]?.style;
-			if (behavior) {
-				if (extendedOnStartup !== configManager.selectedConfig[listId].behavior.extendedOnStartup)
-					extended = configManager.selectedConfig[listId].behavior.extendedOnStartup;
-				extendedOnStartup = configManager.selectedConfig[listId].behavior.extendedOnStartup;
-				extendOnHover = configManager.selectedConfig[listId].behavior.extendOnHover;
-				extendOnClick = configManager.selectedConfig[listId].behavior.extendOnClick;
-				isPinnable = configManager.selectedConfig[listId].behavior.isPinnable;
+	let displayList = $derived.by(() => {
+		let channelsId = configManager.selectedConfig[listId].items.filter(e => e.channel_id);
+		let s = [];
+		channelsId.forEach(ch => {
+			let c = configManager.getLiveChannel(ch)
+			if (c) {
+				s.push(c)
 			}
-			if (style && style.theme === CST.CUSTOM_STYLE) {
-				header = style.header;
-				content = style.content;
-			} else {
-				header = '';
-				content = '';
-			}
-		}
-		
-	}
-	updateStyleVars(listId, configManager.selectedConfig[listId]);
+		})
+		return s;
+	})
 
 	function getNode(item) {
-		return configManager.channelsPickRefMap.get(item.channel_id)
-		//return $channelRef.find(e => e.channel_id === item.channel_id);
+		return configManager.getChannel(item.channel_id)
 	}
 
 	function getNodeIfLive(item) {
-	 	// counter = document.querySelectorAll(".channel-overlay.li" + listId ).length;
-		let node = getNode(item);
-		if (node.isLive)
-			return node
-		else 
-			return undefined
-		// return $channelRef.find(e => {
-		// 	// console.log("checking liveness for " + e.channel_name + " " + e.isLive)
-		// 	return e.channel_id === item.channel_id && e.isLive
-		// });
+		return configManager.getLiveChannel(item.channel_id);
 	}
+
     function toggleAutoCollapse(e) {
         console.log("display", configManager.selectedConfig[listId]);
 		extended = !extended;
-		// getSetAllChannelsInConfig();
         e.stopPropagation();
     }
 
@@ -113,24 +95,14 @@
 	}
 
 	let counter = $derived.by(() => {
-		let set = getSetAllChannelsInConfig();
-		let set3 = getChannelsInConfig();
+		let set = getChannelsInConfig();
 		let count = 0;
-		set3.forEach(e => {
-			if (configManager.channelsPickRefMap.get(e)) {
-				let channel = configManager.channelsPickRefMap.get(e);
-				if (channel.isLive) {
-					count++;
-				}
+		set.forEach(e => {
+			let channel = configManager.getLiveChannel(e);
+			if (channel) {
+				count++;
 			}
 		})
-
-
-		// for (let ch of $channelRef) {
-		// 	if (!set.has(ch.channel_id) && ch.isLive) {
-		// 		count++;
-		// 	}
-		// }
 		return count;
 	});
 
@@ -220,7 +192,7 @@
 		{#if listId !== 'rootList'}
 		<!-- svelte-ignore a11y_click_events_have_key_events -->
 		<!-- svelte-ignore a11y_no_static_element_interactions -->
-		<div class="list-header" style="background-color:{header.headerColor}; --theme-color:{barTypeColor}" class:border={barTypeColor} onclick={toggleAutoCollapse}>
+		<div class="list-header" style="--header-color:{header?.headerColor} --theme-color:{barTypeColor}" class:border={barTypeColor} onclick={toggleAutoCollapse}>
 			<div class="left">
 				<div class="flex-row">
 					<span class="icon-container">
@@ -253,7 +225,7 @@
 		</div>
 		{/if}
 		{#if configManager.selectedConfig[listId]?.hasOwnProperty("items")}
-			<div class="list-body" class:extended style="background-color: {content.contentColor};">
+			<div class="list-body" class:extended style="--content-color:{content?.contentColor};">
 				<div>
 					{#each configManager.selectedConfig[listId].items as item(item.id)}
 						{#if item.type === CST.TYPE_LIST}
@@ -374,6 +346,7 @@
 		justify-content: space-between;
 		align-items: center;
 		padding: 0.4em 0 0.4em 0.0em;
+		background-color: var(--header-color);
 		/* position: relative; */
 		/* background-color: rgb(119, 56, 119); */
 		/* width: 100%; */
@@ -408,6 +381,7 @@
 		transition: grid-template-rows .5s ease;
 		margin: 0;
 		padding: 0;
+		background-color: var(--content-color);
 	}
 	.list-body div {
 		overflow: hidden;

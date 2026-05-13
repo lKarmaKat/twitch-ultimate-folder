@@ -136,11 +136,11 @@ export const newChannels = [
         "id": "9123217886107",
         "channel_id": "91232178",
         "channel_name": "PierreLapin",
+        "viewer_count": 12345,
         "isLive": true,
         "game_name": "Just chatting",
         "profile_image_url": "../../assets/profil.png",
-        "title": "ACAB",
-        "viewer_count": 12345
+        "title": "ACAB"
     }],["93132178",{
         "id": "9323217886107",
         "channel_id": "93132178",
