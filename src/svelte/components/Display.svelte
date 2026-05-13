@@ -6,6 +6,7 @@
     import FolderIcon from './FolderIcon.svelte';
     import DotIcon from './DotIcon.svelte';
 	import Self from './Display.svelte'
+    import AngleIcon from './AngleIcon.svelte';
 
     let { listId = "rootList", configManager }  = $props();
 	
@@ -195,11 +196,13 @@
 		<div class="list-header" style="--header-color:{header?.headerColor} --theme-color:{barTypeColor}" class:border={barTypeColor} onclick={toggleAutoCollapse}>
 			<div class="left">
 				<div class="flex-row">
-					<span class="icon-container">
+					<span class="icon-container" class:extended>
 						{#if type.iconType === 1}
 							<FolderIcon />
 						{:else if type.iconType === 2}	
 							<DotIcon />
+						{:else if type.iconType === 3}	
+							<AngleIcon />
 						{/if}
 					</span>
 					<p class="list-title">{configManager.selectedConfig[listId]?.name}</p>
