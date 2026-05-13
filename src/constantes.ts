@@ -96,9 +96,9 @@ export const NEW_LIST: t.I_NEW_LIST = {
                 }
             },
             type: {
-              height: HEADER_TYPE_HEIGHT[1].id,
-              iconType: ICON_TYPE[0].id,
-              barType: BAR_TYPE[0].id,
+              height: 0,
+              iconType: 0,
+              barType: 0,
               viewerCountType: 1
             }
           }

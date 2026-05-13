@@ -7,38 +7,42 @@
     let listeId;
     let config = $state();
 
-    let colorsList = [
-    { colorName: 'grey', colorCode: "#808080" },
-    { colorName: 'black', colorCode: "#000000" },
-    { colorName: 'purple', colorCode: "#800080" },
-    { colorName: 'lightgreen', colorCode: "#90ee90" },
-    { colorName: 'darkgrey', colorCode: "#a9a9a9" }
-];
+//     let colorsList = [
+//     { colorName: 'grey', colorCode: "#808080" },
+//     { colorName: 'black', colorCode: "#000000" },
+//     { colorName: 'purple', colorCode: "#800080" },
+//     { colorName: 'lightgreen', colorCode: "#90ee90" },
+//     { colorName: 'darkgrey', colorCode: "#a9a9a9" }
+// ];
 
     configChangeEvent.subscribe((value) => {
         listeId = value;
         config = configManager.selectedConfig[listeId];
+        console.log("changed config", config)
     })
 
     function updateListName() {
-        configManager.selectedConfig.update(configEl => {
-            configEl[listeId].name = config.name;   
-            return configEl;
-        });
+        // configManager.selectedConfig[listeId].name = listName
+        // configManager.selectedConfig.update(configEl => {
+        //     configEl[listeId].name = config.name;   
+        //     return configEl;
+        // });
     }
 
-    function capitalizeFirstLetter(val) {
-        return String(val).charAt(0).toUpperCase() + String(val).slice(1);
-    }
+    // function capitalizeFirstLetter(val) {
+    //     return String(val).charAt(0).toUpperCase() + String(val).slice(1);
+    // }
 
     function updateConfig() {
-        console.log(configManager.selectedConfig[listeId])
-        configManager.selectedConfig.update(configEl => {
-            configEl[listeId].behavior = config.behavior;
-            configEl[listeId].style = config.style;
-            configEl[listeId].type = config.type;
-            return configEl;
-        });
+        console.log("config.type.iconType", config.type.iconType)
+        console.log("config.type.barType", config.type.barType)
+        // console.log(configManager.selectedConfig[listeId])
+        // configManager.selectedConfig.update(configEl => {
+        //     configEl[listeId].behavior = config.behavior;
+        //     configEl[listeId].style = config.style;
+        //     configEl[listeId].type = config.type;
+        //     return configEl;
+        // });
 
     }
 </script>
@@ -68,15 +72,16 @@
         </div>
         <div class="bloc">
             <p>Style</p>
-            <div class="row">
+            <!-- <div class="row">
                 <select name="header-size" id="header-size" bind:value={config.type.height} onchange={updateConfig}>
                     {#each CST.HEADER_TYPE_HEIGHT as headerHeight}
                         <option value={headerHeight.id}>{headerHeight.name}</option>
                     {/each}
                 </select>
-            </div>
+            </div> -->
             <div class="row">
                 <select name="icon-type" id="icon-type" bind:value={config.type.iconType} onchange={updateConfig}>
+                    <option value="">none</option>
                     {#each CST.ICON_TYPE as iconType}
                         <option value={iconType.id}>{iconType.name}</option>
                     {/each}
@@ -84,18 +89,19 @@
             </div>
             <div class="row">
                 <select name="bar-type" id="bar-type" bind:value={config.type.barType} onchange={updateConfig}>
+                    <option value="">none</option>
                     {#each CST.BAR_TYPE as iconType}
                         <option value={iconType.id}>{iconType.color}</option>
                     {/each}
                 </select>
             </div>
-            <div class="row">
+            <!-- <div class="row">
                 <select name="theme" id="theme" bind:value={config.style.theme} onchange={updateConfig}>
                     <option value={CST.SYSTEM_STYLE}>System theme</option>
                     <option value={CST.CUSTOM_STYLE}>Custom</option>
                 </select>
-            </div>
-            {#if config.style.theme === CST.CUSTOM_STYLE}
+            </div> -->
+            <!-- {#if config.style.theme === CST.CUSTOM_STYLE}
             <div class="row">
                 <p>Header color</p>
                 <select name="header-color" id="header-color" bind:value={config.style.header.headerColor} onchange={updateConfig}>
@@ -120,7 +126,7 @@
                 <input type="color" name="header-color" id="content-color"
                 bind:value={config.style.content.contentColor} onchange={updateConfig}><label for="content-color"></label>   
             </div>
-            {/if}
+            {/if} -->
         </div>
     </div>
     {/if}

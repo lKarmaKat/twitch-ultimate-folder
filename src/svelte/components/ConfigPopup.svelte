@@ -13,7 +13,7 @@
 
   let configManager = new ConfigManager();
   let loading = $derived.by(() => {
-    return !(configManager.channelsPickRef.length > 0 && configManager.channelsConfigList && Object.getOwnPropertyNames(configManager.channelsConfigList).length > 0)
+    return !(configManager.channelsPickRef.length > 1 && configManager.channelsConfigList && Object.getOwnPropertyNames(configManager.channelsConfigList).length > 0)
   })
 
 
@@ -131,7 +131,7 @@
           </div>
           {/if}
           <div class="config-container">
-            <!-- <ConfigPannel configManager={configManager}/> -->
+            <ConfigPannel configManager={configManager}/>
           </div>
           <!-- {#if !loading} -->
           {#if configManager.channelsPickRef.length && Object.getOwnPropertyNames(configManager.channelsConfigList).length > 0}

@@ -20,7 +20,7 @@
 	let barTypeColor = $derived.by(() => {
 		let color = CST.BAR_TYPE.find(e => e.id === type.barType);
 		if (!color || !color.color) {
-			throw new Error("Display: bar color not found")
+			return 0;
 		}
 		return color.color;
 	});
@@ -194,7 +194,7 @@
 		{#if listId !== 'rootList'}
 		<!-- svelte-ignore a11y_click_events_have_key_events -->
 		<!-- svelte-ignore a11y_no_static_element_interactions -->
-		<div class="list-header" style="--header-color:{header?.headerColor} --theme-color:{barTypeColor}" class:border={barTypeColor} onclick={toggleAutoCollapse}>
+		<div class="list-header" style="--header-color:{header?.headerColor};--theme-color:{barTypeColor}" class:border={barTypeColor} onclick={toggleAutoCollapse}>
 			<div class="left">
 				<div class="flex-row">
 					<span class="icon-container" class:extended>
@@ -352,7 +352,7 @@
 		justify-content: space-between;
 		align-items: center;
 		padding: 0.4em 0 0.4em 0.0em;
-		background-color: var(--header-color);
+		background-color: var(--header-color); /* not currently used*/
 		/* position: relative; */
 		/* background-color: rgb(119, 56, 119); */
 		/* width: 100%; */
