@@ -1,6 +1,6 @@
 {
-    "name": "Hello Extensions",
-    "description": "Base Level Extension",
+    "name": "Ultimate Twitch Folders",
+    "description": "Allows to reorganize the channels you follow by making lists/sublists",
     "version": "1.0",
     "manifest_version": 3,
     "background": {
@@ -36,5 +36,11 @@
         "http://*/*",
         "https://*/*"
         ]
+    },
+    "icons": {
+          "16": "assets/icon16.png",
+          "32": "assets/icon32.png",
+          "48": "assets/icon48.png",
+          "128": "assets/icon128.png"
     }
 }

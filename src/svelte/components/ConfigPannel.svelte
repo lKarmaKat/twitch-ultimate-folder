@@ -18,7 +18,6 @@
     configChangeEvent.subscribe((value) => {
         listeId = value;
         config = configManager.selectedConfig[listeId];
-        console.log("changed config", config)
     })
 
     function updateListName() {

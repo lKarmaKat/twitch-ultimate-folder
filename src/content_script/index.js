@@ -81,17 +81,24 @@ function injectScript() {
 
 }
 
-const observer = new MutationObserver((mut, obs) => {
-  // let t = document.body
+const injectObs = (obs, m) => {
   let t = document.querySelector("#side-nav .side-nav-section")
   if (t) {
     injectScript();
+    if (m) {
+      console.log("Injected by mutation observer")
+    }
     obs.disconnect();
   }
+}
+const observer = new MutationObserver((mut, obs) => {
+  // let t = document.body
+  injectObs(obs, true)
 });
 
 observer.observe(document.body, {
   childList: true,
   subtree: true
 });
+injectObs(observer);
 

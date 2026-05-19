@@ -55,7 +55,7 @@ class ConfigManager {
                 for (const [id, streamInfo] of msg.data) {
                     this.channelsPickRefMap.set(id, streamInfo);
                 }
-                console.log("GET_STREAMS_REF", this.channelsPickRefMap.get("91232178"))
+                // console.log("GET_STREAMS_REF", this.channelsPickRefMap.get("91232178"))
             }
         }
         this.bridge = new PortConnector(dataReceivedCallback);

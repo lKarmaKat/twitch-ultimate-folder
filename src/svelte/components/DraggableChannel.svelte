@@ -9,11 +9,12 @@
 	function navigate(event) {
         event.preventDefault();
         if (!blockNavigation) {
-            console.log("sent");
             window.parent.postMessage({
                 type: 'navigate',
 				channel: channelName
             }, '*');
+        } else {
+            
         }
 	}
 
@@ -44,9 +45,12 @@
         width: 100% !important;
     }
     .layout-flex {
-        display: flex !important;
+        display: flex;
         -webkit-box-pack: justify !important;
         justify-content: space-between !important;
+    }
+    :host([collapsed]) .layout-flex {
+        display: none;
     }
     .title {
         text-overflow: ellipsis;
@@ -155,9 +159,6 @@
         height: 0.6em;
         display: inline-block;
         position: relative;
-    }
-    :host([collapsed]) .layout-flex {
-        display: none
     }
 /* 	
 	:global(.tooltip:not(:focus) #tooltip::before) {

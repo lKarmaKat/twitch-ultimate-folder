@@ -49,7 +49,7 @@ test.beforeEach(async ({ page }) => {
 					},
 					sendMessage: () => Promise.resolve(),
 					connect: (extId: any, type: any) => {
-						console.log("CONNECT")
+						console.log("TEST PORT MOCK NEW CONNECTION")
 						const port = {
 							onMessage: {
 								addListener: (callback: (msg: any) => void) => {

@@ -88,6 +88,7 @@ export class DataFormatter {
     getAllLiveFollowedStreams() {
         return this.twitchApi.getUserFollowedLiveStream()
             .then(channels => {
+                this.allLiveFollowedStreams.clear();
                 channels.forEach(channel => {
                     this.allLiveFollowedStreams.set(
                         channel.user_id,

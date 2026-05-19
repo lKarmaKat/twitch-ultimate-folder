@@ -56,6 +56,18 @@ export default defineConfig(({ command, mode }) => {
         }, {
           src: 'e2e/twitch-copy.html',
           dest: 'assets'
+        },{
+          src: 'src/assets/selected_icons/icon16.png',
+          dest: 'assets'
+        },{
+          src: 'src/assets/selected_icons/icon32.png',
+          dest: 'assets'
+        },{
+          src: 'src/assets/selected_icons/icon48.png',
+          dest: 'assets'
+        },{
+          src: 'src/assets/selected_icons/icon128.png',
+          dest: 'assets'
         }
       ]
     })
