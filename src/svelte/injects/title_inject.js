@@ -1,6 +1,7 @@
 import TitlePopup from "../components/TitlePopup.svelte";
 import { mount } from 'svelte'
 
-mount(TitlePopup, {
-     target: document.body,
-})
+// TODO USELESS AS TitlePopup is injected with the sidebar script
+// mount(TitlePopup, {
+//      target: document.body,
+// })

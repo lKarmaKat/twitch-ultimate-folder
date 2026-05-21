@@ -1,4 +1,5 @@
-import PortConnector from './portConnector.js';
+import PortConnector from './portConnector.svelte.js';
+import { alignmentLeft } from './event.js';
 
 export function maybeTooltip(node, title) {
     if (!title) return;
@@ -7,10 +8,13 @@ export function maybeTooltip(node, title) {
 export function tooltip(node, params) {
     let tt = document.querySelector("#custom-tooltip");
 	let alignedLeft = true;
-	let alignmentCb = (data) => {
-    	alignedLeft = data.data
-  	}
-	let port = new PortConnector(alignmentCb, "alignment")
+	alignmentLeft.subscribe((newAlignment) => {
+		alignedLeft = newAlignment
+	});
+	// let alignmentCb = (data) => {
+    // 	alignedLeft = data.data
+  	// }
+	// let port = new PortConnector(alignmentCb, "alignment", "tooltip from svelte component")
     if (tt)
 	    tt.classList.add('tooltip');
     

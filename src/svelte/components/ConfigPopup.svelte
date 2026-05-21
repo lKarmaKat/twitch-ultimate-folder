@@ -6,7 +6,7 @@
   import DraggableChannel from './DraggableChannel.svelte';
   import DisplayWrapper from './DisplayWrapper.svelte';
   import ConfigManager from '../configManager.svelte';
-  import PortConnector from '../portConnector.js';
+  import PortConnector from '../portConnector.svelte';
   import {  STARTUP_CONF } from '../../constantes.js'
   import { writable, derived } from 'svelte/store';
   

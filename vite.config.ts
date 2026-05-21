@@ -82,7 +82,7 @@ export default defineConfig(({ command, mode }) => {
         content_script: 'src/content_script/index.js',
         popup_hmtl: 'src/iframe/config-popup.html',
         sidebar_inject: 'src/svelte/injects/sidebar_inject.js',
-        title_inject: 'src/svelte/injects/title_inject.js',
+        // title_inject: 'src/svelte/injects/title_inject.js',
         popup: 'src/action_popup/popup.html',
         popup_inject: 'src/svelte/injects/popup_inject.js'
         

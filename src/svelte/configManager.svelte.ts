@@ -1,4 +1,4 @@
-import PortConnector from './portConnector.js';
+import PortConnector from './portConnector.svelte.js';
 import type { StreamsInfos } from '@src/service_worker/models/streamsInfos.model';
 import * as CST from '../constantes.js'
 import type { UserConfigs, I_CONFIG } from '../service_worker/models/userStructure.js';

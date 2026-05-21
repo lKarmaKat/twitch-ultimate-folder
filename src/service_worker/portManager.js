@@ -30,18 +30,18 @@ class PortManager {
 
         chrome.runtime.onConnectExternal.addListener((port) => {
                 this.externalPorts.push(port);
-                console.log("+ new connection external port", port);
+                console.log("+ external new connection  port", port);
                 port.onMessage.addListener((message, port) => {
                     console.log("+ received :", message, "from ", port);
                     this.sendMessageToTabs({message: "received"});
                 });
                 
                 port.onDisconnect.addListener(() => {
-                    console.log("+ Port disconnected external port", port.sender);
+                    console.log("- external Port disconnected port", port.sender);
                     
                     let indexToRemove = this.externalPorts.indexOf(port);
                     this.externalPorts.splice(indexToRemove, 1);
-                    console.log("+ ports are now", this.externalPorts);
+                    console.log("external ports are now", this.externalPorts);
                 });
             if (port.name === "eventbus") {
                 sendCurrentConfigOnConnect(port);

@@ -1,6 +1,6 @@
 <script>
   	import DraggableChannel from './DraggableChannel.svelte';
-	import { maybeTooltip, tooltip } from "../tooltip";
+	import { maybeTooltip, tooltip } from "../tooltip.svelte";
     import * as CST from '../../constantes.js'
 	import { writable } from 'svelte/store'
     import FolderIcon from './icons/FolderIcon.svelte';
