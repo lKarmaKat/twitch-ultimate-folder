@@ -44,8 +44,11 @@ class PortManager {
                     console.log("external ports are now", this.externalPorts);
                 });
             if (port.name === "eventbus") {
-                sendCurrentConfigOnConnect(port);
-                sendStreamInfoOnConnect(port);
+                // setTimeout(() => {
+
+                    sendCurrentConfigOnConnect(port);
+                    sendStreamInfoOnConnect(port);
+                // }, 3000)
             } else if (port.name === 'theme') {
                 sendCurrentThemeOnConnect(port);
             }  else if (port.name === 'alignment') {

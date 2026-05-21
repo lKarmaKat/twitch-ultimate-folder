@@ -8,7 +8,6 @@ class PortConnector {
     cb;
     nm;
     constructor(msgCallback, name = "eventbus", ) {
-        console.log("Port connector", source)
         this.cb = msgCallback;
         this.nm = name;
         this.lauchPort(msgCallback, name)
