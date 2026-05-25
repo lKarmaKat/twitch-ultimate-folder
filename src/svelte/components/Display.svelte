@@ -8,6 +8,18 @@
 	import Self from './Display.svelte'
     import AngleIcon from './icons/AngleIcon.svelte';
     import CrossIcon from './icons/CrossIcon.svelte';
+    import ValorantIcon from './icons/ValorantIcon.svelte';
+    import LOLIcon from './icons/LOLIcon.svelte';
+    import RocketLeague1Icon from './icons/RocketLeague1Icon.svelte';
+    import RocketLeague2Icon from './icons/RocketLeague2Icon.svelte';
+    import COD1Icon from './icons/COD1Icon.svelte';
+    import COD2Icon from './icons/COD2Icon.svelte';
+    import COD3Icon from './icons/COD3Icon.svelte';
+    import COD4Icon from './icons/COD4Icon.svelte';
+    import CSIcon from './icons/CSIcon.svelte';
+    import MinecraftIcon from './icons/MinecraftIcon.svelte';
+    import MinecraftIcon2 from './icons/MinecraftIcon2.svelte';
+    import CoffeeIcon from './icons/CoffeeIcon.svelte';
 
     let { listId = "rootList", configManager }  = $props();
 	
@@ -206,6 +218,30 @@
 							<AngleIcon />
 						{:else if type.iconType === 4}	
 							<CrossIcon />
+						{:else if type.iconType === 5}	
+							<ValorantIcon />
+						{:else if type.iconType === 6}	
+							<LOLIcon />
+						{:else if type.iconType === 7}	
+							<RocketLeague1Icon />
+						{:else if type.iconType === 8}	
+							<RocketLeague2Icon />
+						{:else if type.iconType === 9}	
+							<COD1Icon />
+						{:else if type.iconType === 10}	
+							<COD2Icon />
+						{:else if type.iconType === 11}	
+							<COD3Icon />
+						{:else if type.iconType === 12}	
+							<COD4Icon />
+						{:else if type.iconType === 13}	
+							<CSIcon />
+						{:else if type.iconType === 14}	
+							<MinecraftIcon />
+						{:else if type.iconType === 15}	
+							<MinecraftIcon2 />
+						{:else if type.iconType === 16}	
+							<CoffeeIcon />
 						{/if}
 					</span>
 					<p class="list-title">{configManager.selectedConfig[listId]?.name}</p>

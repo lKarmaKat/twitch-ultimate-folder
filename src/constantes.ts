@@ -46,6 +46,42 @@ export const ICON_TYPE = [
   }, {
     id: 4,
     name: 'cross'
+  }, {
+    id: 5,
+    name: 'Valorant'
+  }, {
+    id: 6,
+    name: 'League of Legends'
+  }, {
+    id: 7,
+    name: 'Rocket League 1'
+  }, {
+    id: 8,
+    name: 'Rocket League 2'
+  }, {
+    id: 9,
+    name: 'CoD 1'
+  }, {
+    id: 10,
+    name: 'CoD 2'
+  }, {
+    id: 11,
+    name: 'CoD 3'
+  }, {
+    id: 12,
+    name: 'CoD 4'
+  }, {
+    id: 13,
+    name: 'Counter Strike'
+  }, {
+    id: 14,
+    name: 'Minecraft'
+  }, {
+    id: 15,
+    name: 'Minecraft 2'
+  }, {
+    id: 16,
+    name: 'Coffee'
   }
 ]
 
