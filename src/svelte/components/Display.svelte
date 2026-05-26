@@ -176,19 +176,19 @@
 		if (configManager.selectedConfig[listId] && configManager.selectedConfig[listId].items) {
 			for (let ch of configManager.selectedConfig[listId].items) {
 				if (ch.id === CST.ALL_OTHER_CHANNELS) {
-					allOtherChannels = true;
+					return true;
 				} else if (ch.type === CST.TYPE_LIST) {
-					otherListWithOnlineChannel = hasLiveChannelCallback(ch.id)
+					if (hasLiveChannelCallback(ch.id))
+					return true;
 				} else {
-					let liveChannel = getNodeIfLive(ch);
-					if (liveChannel) {
-						liveChannels.add(ch);
+					if (getNodeIfLive(ch)) {
+						return true;
 					}
 				}
 			}
 			// counter = liveChannels.size;
 		}
-		return liveChannels.size > 0 || otherListWithOnlineChannel || allOtherChannels;
+		return false;
 	}
 
 	let liveChannels = $derived.by(() => {

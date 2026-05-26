@@ -48,12 +48,16 @@ class PortManager {
 
                     sendCurrentConfigOnConnect(port);
                     sendStreamInfoOnConnect(port);
-                // }, 3000)
+                // }, 1200)
             } else if (port.name === 'theme') {
                 sendCurrentThemeOnConnect(port);
             }  else if (port.name === 'alignment') {
                 sendCurrentAlignmentOnConnect(port)
             }
+            // setTimeout(() => {
+                // port.disconnect()
+                // console.log("disconnected", this.externalPorts)
+            // }, 2000)
         });
     }
 

@@ -1,3 +1,6 @@
+import { portConnected } from './event.js';
+
+
 class PortConnector {
     portConnected = $state(false);
     port = null;
@@ -19,7 +22,7 @@ class PortConnector {
         });
 
         if (this.port) {
-            this.portConnected = true;
+            portConnected.set(true);
         
             this.port.onMessage.addListener((msg) => {
                 // console.log("sidebar received ", msg)
@@ -27,8 +30,8 @@ class PortConnector {
             });
             this.port.onDisconnect.addListener(() => {
                 console.log(this.nm, "disconnected")
-                // this.repollForPort()
-                this.portConnected = false;
+                this.repollForPort()
+                portConnected.update(() => false);
                 // this.port = undefined;
             });
             this.startPing();

@@ -4,7 +4,7 @@
   import ConfigManager from '../configManager.svelte';
   import PortConnector from '../portConnector.svelte.js';
   import NoLiveChannels from './NoLiveChannels.svelte';
-  import { alignmentLeft } from '../event';
+  import { alignmentLeft, portConnected } from '../event';
   import * as CST from '../../constantes'
   
   import { writable, derived } from 'svelte/store';
@@ -43,6 +43,17 @@
   //   }
   // })
 
+  let init = $state(false);
+  let isConnected = $state(false);
+  portConnected.subscribe((newValue) => {
+    if (!init && newValue) {
+      init = true;
+      isConnected = true;
+    } else if (!newValue) {
+      isConnected = false;
+    }
+    isConnected = newValue;
+  })
   let theme = $state(true);
   let themeCb = (data) => {
     theme = data.data;
@@ -57,33 +68,46 @@
   let alignmentPort = new PortConnector(alignmentCb, 'alignment');
 
 
-  function checkForLiveChannelInList(listId) {
-    for (let currentChannel of configManager?.selectedConfig[listId].items) {
-      if (currentChannel.type === CST.TYPE_LIST) {
-        console.log("checkingList for ", currentChannel.id)
-        return checkForLiveChannelInList(currentChannel.id);
-      }
-      else if (currentChannel.channel_id === CST.ALL_OTHER_CHANNELS) {
-        return false;
-      }
-      else if (currentChannel.channel_id && configManager.channelsPickRefMap.has(currentChannel.channel_id)) {
-        console.log("checking for channel", currentChannel.channel_id, configManager.channelsPickRefMap.get(currentChannel.channel_id).isLive)
-        if (configManager.channelsPickRefMap.get(currentChannel.channel_id).isLive) {
-          return false;
-        }
+function checkForLiveChannelInList(listId) {
+  const items = configManager?.selectedConfig?.[listId]?.items;
+  
+  if (!items || items.length === 0) {
+    return false;
+  }
+  
+  for (let currentChannel of items) {
+    if (currentChannel.type === CST.TYPE_LIST) {
+      // console.log("checkingList for", currentChannel.id);
+      if (checkForLiveChannelInList(currentChannel.id)) {
+        return true; // Sortie anticipée
       }
     }
-    return true;
+    else if (currentChannel.channel_id === CST.ALL_OTHER_CHANNELS) {
+        return true;
+    }
+    else if (currentChannel.channel_id) {
+      const channelInfo = configManager.channelsPickRefMap?.get(currentChannel.channel_id);
+      if (!channelInfo) {
+        // console.warn("Channel not found in map:", currentChannel.channel_id);
+        continue;
+      }
+      if (channelInfo.isLive) {
+        return true;
+      }
+    }
   }
+  
+  return false;
+}
 
   let noLiveChannels = $derived.by(() => {
-    console.log("start##########")
+    // console.log("+++ start noLiveChannels")
     if (configManager?.selectedConfig && configManager.channelsPickRef?.length > 0) {
       let result = checkForLiveChannelInList('rootList');
-      console.log("#####final result ", result)
-      return result;
+      // console.log("--- final result ", result)
+      return !result;
     }
-    console.log("end##########")
+    // console.log("--- default true noLiveChannels");
     return true;
   })
 
@@ -92,6 +116,9 @@
 </script>
 
 <div id="display-container" class="display-wrapper" class:dark={theme} class:light={!theme} class:al-left={alignementLeft} class:al-right={!alignementLeft}>
+  {#if !isConnected}
+    Port disconnected
+  {/if}
   {#if !configManager.selectedConfig || configManager.channelsPickRef?.length === 0}
     <WaitingConfig />
   {:else if noLiveChannels}
