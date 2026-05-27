@@ -3,9 +3,9 @@
 	import { maybeTooltip, tooltip } from "../tooltip.svelte";
     import * as CST from '../../constantes.js'
 	import { writable } from 'svelte/store'
+	import Self from './Display.svelte'
     import FolderIcon from './icons/FolderIcon.svelte';
     import DotIcon from './icons/DotIcon.svelte';
-	import Self from './Display.svelte'
     import AngleIcon from './icons/AngleIcon.svelte';
     import CrossIcon from './icons/CrossIcon.svelte';
     import ValorantIcon from './icons/ValorantIcon.svelte';
@@ -20,6 +20,7 @@
     import MinecraftIcon from './icons/MinecraftIcon.svelte';
     import MinecraftIcon2 from './icons/MinecraftIcon2.svelte';
     import CoffeeIcon from './icons/CoffeeIcon.svelte';
+    import IconPicker from './icons/IconPicker.svelte';
 
     let { listId = "rootList", configManager }  = $props();
 	
@@ -210,39 +211,10 @@
 			<div class="left">
 				<div class="flex-row">
 					<span class="icon-container" class:extended>
-						{#if type.iconType === 1}
-							<FolderIcon />
-						{:else if type.iconType === 2}	
-							<DotIcon />
-						{:else if type.iconType === 3}	
-							<AngleIcon />
-						{:else if type.iconType === 4}	
-							<CrossIcon />
-						{:else if type.iconType === 5}	
-							<ValorantIcon />
-						{:else if type.iconType === 6}	
-							<LOLIcon />
-						{:else if type.iconType === 7}	
-							<RocketLeague1Icon />
-						{:else if type.iconType === 8}	
-							<RocketLeague2Icon />
-						{:else if type.iconType === 9}	
-							<COD1Icon />
-						{:else if type.iconType === 10}	
-							<COD2Icon />
-						{:else if type.iconType === 11}	
-							<COD3Icon />
-						{:else if type.iconType === 12}	
-							<COD4Icon />
-						{:else if type.iconType === 13}	
-							<CSIcon />
-						{:else if type.iconType === 14}	
-							<MinecraftIcon />
-						{:else if type.iconType === 15}	
-							<MinecraftIcon2 />
-						{:else if type.iconType === 16}	
-							<CoffeeIcon />
-						{/if}
+						<IconPicker iconType={type.iconType} />
+					</span>
+					<span class="icon-container title" class:extended use:maybeTooltip={configManager.selectedConfig[listId]?.name}>
+						<IconPicker iconType={type.iconType} />
 					</span>
 					<p class="list-title">{configManager.selectedConfig[listId]?.name}</p>
 					<!-- <div class='list-icon'  use:maybeTooltip={configManager.selectedConfig[listId]?.name}>
@@ -351,10 +323,13 @@
         padding: 0 !important;
         margin: 0 !important;
     }
-	:host([collapsed]) .list-icon {
-		display: block
+	.right {
+		display: block;
 	}
-	.list-icon {
+
+	:host(:not([collapsed])) .icon-container.title,
+	:host([collapsed]) span.icon-container:not(.title),
+	:host([collapsed]) .right {
 		display: none;
 	}
 	:host([collapsed]) .list-title {

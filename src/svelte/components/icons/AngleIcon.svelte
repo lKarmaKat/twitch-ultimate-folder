@@ -24,14 +24,14 @@
     }
 
     :global(.list-header:hover) div.container,
-    :global(.icon-container.extended) div.container{
+    :global(.icon-container.extended) div.container {
         transform: rotate(180deg);
     }
 
 
-    :global(.icon-container) div.container{
+    /* :global(.icon-container) div.container{
         transform: rotate(0deg);
-    }
+    } */
 
 </style>
 
