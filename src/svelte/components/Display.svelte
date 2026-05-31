@@ -109,8 +109,25 @@
 		return set;
 	}
 
+	function hasAllOtherChannels(set) {
+		for (let current of set) {
+			if (current === CST.ALL_OTHER_CHANNELS) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 	let counter = $derived.by(() => {
 		let set = getChannelsInConfig();
+		let containsAllOtherChannels = hasAllOtherChannels(set);
+		if (containsAllOtherChannels) {
+			let item = {};
+			item.sort === CST.ALPHA_SORT
+			let s = getAllOtherChannels(configManager.channelsPickRef, item);
+			set = new Set();
+			s.forEach(e => set.add(e.channel_id));
+		}
 		let count = 0;
 		set.forEach(e => {
 			let channel = configManager.getLiveChannel(e);
