@@ -84,16 +84,10 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
     void sender;
     console.log("MESSAGE", msg.type, msg.data);    
   if (msg.type === CST.SAVE_CHANNELS_LIST) {
-    // nettoyer input
     console.log("saving channels list bg", msg.data);
-    // chrome.storage.local.set({ currentConfig: msg.data});
-    configManager.saveConfig(msg.data);
-    // TODO peux mieux faire fin ça fonctionne mais peut mieux faire
-    setTimeout(() => {
-      configManager.getConfigObjectForCurrentUser().then((currentConfig) => {
-        portManager.sendMessageToAllTabs(CST.GET_CURRENT_CONFIGURATION, currentConfig)
-      });
-    }, 1500)
+    configManager.saveConfig(msg.data).then((currentConfig) => {
+      portManager.sendMessageToAllTabs(CST.GET_CURRENT_CONFIGURATION, currentConfig);
+    }).catch(err => logBackgroundError("background:saveConfig", err));
     return false;
   }
   else if (msg.type === CST.RESET_CONFIG) {

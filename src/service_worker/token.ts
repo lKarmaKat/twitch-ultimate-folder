@@ -1,8 +1,9 @@
 import type { Writable } from "svelte/store";
 import { wrapError } from "./errors";
+import { CLIENT_ID } from "../constantes";
 
 export class TokenManager {
-    CLIENT_ID = '0cccietj726skd2jwlf39ymhmyzbi7';
+    CLIENT_ID = CLIENT_ID;
     REDIRECT_URI = chrome.identity.getRedirectURL();
     AUTH_URL = `https://id.twitch.tv/oauth2/authorize?client_id=${this.CLIENT_ID}&response_type=token&redirect_uri=${encodeURIComponent(this.REDIRECT_URI)}&scope=channel:read:subscriptions+user:read:email+user:read:follows`;
 

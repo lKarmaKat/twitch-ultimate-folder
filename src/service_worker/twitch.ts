@@ -4,10 +4,11 @@ import type { ChannelsFollowed } from './models/rest/channels-followed';
 import type { ProfilePicInfos } from './models/profilePicInfos.model';
 import type { StreamsFollowed } from './models/rest/streams-followed';
 import type { User } from "./models/user";
+import { CLIENT_ID } from "../constantes";
 
 export class TwitchApi {
     tokenManager;
-    CLIENT_ID = '0cccietj726skd2jwlf39ymhmyzbi7';
+    CLIENT_ID = CLIENT_ID;
     followedLiveStream = "https://api.twitch.tv/helix/streams/followed";
     allFollowedStream = "https://api.twitch.tv/helix/channels/followed";
 

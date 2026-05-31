@@ -87,38 +87,34 @@ export class ConfigManager {
         return null;
     }
 
-    saveConfig(configToSave: I_CONFIG) {
-        if (!configToSave) return;
-        
-        let userId: number;
-        if (!this.user) {
-            userId = 0;
+    async saveConfig(configToSave: I_CONFIG): Promise<UserConfigs> {
+        if (!configToSave) throw new Error("No config to save");
+
+        const userId = this.user?.id ?? 0;
+        const data: { [key: string]: UserConfigs } = await chrome.storage.local.get(String(userId));
+        let userStructure: UserConfigs = data[String(userId)];
+
+        if (userStructure) {
+            const index = userStructure.configsList.findIndex(
+                conf => conf.rootList.name === configToSave.rootList.name
+            );
+            if (index >= 0) {
+                userStructure.configsList[index] = configToSave;
+            } else {
+                userStructure.configsList.push(configToSave);
+            }
+            await chrome.storage.local.set({ [String(userId)]: userStructure });
         } else {
-            userId = this.user.id;
+            userStructure = {
+                userId,
+                currentConfig: configToSave.rootList.name,
+                configsList: [configToSave]
+            };
+            await chrome.storage.local.set({ [String(userId)]: userStructure });
         }
 
-        chrome.storage.local.get(String(userId), (userContent: { [key: string]: UserConfigs }) => {
-            let userStructure: UserConfigs = userContent[userId];
-            if (userStructure) {
-                let index = userStructure.configsList.findIndex(conf => conf.rootList.name === configToSave.rootList.name);
-                if (index >= 0) {
-                    userStructure.configsList[index] = configToSave;
-                } else {
-                    userStructure.configsList.push(configToSave);
-                }
-                console.log("Saving config in existing config struc", userStructure);
-                chrome.storage.local.set(userContent);
-            } else {
-                let c: any = {};
-                c[userId] = {
-                    userId: userId, 
-                    currentConfig: configToSave.rootList.name,
-                    configsList: [ configToSave ]
-                }
-                console.log("Saving new configObject", c);
-                chrome.storage.local.set(c)
-            }
-        });
+        this.userConfigs = userStructure;
+        return userStructure;
     }
     /**
      * 
