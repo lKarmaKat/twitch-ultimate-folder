@@ -43,6 +43,7 @@ let sendStreamInfoOnConnect = (port: chrome.runtime.Port) => {
 
 let sendCurrentConfigOnConnect = (port: chrome.runtime.Port) => {
     configManager.getConfigObjectForCurrentUser().then((currentConfig) => {
+      if (!currentConfig) return;
       port.postMessage({
         "type": CST.GET_CURRENT_CONFIGURATION,
         "data": currentConfig
@@ -91,17 +92,15 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
     return false;
   }
   else if (msg.type === CST.RESET_CONFIG) {
-      let resetConf = CST.STARTUP_CONF;
-      // chrome.storage.local.set({currentConfig: resetConf});
-      configManager.saveConfig(resetConf);
-      portManager.sendMessageToAllTabs(CST.GET_CURRENT_CONFIGURATION, resetConf)
-      // sendResponse(resetConf);
+    configManager.saveConfig(CST.STARTUP_CONF).then((currentConfig) => {
+      portManager.sendMessageToAllTabs(CST.GET_CURRENT_CONFIGURATION, currentConfig);
+    }).catch(err => logBackgroundError("background:resetConfig", err));
     return false;
   } else if (msg.type === CST.GET_CURRENT_CONFIGURATION) {
     configManager.getConfigObjectForCurrentUser().then((currentConfig) => {
-      sendResponse(currentConfig);
+      sendResponse(currentConfig ?? null);
     }).catch(err => {
-      logBackgroundError("background:sendCurrentConfigOnConnect", err)
+      logBackgroundError("background:getConfig", err)
     });
     return true;
   } else if (msg.type === CST.DISPLAY_POPUP) {
