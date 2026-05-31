@@ -196,7 +196,7 @@ export const ALL_OTHER_CHANNELS_ELEMENT = {
         "channel_name": "All others channels",
         "sort": 'ALPHA',
         "isLive": false,
-        "profile_image_url": "../../assets/profil.png",
+        "profile_image_url": "../../assets/all_other_channels.png",
         "viewer_count": 0, 
         "language": "", 
         "game_name": "", 

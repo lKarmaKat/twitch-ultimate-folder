@@ -8,7 +8,7 @@
 
 	  
 
-	  let { configManager, listId, requestDeleteToParent } = $props()
+	let { configManager, listId, requestDeleteToParent } = $props()
 
 
 	// let duplicatedElementError = $derived(!)
@@ -142,12 +142,12 @@
 			</div>
 			{:else if item.id === CST.ALL_OTHER_CHANNELS}
 				<DraggableChannel 
-					channelId={item.channel_id} 
-					channelName={item.channel_name} 
-					channelProfilePic={item.profile_image_url} 
-					viewerCount={item.viewer_count}
-					gameName={item.game_name}
-					isLive={item.isLive}
+					channelId={CST.ALL_OTHER_CHANNELS_ELEMENT.channel_id} 
+					channelName={CST.ALL_OTHER_CHANNELS_ELEMENT.channel_name} 
+					channelProfilePic={CST.ALL_OTHER_CHANNELS_ELEMENT.profile_image_url} 
+					viewerCount={CST.ALL_OTHER_CHANNELS_ELEMENT.viewer_count}
+					gameName={CST.ALL_OTHER_CHANNELS_ELEMENT.game_name}
+					isLive={CST.ALL_OTHER_CHANNELS_ELEMENT.isLive}
 					bearCard=true/>
 			{:else}
 			{@const i = getNode(item)}

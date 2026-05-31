@@ -118,7 +118,7 @@
         border: none;
         /* vertical-align: top; */
     }
-    .profile-picture img.offline {
+    .profile-picture img.offline:not(.bearCard) {
         filter: grayscale(100%);
     }
     a {
@@ -185,7 +185,7 @@
     <!-- <div class="layout-container" style="background-color: {color};"> -->
         <div class="flex-profile-picture">
             <div class="profile-picture">
-                <img class="profile-picture" class:offline={!isLive} src={channelProfilePic} alt="" />
+                <img class="profile-picture" class:bearCard class:offline={!isLive} src={channelProfilePic} alt="" />
             </div>
         </div>
         <div class="layout">

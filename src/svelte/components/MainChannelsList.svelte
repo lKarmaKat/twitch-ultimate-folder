@@ -101,7 +101,8 @@ function show() {
             viewerCount={item.viewer_count}
             gameName={item.game_name}
             isLive={item.isLive}
-            color=''/>
+            color=''
+            bearCard=true/>
             {/each}
 </section>
 

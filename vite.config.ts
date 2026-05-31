@@ -51,6 +51,9 @@ export default defineConfig(({ command, mode }) => {
           src: 'src/assets/profil.png',
           dest: 'assets'
         }, {
+          src: 'src/assets/all_other_channels.png',
+          dest: 'assets'
+        }, {
           src: 'e2e/mock-twitch.html',
           dest: 'assets'
         }, {
