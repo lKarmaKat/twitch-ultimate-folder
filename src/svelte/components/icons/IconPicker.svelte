@@ -15,6 +15,16 @@
     import MinecraftIcon from './MinecraftIcon.svelte';
     import MinecraftIcon2 from './MinecraftIcon2.svelte';
     import CoffeeIcon from './CoffeeIcon.svelte';
+    import DotaIcon from './DotaIcon.svelte';
+    import FortniteIcon from './FortniteIcon.svelte';
+    import FortniteIcon2 from './FortniteIcon2.svelte';
+    import OverwatchIcon from './OverwatchIcon.svelte';
+    import ArcRaidersIcon from './ArcRaidersIcon.svelte';
+    import R6Icon from './R6Icon.svelte';
+    import GTA6Icon from './GTA6Icon.svelte';
+    import GTA5Icon from './GTA5Icon.svelte';
+    import MusicIcon1 from './MusicIcon1.svelte';
+    import MusicIcon2 from './MusicIcon2.svelte';
     let {iconType} = $props()
 </script>
 
@@ -50,5 +60,25 @@
     <MinecraftIcon2 />
 {:else if iconType === 16}	
     <CoffeeIcon />
+{:else if iconType === 17}
+    <DotaIcon />
+{:else if iconType === 18}
+    <FortniteIcon />
+{:else if iconType === 19}
+    <FortniteIcon2 />
+{:else if iconType === 20}
+    <OverwatchIcon />
+{:else if iconType === 21}
+    <ArcRaidersIcon />
+{:else if iconType === 22}
+    <R6Icon />
+{:else if iconType === 23}
+    <GTA5Icon />
+{:else if iconType === 24}
+    <GTA6Icon />
+{:else if iconType === 25}
+    <MusicIcon1 />
+{:else if iconType === 26}
+    <MusicIcon2 />
 {/if}
 

@@ -83,6 +83,36 @@ export const ICON_TYPE = [
   }, {
     id: 16,
     name: 'Coffee'
+  }, {
+    id: 17,
+    name: 'Dota'
+  }, {
+    id: 18,
+    name: 'Fortnite'
+  }, {
+    id: 19,
+    name: 'Fortnite 2'
+  }, {
+    id: 20,
+    name: 'Overwatch'
+  }, {
+    id: 21,
+    name: 'Arc Raiders'
+  }, {
+    id: 22,
+    name: 'Rainbow 6'
+  }, {
+    id: 23,
+    name: 'GTA 5'
+  }, {
+    id: 24,
+    name: 'GTA 6'
+  }, {
+    id: 25,
+    name: 'Musique 1'
+  }, {
+    id: 26,
+    name: 'Musique 2'
   }
 ]
 
