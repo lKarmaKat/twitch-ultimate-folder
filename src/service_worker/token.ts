@@ -10,6 +10,7 @@ export class TokenManager {
 
     token?: string | null;
     refreshToken?: string | null;
+    userId?: string;
     tokenExpirationDate = 0;
     fetchingPromise: Promise<string> | null = null;
     tokenValidationInterval = 30 * 60 * 1000;
@@ -253,6 +254,7 @@ export class TokenManager {
                     reject(new Error("TokenManager.validateAuthToken Token validation failed"));
                     return;
                 }
+                this.userId = response.user_id;
                 this.setTokenExpirationDate(response.expires_in);
                 this.nextValidationDate = Date.now() + this.tokenValidationInterval;
                 chrome.storage.local.set({
