@@ -77,7 +77,7 @@ class PortManager {
     }
 
     closeAllPorts() {
-        for (let port of [...this.port, ...this.externalPorts]) {
+        for (let port of [...this.ports, ...this.externalPorts]) {
             port.disconnect();
         }
     }

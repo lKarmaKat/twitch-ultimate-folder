@@ -1,9 +1,6 @@
 <script>
     import { maybeTooltip, tooltip } from "../tooltip.svelte";
 
-
-    
-
     let { channelId, channelName, channelProfilePic, viewerCount, gameName = null, isLive, title = '' , color = '', blockNavigation = true, bearCard = false } = $props();
 
 	function navigate(event) {

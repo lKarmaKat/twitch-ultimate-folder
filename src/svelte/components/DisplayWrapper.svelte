@@ -135,4 +135,7 @@ function checkForLiveChannelInList(listId) {
     margin-top: 5px;
     /* height: 100vh; */
   }
+  :host([collapsed]) #display-container {
+    display: none;
+  }
 </style>

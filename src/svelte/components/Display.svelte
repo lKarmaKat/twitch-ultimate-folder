@@ -213,9 +213,9 @@
 					<span class="icon-container" class:extended>
 						<IconPicker iconType={type.iconType} />
 					</span>
-					<span class="icon-container title" class:extended use:maybeTooltip={configManager.selectedConfig[listId]?.name}>
+					<!-- <span class="icon-container title" class:extended use:maybeTooltip={configManager.selectedConfig[listId]?.name}>
 						<IconPicker iconType={type.iconType} />
-					</span>
+					</span> -->
 					<p class="list-title">{configManager.selectedConfig[listId]?.name}</p>
 					<!-- <div class='list-icon'  use:maybeTooltip={configManager.selectedConfig[listId]?.name}>
 						<svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor" xmlns="http://www.w3.org/2000/svg">

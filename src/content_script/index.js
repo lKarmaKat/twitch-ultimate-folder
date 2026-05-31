@@ -68,11 +68,15 @@ function injectScript() {
 
   let c = () => {
     const collapsed = document.querySelector('.side-nav--collapsed');
-
     if (collapsed) {
       maindiv.setAttribute('collapsed', "true");
+      // collapsed.style.width = "10rem";
+
     } else {
+      const extented = document.querySelector('.side-nav--expanded')
       maindiv.removeAttribute('collapsed')
+      // extented.style.width = "auto";
+
     }
   }
   const obs = new MutationObserver(c);
