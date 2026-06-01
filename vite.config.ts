@@ -12,7 +12,7 @@ export default defineConfig(({ command, mode }) => {
     { src: 'src/iframe/*.css', dest: 'assets' },
     { src: 'src/assets/*.{css,png}', dest: 'assets' },
     { src: 'src/assets/selected_icons/*.png', dest: 'assets' },
-    ...(isDev ? [{ src: 'e2e/*.html', dest: 'assets' }] : [])
+    ...(isDev ? [{ src: 'e2e/twitch-copy.html', dest: 'assets' }] : [])
   ]
 
   return {
