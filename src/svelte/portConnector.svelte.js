@@ -6,6 +6,7 @@ class PortConnector {
     port = null;
     PING_INTERVAL = 5000;
     interval;
+    reconnectInterval = null;
     extensionId = "ijodiaomnnnjljemidchdifmpnnmcnlg";
     // extensionId = "pdfjeponpmleiodlfbmlhgbicfpbaoek";
     cb;
@@ -13,10 +14,10 @@ class PortConnector {
     constructor(msgCallback, name = "eventbus", ) {
         this.cb = msgCallback;
         this.nm = name;
-        this.lauchPort(msgCallback, name)
+        this.launchPort(msgCallback, name)
     }
 
-    lauchPort(msgCallback, name) {
+    launchPort(msgCallback, name) {
         this.port = chrome.runtime.connect(this.extensionId, {
           name: name
         });
@@ -43,23 +44,22 @@ class PortConnector {
     }
 
     repollForPort() {
-        let c = () => {
-            console.log("TRYING TO RECONNECT")
-            if (!this.portConnected) {
-                let r = this.lauchPort(this.cb, this.nm);
-                if (r) {
-                    console.log("SUCCESS", r)
-                    return true;
-                }
-                console.log("FAILED", r)
+        if (this.reconnectInterval !== null) return;
 
-                return false
+        this.reconnectInterval = setInterval(() => {
+            console.log(this.nm, "TRYING TO RECONNECT");
+            try {
+                const success = this.launchPort(this.cb, this.nm);
+                if (success) {
+                    console.log(this.nm, "RECONNECT SUCCESS");
+                    portConnected.update(() => true);
+                    clearInterval(this.reconnectInterval);
+                    this.reconnectInterval = null;
+                }
+            } catch (e) {
+                console.log(this.nm, "RECONNECT FAILED", e.message);
             }
-        }
-        setTimeout(() => {
-                if (!c())
-                    setTimeout(() => c(), 1000);
-        }, 1000)
+        }, 10000);
     }
 
     startPing() {
