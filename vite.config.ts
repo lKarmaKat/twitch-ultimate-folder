@@ -1,85 +1,60 @@
-// import { defineConfig } from 'vite'
 import { svelte } from '@sveltejs/vite-plugin-svelte'
-import { viteStaticCopy } from 'vite-plugin-static-copy';
-import webExtension from 'vite-plugin-web-extension'
-import { loadEnv, defineConfig } from 'vite'
-// import { defineConfig } from 'vitest/config';
-import { expect, test } from 'vitest';
-
-
-
+import { viteStaticCopy } from 'vite-plugin-static-copy'
+import { defineConfig } from 'vite'
 
 // https://vite.dev/config/
 export default defineConfig(({ command, mode }) => {
+  const isDev = mode !== 'production'
   console.log("CMD", command)
   console.log("MODE", mode)
+  const staticCopyTargets = [
+    { src: 'public/manifest.json', dest: '.' },
+    { src: 'src/iframe/*.css', dest: 'assets' },
+    { src: 'src/assets/*.{css,png}', dest: 'assets' },
+    { src: 'src/assets/selected_icons/*.png', dest: 'assets' },
+    ...(isDev ? [{ src: 'e2e/*.html', dest: 'assets' }] : [])
+  ]
+
   return {
-  base: './',
-  dev: mode !== 'production',
-  plugins: [
-    svelte({
-      compilerOptions: {
-        css: 'injected',
-        runes: true,
-        dev: true
+    base: './',
+    plugins: [
+      svelte({
+        compilerOptions: {
+          css: 'injected',
+          runes: true,
+          dev: isDev
+        }
+      }),
+      viteStaticCopy({ targets: staticCopyTargets })
+    ],
+    build: {
+      cssCodeSplit: true,
+      sourcemap: isDev ? 'inline' : false,
+      minify: isDev ? false : 'terser',
+      rollupOptions: {
+        input: {
+          background: 'src/service_worker/background.ts',
+          content_script: 'src/content_script/index.js',
+          popup_hmtl: 'src/iframe/config-popup.html',
+          sidebar_inject: 'src/svelte/injects/sidebar_inject.js',
+          // title_inject: 'src/svelte/injects/title_inject.js',
+          popup: 'src/action_popup/popup.html',
+          popup_inject: 'src/svelte/injects/popup_inject.js'
+        },
+        output: {
+          entryFileNames: '[name].js',
+          assetFileNames: 'assets/[name][extname]',
+          chunkFileNames: 'assets/[name].js'
+        }
       }
-    }),
-    viteStaticCopy({
-      targets: [
-        { src: 'public/manifest.json', dest: '.' },
-        { src: 'src/iframe/*.css', dest: 'assets' },
-        { src: 'src/assets/*.{css,png}', dest: 'assets' },
-        { src: 'src/assets/selected_icons/*.png', dest: 'assets' },
-        { src: 'e2e/*.html', dest: 'assets' },
-      ]
-    })
-  ],
-  build: {
-    cssCodeSplit: true,
-    sourcemap: 'inline',
-    minify: false,
-    rollupOptions: {
-      input: {
-        background: 'src/service_worker/background.ts',
-        content_script: 'src/content_script/index.js',
-        popup_hmtl: 'src/iframe/config-popup.html',
-        sidebar_inject: 'src/svelte/injects/sidebar_inject.js',
-        // title_inject: 'src/svelte/injects/title_inject.js',
-        popup: 'src/action_popup/popup.html',
-        popup_inject: 'src/svelte/injects/popup_inject.js'
-        
-
-      },
-      output: {
-        // entryFileNames: (chunk) => {
-        //   // if (['background', 'content_script', 'sidebar_inject', 'popup_inject', 'popup'].includes(chunk.name)) {
-        //     return `${chunk.name}.js`
-        //   // }
-        //   // return '[name].js'
-        // },
-        entryFileNames: '[name].js',
-
-        assetFileNames: 'assets/[name][extname]',
-        chunkFileNames: 'assets/[name].js'
-
-
-      }
-    }
-  },
-  server: {
-    open: 'assets/twitch-copy.html'
-  },
-	test: {
-    include: ["./svelte_tests/*"],
-		// If you are testing components client-side, you need to setup a DOM environment.
-		// If not all your files should have this environment, you can use a
-		// `// @vitest-environment jsdom` comment at the top of the test files instead.
-		environment: 'jsdom'
-	},
-	// Tell Vitest to use the `browser` entry points in `package.json` files, even though it's running in Node
-	resolve: process.env.VITEST
-		? {
-				conditions: ['browser']
-			}
-		: undefined
-}})
+    },
+    server: {
+      open: 'assets/twitch-copy.html'
+    },
+    test: {
+      include: ['./svelte_tests/*'],
+      environment: 'jsdom'
+    },
+    resolve: process.env.VITEST ? { conditions: ['browser'] } : undefined
+  }
+})
