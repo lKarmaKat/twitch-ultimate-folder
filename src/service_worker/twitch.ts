@@ -11,6 +11,7 @@ export class TwitchApi {
     CLIENT_ID = CLIENT_ID;
     followedLiveStream = "https://api.twitch.tv/helix/streams/followed";
     allFollowedStream = "https://api.twitch.tv/helix/channels/followed";
+    rateLimitRemaining: number = 800;
 
     constructor(tokenManager: TokenManager) {
       this.tokenManager = tokenManager;
@@ -163,6 +164,8 @@ export class TwitchApi {
       }
     
       return fetch(`${url}?${queryParams}`, options).then((response) => {
+          const remaining = response.headers.get('Ratelimit-Remaining');
+          if (remaining !== null) this.rateLimitRemaining = parseInt(remaining, 10);
           return response.json();
         }).then((response) => {
           let allChannels = [...accumulatedChannels, ...response.data];
