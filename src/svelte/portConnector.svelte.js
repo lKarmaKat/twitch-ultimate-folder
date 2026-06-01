@@ -1,8 +1,7 @@
-import { portConnected } from './event.js';
+import { portConnected } from './event.svelte.js';
 
 
 class PortConnector {
-    portConnected = $state(false);
     port = null;
     PING_INTERVAL = 5000;
     interval;
@@ -23,7 +22,7 @@ class PortConnector {
         });
 
         if (this.port) {
-            portConnected.set(true);
+            portConnected.current = true;
         
             this.port.onMessage.addListener((msg) => {
                 // console.log("sidebar received ", msg)
@@ -32,7 +31,7 @@ class PortConnector {
             this.port.onDisconnect.addListener(() => {
                 console.log(this.nm, "disconnected")
                 this.repollForPort()
-                portConnected.update(() => false);
+                portConnected.current = false;
                 // this.port = undefined;
             });
             this.startPing();
@@ -52,7 +51,7 @@ class PortConnector {
                 const success = this.launchPort(this.cb, this.nm);
                 if (success) {
                     console.log(this.nm, "RECONNECT SUCCESS");
-                    portConnected.update(() => true);
+                    portConnected.current = true;
                     clearInterval(this.reconnectInterval);
                     this.reconnectInterval = null;
                 }

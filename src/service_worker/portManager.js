@@ -54,10 +54,10 @@ class PortManager {
             }  else if (port.name === 'alignment') {
                 sendCurrentAlignmentOnConnect(port)
             }
-            // setTimeout(() => {
-                // port.disconnect()
-                // console.log("disconnected", this.externalPorts)
-            // }, 2000)
+            setTimeout(() => {
+                port.disconnect()
+                console.log("disconnected", this.externalPorts)
+            }, 2000)
         });
     }
 

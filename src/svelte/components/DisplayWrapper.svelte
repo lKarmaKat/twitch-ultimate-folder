@@ -4,10 +4,8 @@
   import ConfigManager from '../configManager.svelte';
   import PortConnector from '../portConnector.svelte.js';
   import NoLiveChannels from './NoLiveChannels.svelte';
-  import { alignmentLeft, portConnected } from '../event';
+  import { alignmentLeft, portConnected } from '../event.svelte.js';
   import * as CST from '../../constantes'
-  
-  import { writable, derived } from 'svelte/store';
 
   let { configManager = new ConfigManager(true) } = $props();
 
@@ -43,27 +41,14 @@
   //   }
   // })
 
-  let init = $state(false);
-  let isConnected = $state(false);
-  portConnected.subscribe((newValue) => {
-    if (!init && newValue) {
-      init = true;
-      isConnected = true;
-    } else if (!newValue) {
-      isConnected = false;
-    }
-    isConnected = newValue;
-  })
   let theme = $state(true);
   let themeCb = (data) => {
     theme = data.data;
   }
   let port = new PortConnector(themeCb, "theme");
 
-  let alignementLeft = $state(true);
   let alignmentCb = (data) => {
-    alignementLeft = data.data
-    alignmentLeft.set(data.data)
+    alignmentLeft.current = data.data;
   }
   let alignmentPort = new PortConnector(alignmentCb, 'alignment');
 
@@ -115,8 +100,8 @@ function checkForLiveChannelInList(listId) {
 
 </script>
 
-<div id="display-container" class="display-wrapper" class:dark={theme} class:light={!theme} class:al-left={alignementLeft} class:al-right={!alignementLeft}>
-  {#if !isConnected}
+<div id="display-container" class="display-wrapper" class:dark={theme} class:light={!theme} class:al-left={alignmentLeft.current} class:al-right={!alignmentLeft.current}>
+  {#if !portConnected.current}
     Port disconnected
   {/if}
   {#if !configManager.selectedConfig || configManager.channelsPickRef?.length === 0}

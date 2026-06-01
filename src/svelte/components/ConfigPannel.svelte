@@ -1,5 +1,5 @@
 <script>
-	import { configChangeEvent } from "../event.js";
+	import { configChangeEvent } from "../event.svelte.js";
     import * as CST from '../../constantes.js'
     import { writable } from 'svelte/store';
     import ConfigManager from "../configManager.svelte.js";
@@ -15,8 +15,8 @@
 //     { colorName: 'darkgrey', colorCode: "#a9a9a9" }
 // ];
 
-    configChangeEvent.subscribe((value) => {
-        listeId = value;
+    $effect(() => {
+        listeId = configChangeEvent.current;
         config = configManager.selectedConfig[listeId];
     })
 
