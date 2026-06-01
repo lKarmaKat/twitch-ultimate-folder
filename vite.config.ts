@@ -26,52 +26,11 @@ export default defineConfig(({ command, mode }) => {
     }),
     viteStaticCopy({
       targets: [
-        {
-          src: 'public/manifest.json',
-          dest: '.',
-        },{
-          src: 'src/iframe/iframe.css',
-          dest: 'assets'
-        },{
-          src: 'src/iframe/sidebar.css',
-          dest: 'assets'
-        },{
-          src: 'src/iframe/clair.css',
-          dest: 'assets'
-        },{
-          src: 'src/iframe/sombre.css',
-          dest: 'assets'
-        },{
-          src: 'src/assets/dark_channel.css',
-          dest: 'assets'
-        },{
-          src: 'src/assets/light_channel.css',
-          dest: 'assets'
-        }, {
-          src: 'src/assets/profil.png',
-          dest: 'assets'
-        }, {
-          src: 'src/assets/all_other_channels.png',
-          dest: 'assets'
-        }, {
-          src: 'e2e/mock-twitch.html',
-          dest: 'assets'
-        }, {
-          src: 'e2e/twitch-copy.html',
-          dest: 'assets'
-        },{
-          src: 'src/assets/selected_icons/icon16.png',
-          dest: 'assets'
-        },{
-          src: 'src/assets/selected_icons/icon32.png',
-          dest: 'assets'
-        },{
-          src: 'src/assets/selected_icons/icon48.png',
-          dest: 'assets'
-        },{
-          src: 'src/assets/selected_icons/icon128.png',
-          dest: 'assets'
-        }
+        { src: 'public/manifest.json', dest: '.' },
+        { src: 'src/iframe/*.css', dest: 'assets' },
+        { src: 'src/assets/*.{css,png}', dest: 'assets' },
+        { src: 'src/assets/selected_icons/*.png', dest: 'assets' },
+        { src: 'e2e/*.html', dest: 'assets' },
       ]
     })
   ],
