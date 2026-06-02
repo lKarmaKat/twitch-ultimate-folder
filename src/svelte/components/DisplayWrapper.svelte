@@ -6,6 +6,7 @@
   import NoLiveChannels from './NoLiveChannels.svelte';
   import { alignmentLeft, portConnected } from '../event.svelte.js';
   import * as CST from '../../constantes'
+    import PortDisconnected from './PortDisconnected.svelte';
 
   let { configManager = new ConfigManager(true) } = $props();
 
@@ -102,13 +103,13 @@ function checkForLiveChannelInList(listId) {
 
 <div id="display-container" class="display-wrapper" class:dark={theme} class:light={!theme} class:al-left={alignmentLeft.current} class:al-right={!alignmentLeft.current}>
   {#if !portConnected.current}
-    Port disconnected
+    <PortDisconnected />
   {/if}
-  {#if !configManager.selectedConfig || configManager.channelsPickRef?.length === 0}
+  {#if !configManager.selectedConfig || configManager.channelsPickRefMap?.size === 0}
     <WaitingConfig />
   {:else if noLiveChannels}
     <NoLiveChannels />
-  {:else if configManager.selectedConfig && Object.getOwnPropertyNames(configManager.selectedConfig).length > 0 && configManager.channelsPickRef?.length > 0}
+  {:else if configManager.selectedConfig && Object.getOwnPropertyNames(configManager.selectedConfig).length > 0 && configManager.channelsPickRefMap?.size > 0}
     <Display 
     listId={"rootList"}
     configManager={configManager}/>
