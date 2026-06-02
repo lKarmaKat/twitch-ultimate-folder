@@ -24,7 +24,8 @@
 }
 
 #display-container.light .list-header {
-    background-color: #ffffff;
+    /* background-color: #ffffff; */
+    background-color: rgba(201, 201, 202, 0.25);
     color: rgb(14, 14, 16);
 }
 #display-container.light .list-body {
