@@ -41,7 +41,7 @@ chrome.runtime.sendMessage({type: CST.GET_THEME}, (response) => {
 chrome.runtime.sendMessage({type: CST.GET_ALIGNMENT}, (response) => {
     console.log("received", response);
     if (response.type === CST.ALIGNMENT) {
-        alignmentCheckbox.checked = response.data;
+        alignmentCheckbox.checked = !response.data;
     }
 });
 
@@ -50,15 +50,15 @@ alignmentCheckbox.addEventListener("change", () => {
     (async () => {
         let o;
         if (alignmentCheckbox.checked) {
-            o = {type: CST.CHANGE_ALIGNMENT, value: true}
-        } else {
             o = {type: CST.CHANGE_ALIGNMENT, value: false};
+        } else {
+            o = {type: CST.CHANGE_ALIGNMENT, value: true}
         }
         const response = await chrome.runtime.sendMessage(o);
         if (!response) {    
             alignmentCheckbox.checked = false;
         } else {
-            alignmentCheckbox.checked = response.data
+            alignmentCheckbox.checked = !response.data
         }
     })();
 });
