@@ -6,6 +6,12 @@
     color: #adadb8;
     /* background-color: #18181b; */
 }
+
+#display-container.dark .list-header .badge {
+    background: rgba(145, 71, 255, 0.22);
+    color: #bf94ff;
+}
+
 #display-container.dark .list-body {
     background-color: #26262c;
 }
@@ -23,10 +29,17 @@
     color: rgb(239, 239, 241);
 }
 
+/* ************* */
+
 #display-container.light .list-header {
     /* background-color: #ffffff; */
     background-color: rgba(201, 201, 202, 0.25);
     color: rgb(14, 14, 16);
+}
+
+ #display-container.light .list-header .badge {
+    background: rgba(145, 71, 255, 0.13);
+    color: #7b3fc9;
 }
 #display-container.light .list-body {
     background-color: #efeff1;

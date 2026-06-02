@@ -38,6 +38,15 @@
 		return color.color;
 	});
 
+	let counterBadge = $derived.by(() => {
+		return [CST.COUNTER_TYPE[1].id,
+		CST.COUNTER_TYPE[2].id
+		].includes(type.viewerCountType)
+	});
+
+	let counterBadgeText = $derived.by(() => CST.COUNTER_TYPE[1].id === type.viewerCountType);
+	let displayCounter = $derived.by(() => type.viewerCountType);
+
 	// console.log(`liste ${listId}`, $channelConfig)
 	let extendedOnStartup=false;
 	let extendOnHover=false;
@@ -238,9 +247,14 @@
 
 			</div>
 			<div class="right">
-				<p>
+				<span class:badge={counterBadge} class="counter">
+				{#if displayCounter}
 					{counter}
-				</p>
+					{#if counterBadgeText}
+						live
+					{/if}
+				{/if}
+				</span>
 			</div>
 		</div>
 		{/if}
@@ -293,6 +307,11 @@
 	{/if}
 			
 <style>
+	.badge {
+    	font-weight: 500;
+    	padding: 2px 7px;
+    	border-radius: 99px;
+	}
 	.icon-container {
 		width: 1.5em;
 		height: 1.5em;

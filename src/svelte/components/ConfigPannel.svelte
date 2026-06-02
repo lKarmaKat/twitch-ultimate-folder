@@ -94,6 +94,14 @@
                     {/each}
                 </select>
             </div>
+            <div class="row">
+                <select name="bar-type" id="bar-type" bind:value={config.type.viewerCountType} onchange={updateConfig}>
+                    <option value="">none</option>
+                    {#each CST.COUNTER_TYPE as counterType}
+                        <option value={counterType.id}>{counterType.name}</option>
+                    {/each}
+                </select>
+            </div>
             <!-- <div class="row">
                 <select name="theme" id="theme" bind:value={config.style.theme} onchange={updateConfig}>
                     <option value={CST.SYSTEM_STYLE}>System theme</option>

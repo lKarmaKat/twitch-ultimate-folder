@@ -129,9 +129,23 @@ export const BAR_TYPE = [
     id: 3,
     name: 'orange',
     color: "rgb(100, 50, 20)"
-
   }
 ]
+
+
+export const COUNTER_TYPE = [
+  {
+    id: 1,
+    name: 'bare counter'
+  }, {
+    id: 2,
+    name: 'badge'
+  }, {
+    id: 3,
+    name: 'naked badge'
+  }
+]
+
 
 export const NEW_LIST: t.I_NEW_LIST = {
             id:'node1',
@@ -166,7 +180,7 @@ export const NEW_LIST: t.I_NEW_LIST = {
               height: 0,
               iconType: 0,
               barType: 0,
-              viewerCountType: 1
+              viewerCountType: 2
             }
           }
 
