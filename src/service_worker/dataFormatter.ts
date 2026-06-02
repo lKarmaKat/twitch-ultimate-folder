@@ -27,7 +27,15 @@ export class DataFormatter {
                 this.getAllLiveFollowedStreams()
             ]);
 
-            await this.getChannelProfilePicture();
+            if (this.profilePicInfo.size === 0) {
+                await this.getChannelProfilePicture();
+            } else {
+                const newIds = Array.from(this.allFollowedStreams.keys())
+                    .filter(id => !this.profilePicInfo.has(id));
+                if (newIds.length > 0) {
+                    await this.getChannelProfilePicture(newIds);
+                }
+            }
             this.mixAllInfos();
             this.initComplete = true;
             return this.getInfotoSend();
@@ -108,10 +116,10 @@ export class DataFormatter {
             });
     }
 
-    getChannelProfilePicture() {
-        const ids = Array.from(this.allFollowedStreams.keys());
+    getChannelProfilePicture(ids?: number[]) {
+        const idsToFetch = ids ?? Array.from(this.allFollowedStreams.keys());
 
-        return this.twitchApi.getUsersProfilPic(ids)
+        return this.twitchApi.getUsersProfilPic(idsToFetch)
             .then(channels => {
                 channels.forEach(channel => {
                     this.profilePicInfo.set(
