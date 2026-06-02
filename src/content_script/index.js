@@ -47,7 +47,7 @@ function injectScript() {
   let t = document.querySelector("#side-nav .side-nav-section")
   const maindiv = document.createElement('div')
   maindiv.id = "sidebar_shadow";
-  t.insertBefore(maindiv, t.firstElementChild);
+  t.parentElement.insertBefore(maindiv, t);
 
   let shadowParent = maindiv.attachShadow({mode:'open'})
   const script2 = document.createElement('script');
@@ -66,17 +66,16 @@ function injectScript() {
   shadowParent.appendChild(link2);
 
 
+  const sections = () => document.querySelectorAll('#side-nav .side-nav-section');
+
   let c = () => {
     const collapsed = document.querySelector('.side-nav--collapsed');
     if (collapsed) {
       maindiv.setAttribute('collapsed', "true");
-      // collapsed.style.width = "10rem";
-
+      sections().forEach(el => el.style.removeProperty('display'));
     } else {
-      const extented = document.querySelector('.side-nav--expanded')
-      maindiv.removeAttribute('collapsed')
-      // extented.style.width = "auto";
-
+      maindiv.removeAttribute('collapsed');
+      sections().forEach(el => el.style.setProperty('display', 'none', 'important'));
     }
   }
   const obs = new MutationObserver(c);
