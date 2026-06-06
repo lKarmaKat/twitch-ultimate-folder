@@ -50,11 +50,6 @@ export default defineConfig(({ command, mode }) => {
     },
     server: {
       open: 'assets/twitch-copy.html'
-    },
-    test: {
-      include: ['./svelte_tests/*'],
-      environment: 'jsdom'
-    },
-    resolve: process.env.VITEST ? { conditions: ['browser'] } : undefined
+    }
   }
 })
