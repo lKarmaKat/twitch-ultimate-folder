@@ -1,69 +1,86 @@
-import type { Writable } from "svelte/store";
 import { wrapError } from "./errors";
 import { CLIENT_ID } from "../constantes";
 
+export interface DeviceCodeInfo {
+    user_code: string;
+    verification_uri: string;
+}
+
 export class TokenManager {
-    CLIENT_ID = CLIENT_ID;
-    REDIRECT_URI = chrome.identity.getRedirectURL();
     TOKEN_URL = 'https://id.twitch.tv/oauth2/token';
-    SCOPE = 'channel:read:subscriptions+user:read:email+user:read:follows';
+    DEVICE_URL = 'https://id.twitch.tv/oauth2/device';
+    SCOPE = 'channel:read:subscriptions user:read:email user:read:follows';
 
     token?: string | null;
     refreshToken?: string | null;
-    userId?: string;
+    userId?: number;
     tokenExpirationDate = 0;
     fetchingPromise: Promise<string> | null = null;
     tokenValidationInterval = 30 * 60 * 1000;
     nextValidationDate = 0;
     authAutoFailed = false;
-    userUpdate?: Writable<boolean>;
-    userAuthAutoFailed?: Writable<boolean>;
+    userAlreadyLoggedInCallbak: (info: number) => void;
+    userGotDisconnected: (data: boolean | null) => void;
+    noTokenFound: () => boolean
 
-    constructor(userUpdate?: Writable<boolean>, userAuthAutoFailed?: Writable<boolean>) {
-        this.userUpdate = userUpdate;
-        this.userAuthAutoFailed = userAuthAutoFailed;
+    constructor(
+        userAlreadyLoggedInCallbak: (userId: number) => void,
+        userGotDisconnected: (info: boolean | null) => void,
+        noTokenFound: () => boolean
+    ) {
+        this.userAlreadyLoggedInCallbak = userAlreadyLoggedInCallbak
+        this.userGotDisconnected = userGotDisconnected
+        this.noTokenFound = noTokenFound
     }
 
-    async initToken(): Promise<string> {
+    async getTokenFromStorage() {
         try {
             await this.chromeStorageToken();
-        } catch {
-            try {
-                await this.getNewTokenAndValidate();
-                this.userUpdate?.set(true);
-                return this.token!;
-            } catch {
-                this.userUpdate?.set(false);
-                throw new Error("TokenManager.initToken No token found and unable to get a new one.");
-            }
-        }
-
-        if (this.isTokenValid()) {
-            this.userUpdate?.set(true);
-            return this.token!;
-        }
-
-        try {
             await this.validateAuthToken();
-            this.userUpdate?.set(true);
+            this.userAlreadyLoggedInCallbak(this.userId!);
+        } catch (error) {
+            // no token found, waitin for user to login
+        }
+        return null;
+    }
+
+
+    async initAuthentification(callback: any): Promise<string> {
+        try {
+            await this.getNewTokenAndValidate(callback);
+            // this.userDisconnected(true);
             return this.token!;
         } catch {
-            if (this.refreshToken) {
-                try {
-                    await this.refreshAccessToken();
-                    this.userUpdate?.set(true);
-                    return this.token!;
-                } catch { /* fall through to new auth */ }
-            }
-            try {
-                await this.getNewTokenAndValidate();
-                this.userUpdate?.set(true);
-                return this.token!;
-            } catch {
-                this.userUpdate?.set(false);
-                throw new Error("TokenManager.initToken Invalid token and unable to refresh or get a new one.");
-            }
+            // this.userDisconnected(false);
+            throw new Error("TokenManager.initToken No token found and unable to get a new one.");
         }
+        
+        // if (this.isTokenValid()) {
+        //     // this.userDisconnected(true);
+        //     return this.token!;
+        // }
+
+        // try {
+        //     await this.validateAuthToken();
+        //     // this.userDisconnected(true);
+        //     return this.token!;
+        // } catch {
+        //     if (this.refreshToken) {
+        //         try {
+        //             await this.refreshAccessToken();
+        //             // this.userDisconnected(true);
+        //             return this.token!;
+        //         } catch { /* fall through to new auth */ }
+        //     }
+        //     try {
+        //         await this.getNewTokenAndValidate();
+        //         // this.userDisconnected(true);
+        //         return this.token!;
+        //     } catch {
+        //         // this.userDisconnected(false);
+        //         throw new Error("TokenManager.initToken Invalid token and unable to refresh or get a new one.");
+        //     }
+        // }
     }
 
     getToken(): Promise<string> {
@@ -88,7 +105,7 @@ export class TokenManager {
                     await this.getNewTokenAndValidate();
                     return this.token!;
                 } catch (error) {
-                    this.userUpdate?.set(false);
+                    // this.userDisconnected(false);
                     throw wrapError("TokenManager.getToken failed to refresh token", error);
                 }
             }
@@ -97,24 +114,6 @@ export class TokenManager {
         });
 
         return this.fetchingPromise;
-    }
-
-    private generateCodeVerifier(): string {
-        const array = new Uint8Array(32);
-        crypto.getRandomValues(array);
-        return btoa(String.fromCharCode(...array))
-            .replace(/\+/g, '-')
-            .replace(/\//g, '_')
-            .replace(/=/g, '');
-    }
-
-    private async generateCodeChallenge(verifier: string): Promise<string> {
-        const data = new TextEncoder().encode(verifier);
-        const digest = await crypto.subtle.digest('SHA-256', data);
-        return btoa(String.fromCharCode(...new Uint8Array(digest)))
-            .replace(/\+/g, '-')
-            .replace(/\//g, '_')
-            .replace(/=/g, '');
     }
 
     async chromeStorageToken(): Promise<void> {
@@ -126,6 +125,9 @@ export class TokenManager {
         this.tokenExpirationDate = parseInt(data.tokenExpirationDate as string) || 0;
         this.nextValidationDate = parseInt(data.nextValidationDate as string) || 0;
         this.refreshToken = (data.refreshToken as string) ?? null;
+        if (!this.refreshToken) {
+            console.error("No refresh token found in chromeLocalStorage")
+        }
     }
 
     isTokenValid(): boolean {
@@ -135,9 +137,9 @@ export class TokenManager {
         return false;
     }
 
-    async getNewTokenAndValidate(): Promise<string> {
+    async getNewTokenAndValidate(callback: any): Promise<string> {
         try {
-            await this.getNewAuthToken();
+            await this.getNewAuthToken(callback);
             await this.validateAuthToken();
             return this.token!;
         } catch (error) {
@@ -145,68 +147,96 @@ export class TokenManager {
         }
     }
 
-    async getNewAuthToken(manualConnect: boolean = false): Promise<void> {
-        if (this.authAutoFailed && !manualConnect) {
-            throw new Error('TokenManager.getNewAuthToken auth previously failed non-interactively');
+    async getNewAuthToken(callback: any): Promise<void> {
+        if (this.authAutoFailed) {
+            throw new Error('TokenManager.getNewAuthToken auth previously failed');
         }
 
-        const codeVerifier = this.generateCodeVerifier();
-        const codeChallenge = await this.generateCodeChallenge(codeVerifier);
+        try {
+            const { device_code, user_code, verification_uri, interval, expires_in } = await this.requestDeviceCode();
+            if (callback)
+                callback({user_code, verification_uri});
 
-        const authUrl = `https://id.twitch.tv/oauth2/authorize`
-            + `?client_id=${this.CLIENT_ID}`
-            + `&response_type=code`
-            + `&redirect_uri=${encodeURIComponent(this.REDIRECT_URI)}`
-            + `&scope=${this.SCOPE}`
-            + `&code_challenge=${codeChallenge}`
-            + `&code_challenge_method=S256`;
+            await this.pollForDeviceToken(device_code, interval, Date.now() + expires_in * 1000);
 
-        const redirectUrl = await new Promise<string>((resolve, reject) => {
-            chrome.identity.launchWebAuthFlow(
-                { url: authUrl, interactive: true },
-                (redirectUrl) => {
-                    if (chrome.runtime.lastError) {
-                        reject(new Error(chrome.runtime.lastError?.message));
-                    } else if (!redirectUrl) {
-                        reject(new Error("TokenManager.getNewAuthToken No redirect url"));
-                    } else {
-                        resolve(redirectUrl);
-                    }
-                }
-            );
-        });
-
-        const code = new URL(redirectUrl).searchParams.get('code');
-        if (!code) {
+            // this.onAuthSuccess(null);
+        } catch (error) {
             this.authAutoFailed = true;
-            this.userAuthAutoFailed?.set(true);
-            throw new Error('TokenManager.getNewAuthToken No code in redirect URL');
+            // this.onAuthSuccess(false);
+            throw error;
         }
-
-        await this.exchangeCodeForToken(code, codeVerifier);
     }
 
-    private async exchangeCodeForToken(code: string, codeVerifier: string): Promise<void> {
+    private async requestDeviceCode(): Promise<{
+        device_code: string;
+        user_code: string;
+        verification_uri: string;
+        interval: number;
+        expires_in: number;
+    }> {
         const body = new URLSearchParams({
-            client_id: this.CLIENT_ID,
-            code,
-            code_verifier: codeVerifier,
-            grant_type: 'authorization_code',
-            redirect_uri: this.REDIRECT_URI,
+            client_id: CLIENT_ID,
+            scopes: this.SCOPE,
+        });
+        const response = await fetch(this.DEVICE_URL, { method: 'POST', body });
+        if (!response.ok) throw new Error(`TokenManager.requestDeviceCode failed: ${response.status}`);
+        return response.json();
+    }
+
+    private async pollForDeviceToken(
+        device_code: string,
+        interval: number,
+        expiresAt: number
+    ): Promise<void> {
+        const body = new URLSearchParams({
+            client_id: CLIENT_ID,
+            device_code,
+            grant_type: 'urn:ietf:params:oauth:grant-type:device_code',
+            scopes: this.SCOPE
         });
 
-        const response = await fetch(this.TOKEN_URL, { method: 'POST', body });
-        const data = await response.json();
+        while (Date.now() < expiresAt) {
+            await new Promise(r => setTimeout(r, interval * 1000));
+            const response = await fetch(this.TOKEN_URL, { method: 'POST', body });
+            const data = await response.json();
 
-        if (!data.access_token) {
-            throw new Error('TokenManager.exchangeCodeForToken No access_token in response');
+            if (data.access_token) {
+                this.token = data.access_token;
+                this.refreshToken = data.refresh_token ?? null;
+                this.setTokenExpirationDate(data.expires_in);
+                this.nextValidationDate = Date.now() + this.tokenValidationInterval;
+                chrome.storage.local.set({
+                    twitchToken: this.token,
+                    ...(this.refreshToken && { refreshToken: this.refreshToken }),
+                    tokenExpirationDate: this.tokenExpirationDate,
+                    nextValidationDate: this.nextValidationDate,
+                });
+                return;
+            }
+            if (data.message === 'slow_down') interval += 5;
+            else if (data.message !== 'authorization_pending') {
+                throw new Error(`TokenManager.pollForDeviceToken error: ${data.message}`);
+            }
         }
+        throw new Error('TokenManager.pollForDeviceToken token expired before user authorized');
+    }
 
-        this.token = data.access_token;
-        this.refreshToken = data.refresh_token ?? null;
+    async validateAuthToken(): Promise<void> {
+        const response = await fetch("https://id.twitch.tv/oauth2/validate", {
+            method: 'GET',
+            headers: { Authorization: 'OAuth ' + this.token }
+        });
+        if (!response.ok) {
+            this.token = null;
+            throw new Error("TokenManager.validateAuthToken Token validation failed");
+        }
+        const data = await response.json();
+        this.userId = data.user_id;
+        this.setTokenExpirationDate(data.expires_in);
+        this.nextValidationDate = Date.now() + this.tokenValidationInterval;
         chrome.storage.local.set({
-            twitchToken: this.token,
-            ...(this.refreshToken && { refreshToken: this.refreshToken }),
+            tokenExpirationDate: this.tokenExpirationDate,
+            nextValidationDate: this.nextValidationDate,
         });
     }
 
@@ -214,7 +244,7 @@ export class TokenManager {
         if (!this.refreshToken) throw new Error('TokenManager.refreshAccessToken No refresh token');
 
         const body = new URLSearchParams({
-            client_id: this.CLIENT_ID,
+            client_id: CLIENT_ID,
             grant_type: 'refresh_token',
             refresh_token: this.refreshToken,
         });
@@ -222,7 +252,7 @@ export class TokenManager {
         const response = await fetch(this.TOKEN_URL, { method: 'POST', body });
         const data = await response.json();
 
-        if (!data.access_token) {
+        if (!response.ok || !data.access_token) {
             this.refreshToken = null;
             chrome.storage.local.remove('refreshToken');
             throw new Error('TokenManager.refreshAccessToken Token refresh failed');
@@ -235,35 +265,10 @@ export class TokenManager {
         chrome.storage.local.set({
             twitchToken: this.token,
             refreshToken: this.refreshToken,
-            tokenExpirationDate: data.expires_in,
+            tokenExpirationDate: this.tokenExpirationDate,
             nextValidationDate: this.nextValidationDate,
         });
         return this.token!;
-    }
-
-    validateAuthToken(): Promise<void> {
-        return new Promise((resolve, reject) => {
-            fetch("https://id.twitch.tv/oauth2/validate", {
-                method: 'GET',
-                headers: { Authorization: 'OAuth ' + this.token }
-            }).then(response => {
-                return response.json();
-            }).then((response) => {
-                if (response['status'] === 401) {
-                    this.token = null;
-                    reject(new Error("TokenManager.validateAuthToken Token validation failed"));
-                    return;
-                }
-                this.userId = response.user_id;
-                this.setTokenExpirationDate(response.expires_in);
-                this.nextValidationDate = Date.now() + this.tokenValidationInterval;
-                chrome.storage.local.set({
-                    tokenExpirationDate: response.expires_in,
-                    nextValidationDate: this.nextValidationDate,
-                });
-                resolve();
-            });
-        });
     }
 
     setTokenExpirationDate(expires_in: number) {

@@ -4,19 +4,48 @@ import { ConfigManager } from './configManage';
 import { TokenManager } from "./token";
 import { logErrorChain, wrapError } from "./errors";
 import * as CST from '../constantes.js'
-import { writable } from 'svelte/store';
 import { DataPoller } from './dataPoller';
 import type { StreamsInfos } from './models/streamsInfos.model';
 
-const userUpdate = writable(false);
-const userAuthAutoFailed = writable(false);
+let waitingForUserToLogin: boolean = false;
 
-let tokenManager = new TokenManager(userUpdate, userAuthAutoFailed);
-let twitchApi = new TwitchApi(tokenManager);
-let configManager = new ConfigManager(twitchApi, userUpdate);
-let streamsDatasPoller = new DataPoller(twitchApi, (data: StreamsInfos[]) => {
-  portManager.sendMessageToAllTabs(CST.GET_STREAMS_REF, data);
-});
+
+
+const tokenManager = new TokenManager(
+    (userId) => initServices(userId),
+    () => {},
+    () => true
+);
+tokenManager.getTokenFromStorage();
+
+let twitchApi: TwitchApi | null = null;
+let configManager: ConfigManager | null = null;
+let streamsDatasPoller: DataPoller | null = null;
+
+function initServices(userId: number) {
+    twitchApi = new TwitchApi(tokenManager);
+    configManager = new ConfigManager(twitchApi);
+    configManager.init(userId);
+    streamsDatasPoller = new DataPoller(twitchApi, (data: StreamsInfos[]) => {
+        portManager.sendMessageToAllTabs(CST.GET_STREAMS_REF, data);
+    });
+}
+
+
+
+
+
+
+
+
+// let tokenManager = new TokenManager(userDisconnected, (info) => {
+//   portManager.sendMessageToAllTabs(CST.AUTH_DEVICE_CODE, info, 'auth');
+// });
+// let twitchApi = new TwitchApi(tokenManager);
+// let configManager = new ConfigManager(twitchApi);
+// let streamsDatasPoller = new DataPoller(twitchApi, (data: StreamsInfos[]) => {
+//   portManager.sendMessageToAllTabs(CST.GET_STREAMS_REF, data);
+// });
 
 const logBackgroundError = (context: string, error: unknown) => {
   logErrorChain(context, error);
@@ -30,18 +59,21 @@ console.log("####################");
 
 
 let sendStreamInfoOnConnect = (port: chrome.runtime.Port) => {
+  if (streamsDatasPoller) {   
     streamsDatasPoller.getConfig().then((info) => {
-    // console.log("updating bg");
-    port.postMessage({ 
-      "type": CST.GET_STREAMS_REF, 
-      "data": info
+      // console.log("updating bg");
+      port.postMessage({ 
+        "type": CST.GET_STREAMS_REF, 
+        "data": info
+      });
+    }).catch((error) => {
+      logBackgroundError("background:sendStreamInfoOnConnect", wrapError("Background failed to send stream info on connect", error));
     });
-  }).catch((error) => {
-    logBackgroundError("background:sendStreamInfoOnConnect", wrapError("Background failed to send stream info on connect", error));
-  });
+  }
 };
 
 let sendCurrentConfigOnConnect = (port: chrome.runtime.Port) => {
+  if (configManager) {
     configManager.getConfigObjectForCurrentUser().then((currentConfig) => {
       if (!currentConfig) return;
       port.postMessage({
@@ -51,6 +83,7 @@ let sendCurrentConfigOnConnect = (port: chrome.runtime.Port) => {
     }).catch(err => {
       logBackgroundError("background:sendCurrentConfigOnConnect", err)
     });
+  }
 }
 
 let themeSombre = true;
@@ -77,27 +110,48 @@ let sendCurrentAlignmentOnConnect = (port: chrome.runtime.Port) => {
 
 let portManager = new PortManager(sendCurrentConfigOnConnect, sendStreamInfoOnConnect, sendCurrentThemeOnConnect, sendCurrentAlignmentOnConnect);
 
+// userUpdate.subscribe((userValid: boolean) => {
+//   if (!userValid) return;
+//   configManager.getConfigObjectForCurrentUser()
+//     .then((currentConfig) => {
+//       if (currentConfig) portManager.sendMessageToAllTabs(CST.GET_CURRENT_CONFIGURATION, currentConfig);
+//     })
+//     .catch(err => logBackgroundError("background:userUpdate:sendConfig", err));
+// });
+
 self.addEventListener('beforeunload', () => {
   portManager.closeAllPorts();
 });
 
-chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
+chrome.runtime.onMessage.addListener(async (msg, sender, sendResponse) => {
     void sender;
     console.log("MESSAGE", msg.type, msg.data);    
-  if (msg.type === CST.SAVE_CHANNELS_LIST) {
+    if( msg.type === CST.IS_USER_LOGGED_IN) {
+      if (tokenManager.token) {
+        sendResponse(true);
+      } else {
+        const info = await new Promise<any>(resolve => {
+          tokenManager.initAuthentification((info: any) => {
+            resolve(info);
+          })
+        })
+        sendResponse(info)      
+      }
+    return true;
+    } else if (msg.type === CST.SAVE_CHANNELS_LIST) {
     console.log("saving channels list bg", msg.data);
-    configManager.saveConfig(msg.data).then((currentConfig) => {
+    configManager!.saveConfig(msg.data).then((currentConfig) => {
       portManager.sendMessageToAllTabs(CST.GET_CURRENT_CONFIGURATION, currentConfig);
     }).catch(err => logBackgroundError("background:saveConfig", err));
     return false;
   }
   else if (msg.type === CST.RESET_CONFIG) {
-    configManager.saveConfig(CST.STARTUP_CONF).then((currentConfig) => {
+    configManager!.saveConfig(CST.STARTUP_CONF).then((currentConfig) => {
       portManager.sendMessageToAllTabs(CST.GET_CURRENT_CONFIGURATION, currentConfig);
     }).catch(err => logBackgroundError("background:resetConfig", err));
     return false;
   } else if (msg.type === CST.GET_CURRENT_CONFIGURATION) {
-    configManager.getConfigObjectForCurrentUser().then((currentConfig) => {
+    configManager!.getConfigObjectForCurrentUser().then((currentConfig) => {
       sendResponse(currentConfig ?? null);
     }).catch(err => {
       logBackgroundError("background:getConfig", err)
@@ -163,22 +217,22 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
   return false;
 });
 
+// dead code from the time when svelte/configManager would send a message to reset config then ask for current config
+// chrome.runtime.onMessageExternal.addListener((msg, sender, sendResponse) => {
+//   void sender;
+//   if (msg.type === CST.GET_CURRENT_CONFIGURATION) {
+//     console.log("getting current conf");
+//     (async () => {
+//         chrome.storage.local.get('currentConfig', (data) => {
+//             if (data?.currentConfig) {
+//                 sendResponse(data?.currentConfig);
+//             }
+//         });
+//     })();
+//     return true;
+//   }
 
-chrome.runtime.onMessageExternal.addListener((msg, sender, sendResponse) => {
-  void sender;
-  if (msg.type === CST.GET_CURRENT_CONFIGURATION) {
-    console.log("getting current conf");
-    (async () => {
-        chrome.storage.local.get('currentConfig', (data) => {
-            if (data?.currentConfig) {
-                sendResponse(data?.currentConfig);
-            }
-        });
-    })();
-    return true;
-  }
-
-  return false;
-});
+//   return false;
+// });
 
 

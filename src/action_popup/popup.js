@@ -55,7 +55,7 @@ alignmentCheckbox.addEventListener("change", () => {
             o = {type: CST.CHANGE_ALIGNMENT, value: true}
         }
         const response = await chrome.runtime.sendMessage(o);
-        if (!response) {    
+        if (!response) {
             alignmentCheckbox.checked = false;
         } else {
             alignmentCheckbox.checked = !response.data
@@ -63,7 +63,24 @@ alignmentCheckbox.addEventListener("change", () => {
     })();
 });
 
-
+chrome.runtime.sendMessage({type: CST.IS_USER_LOGGED_IN}, async (response) => {
+    if (response.user_code) {
+        console.log("Action popup IS_USER_LOGGED_IN")
+        let authContainer = document.querySelector('.auth-container')
+        let authInfo = authContainer.querySelector('.auth-code')
+        authInfo.textContent = response.user_code
+        authInfo.href = response.verification_uri
+        
+        let loader = document.querySelector('.loader')
+        loader.hidden = true;
+        authContainer.hidden = false;
+    } else {
+        let configContainer = document.querySelector('.config-container')
+        let loader = document.querySelector('.loader')
+        loader.hidden = true;
+        configContainer.hidden = false;
+    }
+});
 
 
     // (async () => {
