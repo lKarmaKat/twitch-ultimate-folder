@@ -78,6 +78,19 @@ input[type=text] {
     stroke: #bf94ff; 
 }
 
+.pannel-header {
+    background-color: #393941;
+}
+
+.row .help-badge,
+.grid .help-badge {
+    background-color: #bf94ff;
+}
+
+.counter-select .badge{
+    background: rgba(145, 71, 255, 0.22);
+    color: #bf94ff;
+}
 /* twitch icon color #9147ff */
 /* twitch icon color a970ff */
 

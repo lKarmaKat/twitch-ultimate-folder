@@ -48,15 +48,22 @@
         // });
 
     }
+
+    const behaviorItems = [
+    { key: 'extendedOnStartup', label: 'Extended on startup', tooltip: 'Liste déjà dépliée au chargement de la page.' },
+    { key: 'extendOnHover',     label: 'Extends on hover',     tooltip: 'La liste se déplie au survol de la souris.' },
+    { key: 'extendOnClick',     label: 'Extends on click',     tooltip: 'La liste se déplie/replie au clic sur le header.' }
+    ];
 </script>
 
 <div class="pannel-container">
     {#if config}
     <div class="pannel-header">
         <!-- svelte-ignore missing-declaration -->
+        <p>List name</p>
         <input type="text" 
         name="liste-name" 
-        id="liste-name" 
+        id="liste-name"
         bind:value={config.name} placeholder="Enter list name"
         oninput={updateListName} />
     </div>
@@ -64,13 +71,20 @@
     <div class="pannel-body">
         <div class="bloc">
             <p>Behavior</p>
-            <div class="row">
-                <input type="checkbox" id="extendedOnStartup" bind:checked={config.behavior.extendedOnStartup} onchange={updateConfig} ><label for="extendedOnStartup">extendedOnStartup</label>
-                <input type="checkbox" id="extendOnHover" bind:checked={config.behavior.extendOnHover} onchange={updateConfig}><label for="extendOnHover">extendOnHover</label>
-            </div>
-            <div class="row">
-                <input type="checkbox" id="extendOnClick" bind:checked={config.behavior.extendOnClick} onchange={updateConfig}><label for="extendOnClick">extendOnClick</label>
-                <input type="checkbox" id="isPinnable" bind:checked={config.behavior.isPinnable} onchange={updateConfig}><label for="isPinnable">isPinnable</label>
+            <div class="grid">
+                {#each behaviorItems as item}
+                    <div class="behavior-item">
+                        <input
+                            type="checkbox"
+                            id={item.key}
+                            bind:checked={config.behavior[item.key]}
+                            onchange={updateConfig} />
+                        <label for={item.key}>{item.label}</label>
+                        <span
+                            class="help-badge"
+                            data-tooltip={item.tooltip}>?</span>
+                    </div>
+                {/each}
             </div>
         </div>
         <div class="bloc">
@@ -83,17 +97,29 @@
                 </select>
             </div> -->
             <div class="row">
+                <p>List header icon</p>
+                <span
+                    class="help-badge"
+                    data-tooltip="Help">?</span>
                 <IconSelect
                     bind:value={config.type.iconType}
                     options={CST.ICON_TYPE}
                     onchange={updateConfig} />
             </div>
             <div class="row">
+                <p>List header side bar color</p>
+                <span
+                    class="help-badge"
+                    data-tooltip="Help">?</span>
                 <BarColorSelect
                     bind:value={config.type.barType}
                     options={CST.BAR_TYPE} />
             </div>
             <div class="row">
+                <p>List header badge style</p>
+                <span
+                    class="help-badge"
+                    data-tooltip="Help">?</span>
                 <CounterTypeSelect
                     bind:value={config.type.viewerCountType}
                     options={CST.COUNTER_TYPE}
@@ -144,20 +170,19 @@
     .pannel-container {
         box-sizing: border-box;
         width: 100%;
-        border: 1px solid grey;
         padding: 0.3em 0.8em;
     }
     .pannel-header {
         display: flex;
-        flex-direction: row;
-        padding: 0.3em .8em;
-        background-color: rgb(116, 71, 26);
+        flex-direction: column;
+        padding: 0.3em 1em;
+        border-radius: .3em .3em .3em .3em;
     }
     .pannel-header input {
         width: 90%;
     }
     .bloc {
-        margin: 0.5em 1.5em;
+        margin: 0.5em 0em;
         padding: 0.5em 1em;
         border: 1px solid grey;
         border-radius: .5em .5em .5em .5em;
@@ -180,4 +205,83 @@
     input[type="text"]:focus {
         outline: none;
     }
+    .row {
+        margin: 1em 0;
+    }
+
+
+
+
+.behavior-item {
+    display: flex;
+    align-items: center;
+    gap: 0.4em;
+}
+
+/* La pastille "?" */
+.help-badge {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    color: #fff;
+    font-size: 0.7em;
+    font-weight: 700;
+    cursor: help;
+    user-select: none;
+    flex-shrink: 0;
+}
+
+/* Le tooltip */
+.help-badge::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: calc(100% + 6px);
+    left: 50%;
+    transform: translateX(-15%) translateY(4px);
+    width: max-content;
+    /* max-width: 200px; */
+    padding: 0.4em 0.6em;
+    border-radius: 0.4em;
+    background: #1f1f23;
+    color: #efeff1;
+    font-size: 1.6em;
+    font-weight: 400;
+    line-height: 1.3;
+    text-align: center;
+    white-space: normal;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.12s ease, transform 0.12s ease;
+    z-index: 10;
+}
+
+/* Petite flèche */
+.help-badge::before {
+    content: "";
+    position: absolute;
+    bottom: calc(100% + 1px);
+    left: 50%;
+    transform: translateX(-50%) translateY(4px);
+    border: 5px solid transparent;
+    border-top-color: #1f1f23;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.12s ease, transform 0.12s ease;
+    z-index: 10;
+}
+.row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.8em 1em;
+    margin: 1em 0;
+}
+.help-badge:hover::after,
+.help-badge:hover::before {
+    opacity: 1;
+    transform: translateX(-15%) translateY(0);
+}
 </style>
