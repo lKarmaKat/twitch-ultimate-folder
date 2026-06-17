@@ -28,7 +28,7 @@
             {#if value !== ""}<CounterType counter={SAMPLE} viewerCountType={value} />{/if}
         </span>
         <span class="label">{selected ? selected.name : "none"}</span>
-        <span class="caret" class:open>▾</span>
+        <span class="caret" class:open>▲</span>
     </button>
 
     {#if open}
@@ -72,6 +72,8 @@
     .caret {
         margin-left: auto;
         transition: transform 0.15s ease;
+        color: grey;
+        rotate: 180deg;
     }
     .caret.open { transform: rotate(180deg); }
 

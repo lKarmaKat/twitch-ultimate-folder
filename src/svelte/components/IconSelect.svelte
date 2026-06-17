@@ -27,7 +27,7 @@
             {#if value !== ""}<IconPicker iconType={value} />{/if}
         </span>
         <span class="label">{selected ? selected.name : "none"}</span>
-        <span class="caret" class:open>▾</span>
+        <span class="caret" class:open>▲</span>
     </button>
 
     {#if open}
@@ -71,6 +71,8 @@
     .caret {
         margin-left: auto;
         transition: transform 0.15s ease;
+        rotate: 180deg;
+        color: grey;
     }
     .caret.open { transform: rotate(180deg); }
 

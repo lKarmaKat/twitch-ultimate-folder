@@ -22,7 +22,7 @@
     <button type="button" class="trigger" onclick={() => open = !open}>
         <span class="swatch" style:background={selected ? selected.color : "transparent"}></span>
         <span class="label">{selected ? selected.name : "none"}</span>
-        <span class="caret" class:open>▾</span>
+        <span class="caret" class:open>▲</span>
     </button>
 
     {#if open}
@@ -65,6 +65,8 @@
     }
     .caret {
         margin-left: auto;
+        rotate: 180deg;
+        color: grey;
         transition: transform 0.15s ease;
     }
     .caret.open { transform: rotate(180deg); }
