@@ -11,14 +11,6 @@
         
     }
 
-    :global(.dark) svg {
-        fill: #bf94ff; 
-        stroke: #bf94ff; 
-    }
-    :global(.light) svg {
-        fill: #7b3fc9;
-        stroke: #7b3fc9;
-    }
 </style>
 
 

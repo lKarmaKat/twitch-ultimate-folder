@@ -16,12 +16,6 @@
         height: 100%;
         margin: 0 0.2em;
     }
-    :global(.dark) svg {
-        fill: #bf94ff; 
-    }
-    :global(.light) svg {
-        fill: #7b3fc9
-    }
 
     :global(.list-header:hover) div.icon-container,
     :global(.display-icon-container.extended) div.icon-container {

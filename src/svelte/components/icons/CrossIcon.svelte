@@ -20,14 +20,6 @@
     }
 
 
-    :global(.dark) svg {
-        fill: #bf94ff; 
-        stroke: #bf94ff; 
-    }
-    :global(.light) svg {
-        fill: #7b3fc9;
-        stroke: #7b3fc9;
-    }
 
     :global(.list-header:hover) div.icon-container,
     :global(.display-icon-container.extended) div.icon-container{

@@ -22,12 +22,6 @@
     :global(.light) div {
         background: rgba(145,71,255,0.12);
     }
-    :global(.dark) svg {
-        fill: #bf94ff; 
-    }
-    :global(.light) svg {
-        fill: #7b3fc9
-    }
 </style>
 
 <div class="icon-container">
