@@ -5,6 +5,7 @@
     import ConfigManager from "../configManager.svelte.js";
     import IconSelect from "./IconSelect.svelte";
     import BarColorSelect from "./BarColorSelect.svelte";
+    import CounterTypeSelect from "./CounterTypeSelect.svelte";
 
     let { configManager, darkTheme = true } = $props();
     let listeId;
@@ -95,12 +96,11 @@
                     onchange={updateConfig} />
             </div>
             <div class="row">
-                <select name="bar-type" id="bar-type" bind:value={config.type.viewerCountType} onchange={updateConfig}>
-                    <option value="">none</option>
-                    {#each CST.COUNTER_TYPE as counterType}
-                        <option value={counterType.id}>{counterType.name}</option>
-                    {/each}
-                </select>
+                <CounterTypeSelect
+                    bind:value={config.type.viewerCountType}
+                    options={CST.COUNTER_TYPE}
+                    onchange={updateConfig}
+                    darkTheme={darkTheme} />
             </div>
             <!-- <div class="row">
                 <select name="theme" id="theme" bind:value={config.style.theme} onchange={updateConfig}>

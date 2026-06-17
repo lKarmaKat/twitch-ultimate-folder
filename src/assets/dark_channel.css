@@ -7,6 +7,7 @@
     /* background-color: #18181b; */
 }
 
+.counter-select .badge,
 #display-container.dark .list-header .badge {
     background: rgba(145, 71, 255, 0.22);
     color: #bf94ff;
@@ -37,7 +38,8 @@
     color: rgb(14, 14, 16);
 }
 
- #display-container.light .list-header .badge {
+.counter-select .badge,
+#display-container.light .list-header .badge {
     background: rgba(145, 71, 255, 0.13);
     color: #7b3fc9;
 }

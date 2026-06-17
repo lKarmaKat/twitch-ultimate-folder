@@ -10,10 +10,14 @@
         height: 100%;
         
     }
+    svg {
+        width: 100%;
+        height: 100%;
+    }
 
     :global(.dark) svg {
-        fill: #bf94ff; 
-        stroke: #bf94ff; 
+        fill: #bf94ff;
+        stroke: #bf94ff;
     }
     :global(.light) svg {
         fill: #7b3fc9;
