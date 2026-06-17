@@ -4,6 +4,7 @@
     import { writable } from 'svelte/store';
     import ConfigManager from "../configManager.svelte.js";
     import IconSelect from "./IconSelect.svelte";
+    import BarColorSelect from "./BarColorSelect.svelte";
 
     let { configManager, darkTheme = true } = $props();
     let listeId;
@@ -88,12 +89,10 @@
                     darkTheme={darkTheme} />
             </div>
             <div class="row">
-                <select name="bar-type" id="bar-type" bind:value={config.type.barType} onchange={updateConfig}>
-                    <option value="">none</option>
-                    {#each CST.BAR_TYPE as iconType}
-                        <option value={iconType.id}>{iconType.color}</option>
-                    {/each}
-                </select>
+                <BarColorSelect
+                    bind:value={config.type.barType}
+                    options={CST.BAR_TYPE}
+                    onchange={updateConfig} />
             </div>
             <div class="row">
                 <select name="bar-type" id="bar-type" bind:value={config.type.viewerCountType} onchange={updateConfig}>
