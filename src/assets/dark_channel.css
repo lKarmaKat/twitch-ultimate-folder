@@ -7,7 +7,6 @@
     /* background-color: #18181b; */
 }
 
-.counter-select .badge,
 #display-container.dark .list-header .badge {
     background: rgba(145, 71, 255, 0.22);
     color: #bf94ff;
@@ -30,6 +29,17 @@
     color: rgb(239, 239, 241);
 }
 
+#display-container.dark .icon-container svg {
+    fill: #bf94ff; 
+}
+
+#display-container.dark .icon-container .dot {
+    background: #bf94ff;
+}
+
+#display-container.dark .icon-container .cross {
+    stroke: #bf94ff; 
+}
 /* ************* */
 
 #display-container.light .list-header {
@@ -58,4 +68,17 @@
 }
 #display-container.light .viewer-count {
     color: rgb(14, 14, 16);
+}
+
+
+#display-container.light .icon-container svg {
+    fill: #7b3fc9
+}
+
+#display-container.light .icon-container .dot {
+    background: #7b3fc9;
+}
+
+#display-container.light .icon-container .cross {
+    stroke: #7b3fc9;
 }

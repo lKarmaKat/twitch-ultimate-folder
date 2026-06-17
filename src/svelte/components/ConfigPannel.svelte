@@ -176,7 +176,7 @@
         display: flex;
         flex-direction: column;
         padding: 0.3em 1em;
-        border-radius: .3em .3em .3em .3em;
+        border-radius: .3em;
     }
     .pannel-header input {
         width: 90%;
@@ -185,7 +185,7 @@
         margin: 0.5em 0em;
         padding: 0.5em 1em;
         border: 1px solid grey;
-        border-radius: .5em .5em .5em .5em;
+        border-radius: .5em;
     }
     .pannel-body {
         display: flex;
@@ -205,18 +205,16 @@
     input[type="text"]:focus {
         outline: none;
     }
+    .behavior-item,
+    .row {
+        display: flex;
+        align-items: center;
+        gap: 0.4em;
+    }
     .row {
         margin: 1em 0;
+        flex-wrap: wrap;
     }
-
-
-
-
-.behavior-item {
-    display: flex;
-    align-items: center;
-    gap: 0.4em;
-}
 
 /* La pastille "?" */
 .help-badge {
@@ -272,12 +270,6 @@
     pointer-events: none;
     transition: opacity 0.12s ease, transform 0.12s ease;
     z-index: 10;
-}
-.row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 0.8em 1em;
-    margin: 1em 0;
 }
 .help-badge:hover::after,
 .help-badge:hover::before {
