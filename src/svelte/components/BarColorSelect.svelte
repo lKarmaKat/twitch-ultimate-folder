@@ -18,7 +18,7 @@
 
 <svelte:window onclick={onWindowClick} />
 
-<div class="bar-select">
+<div class="custom-select bar-select">
     <button type="button" class="trigger" onclick={() => open = !open}>
         <span class="swatch" style:background={selected ? selected.color : "transparent"}></span>
         <span class="label">{selected ? selected.name : "none"}</span>
@@ -80,7 +80,7 @@
         margin: 0;
         padding: 0.25em;
         list-style: none;
-        background: #1f1f23;
+        /* background: #1f1f23; */
         border: 1px solid grey;
         border-radius: 0.4em;
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);

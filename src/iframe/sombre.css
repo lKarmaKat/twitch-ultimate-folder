@@ -56,12 +56,15 @@ input[type=text] {
     color: rgb(239, 239, 241);
 }
 
-.bar-select .label,
-.icon-select .label {
+.custom-select .label {
     color: rgb(239, 239, 241);
 }
 
-
+.custom-select .menu,
+.custom-select {
+    background-color: #393941;
+    color: #adadb8;
+}
 /* twitch icon color #9147ff */
 /* twitch icon color a970ff */
 

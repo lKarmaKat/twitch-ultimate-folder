@@ -21,7 +21,7 @@
 
 <svelte:window onclick={onWindowClick} />
 
-<div class="icon-select" class:dark={darkTheme} class:light={!darkTheme}>
+<div class="custom-select icon-select">
     <button type="button" class="trigger" onclick={() => open = !open}>
         <span class="icon-slot">
             {#if value !== ""}<IconPicker iconType={value} />{/if}
@@ -85,7 +85,6 @@
         margin: 0;
         padding: 0.25em;
         list-style: none;
-        background: #1f1f23;
         border: 1px solid grey;
         border-radius: 0.4em;
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);

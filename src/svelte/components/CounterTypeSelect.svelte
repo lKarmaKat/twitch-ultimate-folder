@@ -22,7 +22,7 @@
 
 <svelte:window onclick={onWindowClick} />
 
-<div class="counter-select" class:dark={darkTheme} class:light={!darkTheme}>
+<div class="custom-select counter-select">
     <button type="button" class="trigger" onclick={() => open = !open}>
         <span class="preview">
             {#if value !== ""}<CounterType counter={SAMPLE} viewerCountType={value} />{/if}
@@ -86,7 +86,6 @@
         margin: 0;
         padding: 0.25em;
         list-style: none;
-        background: #1f1f23;
         border: 1px solid grey;
         border-radius: 0.4em;
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
@@ -119,7 +118,5 @@
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
-        margin-left: auto;
-        opacity: 0.7;
     }
 </style>

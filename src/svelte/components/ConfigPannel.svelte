@@ -7,7 +7,7 @@
     import BarColorSelect from "./BarColorSelect.svelte";
     import CounterTypeSelect from "./CounterTypeSelect.svelte";
 
-    let { configManager, darkTheme = true } = $props();
+    let { configManager } = $props();
     let listeId;
     let config = $state();
 
@@ -86,21 +86,18 @@
                 <IconSelect
                     bind:value={config.type.iconType}
                     options={CST.ICON_TYPE}
-                    onchange={updateConfig}
-                    darkTheme={darkTheme} />
+                    onchange={updateConfig} />
             </div>
             <div class="row">
                 <BarColorSelect
                     bind:value={config.type.barType}
-                    options={CST.BAR_TYPE}
-                    onchange={updateConfig} />
+                    options={CST.BAR_TYPE} />
             </div>
             <div class="row">
                 <CounterTypeSelect
                     bind:value={config.type.viewerCountType}
                     options={CST.COUNTER_TYPE}
-                    onchange={updateConfig}
-                    darkTheme={darkTheme} />
+                    onchange={updateConfig} />
             </div>
             <!-- <div class="row">
                 <select name="theme" id="theme" bind:value={config.style.theme} onchange={updateConfig}>
