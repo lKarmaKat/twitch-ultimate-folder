@@ -65,6 +65,19 @@ input[type=text] {
     background-color: #393941;
     color: #adadb8;
 }
+
+.icon-container svg {
+    fill: #bf94ff; 
+}
+
+.icon-container .dot {
+    background: #bf94ff;
+}
+
+.icon-container .cross {
+    stroke: #bf94ff; 
+}
+
 /* twitch icon color #9147ff */
 /* twitch icon color a970ff */
 

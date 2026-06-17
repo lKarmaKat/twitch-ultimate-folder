@@ -228,10 +228,10 @@
 		<div class="list-header" style="--header-color:{header?.headerColor};--theme-color:{barTypeColor}" class:border={barTypeColor} onclick={toggleAutoCollapse}>
 			<div class="left">
 				<div class="flex-row">
-					<span class="icon-container" class:extended>
+					<span class="display-icon-container" class:extended>
 						<IconPicker iconType={type.iconType} />
 					</span>
-					<!-- <span class="icon-container title" class:extended use:maybeTooltip={configManager.selectedConfig[listId]?.name}>
+					<!-- <span class="display-icon-container title" class:extended use:maybeTooltip={configManager.selectedConfig[listId]?.name}>
 						<IconPicker iconType={type.iconType} />
 					</span> -->
 					<p class="list-title">{configManager.selectedConfig[listId]?.name}</p>
@@ -292,13 +292,13 @@
 	{/if}
 			
 <style>
-	.icon-container {
+	.display-icon-container {
 		width: 1.5em;
 		height: 1.5em;
 		margin-right: .28em;
 		margin-left: 0.2em;
 	}
-	.icon-container,
+	.display-icon-container,
 	.flex-row {
 		display: flex;
 		flex-direction: row;
@@ -332,8 +332,8 @@
 		display: block;
 	}
 
-	:host(:not([collapsed])) .icon-container.title,
-	:host([collapsed]) span.icon-container:not(.title),
+	:host(:not([collapsed])) .display-icon-container.title,
+	:host([collapsed]) span.display-icon-container:not(.title),
 	:host([collapsed]) .right {
 		display: none;
 	}

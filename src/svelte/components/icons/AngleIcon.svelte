@@ -23,19 +23,19 @@
         fill: #7b3fc9
     }
 
-    :global(.list-header:hover) div.container,
-    :global(.icon-container.extended) div.container {
+    :global(.list-header:hover) div.icon-container,
+    :global(.display-icon-container.extended) div.icon-container {
         transform: rotate(180deg);
     }
 
 
-    /* :global(.icon-container) div.container{
+    /* :global(.icon-container) div.icon-container{
         transform: rotate(0deg);
     } */
 
 </style>
 
-<div class="container">
+<div class="icon-container">
     <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Capa_1" width="64px" height="64px" viewBox="0 0 199.404 199.404" xml:space="preserve">
 
 <g id="SVGRepo_bgCarrier" stroke-width="0"/>

@@ -23,7 +23,7 @@
 
 
 
-<div>
+<div class="icon-container">
     <svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg" version="1.1" id="svg1" width="421.45337" height="449.5434" viewBox="0 0 421.45337 449.5434">
   <defs id="defs1"/>
   <g id="g1">

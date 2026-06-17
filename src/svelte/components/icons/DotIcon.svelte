@@ -1,6 +1,6 @@
 <style>
 
-        div.container {
+        div.icon-container {
         display: flex;
         justify-content: center;
         align-items: center;
@@ -19,6 +19,6 @@
     }
 </style>
 
-<div class="container">
+<div class="icon-container">
     <div class="dot"></div>
 </div>

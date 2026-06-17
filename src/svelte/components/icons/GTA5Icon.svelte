@@ -22,7 +22,7 @@
 </style>
 
 
-<div>
+<div class="icon-container">
 <svg xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg" version="1.1" id="svg1" width="671" height="498" viewBox="0 0 671 498">
   <defs id="defs1"/>
   <g id="g1">
