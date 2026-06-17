@@ -6,7 +6,7 @@
   import NoLiveChannels from './NoLiveChannels.svelte';
   import { alignmentLeft, portConnected } from '../event.svelte.js';
   import * as CST from '../../constantes'
-    import PortDisconnected from './PortDisconnected.svelte';
+  import PortDisconnected from './PortDisconnected.svelte';
 
   let { configManager = new ConfigManager(true) } = $props();
 
@@ -41,12 +41,17 @@
   //     console.log("#############################")
   //   }
   // })
-
   let theme = $state(true);
   let themeCb = (data) => {
     theme = data.data;
   }
   let port = new PortConnector(themeCb, "theme");
+
+  let isUserConnected = $state(null);
+  let authCb = (msg) => {
+    isUserConnected = msg.data;
+  }
+  let authPort = new PortConnector(authCb, 'auth');
 
   let alignmentCb = (data) => {
     alignmentLeft.current = data.data;
@@ -97,22 +102,29 @@ function checkForLiveChannelInList(listId) {
     return true;
   })
 
-
+let shortLoadingLogo = $state(true)
+setTimeout(()=> shortLoadingLogo = false, 200);
 
 </script>
 
 <div id="display-container" class="display-wrapper" class:dark={theme} class:light={!theme} class:al-left={alignmentLeft.current} class:al-right={!alignmentLeft.current}>
-  {#if !portConnected.current}
-    <PortDisconnected />
-  {/if}
-  {#if !configManager.selectedConfig || configManager.channelsPickRefMap?.size === 0}
+  {#if shortLoadingLogo}
     <WaitingConfig />
-  {:else if noLiveChannels}
-    <NoLiveChannels />
-  {:else if configManager.selectedConfig && Object.getOwnPropertyNames(configManager.selectedConfig).length > 0 && configManager.channelsPickRefMap?.size > 0}
-    <Display 
-    listId={"rootList"}
-    configManager={configManager}/>
+  {:else}
+    {#if !portConnected.current}
+      <PortDisconnected />
+    {/if}
+    {#if !isUserConnected}
+      Seems like you need to connect
+    {:else if !configManager.selectedConfig || configManager.channelsPickRefMap?.size === 0}
+      <WaitingConfig />
+    {:else if noLiveChannels}
+      <NoLiveChannels />
+    {:else if configManager.selectedConfig && Object.getOwnPropertyNames(configManager.selectedConfig).length > 0 && configManager.channelsPickRefMap?.size > 0}
+      <Display 
+      listId={"rootList"}
+      configManager={configManager}/>
+    {/if}
   {/if}
 </div>
 

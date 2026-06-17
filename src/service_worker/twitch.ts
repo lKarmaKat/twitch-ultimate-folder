@@ -15,9 +15,6 @@ export class TwitchApi {
 
     constructor(tokenManager: TokenManager) {
       this.tokenManager = tokenManager;
-      this.tokenManager.initToken().catch((error) => {
-        logErrorChain("TwitchApi.constructor.initToken", wrapError("TwitchApi initial token loading failed", error));
-      });
     }
 
     /*

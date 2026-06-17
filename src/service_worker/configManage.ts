@@ -1,35 +1,41 @@
 import { TwitchApi } from './twitch';
 import type { User } from './models/user';
 import type { UserConfigs, I_NEW_LIST, I_CONFIG } from './models/userStructure'
-import type { Writable } from "svelte/store";
+// import type { Writable } from "svelte/store";
 import * as CST from '../constantes'
 
 export class ConfigManager {
     twitchApi: TwitchApi;
-    user: User | null = null;
+    userId: number | null = null;
     userConfigs: UserConfigs | null = null;
     userConfigsPromise: Promise<UserConfigs | null> | null = null;
 
-    constructor(twitchApi: TwitchApi, userUpdate: Writable<boolean>) {
+    constructor(twitchApi: TwitchApi
+        // , userUpdate: Writable<boolean>
+    ) {
         this.twitchApi = twitchApi;
-        userUpdate.subscribe((userValid: boolean) => {
-            if (!userValid) {
-                this.user = null;
-                this.userConfigs = null;
-            } else {
-                const userId = this.twitchApi.tokenManager.userId;
-                if (!userId) return;
-                this.user = { id: Number(userId), login: '', display_name: '' };
-                this.getConfigObjectForCurrentUser();
-            }
-        });
+        // userUpdate.subscribe((userValid: boolean) => {
+        //     if (!userValid) {
+        //         this.user = null;
+        //         this.userConfigs = null;
+        //     } else {
+        //         const userId = this.twitchApi.tokenManager.userId;
+        //         if (!userId) return;
+        //         this.user = { id: Number(userId), login: '', display_name: '' };
+        //         this.getConfigObjectForCurrentUser();
+        //     }
+        // });
+    }
+
+    initConfigWithUser(userId: number) {
+        this.userId = userId;
     }
 
     getConfigObjectForCurrentUser(): Promise<UserConfigs | null> {
-        if (!this.user) return Promise.resolve(null);
+        if (!this.userId) return Promise.resolve(null);
         if (this.userConfigsPromise) return this.userConfigsPromise;
 
-        const userId = this.user.id;
+        const userId = this.userId;
 
         this.userConfigsPromise = (async (): Promise<UserConfigs | null> => {
             const data: { [key: string]: UserConfigs } = await chrome.storage.local.get(String(userId));
@@ -63,7 +69,7 @@ export class ConfigManager {
     }
 
     findConfigById(configName: string): I_NEW_LIST | null {
-        if (this.user) {
+        if (this.userId) {
             const config = this.userConfigs!.configsList.find(conf => conf.rootList.name === configName);
             if (config?.config)
                 return config.config;
@@ -73,9 +79,9 @@ export class ConfigManager {
 
     async saveConfig(configToSave: I_CONFIG): Promise<UserConfigs> {
         if (!configToSave) throw new Error("No config to save");
-        if (!this.user) throw new Error("No user connected, cannot save config");
+        if (!this.userId) throw new Error("No user connected, cannot save config");
 
-        const userId = this.user.id;
+        const userId = this.userId;
         const data: { [key: string]: UserConfigs } = await chrome.storage.local.get(String(userId));
         let userStructure: UserConfigs = data[String(userId)];
 

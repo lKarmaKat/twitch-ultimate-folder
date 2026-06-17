@@ -5,14 +5,26 @@ import { DataFormatter } from "./dataFormatter";
 import { POLLING_INTERVAL } from '../constantes'
 
 
-export class DataPoller {
+export class DataPusher {
     dataFormatter;
     private twitchApi: TwitchApi;
+    private readyPromise: Promise<void>;
 
     constructor(twitchApi: TwitchApi, sendCallback: any) {
         this.twitchApi = twitchApi;
         this.dataFormatter = new DataFormatter(twitchApi);
-        this.scheduleNext(sendCallback);
+        this.readyPromise = this.runFirstPoll(sendCallback).catch(() => {});
+    }
+
+    private async runFirstPoll(sendCallback: any): Promise<void> {
+        try {
+            const data = await this.dataFormatter.updateAll();
+            sendCallback(data);
+        } catch (error) {
+            throw wrapError("DataPusher.runFirstPoll failed", error);
+        } finally {
+            this.scheduleNext(sendCallback);
+        }
     }
 
     private getInterval(): number {
@@ -29,7 +41,7 @@ export class DataPoller {
                 const data = await this.dataFormatter.updateAll();
                 sendCallback(data);
             } catch (error) {
-                throw wrapError("DataPoller.scheduleNext failed", error);
+                throw wrapError("DataPusher.scheduleNext failed", error);
             } finally {
                 this.scheduleNext(sendCallback);
             }
@@ -37,6 +49,7 @@ export class DataPoller {
     }
 
     async getConfig(): Promise<[number, StreamsInfos][]> {
+        await this.readyPromise;
         return this.dataFormatter.getInfotoSend();
     }
 

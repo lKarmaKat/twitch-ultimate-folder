@@ -4,31 +4,55 @@ import { ConfigManager } from './configManage';
 import { TokenManager } from "./token";
 import { logErrorChain, wrapError } from "./errors";
 import * as CST from '../constantes.js'
-import { DataPoller } from './dataPoller';
+import { DataPusher } from './dataPusher';
 import type { StreamsInfos } from './models/streamsInfos.model';
 
-let waitingForUserToLogin: boolean = false;
+const logBackgroundError = (context: string, error: unknown) => {
+  logErrorChain(context, error);
+};
 
-
+console.log("####################");
+console.log("Background.js");
+console.log("####################");
 
 const tokenManager = new TokenManager(
     (userId) => initServices(userId),
     () => {},
-    () => true
+    () => {
+      portManager.sendMessageToAllTabs("", false, "auth")
+      console.log("No Token found, has yet to be implemented")
+      return true
+    }
 );
-tokenManager.getTokenFromStorage();
-
+// setTimeout(() => {
+  tokenManager.getTokenFromStorage();
+// }, 8000)
 let twitchApi: TwitchApi | null = null;
 let configManager: ConfigManager | null = null;
-let streamsDatasPoller: DataPoller | null = null;
+let streamsDatasPoller: DataPusher | null = null;
 
-function initServices(userId: number) {
+async function initServices(userId: number) {
+    console.log("BACKGROUND initService")
     twitchApi = new TwitchApi(tokenManager);
     configManager = new ConfigManager(twitchApi);
-    configManager.init(userId);
-    streamsDatasPoller = new DataPoller(twitchApi, (data: StreamsInfos[]) => {
+    configManager.initConfigWithUser(userId);
+    streamsDatasPoller = new DataPusher(twitchApi, (data: StreamsInfos[]) => {
         portManager.sendMessageToAllTabs(CST.GET_STREAMS_REF, data);
     });
+
+    // Rattrapage pour les ports connectés avant que l'auth soit prête
+    try {
+        const [currentConfig, streamInfo] = await Promise.all([
+            configManager.getConfigObjectForCurrentUser(),
+            streamsDatasPoller.getConfig()
+        ]);
+        portManager.sendMessageToAllTabs("", true, "auth")
+
+        if (currentConfig) portManager.sendMessageToAllTabs(CST.GET_CURRENT_CONFIGURATION, currentConfig);
+        if (streamInfo) portManager.sendMessageToAllTabs(CST.GET_STREAMS_REF, streamInfo);
+    } catch (e) {
+        logBackgroundError("initServices:initialBroadcast", e);
+    }
 }
 
 
@@ -47,13 +71,7 @@ function initServices(userId: number) {
 //   portManager.sendMessageToAllTabs(CST.GET_STREAMS_REF, data);
 // });
 
-const logBackgroundError = (context: string, error: unknown) => {
-  logErrorChain(context, error);
-};
 
-console.log("####################");
-console.log("Background.js");
-console.log("####################");
 
 
 
@@ -107,8 +125,17 @@ let sendCurrentAlignmentOnConnect = (port: chrome.runtime.Port) => {
   });
 }
 
-
-let portManager = new PortManager(sendCurrentConfigOnConnect, sendStreamInfoOnConnect, sendCurrentThemeOnConnect, sendCurrentAlignmentOnConnect);
+let sendCurrentAuth = (port: chrome.runtime.Port) => {
+  port.postMessage({
+    "type": "", // RENVOYER LE TYPE NE SERT A RIEN ICI
+    "data": tokenManager.token ? true : false 
+  });
+}
+let portManager = new PortManager(sendCurrentConfigOnConnect, 
+                                  sendStreamInfoOnConnect, 
+                                  sendCurrentThemeOnConnect, 
+                                  sendCurrentAlignmentOnConnect,
+                                sendCurrentAuth);
 
 // userUpdate.subscribe((userValid: boolean) => {
 //   if (!userValid) return;
@@ -129,6 +156,11 @@ chrome.runtime.onMessage.addListener(async (msg, sender, sendResponse) => {
     if( msg.type === CST.IS_USER_LOGGED_IN) {
       if (tokenManager.token) {
         sendResponse(true);
+      } else if (tokenManager.currentDeviceCodeInfo?.user_code && tokenManager.currentDeviceCodeInfo?.verification_uri) {
+        sendResponse({ 
+                user_code: tokenManager.currentDeviceCodeInfo?.user_code,
+                verification_uri: tokenManager.currentDeviceCodeInfo?.verification_uri
+        });
       } else {
         const info = await new Promise<any>(resolve => {
           tokenManager.initAuthentification((info: any) => {

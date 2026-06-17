@@ -1,3 +1,9 @@
+console.log("################")
+console.log("################")
+console.log("CONTENT SCRIPT")
+console.log("################")
+console.log("################")
+
 function createDivWithIframeInShwadowDom(mainDivId, iframeSrcUrl, cssUrl = '', allowTransparency = false) {
   const iframe = document.createElement('iframe');
   iframe.src = iframeSrcUrl;
@@ -48,6 +54,8 @@ function injectScript() {
   const maindiv = document.createElement('div')
   maindiv.id = "sidebar_shadow";
   t.parentElement.insertBefore(maindiv, t);
+  // t.parentElement.insertBefore(maindiv, t.parentElement.lastElementChild)
+  // t.insertBefore(maindiv, t.firstElementChild);
 
   let shadowParent = maindiv.attachShadow({mode:'open'})
   const script2 = document.createElement('script');
@@ -65,6 +73,9 @@ function injectScript() {
   link2.href = chrome.runtime.getURL('assets/dark_channel.css');
   shadowParent.appendChild(link2);
 
+
+  const sideNav = document.querySelector('#side-nav');
+  // sideNav.style.setProperty('width', '34rem', 'important');
 
   const sections = () => document.querySelectorAll('#side-nav .side-nav-section');
 
@@ -86,9 +97,11 @@ function injectScript() {
 
 const injectObs = (obs, m) => {
   let t = document.querySelector("#side-nav .side-nav-section")
-  if (t) {
+  let side = document.querySelector('.injected-sidebar-css');
+  // console.log("observed changes")
+  if (t && !side) {
     injectScript();
-    if (m) {
+    if (m) { // always true ?
       console.log("Injected by mutation observer")
     }
     obs.disconnect();
@@ -103,5 +116,20 @@ observer.observe(document.body, {
   childList: true,
   subtree: true
 });
+
+const sideNavObserver = new MutationObserver((mut, obs) => {
+  let t = document.querySelector("#side-nav .side-nav-section")
+  // console.log("########")
+  // console.log("body observer")
+  // console.log("########")
+  if (t) {
+    observer.observe(t, {
+      childList: true,
+      subtree: true
+    });
+    obs.disconnect()
+  }
+}).observe(document.body, { childList: true, subtree: true })
+
 injectObs(observer);
 

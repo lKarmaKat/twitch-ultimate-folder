@@ -4,6 +4,7 @@ import { CLIENT_ID } from "../constantes";
 export interface DeviceCodeInfo {
     user_code: string;
     verification_uri: string;
+    device_code: string;
 }
 
 export class TokenManager {
@@ -18,7 +19,9 @@ export class TokenManager {
     fetchingPromise: Promise<string> | null = null;
     tokenValidationInterval = 30 * 60 * 1000;
     nextValidationDate = 0;
-    authAutoFailed = false;
+    // authAutoFailed = false;
+    authInProgressPromise: Promise<void> | null;
+    currentDeviceCodeInfo: DeviceCodeInfo | null;
     userAlreadyLoggedInCallbak: (info: number) => void;
     userGotDisconnected: (data: boolean | null) => void;
     noTokenFound: () => boolean
@@ -28,18 +31,25 @@ export class TokenManager {
         userGotDisconnected: (info: boolean | null) => void,
         noTokenFound: () => boolean
     ) {
+        console.log("TOKEN CONSTR")
         this.userAlreadyLoggedInCallbak = userAlreadyLoggedInCallbak
         this.userGotDisconnected = userGotDisconnected
         this.noTokenFound = noTokenFound
     }
 
     async getTokenFromStorage() {
+        console.log("getTokenFromStorage")
+
         try {
             await this.chromeStorageToken();
+             if (!this.refreshToken && !this.token) {
+                await this.refreshAccessToken();
+            }
             await this.validateAuthToken();
+            console.log("Calling userAlreadyLoggedInCallbak")
             this.userAlreadyLoggedInCallbak(this.userId!);
         } catch (error) {
-            // no token found, waitin for user to login
+            //throw wrapError("TokenManager.getTokenFromStorage nothing in store.", error);
         }
         return null;
     }
@@ -49,38 +59,14 @@ export class TokenManager {
         try {
             await this.getNewTokenAndValidate(callback);
             // this.userDisconnected(true);
+            if (this.token) {
+                this.userAlreadyLoggedInCallbak(this.userId!)
+            }
             return this.token!;
-        } catch {
+        } catch (error) {
             // this.userDisconnected(false);
-            throw new Error("TokenManager.initToken No token found and unable to get a new one.");
+            throw wrapError("TokenManager.initToken No token found and unable to get a new one.", error);
         }
-        
-        // if (this.isTokenValid()) {
-        //     // this.userDisconnected(true);
-        //     return this.token!;
-        // }
-
-        // try {
-        //     await this.validateAuthToken();
-        //     // this.userDisconnected(true);
-        //     return this.token!;
-        // } catch {
-        //     if (this.refreshToken) {
-        //         try {
-        //             await this.refreshAccessToken();
-        //             // this.userDisconnected(true);
-        //             return this.token!;
-        //         } catch { /* fall through to new auth */ }
-        //     }
-        //     try {
-        //         await this.getNewTokenAndValidate();
-        //         // this.userDisconnected(true);
-        //         return this.token!;
-        //     } catch {
-        //         // this.userDisconnected(false);
-        //         throw new Error("TokenManager.initToken Invalid token and unable to refresh or get a new one.");
-        //     }
-        // }
     }
 
     getToken(): Promise<string> {
@@ -99,14 +85,16 @@ export class TokenManager {
                     try {
                         await this.refreshAccessToken();
                         return this.token!;
-                    } catch { /* fall through */ }
+                    } catch (error) { 
+                        throw wrapError("TokenManager.getToken failed to refresh token", error);
+                     }
                 }
                 try {
-                    await this.getNewTokenAndValidate();
+                    await this.getNewTokenAndValidate(null);
                     return this.token!;
                 } catch (error) {
                     // this.userDisconnected(false);
-                    throw wrapError("TokenManager.getToken failed to refresh token", error);
+                    throw wrapError("TokenManager.getToken failed to get new token or validate", error);
                 }
             }
         })().finally(() => {
@@ -120,7 +108,13 @@ export class TokenManager {
         const data = await chrome.storage.local.get([
             'twitchToken', 'tokenExpirationDate', 'nextValidationDate', 'refreshToken'
         ]);
-        if (!data.twitchToken) throw new Error('No token in storage');
+        if (!data.twitchToken || !data.tokenExpirationDate || !data.nextValidationDate || !data.refreshToken) {
+            console.log('Something missing in storage', data.twitchToken, data.tokenExpirationDate, data.nextValidationDate, data.refreshToken);
+        }
+        if (!data.refreshToken) {
+            this.noTokenFound();
+            return Promise.reject("Something missing to validate token");
+        }
         this.token = data.twitchToken as string;
         this.tokenExpirationDate = parseInt(data.tokenExpirationDate as string) || 0;
         this.nextValidationDate = parseInt(data.nextValidationDate as string) || 0;
@@ -143,28 +137,59 @@ export class TokenManager {
             await this.validateAuthToken();
             return this.token!;
         } catch (error) {
-            throw wrapError("TokenManager.getNewTokenAndValidate validation failed", error);
+            throw wrapError("TokenManager.getNewTokenAndValidate failed to get new token or validate", error);
         }
     }
 
     async getNewAuthToken(callback: any): Promise<void> {
-        if (this.authAutoFailed) {
-            throw new Error('TokenManager.getNewAuthToken auth previously failed');
-        }
+        // if (this.authAutoFailed) {
+        //     throw new Error('TokenManager.getNewAuthToken auth previously failed');
+        // }
+        if (this.authInProgressPromise) return this.authInProgressPromise;
 
-        try {
-            const { device_code, user_code, verification_uri, interval, expires_in } = await this.requestDeviceCode();
-            if (callback)
-                callback({user_code, verification_uri});
+        // if (this.authInProgressPromise) {
+        //     if (callback) callback({ 
+        //         user_code: this.currentDeviceCodeInfo?.user_code,
+        //         verification_uri: this.currentDeviceCodeInfo?.verification_uri
+        //     });
+        //     return Promise.reject();
+        // };
 
-            await this.pollForDeviceToken(device_code, interval, Date.now() + expires_in * 1000);
+        this.authInProgressPromise = (async () => {
+            try {
+                const { device_code, user_code, verification_uri, interval, expires_in } = await this.requestDeviceCode();
+                this.currentDeviceCodeInfo = {
+                    device_code,
+                    user_code,
+                    verification_uri
+                }
+                if (callback) callback({ user_code, verification_uri });
+                await this.pollForDeviceToken(device_code, interval, Date.now() + expires_in * 1000);
+            } catch (error) {
+                // this.authAutoFailed = true;
+                throw wrapError("error", error);
+            }
+        })().finally(() => {
+            this.authInProgressPromise = null;
+        });
 
-            // this.onAuthSuccess(null);
-        } catch (error) {
-            this.authAutoFailed = true;
-            // this.onAuthSuccess(false);
-            throw error;
-        }
+        return this.authInProgressPromise;
+
+
+
+        // try {
+        //     const { device_code, user_code, verification_uri, interval, expires_in } = await this.requestDeviceCode();
+        //     if (callback)
+        //         callback({user_code, verification_uri});
+
+        //     await this.pollForDeviceToken(device_code, interval, Date.now() + expires_in * 1000);
+
+        //     // this.onAuthSuccess(null);
+        // } catch (error) {
+        //     // this.authAutoFailed = true;
+        //     // this.onAuthSuccess(false);
+        // throw wrapError("error", error);
+        // }
     }
 
     private async requestDeviceCode(): Promise<{
@@ -196,6 +221,7 @@ export class TokenManager {
         });
 
         while (Date.now() < expiresAt) {
+            console.log("Polling with device_code", device_code)
             await new Promise(r => setTimeout(r, interval * 1000));
             const response = await fetch(this.TOKEN_URL, { method: 'POST', body });
             const data = await response.json();
@@ -204,7 +230,6 @@ export class TokenManager {
                 this.token = data.access_token;
                 this.refreshToken = data.refresh_token ?? null;
                 this.setTokenExpirationDate(data.expires_in);
-                this.nextValidationDate = Date.now() + this.tokenValidationInterval;
                 chrome.storage.local.set({
                     twitchToken: this.token,
                     ...(this.refreshToken && { refreshToken: this.refreshToken }),
@@ -233,7 +258,6 @@ export class TokenManager {
         const data = await response.json();
         this.userId = data.user_id;
         this.setTokenExpirationDate(data.expires_in);
-        this.nextValidationDate = Date.now() + this.tokenValidationInterval;
         chrome.storage.local.set({
             tokenExpirationDate: this.tokenExpirationDate,
             nextValidationDate: this.nextValidationDate,
@@ -261,7 +285,6 @@ export class TokenManager {
         this.token = data.access_token;
         this.refreshToken = data.refresh_token ?? this.refreshToken;
         this.setTokenExpirationDate(data.expires_in);
-        this.nextValidationDate = Date.now() + this.tokenValidationInterval;
         chrome.storage.local.set({
             twitchToken: this.token,
             refreshToken: this.refreshToken,
@@ -273,5 +296,6 @@ export class TokenManager {
 
     setTokenExpirationDate(expires_in: number) {
         this.tokenExpirationDate = Date.now() + (expires_in * 1000);
+        this.nextValidationDate = Date.now() + this.tokenValidationInterval;
     }
 }

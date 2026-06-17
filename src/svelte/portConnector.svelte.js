@@ -58,14 +58,14 @@ class PortConnector {
             } catch (e) {
                 console.log(this.nm, "RECONNECT FAILED", e.message);
             }
-        }, 10000);
+        }, 2000);
     }
 
     startPing() {
         let pingCallBack = () => {
             chrome.runtime.sendMessage(this.extensionId, { type: 'KEEP_ALIVE_PING' });
         }
-        // this.interval = setInterval(pingCallBack, this.PING_INTERVAL);
+        this.interval = setInterval(pingCallBack, this.PING_INTERVAL);
     }
 }
 
