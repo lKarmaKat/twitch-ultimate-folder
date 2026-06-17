@@ -1,6 +1,7 @@
 import type * as t from 'src/service_worker/models/userStructure';
 
-export const CLIENT_ID = '0cccietj726skd2jwlf39ymhmyzbi7';
+// export const CLIENT_ID = '0cccietj726skd2jwlf39ymhmyzbi7';
+export const CLIENT_ID = '1baau10iaxptnjjl9o9yt6kb8ibrv9';
 export const POLLING_INTERVAL = 6000;
 export const ALL_OTHER_CHANNELS = -1;
 export const GET_STREAMS_REF = 'GET_STREAMS_REF';

@@ -3,7 +3,9 @@
     import * as CST from '../../constantes.js'
     import { writable } from 'svelte/store';
     import ConfigManager from "../configManager.svelte.js";
-    let { configManager } = $props();
+    import IconSelect from "./IconSelect.svelte";
+
+    let { configManager, darkTheme = true } = $props();
     let listeId;
     let config = $state();
 
@@ -79,12 +81,11 @@
                 </select>
             </div> -->
             <div class="row">
-                <select name="icon-type" id="icon-type" bind:value={config.type.iconType} onchange={updateConfig}>
-                    <option value="">none</option>
-                    {#each CST.ICON_TYPE as iconType}
-                        <option value={iconType.id}>{iconType.name}</option>
-                    {/each}
-                </select>
+                <IconSelect
+                    bind:value={config.type.iconType}
+                    options={CST.ICON_TYPE}
+                    onchange={updateConfig}
+                    darkTheme={darkTheme} />
             </div>
             <div class="row">
                 <select name="bar-type" id="bar-type" bind:value={config.type.barType} onchange={updateConfig}>

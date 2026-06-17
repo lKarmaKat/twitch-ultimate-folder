@@ -42,14 +42,19 @@ export class TokenManager {
 
         try {
             await this.chromeStorageToken();
-             if (!this.refreshToken && !this.token) {
+            try {
+                await this.validateAuthToken();
+            } catch (error) {
+                if (!this.refreshToken) {
+                    throw wrapError("TokenManager.getTokenFromStorage no refresh token", error);
+                }
                 await this.refreshAccessToken();
+                // await this.validateAuthToken();
             }
-            await this.validateAuthToken();
             console.log("Calling userAlreadyLoggedInCallbak")
             this.userAlreadyLoggedInCallbak(this.userId!);
         } catch (error) {
-            //throw wrapError("TokenManager.getTokenFromStorage nothing in store.", error);
+            throw wrapError("TokenManager.getTokenFromStorage either refreshing or validating after refresh failed.", error);
         }
         return null;
     }
@@ -85,9 +90,9 @@ export class TokenManager {
                     try {
                         await this.refreshAccessToken();
                         return this.token!;
-                    } catch (error) { 
+                    } catch (error) {
                         throw wrapError("TokenManager.getToken failed to refresh token", error);
-                     }
+                    }
                 }
                 try {
                     await this.getNewTokenAndValidate(null);
@@ -279,7 +284,7 @@ export class TokenManager {
         if (!response.ok || !data.access_token) {
             this.refreshToken = null;
             chrome.storage.local.remove('refreshToken');
-            throw new Error('TokenManager.refreshAccessToken Token refresh failed');
+            throw new Error('TokenManager.refreshAccessToken Token refresh failed' + JSON.stringify(response));
         }
 
         this.token = data.access_token;

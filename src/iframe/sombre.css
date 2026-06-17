@@ -56,7 +56,9 @@ input[type=text] {
     color: rgb(239, 239, 241);
 }
 
-
+.icon-select .label {
+    color: rgb(239, 239, 241);
+}
 
 
 /* twitch icon color #9147ff */

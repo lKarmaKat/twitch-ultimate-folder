@@ -37,10 +37,10 @@
     configManager.saveConfig(configManager.selectedConfig);
   }
 
-  let themeName = $state(true);
+  let darkTheme = $state(true);
 
   let theme = (data) => {
-      themeName = data.data;
+      darkTheme = data.data;
   }
   let port = new PortConnector(theme, "theme");
 
@@ -73,7 +73,7 @@
 </script>
 
 <svelte:head>
-  {#if themeName}
+  {#if darkTheme}
 	<link rel="stylesheet" href="/assets/sombre.css">
 	<link rel="stylesheet" href="/assets/dark_channel.css">
 	{:else}
@@ -131,7 +131,7 @@
           </div>
           {/if}
           <div class="config-container">
-            <ConfigPannel configManager={configManager}/>
+            <ConfigPannel configManager={configManager} darkTheme={darkTheme}/>
           </div>
           <!-- {#if !loading} -->
           {#if configManager.channelsPickRef.length && Object.getOwnPropertyNames(configManager.channelsConfigList).length > 0}
