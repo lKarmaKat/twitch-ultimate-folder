@@ -225,9 +225,9 @@ export const currentConfig = 'currentConfig';
 
 export const ALL_OTHER_CHANNELS_ELEMENT = {
         "id": ALL_OTHER_CHANNELS,
-        "channel_id": -1,
+        "channel_id": ALL_OTHER_CHANNELS,
         "channel_name": "All others channels",
-        "sort": 'ALPHA',
+        "sort": ALPHA_SORT,
         "isLive": false,
         "profile_image_url": "../../assets/all_other_channels.png",
         "viewer_count": 0, 

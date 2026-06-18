@@ -123,8 +123,7 @@
 		let set = getChannelsInConfig();
 		let containsAllOtherChannels = hasAllOtherChannels(set);
 		if (containsAllOtherChannels) {
-			let item = {};
-			item.sort === CST.ALPHA_SORT
+			let item = CST.ALL_OTHER_CHANNELS_ELEMENT;
 			let s = getAllOtherChannels(configManager.channelsPickRef, item);
 			set = new Set();
 			s.forEach(e => set.add(e.channel_id));
@@ -178,12 +177,12 @@
 				return ('' + an).localeCompare(bn)
 			}
 		};
-		if (item.sort === CST.ALPHA_SORT)
+		let allOtherChannelsRef = configManager.getChannel(`${item.channel_id}`)
+		if (allOtherChannelsRef.sort === CST.ALPHA_SORT) {
 			list.sort(alphaSortCallback);
-		else 
+		} else  {
 			list.sort(viewerCountSortCallback);
-		// console.log("all others", list.length, list)
-		// counter = c;
+		}
 		return list;
 	}
 
@@ -213,6 +212,63 @@
 	let liveChannels = $derived.by(() => {
 		return hasLiveChannelCallback(listId)
 	})
+
+	function getListChannelsSortedByStrategy(channelsList) {
+		let sortedList = [...channelsList];
+		const alphaSortCallback = (ax, bx) => {
+			if (ax.type === CST.TYPE_LIST) return 1;
+			if (bx.type === CST.TYPE_LIST) return -1;
+			let a = getNodeIfLive(ax);
+			let b = getNodeIfLive(bx);
+			// console.log('sorting', a, ax, b, bx)
+			if (!a) return 1;
+			if (!b) return -1;
+			if (a.isLive && b.isLive) {
+				let an = a.channel_name;
+				let bn = b.channel_name;
+				return ('' + an).localeCompare(bn)
+			} else if (a.isLive) {
+				return -1;
+			} else if (b.isLive) {
+				return 1;
+			} else {
+				let an = a.channel_name;
+				let bn = b.channel_name;
+				return ('' + an).localeCompare(bn)
+			}
+		};
+		const viewerCountSortCallback = (ax,bx) => {
+			if (ax.type === CST.TYPE_LIST) return 1;
+			if (bx.type === CST.TYPE_LIST) return -1;
+			let a = getNodeIfLive(ax);
+			let b = getNodeIfLive(bx);
+			// console.log('sorting', a, ax, b, bx)
+			if (!a) return 1;
+			if (!b) return -1;
+			if (a.isLive && b.isLive) {
+				return b.viewer_count - a.viewer_count
+			} else if (a.isLive) {
+				return -1;
+			} else if (b.isLive) {
+				return 1;
+			} else {
+				let an = a.channel_name;
+				let bn = b.channel_name;
+				return ('' + an).localeCompare(bn)
+			}
+		};
+		// console.log("sortStrategy for", listId, configManager.selectedConfig[listId].sort)
+		if (configManager.selectedConfig[listId].sort === CST.ALPHA_SORT) {
+			// console.log("alpha for", listId)
+			sortedList.sort(alphaSortCallback);
+		}
+		else if (configManager.selectedConfig[listId].sort === CST.VIEWER_SORT) {
+			// console.log("viwer for", listId)
+			
+			sortedList.sort(viewerCountSortCallback);
+		}
+		return sortedList;
+	}
 
 </script>
 	<!-- <div class="width-test">
@@ -246,13 +302,13 @@
 		{#if configManager.selectedConfig[listId]?.hasOwnProperty("items")}
 			<div class="list-body" class:extended style="--content-color:{content?.contentColor};">
 				<div>
-					{#each configManager.selectedConfig[listId].items as item(item.id)}
+					<!-- {#each configManager.selectedConfig[listId].items as item(item.id)} -->
+					{#each getListChannelsSortedByStrategy(configManager.selectedConfig[listId].items) as item(item.id)}
 						{#if item.type === CST.TYPE_LIST}
 							<div class="nested-list">
 								<Self  listId={item.id} configManager={configManager} />
 							</div>
-						{:else if item.id === CST.ALL_OTHER_CHANNELS}
-
+						{:else if item.channel_id === CST.ALL_OTHER_CHANNELS}
 							{#each getAllOtherChannels(configManager.channelsPickRef, item) as other(`${other.channel_id}`)}
 								{@const i = getNode(other)}
 								<div class="channel-overlay li{listId}">

@@ -10,7 +10,7 @@ class ConfigManager {
     channelsPickRefMap = new SvelteMap<string, StreamsInfos>();
     channelsPickRef = $derived.by(() => {
         let channelsList = Array.from(this.channelsPickRefMap.values());
-        channelsList.push(CST.ALL_OTHER_CHANNELS_ELEMENT);
+        // channelsList.push(CST.ALL_OTHER_CHANNELS_ELEMENT);
         
         const alphaSortCallback = (a: StreamsInfos, b: StreamsInfos) => {
                     let alphaSort = (a: StreamsInfos, b: StreamsInfos) => {
@@ -52,6 +52,7 @@ class ConfigManager {
                 }
             } else if (msg.type === CST.GET_STREAMS_REF) {
                 this.channelsPickRefMap.clear();
+                this.channelsPickRefMap.set(`${CST.ALL_OTHER_CHANNELS}`, CST.ALL_OTHER_CHANNELS_ELEMENT)
                 for (const [id, streamInfo] of msg.data) {
                     this.channelsPickRefMap.set(id, streamInfo);
                 }

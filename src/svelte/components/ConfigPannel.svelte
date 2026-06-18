@@ -6,6 +6,7 @@
     import IconSelect from "./IconSelect.svelte";
     import BarColorSelect from "./BarColorSelect.svelte";
     import CounterTypeSelect from "./CounterTypeSelect.svelte";
+    import SortSelect from "./SortSelect.svelte";
 
     let { configManager } = $props();
     let listeId;
@@ -81,6 +82,14 @@
                             data-tooltip={item.tooltip}>?</span>
                     </div>
                 {/each}
+            </div>
+            <div class="row">
+                <p>Sort strategy</p>
+                <span class="help-badge" data-tooltip="Help">?</span>
+                <SortSelect
+                    bind:value={config.sort}
+                    options={CST.SORT_STRATEGY}
+                    onchange={updateConfig} />
             </div>
         </div>
         <div class="bloc">
