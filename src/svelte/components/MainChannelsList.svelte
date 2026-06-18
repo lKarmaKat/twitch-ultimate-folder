@@ -69,7 +69,7 @@ function show() {
 <style>
     section {
       overflow-y: scroll;
-      max-height: 95%;
+      /* max-height: 95%; */
     }
     input[type=text] {
         font-size: 1em;

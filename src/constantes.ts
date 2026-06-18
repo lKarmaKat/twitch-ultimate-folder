@@ -18,22 +18,39 @@ export const CHANGE_ALIGNMENT = 'CHANGE_ALIGNMENT';
 export const GET_ALIGNMENT = 'GET_ALIGNMENT';
 export const IS_USER_LOGGED_IN = 'IS_USER_LOGGED_IN';
 export const AUTH_DEVICE_CODE = 'AUTH_DEVICE_CODE';
-export const ALPHA_SORT = 'ALPHA';
-export const VIEWER_SORT = 'VIEWER';
-export const CUSTOM_SORT = 'CUSTOM';
 export const SYSTEM_STYLE = 'SYSTEM_STYLE';
 export const CUSTOM_STYLE = 'CUSTOM_STYLE';
 export let TYPE_LIST = 'list'
 
+
+export const EXTENDED_ON_STARTUP = 0;
+export const EXTENDEDS_ON_HOVER = 1;
+export const EXTENDEDS_ON_CLICK = 2;
+
+export const CUSTOM_SORT = 0;
+export const VIEWER_SORT = 1;
+export const ALPHA_SORT = 2;
+
 export const PARAM_ALIGNMENT_LEFT = 'alignmentLeft';
 
-export const HEADER_TYPE_HEIGHT = [
+export const HEADER_TYPE_HEIGHT = [ // Not currently used
   { id: 1, name: 'small' },
   { id: 2, name: 'medium' },
   { id: 3, name: 'large' }
 ]
   
 
+export const BEHAVIOUR = [
+{id: EXTENDED_ON_STARTUP, label: 'Extended on startup', tooltip: 'Liste déjà dépliée au chargement de la page.'},
+{id: EXTENDEDS_ON_HOVER, label: 'Extends on hover', tooltip: 'La liste se déplie au survol de la souris.'},
+{id: EXTENDEDS_ON_CLICK, label: 'Extends on click', tooltip: 'La liste se déplie/replie au clic sur le header.'}
+];
+
+export const SORT_STRATEGY = [
+  {id: CUSTOM_SORT, type: 'CUSTOM_SORT', name: 'Custom sort'},
+  {id: VIEWER_SORT, type: 'VIEWER_SORT', name: 'Viewer count sort'},
+  {id: ALPHA_SORT, type: 'ALPHA_SORT', name: 'Alpha sort'},
+]
 
 export const ICON_TYPE = [
   { 
@@ -156,12 +173,11 @@ export const NEW_LIST: t.I_NEW_LIST = {
             items:[
             ],
             behavior: {
-                extendedOnStartup: true,
-                extendOnHover: false,
-                extendOnClick: false,
-                isPinnable: true
+                [EXTENDED_ON_STARTUP]: true,
+                [EXTENDEDS_ON_HOVER]: false,
+                [EXTENDEDS_ON_CLICK]: false
             },
-            sort: CUSTOM_SORT,
+            sort: SORT_STRATEGY[CUSTOM_SORT].id,
             style: {
                 theme: SYSTEM_STYLE,
                 header: {

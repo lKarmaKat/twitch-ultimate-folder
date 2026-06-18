@@ -140,8 +140,8 @@
           </div>
           {/if}
         </div>
-        <button id="showC" onclick={showDisplayConf}>Show display conf</button>
-        <button onclick={() => saveConfig()}>Enregistrer</button>
+        <!-- For debug purpose -->
+        <!-- <button id="showC" onclick={showDisplayConf}>Show display conf</button> -->
       {/if}
     </div>
   </div>
@@ -211,7 +211,16 @@
     left: 15%;
     top: 10%;
   }
-
+  #config-list-container {
+    display: flex;
+    flex-direction: column;
+    max-height: 100%;
+    flex: 0 1 14%
+  }
+  #config-list {
+    flex: 1 1 auto;
+    min-height: 0;        /* indispensable pour que overflow-y:scroll marche en flex */
+  }
   div.channels-container,
   div.display-container {
     max-height: 100%;

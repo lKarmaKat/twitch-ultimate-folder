@@ -53,7 +53,7 @@
 	});
 
 	let extended = $derived.by(() => {
-		return configManager.selectedConfig[listId].behavior.extendedOnStartup || false;
+		return configManager.selectedConfig[listId].behavior[CST.EXTENDED_ON_STARTUP] || false;
 	});
 
 	let displayList = $derived.by(() => {

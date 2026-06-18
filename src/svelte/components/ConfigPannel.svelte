@@ -49,11 +49,7 @@
 
     }
 
-    const behaviorItems = [
-    { key: 'extendedOnStartup', label: 'Extended on startup', tooltip: 'Liste déjà dépliée au chargement de la page.' },
-    { key: 'extendOnHover',     label: 'Extends on hover',     tooltip: 'La liste se déplie au survol de la souris.' },
-    { key: 'extendOnClick',     label: 'Extends on click',     tooltip: 'La liste se déplie/replie au clic sur le header.' }
-    ];
+
 </script>
 
 <div class="pannel-container">
@@ -72,12 +68,12 @@
         <div class="bloc">
             <p>Behavior</p>
             <div class="grid">
-                {#each behaviorItems as item}
+                {#each CST.BEHAVIOUR as item}
                     <div class="behavior-item">
                         <input
                             type="checkbox"
-                            id={item.key}
-                            bind:checked={config.behavior[item.key]}
+                            id={item.id}
+                            bind:checked={config.behavior[item.id]}
                             onchange={updateConfig} />
                         <label for={item.key}>{item.label}</label>
                         <span
