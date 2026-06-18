@@ -124,10 +124,13 @@
             {/if}
           </div>
           {#if configManager.channelsPickRef.length}
+          <div id="config-list-container">
           <div id="config-list" class="channels-container">
             <ConfigList listId="rootList"
             configManager={configManager}
             requestDeleteToParent={promptResetConfig} />
+          </div>
+            <button class="save-btn" onclick={() => saveConfig()}>Enregistrer</button>
           </div>
           {/if}
           <div class="config-container">
@@ -256,4 +259,49 @@
     flex-direction: row;
     justify-content: space-between;
   }
+  .save-btn {
+    margin: .4em 1.5em .4em 0;
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+    width: 100%;
+    padding: 0.4em 0.5em;
+    background: #a970ff;
+    border: #a970ff;
+    border-radius: 0.3em;
+    cursor: pointer;
+    text-align: left;
+    color: inherit;
+  }
+
+
+  div.channels-container,
+div.display-container {
+  max-height: 100%;
+  overflow-y: scroll;
+  flex: 0 1 14%;
+
+  /* Firefox */
+  scrollbar-width: thin;                     /* auto | thin | none */
+  scrollbar-color: #1010da transparent;      /* thumb  track */
+}
+
+/* Chromium / Edge */
+div.channels-container::-webkit-scrollbar,
+div.display-container::-webkit-scrollbar {
+  width: 8px;
+}
+div.channels-container::-webkit-scrollbar-track,
+div.display-container::-webkit-scrollbar-track {
+  background: transparent;
+}
+div.channels-container::-webkit-scrollbar-thumb,
+div.display-container::-webkit-scrollbar-thumb {
+  background: #2020d6;
+  border-radius: 4px;
+}
+div.channels-container::-webkit-scrollbar-thumb:hover,
+div.display-container::-webkit-scrollbar-thumb:hover {
+  background: #1818c9;
+}
 </style>
