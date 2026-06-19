@@ -47,6 +47,7 @@
     "vite-plugin-web-extension": "^4.5.0"
   },
   "dependencies": {
-    "svelte-dnd-action": "^0.9.69"
+    "svelte-dnd-action": "^0.9.69",
+    "svelte-i18n": "^4.0.1"
   }
 }

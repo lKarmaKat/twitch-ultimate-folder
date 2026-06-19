@@ -1,5 +1,6 @@
 <script>
     import CounterType from './CounterType.svelte';
+    import { _ } from 'svelte-i18n';
 
     // value = id ("" = none), options = [{id, name}], onchange = callback
     let { value = $bindable(""), options = [], onchange, darkTheme = true } = $props();
@@ -27,7 +28,7 @@
         <span class="preview">
             {#if value !== ""}<CounterType counter={SAMPLE} viewerCountType={value} />{/if}
         </span>
-        <span class="label">{selected ? selected.name : "none"}</span>
+        <span class="label">{selected ? $_(selected.name) : $_('common.none')}</span>
         <span class="caret" class:open>▲</span>
     </button>
 
@@ -36,14 +37,14 @@
             <li>
                 <button type="button" class="item" class:active={value === ""} onclick={() => choose("")}>
                     <span class="preview"></span>
-                    <span class="label">none</span>
+                    <span class="label">{$_('common.none')}</span>
                 </button>
             </li>
             {#each options as opt}
                 <li>
                     <button type="button" class="item" class:active={value === opt.id} onclick={() => choose(opt.id)}>
                         <span class="preview"><CounterType counter={SAMPLE} viewerCountType={opt.id} /></span>
-                        <span class="label">{opt.name}</span>
+                        <span class="label">{$_(opt.name)}</span>
                     </button>
                 </li>
             {/each}

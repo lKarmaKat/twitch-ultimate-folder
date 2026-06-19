@@ -1,5 +1,6 @@
 <script>
     import { maybeTooltip, tooltip } from "../tooltip.svelte";
+    import { _ } from 'svelte-i18n';
 
     let { channelId, channelName, channelProfilePic, viewerCount, gameName = null, isLive, title = '' , color = '', blockNavigation = true, bearCard = false } = $props();
 
@@ -206,7 +207,7 @@
                             <p class="viewer-count">{formatter.format(viewerCount)}</p>
                         </div>
                     {:else if !bearCard }
-                        <div class="offline">Offline</div>
+                        <div class="offline">{$_('channel.offline')}</div>
                     {/if}
                 </div>
             </div>

@@ -1,12 +1,7 @@
 import DisplayWrapper from "../components/DisplayWrapper.svelte";
 import TitlePopup from "../components/TitlePopup.svelte";
+import { setupI18n } from "../../i18n/index.js";
 import { mount } from 'svelte'
-
-
-
-  mount(TitlePopup, {
-     target: document.body,
-   })
 
 function mountSidebar() {
     mount(DisplayWrapper, {
@@ -64,7 +59,14 @@ const observer = new MutationObserver((mut, obs) => {
   }
 });
 
-observer.observe(document.body, {
-  childList: true,
-  subtree: true
+// Initialise l'i18n avant tout montage, puis lance les composants.
+setupI18n().then(() => {
+  mount(TitlePopup, {
+    target: document.body,
+  })
+
+  observer.observe(document.body, {
+    childList: true,
+    subtree: true
+  });
 });

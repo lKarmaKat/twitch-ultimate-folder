@@ -1,4 +1,6 @@
 <script>
+    import { _ } from 'svelte-i18n';
+
     // value = id de la stratégie de tri, options = [{id, type, name}], onchange = callback
     let { value = $bindable(), options = [], onchange } = $props();
 
@@ -20,7 +22,7 @@
 
 <div class="custom-select sort-select">
     <button type="button" class="trigger" onclick={() => open = !open}>
-        <span class="label">{selected ? selected.name : "Select sort"}</span>
+        <span class="label">{selected ? $_(selected.name) : $_('sortSelect.placeholder')}</span>
         <span class="caret" class:open>▲</span>
     </button>
 
@@ -29,7 +31,7 @@
             {#each options as opt}
                 <li>
                     <button type="button" class="item" class:active={value === opt.id} onclick={() => choose(opt.id)}>
-                        <span class="label">{opt.name}</span>
+                        <span class="label">{$_(opt.name)}</span>
                     </button>
                 </li>
             {/each}

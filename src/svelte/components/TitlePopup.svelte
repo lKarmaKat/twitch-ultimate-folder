@@ -1,5 +1,5 @@
 <script>
-
+    import { _ } from 'svelte-i18n';
 </script>
 
 
@@ -43,7 +43,7 @@
                         <div></div>
                     </div>
                 </div>
-                <div class="hidden-focusable-elem" tabindex="0" role="button" aria-label="Close dialog" style="opacity: 0;"></div>
+                <div class="hidden-focusable-elem" tabindex="0" role="button" aria-label={$_('titlePopup.closeDialog')} style="opacity: 0;"></div>
             </div>
         </div>
     </div>

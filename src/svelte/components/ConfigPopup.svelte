@@ -8,7 +8,9 @@
   import ConfigManager from '../configManager.svelte';
   import PortConnector from '../portConnector.svelte';
   import {  STARTUP_CONF } from '../../constantes.js'
-  import { writable, derived } from 'svelte/store';
+  import { _ } from 'svelte-i18n';
+  import { applyLocale } from '../../i18n/index.js';
+  import { writable, derived, get } from 'svelte/store';
   
 
   let configManager = new ConfigManager();
@@ -26,7 +28,7 @@
 
   function promptResetConfig(param) {
     let confName = configManager.selectedConfig[param].name;
-    let promptMsg = `Are you sur you want to reset the config named "${confName}""`
+    let promptMsg = get(_)('configPopup.resetPrompt', { values: { name: confName } });
     let rep = prompt(promptMsg, "oui");
     if (rep === "oui") {
       configManager.resetConfig()
@@ -43,6 +45,11 @@
       darkTheme = data.data;
   }
   let port = new PortConnector(theme, "theme");
+
+  let localeCb = (msg) => {
+      applyLocale(msg.data);
+  }
+  let localePort = new PortConnector(localeCb, "locale");
 
   // Ca je garde au cas où
   // function newConfig() {
@@ -85,7 +92,7 @@
 <div class="overlay-side">
   <div class="popup">
     <div class="header">
-      <div class="left">Organisez vos favoris</div>
+      <div class="left">{$_('configPopup.title')}</div>
       <div class="right">
         <button onclick={() => closePopup()} class="cross">X</button>
       </div>
@@ -116,7 +123,7 @@
             {/if} -->
           </div>
         </div>
-        <h2>Channels list</h2>
+        <h2>{$_('configPopup.channelsList')}</h2>
         <div class="flex-container">
           <div class="channels-container">
             {#if configManager.channelsPickRef.length > 0}
@@ -130,7 +137,7 @@
             configManager={configManager}
             requestDeleteToParent={promptResetConfig} />
           </div>
-            <button class="save-btn" onclick={() => saveConfig()}>Enregistrer</button>
+            <button class="save-btn" onclick={() => saveConfig()}>{$_('configPopup.save')}</button>
           </div>
           {/if}
           <div class="config-container">

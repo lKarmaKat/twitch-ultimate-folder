@@ -1,8 +1,21 @@
 <script>
   import * as CST from '../constantes.js';
+  import { _, locale } from 'svelte-i18n';
+  import { get } from 'svelte/store';
+  import { applyLocale } from '../i18n/index.js';
+  import LanguageSelect from '../svelte/components/LanguageSelect.svelte';
+  import enFlag from '../assets/flags/en.svg';
+  import frFlag from '../assets/flags/fr.svg';
 
   // 'loading' | 'auth' | 'config'  (remplace le jonglage de l'attribut `hidden`)
   let view = $state('loading');
+
+  // Langue courante (initialisée depuis svelte-i18n, déjà configuré par setupI18n).
+  let lang = $state(get(locale) ?? 'en');
+  const languages = [
+    { id: 'en', name: 'English', flag: enFlag },
+    { id: 'fr', name: 'Français', flag: frFlag },
+  ];
 
   // Code d'activation Twitch (device flow)
   let userCode = $state('');
@@ -52,6 +65,12 @@
     const response = await chrome.runtime.sendMessage({ type: CST.CHANGE_ALIGNMENT, value });
     alignment = response ? !response.data : false;
   }
+
+  function onLocaleChange() {
+    // Persistance + diffusion en direct aux onglets via le background.
+    chrome.runtime.sendMessage({ type: CST.CHANGE_LOCALE, value: lang });
+    applyLocale(lang);
+  }
 </script>
 
 <div class="app" class:dark={theme}>
@@ -67,10 +86,10 @@
         <svg width="32px" height="32px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="auth-icon">
           <path d="M12 1L3 5v6c0 5.25 3.75 10.15 9 11.25C17.25 21.15 21 16.25 21 11V5L12 1z" />
         </svg>
-        <p class="auth-title">Connexion Twitch requise</p>
-        <p class="auth-instruction">Rendez-vous sur <strong>twitch.tv/activate</strong> et entrez ce code&nbsp;:</p>
+        <p class="auth-title">{$_('actionPopup.authTitle')}</p>
+        <p class="auth-instruction">{$_('actionPopup.authInstructionBefore')} <strong>twitch.tv/activate</strong> {$_('actionPopup.authInstructionAfter')}</p>
         <a class="auth-code" href={verificationUri} target="_blank" rel="noopener noreferrer">{userCode}</a>
-        <p class="auth-waiting">En attente de l'autorisation…</p>
+        <p class="auth-waiting">{$_('actionPopup.authWaiting')}</p>
       </div>
     </div>
   {:else}
@@ -78,41 +97,50 @@
       <div class="popup">
         <div class="card">
           <div class="card-header">
-            <h1>Préférences</h1>
+            <h1>{$_('actionPopup.preferences')}</h1>
           </div>
 
           <div class="row">
             <div class="row-info">
-              <button class="btn btn-primary" onclick={openConfigPopup}>Open config popup</button>
+              <button class="btn btn-primary" onclick={openConfigPopup}>{$_('actionPopup.openConfig')}</button>
             </div>
           </div>
 
           <label class="row" for="theme">
             <div class="row-info">
-              <div class="row-label">Thème</div>
+              <div class="row-label">{$_('actionPopup.theme')}</div>
             </div>
             <input type="checkbox" class="tgl" id="theme" bind:checked={theme} onchange={onThemeChange}>
             <span class="sw">
               <span class="track"></span>
-              <span class="lbl-on">Dark</span>
-              <span class="lbl-off">Light</span>
+              <span class="lbl-on">{$_('actionPopup.dark')}</span>
+              <span class="lbl-off">{$_('actionPopup.light')}</span>
               <span class="thumb"></span>
             </span>
           </label>
 
           <label class="row" for="alignment">
             <div class="row-info">
-              <div class="row-label">Alignement des chaines</div>
-              <div class="row-sub">Si vous utilisez BTTV pour changer la disposition du chat</div>
+              <div class="row-label">{$_('actionPopup.alignment')}</div>
+              <div class="row-sub">{$_('actionPopup.alignmentSub')}</div>
             </div>
             <input type="checkbox" class="tgl" id="alignment" bind:checked={alignment} onchange={onAlignmentChange}>
             <span class="sw">
               <span class="track"></span>
-              <span class="lbl-on">Droite</span>
-              <span class="lbl-off">Gauche</span>
+              <span class="lbl-on">{$_('actionPopup.right')}</span>
+              <span class="lbl-off">{$_('actionPopup.left')}</span>
               <span class="thumb"></span>
             </span>
           </label>
+
+          <div class="row">
+            <div class="row-info">
+              <div class="row-label">{$_('actionPopup.language')}</div>
+            </div>
+            <div class="lang-wrap">
+              <LanguageSelect bind:value={lang} options={languages} onchange={onLocaleChange} />
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -131,12 +159,11 @@
   :global(body) {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     width: 320px;
-    min-height: 100%;
+    margin: 0;
   }
 
   .app {
     width: 320px;
-    min-height: 100vh;
     background: #f2f2f7;
   }
 
@@ -144,7 +171,6 @@
   .popup {
     width: 320px;
     background: #f2f2f7;
-    min-height: 100vh;
     display: flex;
     flex-direction: column;
   }
@@ -200,6 +226,12 @@
     font-size: 12px;
     color: #8e8e93;
     margin-top: 2px;
+  }
+
+  .lang-wrap {
+    width: 140px;
+    flex-shrink: 0;
+    font-size: 13px;
   }
 
   /* ——— Toggle ——— */

@@ -125,17 +125,30 @@ let sendCurrentAlignmentOnConnect = (port: chrome.runtime.Port) => {
   });
 }
 
+let currentLocale: string | undefined;
+chrome.storage.local.get("local").then((data) => {
+  currentLocale = data.local as string | undefined;
+});
+let sendCurrentLocaleOnConnect = (port: chrome.runtime.Port) => {
+  if (!currentLocale) return;
+  port.postMessage({
+    "type": CST.LOCALE,
+    "data": currentLocale
+  });
+}
+
 let sendCurrentAuth = (port: chrome.runtime.Port) => {
   port.postMessage({
     "type": "", // RENVOYER LE TYPE NE SERT A RIEN ICI
-    "data": tokenManager.token ? true : false 
+    "data": tokenManager.token ? true : false
   });
 }
-let portManager = new PortManager(sendCurrentConfigOnConnect, 
-                                  sendStreamInfoOnConnect, 
-                                  sendCurrentThemeOnConnect, 
+let portManager = new PortManager(sendCurrentConfigOnConnect,
+                                  sendStreamInfoOnConnect,
+                                  sendCurrentThemeOnConnect,
                                   sendCurrentAlignmentOnConnect,
-                                sendCurrentAuth);
+                                sendCurrentAuth,
+                                sendCurrentLocaleOnConnect);
 
 // userUpdate.subscribe((userValid: boolean) => {
 //   if (!userValid) return;
@@ -243,6 +256,21 @@ chrome.runtime.onMessage.addListener(async (msg, sender, sendResponse) => {
       type: CST.ALIGNMENT, // RENVOYER LE TYPE NE SERT A RIEN ICI
       data: currentAlignmentLeft
     })
+    return true;
+  } else if (msg.type === CST.CHANGE_LOCALE) {
+    currentLocale = msg.value;
+    sendResponse({
+      type: CST.LOCALE,
+      data: currentLocale
+    });
+    chrome.storage.local.set({ "local": currentLocale });
+    portManager.sendMessageToAllTabs(CST.CHANGE_LOCALE, currentLocale, "locale");
+    return true;
+  } else if (msg.type === CST.GET_LOCALE) {
+    sendResponse({
+      type: CST.LOCALE,
+      data: currentLocale
+    });
     return true;
   }
 

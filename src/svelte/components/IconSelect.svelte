@@ -1,5 +1,6 @@
 <script>
     import IconPicker from './icons/IconPicker.svelte';
+    import { _ } from 'svelte-i18n';
 
     // value = id de l'icône ("" = none), options = [{id, name}], onchange = callback
     let { value = $bindable(""), options = [], onchange, darkTheme = true } = $props();
@@ -26,7 +27,7 @@
         <span class="icon-slot">
             {#if value !== ""}<IconPicker iconType={value} />{/if}
         </span>
-        <span class="label">{selected ? selected.name : "none"}</span>
+        <span class="label">{selected ? $_(selected.name) : $_('common.none')}</span>
         <span class="caret" class:open>▲</span>
     </button>
 
@@ -35,14 +36,14 @@
             <li>
                 <button type="button" class="item" class:active={value === ""} onclick={() => choose("")}>
                     <span class="icon-slot"></span>
-                    <span class="label">none</span>
+                    <span class="label">{$_('common.none')}</span>
                 </button>
             </li>
             {#each options as opt}
                 <li>
                     <button type="button" class="item" class:active={value === opt.id} onclick={() => choose(opt.id)}>
                         <span class="icon-slot"><IconPicker iconType={opt.id} /></span>
-                        <span class="label">{opt.name}</span>
+                        <span class="label">{$_(opt.name)}</span>
                     </button>
                 </li>
             {/each}

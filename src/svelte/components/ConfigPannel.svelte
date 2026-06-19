@@ -1,6 +1,7 @@
 <script>
 	import { configChangeEvent } from "../event.svelte.js";
     import * as CST from '../../constantes.js'
+    import { _ } from 'svelte-i18n';
     import { writable } from 'svelte/store';
     import ConfigManager from "../configManager.svelte.js";
     import IconSelect from "./IconSelect.svelte";
@@ -57,17 +58,17 @@
     {#if config}
     <div class="pannel-header">
         <!-- svelte-ignore missing-declaration -->
-        <p>List name</p>
-        <input type="text" 
-        name="liste-name" 
+        <p>{$_('configPannel.listName')}</p>
+        <input type="text"
+        name="liste-name"
         id="liste-name"
-        bind:value={config.name} placeholder="Enter list name"
+        bind:value={config.name} placeholder={$_('configPannel.listNamePlaceholder')}
         oninput={updateListName} />
     </div>
     {#if config.behavior}
     <div class="pannel-body">
         <div class="bloc">
-            <p>Behavior</p>
+            <p>{$_('configPannel.behavior')}</p>
             <div class="grid">
                 {#each CST.BEHAVIOUR as item}
                     <div class="behavior-item">
@@ -76,16 +77,16 @@
                             id={item.id}
                             bind:checked={config.behavior[item.id]}
                             onchange={updateConfig} />
-                        <label for={item.key}>{item.label}</label>
+                        <label for={item.key}>{$_(item.label)}</label>
                         <span
                             class="help-badge"
-                            data-tooltip={item.tooltip}>?</span>
+                            data-tooltip={$_(item.tooltip)}>?</span>
                     </div>
                 {/each}
             </div>
             <div class="row">
-                <p>Sort strategy</p>
-                <span class="help-badge" data-tooltip="Help">?</span>
+                <p>{$_('configPannel.sortStrategy')}</p>
+                <span class="help-badge" data-tooltip={$_('configPannel.help')}>?</span>
                 <SortSelect
                     bind:value={config.sort}
                     options={CST.SORT_STRATEGY}
@@ -93,7 +94,7 @@
             </div>
         </div>
         <div class="bloc">
-            <p>Style</p>
+            <p>{$_('configPannel.style')}</p>
             <!-- <div class="row">
                 <select name="header-size" id="header-size" bind:value={config.type.height} onchange={updateConfig}>
                     {#each CST.HEADER_TYPE_HEIGHT as headerHeight}
@@ -102,29 +103,29 @@
                 </select>
             </div> -->
             <div class="row">
-                <p>List header icon</p>
+                <p>{$_('configPannel.listHeaderIcon')}</p>
                 <span
                     class="help-badge"
-                    data-tooltip="Help">?</span>
+                    data-tooltip={$_('configPannel.help')}>?</span>
                 <IconSelect
                     bind:value={config.type.iconType}
                     options={CST.ICON_TYPE}
                     onchange={updateConfig} />
             </div>
             <div class="row">
-                <p>List header side bar color</p>
+                <p>{$_('configPannel.listHeaderBarColor')}</p>
                 <span
                     class="help-badge"
-                    data-tooltip="Help">?</span>
+                    data-tooltip={$_('configPannel.help')}>?</span>
                 <BarColorSelect
                     bind:value={config.type.barType}
                     options={CST.BAR_TYPE} />
             </div>
             <div class="row">
-                <p>List header badge style</p>
+                <p>{$_('configPannel.listHeaderBadge')}</p>
                 <span
                     class="help-badge"
-                    data-tooltip="Help">?</span>
+                    data-tooltip={$_('configPannel.help')}>?</span>
                 <CounterTypeSelect
                     bind:value={config.type.viewerCountType}
                     options={CST.COUNTER_TYPE}

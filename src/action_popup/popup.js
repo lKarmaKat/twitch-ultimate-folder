@@ -1,6 +1,9 @@
 import { mount } from 'svelte';
 import ActionPopup from './ActionPopup.svelte';
+import { setupI18n } from '../i18n/index.js';
 
-export default mount(ActionPopup, {
-  target: document.body,
+setupI18n().then(() => {
+  mount(ActionPopup, {
+    target: document.body,
+  });
 });

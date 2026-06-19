@@ -1,5 +1,6 @@
 <script>
     import * as CST from '../../constantes.js'
+    import { _ } from 'svelte-i18n';
 
     let { counter, viewerCountType } = $props();
 
@@ -16,7 +17,7 @@
     <span class:badge={counterBadge} class="counter">
         {counter}
         {#if counterBadgeText}
-            live
+            {$_('counter.live')}
         {/if}
     </span>
 {/if}

@@ -1,3 +1,7 @@
+<script>
+    import { _ } from 'svelte-i18n';
+</script>
+
 <style>
     .flex-container {
         display: flex;
@@ -9,5 +13,5 @@
 
 
 <div class="flex-container">
-    <p data-testid="status">No live channels in custom display</p>
+    <p data-testid="status">{$_('status.noLiveChannels')}</p>
 </div>

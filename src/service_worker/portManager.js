@@ -1,7 +1,7 @@
 class PortManager {
     ports = [];
     externalPorts = [];
-    constructor(sendCurrentConfigOnConnect, sendStreamInfoOnConnect, sendCurrentThemeOnConnect, sendCurrentAlignmentOnConnect, sendCurrentAuth) {
+    constructor(sendCurrentConfigOnConnect, sendStreamInfoOnConnect, sendCurrentThemeOnConnect, sendCurrentAlignmentOnConnect, sendCurrentAuth, sendCurrentLocaleOnConnect) {
         console.log("##### Port manager constr");
         chrome.runtime.onConnect.addListener((port) => {
             this.ports.push(port);
@@ -27,6 +27,8 @@ class PortManager {
                 sendCurrentAlignmentOnConnect(port)
             } else if (port.name === 'auth') {
                 sendCurrentAuth(port)
+            } else if (port.name === 'locale') {
+                sendCurrentLocaleOnConnect(port)
             }
         });
 
@@ -57,6 +59,8 @@ class PortManager {
                 sendCurrentAlignmentOnConnect(port)
             } else if (port.name === 'auth') {
                 sendCurrentAuth(port)
+            } else if (port.name === 'locale') {
+                sendCurrentLocaleOnConnect(port)
             }
             // setTimeout(() => {
             //     let index = this.externalPorts.findIndex(po => po === port);

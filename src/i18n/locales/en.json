@@ -1,0 +1,128 @@
+{
+  "common": {
+    "none": "none"
+  },
+  "actionPopup": {
+    "authTitle": "Twitch connection required",
+    "authInstructionBefore": "Go to",
+    "authInstructionAfter": "and enter this code:",
+    "authWaiting": "Waiting for authorization…",
+    "preferences": "Preferences",
+    "openConfig": "Open config popup",
+    "theme": "Theme",
+    "dark": "Dark",
+    "light": "Light",
+    "alignment": "Channel alignment",
+    "alignmentSub": "If you use BTTV to change the chat layout",
+    "right": "Right",
+    "left": "Left",
+    "language": "Language"
+  },
+  "configPopup": {
+    "title": "Organize your favorites",
+    "channelsList": "Channels list",
+    "save": "Save",
+    "resetPrompt": "Are you sure you want to reset the config named \"{name}\"?"
+  },
+  "configPannel": {
+    "listName": "List name",
+    "listNamePlaceholder": "Enter list name",
+    "behavior": "Behavior",
+    "sortStrategy": "Sort strategy",
+    "style": "Style",
+    "listHeaderIcon": "List header icon",
+    "listHeaderBarColor": "List header side bar color",
+    "listHeaderBadge": "List header badge style",
+    "help": "Help"
+  },
+  "configList": {
+    "alreadyInList": "The item is already in the list",
+    "addList": "Add new list in {listId}"
+  },
+  "mainList": {
+    "searchPlaceholder": "Search through channels",
+    "noChannels": "No channels to display"
+  },
+  "display": {
+    "needConnect": "Seems like you need to connect",
+    "allOtherChannels": "All others channels"
+  },
+  "channel": {
+    "offline": "Offline"
+  },
+  "status": {
+    "noLiveChannels": "No live channels in custom display",
+    "portDisconnected": "Port disconnected",
+    "waitingConfig": "Waiting for config"
+  },
+  "sortSelect": {
+    "placeholder": "Select sort"
+  },
+  "titlePopup": {
+    "closeDialog": "Close dialog"
+  },
+  "counter": {
+    "live": "live"
+  },
+  "language": {
+    "en": "English",
+    "fr": "Français"
+  },
+  "behaviour": {
+    "extendedOnStartup": {
+      "label": "Extended on startup",
+      "tooltip": "List already expanded when the page loads."
+    },
+    "extendsOnHover": {
+      "label": "Extends on hover",
+      "tooltip": "The list expands on mouse hover."
+    },
+    "extendsOnClick": {
+      "label": "Extends on click",
+      "tooltip": "The list expands/collapses when clicking the header."
+    }
+  },
+  "sort": {
+    "custom": "Custom sort",
+    "viewer": "Viewer count sort",
+    "alpha": "Alpha sort"
+  },
+  "bar": {
+    "purple": "purple",
+    "green": "green",
+    "orange": "orange"
+  },
+  "counterType": {
+    "bareCounter": "bare counter",
+    "badge": "badge",
+    "nakedBadge": "naked badge"
+  },
+  "icon": {
+    "folder": "folder",
+    "dot": "dot",
+    "angle": "angle",
+    "cross": "cross",
+    "valorant": "Valorant",
+    "lol": "League of Legends",
+    "rocketLeague1": "Rocket League 1",
+    "rocketLeague2": "Rocket League 2",
+    "cod1": "CoD 1",
+    "cod2": "CoD 2",
+    "cod3": "CoD 3",
+    "cod4": "CoD 4",
+    "counterStrike": "Counter Strike",
+    "minecraft": "Minecraft",
+    "minecraft2": "Minecraft 2",
+    "coffee": "Coffee",
+    "dota": "Dota",
+    "fortnite": "Fortnite",
+    "fortnite2": "Fortnite 2",
+    "overwatch": "Overwatch",
+    "arcRaiders": "Arc Raiders",
+    "rainbow6": "Rainbow 6",
+    "gta5": "GTA 5",
+    "gta6": "GTA 6",
+    "music1": "Music 1",
+    "music2": "Music 2"
+  }
+}

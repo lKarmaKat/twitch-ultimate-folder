@@ -1,5 +1,5 @@
 <script>
-
+    import { _ } from 'svelte-i18n';
 </script>
 
 
@@ -26,6 +26,6 @@
 </style>
 
 <div class="flex-container">
-    <p data-testid="status">Waiting for config</p>
+    <p data-testid="status">{$_('status.waitingConfig')}</p>
     <div class="loader"></div>
 </div>

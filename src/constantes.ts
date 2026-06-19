@@ -16,6 +16,9 @@ export const GET_THEME = 'GET_THEME';
 export const ALIGNMENT = 'ALIGNMENT';
 export const CHANGE_ALIGNMENT = 'CHANGE_ALIGNMENT';
 export const GET_ALIGNMENT = 'GET_ALIGNMENT';
+export const LOCALE = 'LOCALE';
+export const CHANGE_LOCALE = 'CHANGE_LOCALE';
+export const GET_LOCALE = 'GET_LOCALE';
 export const IS_USER_LOGGED_IN = 'IS_USER_LOGGED_IN';
 export const AUTH_DEVICE_CODE = 'AUTH_DEVICE_CODE';
 export const SYSTEM_STYLE = 'SYSTEM_STYLE';
@@ -40,114 +43,116 @@ export const HEADER_TYPE_HEIGHT = [ // Not currently used
 ]
   
 
+// Les `label`/`tooltip`/`name` ci-dessous sont des clés i18n résolues avec $_()
+// dans les composants (on ne peut pas utiliser $_ dans un .ts).
 export const BEHAVIOUR = [
-{id: EXTENDED_ON_STARTUP, label: 'Extended on startup', tooltip: 'Liste déjà dépliée au chargement de la page.'},
-{id: EXTENDEDS_ON_HOVER, label: 'Extends on hover', tooltip: 'La liste se déplie au survol de la souris.'},
-{id: EXTENDEDS_ON_CLICK, label: 'Extends on click', tooltip: 'La liste se déplie/replie au clic sur le header.'}
+{id: EXTENDED_ON_STARTUP, label: 'behaviour.extendedOnStartup.label', tooltip: 'behaviour.extendedOnStartup.tooltip'},
+{id: EXTENDEDS_ON_HOVER, label: 'behaviour.extendsOnHover.label', tooltip: 'behaviour.extendsOnHover.tooltip'},
+{id: EXTENDEDS_ON_CLICK, label: 'behaviour.extendsOnClick.label', tooltip: 'behaviour.extendsOnClick.tooltip'}
 ];
 
 export const SORT_STRATEGY = [
-  {id: CUSTOM_SORT, type: 'CUSTOM_SORT', name: 'Custom sort'},
-  {id: VIEWER_SORT, type: 'VIEWER_SORT', name: 'Viewer count sort'},
-  {id: ALPHA_SORT, type: 'ALPHA_SORT', name: 'Alpha sort'},
+  {id: CUSTOM_SORT, type: 'CUSTOM_SORT', name: 'sort.custom'},
+  {id: VIEWER_SORT, type: 'VIEWER_SORT', name: 'sort.viewer'},
+  {id: ALPHA_SORT, type: 'ALPHA_SORT', name: 'sort.alpha'},
 ]
 
 export const ICON_TYPE = [
-  { 
-    id: 1, 
-    name: 'folder'
+  {
+    id: 1,
+    name: 'icon.folder'
   },
   {
-    id: 2, 
-    name: 'dot'
+    id: 2,
+    name: 'icon.dot'
   },
   {
     id: 3,
-    name: 'angle'
+    name: 'icon.angle'
   }, {
     id: 4,
-    name: 'cross'
+    name: 'icon.cross'
   }, {
     id: 5,
-    name: 'Valorant'
+    name: 'icon.valorant'
   }, {
     id: 6,
-    name: 'League of Legends'
+    name: 'icon.lol'
   }, {
     id: 7,
-    name: 'Rocket League 1'
+    name: 'icon.rocketLeague1'
   }, {
     id: 8,
-    name: 'Rocket League 2'
+    name: 'icon.rocketLeague2'
   }, {
     id: 9,
-    name: 'CoD 1'
+    name: 'icon.cod1'
   }, {
     id: 10,
-    name: 'CoD 2'
+    name: 'icon.cod2'
   }, {
     id: 11,
-    name: 'CoD 3'
+    name: 'icon.cod3'
   }, {
     id: 12,
-    name: 'CoD 4'
+    name: 'icon.cod4'
   }, {
     id: 13,
-    name: 'Counter Strike'
+    name: 'icon.counterStrike'
   }, {
     id: 14,
-    name: 'Minecraft'
+    name: 'icon.minecraft'
   }, {
     id: 15,
-    name: 'Minecraft 2'
+    name: 'icon.minecraft2'
   }, {
     id: 16,
-    name: 'Coffee'
+    name: 'icon.coffee'
   }, {
     id: 17,
-    name: 'Dota'
+    name: 'icon.dota'
   }, {
     id: 18,
-    name: 'Fortnite'
+    name: 'icon.fortnite'
   }, {
     id: 19,
-    name: 'Fortnite 2'
+    name: 'icon.fortnite2'
   }, {
     id: 20,
-    name: 'Overwatch'
+    name: 'icon.overwatch'
   }, {
     id: 21,
-    name: 'Arc Raiders'
+    name: 'icon.arcRaiders'
   }, {
     id: 22,
-    name: 'Rainbow 6'
+    name: 'icon.rainbow6'
   }, {
     id: 23,
-    name: 'GTA 5'
+    name: 'icon.gta5'
   }, {
     id: 24,
-    name: 'GTA 6'
+    name: 'icon.gta6'
   }, {
     id: 25,
-    name: 'Musique 1'
+    name: 'icon.music1'
   }, {
     id: 26,
-    name: 'Musique 2'
+    name: 'icon.music2'
   }
 ]
 
 export const BAR_TYPE = [
   {
     id: 1,
-    name: 'purple',
+    name: 'bar.purple',
     color: "rgb(145, 71, 255)"
   },{
     id: 2,
-    name: 'green',
+    name: 'bar.green',
     color: "rgb(0, 200, 0)"
   },{
     id: 3,
-    name: 'orange',
+    name: 'bar.orange',
     color: "rgb(100, 50, 20)"
   }
 ]
@@ -156,13 +161,13 @@ export const BAR_TYPE = [
 export const COUNTER_TYPE = [
   {
     id: 1,
-    name: 'bare counter'
+    name: 'counterType.bareCounter'
   }, {
     id: 2,
-    name: 'badge'
+    name: 'counterType.badge'
   }, {
     id: 3,
-    name: 'naked badge'
+    name: 'counterType.nakedBadge'
   }
 ]
 

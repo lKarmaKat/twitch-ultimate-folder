@@ -1,7 +1,8 @@
 <script>
     import DraggableChannel from './DraggableChannel.svelte';
     import { parentFinalizeEvent } from "../event.svelte.js";
-    import { derived, writable } from 'svelte/store';
+    import { _ } from 'svelte-i18n';
+    import { derived, writable, get } from 'svelte/store';
     
     import { dndzone, TRIGGERS, SHADOW_ITEM_MARKER_PROPERTY_NAME, DRAGGED_ELEMENT_ID } from "svelte-dnd-action";
 
@@ -14,7 +15,7 @@
       if (!items || items.length < 1) {
         return writable([{
           id: -1,
-          channel_name: "No channels to display"
+          channel_name: get(_)('mainList.noChannels')
         }])
       }
       let a = items;
@@ -90,7 +91,7 @@ function show() {
 <!-- svelte-ignore a11y-no-static-element-interactions -->
  <div>
   <!-- <input type="text" name="listFilter" id="listFilter" placeholder="Search through channels" bind:value={searchString} oninput={searchChange} /> -->
-  <input type="text" name="listFilter" id="listFilter" placeholder="Search through channels" bind:value={searchString} />
+  <input type="text" name="listFilter" id="listFilter" placeholder={$_('mainList.searchPlaceholder')} bind:value={searchString} />
  </div>
 <section onclick={show}  id="main-channels-list" class="channels" use:dndzone={{items: filtered, flipDurationMs, dropFromOthersDisabled: true}} onconsider={handleDndConsider} onfinalize={handleDndFinalize}>
             {#each filtered as item(item.id)}

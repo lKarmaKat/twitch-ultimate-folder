@@ -3,6 +3,8 @@
 	import { parentFinalizeEvent, configChangeEvent } from "../event.svelte.js";
   	import * as CST from '../../constantes.js'
 	import { dndzone, SHADOW_ITEM_MARKER_PROPERTY_NAME } from 'svelte-dnd-action';
+	import { _ } from 'svelte-i18n';
+	import { get } from 'svelte/store';
 	import Self from './ConfigList.svelte'
 
 
@@ -45,7 +47,7 @@
 			if (!draggedData.save) {
 				draggedData.save = draggedEl.innerHTML;
 			}
-			draggedEl.innerHTML = "<strong>L'élément est déjà dans la liste</strong>";
+			draggedEl.innerHTML = `<strong>${get(_)('configList.alreadyInList')}</strong>`;
 			draggedEl.style.cursor = 'not-allowed';
 		} else if (draggedData.save) {
 			draggedEl.innerHTML = draggedData.save;
@@ -117,7 +119,7 @@
 		<!-- <div class="header" style="background-color: {headerColor};"> -->
 		<p class="list-title">{configManager.selectedConfig[listId]?.name}</p>
 		<div class="list-side-menu">
-			<button id="add-list-{listId}" class="add" onclick={() => addNode()} title="Add new list in {listId}">+</button>
+			<button id="add-list-{listId}" class="add" onclick={() => addNode()} title={$_('configList.addList', { values: { listId } })}>+</button>
 			<button class="delete" onclick={()=>{requestDeleteToParent(listId)}}>x</button>
 		</div>
 	</div>
@@ -141,9 +143,9 @@
 					configManager={configManager} />
 			</div>
 			{:else if item.id === CST.ALL_OTHER_CHANNELS}
-				<DraggableChannel 
-					channelId={CST.ALL_OTHER_CHANNELS_ELEMENT.channel_id} 
-					channelName={CST.ALL_OTHER_CHANNELS_ELEMENT.channel_name} 
+				<DraggableChannel
+					channelId={CST.ALL_OTHER_CHANNELS_ELEMENT.channel_id}
+					channelName={$_('display.allOtherChannels')}
 					channelProfilePic={CST.ALL_OTHER_CHANNELS_ELEMENT.profile_image_url} 
 					viewerCount={CST.ALL_OTHER_CHANNELS_ELEMENT.viewer_count}
 					gameName={CST.ALL_OTHER_CHANNELS_ELEMENT.game_name}

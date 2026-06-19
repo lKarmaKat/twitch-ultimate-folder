@@ -7,6 +7,8 @@
   import { alignmentLeft, portConnected } from '../event.svelte.js';
   import * as CST from '../../constantes'
   import PortDisconnected from './PortDisconnected.svelte';
+  import { _ } from 'svelte-i18n';
+  import { applyLocale } from '../../i18n/index.js';
 
   let { configManager = new ConfigManager(true) } = $props();
 
@@ -57,6 +59,11 @@
     alignmentLeft.current = data.data;
   }
   let alignmentPort = new PortConnector(alignmentCb, 'alignment');
+
+  let localeCb = (msg) => {
+    applyLocale(msg.data);
+  }
+  let localePort = new PortConnector(localeCb, 'locale');
 
 
 function checkForLiveChannelInList(listId) {
@@ -115,7 +122,7 @@ setTimeout(()=> shortLoadingLogo = false, 200);
       <PortDisconnected />
     {/if}
     {#if !isUserConnected}
-      Seems like you need to connect
+      {$_('display.needConnect')}
     {:else if !configManager.selectedConfig || configManager.channelsPickRefMap?.size === 0}
       <WaitingConfig />
     {:else if noLiveChannels}
