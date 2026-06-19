@@ -1,19 +1,18 @@
 <script>
     import CounterType from './CounterType.svelte';
     import { _ } from 'svelte-i18n';
+    import * as CST from '../../constantes.js'
 
-    // value = id ("" = none), options = [{id, name}], onchange = callback
-    let { value = $bindable(""), options = [], onchange, darkTheme = true } = $props();
+    let { value = $bindable("") } = $props();
 
     const SAMPLE = 42; // valeur fictive pour l'aperçu
 
     let open = $state(false);
-    let selected = $derived(options.find(o => o.id === value));
+    let selected = $derived(CST.COUNTER_TYPE.find(o => o.id === value));
 
     function choose(id) {
         value = id;
         open = false;
-        onchange?.();
     }
 
     function onWindowClick(e) {
@@ -40,7 +39,7 @@
                     <span class="label">{$_('common.none')}</span>
                 </button>
             </li>
-            {#each options as opt}
+            {#each CST.COUNTER_TYPE as opt}
                 <li>
                     <button type="button" class="item" class:active={value === opt.id} onclick={() => choose(opt.id)}>
                         <span class="preview"><CounterType counter={SAMPLE} viewerCountType={opt.id} /></span>

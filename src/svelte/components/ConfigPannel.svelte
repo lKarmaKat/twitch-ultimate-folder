@@ -12,45 +12,10 @@
     let { configManager } = $props();
     let listeId;
     let config = $state();
-
-//     let colorsList = [
-//     { colorName: 'grey', colorCode: "#808080" },
-//     { colorName: 'black', colorCode: "#000000" },
-//     { colorName: 'purple', colorCode: "#800080" },
-//     { colorName: 'lightgreen', colorCode: "#90ee90" },
-//     { colorName: 'darkgrey', colorCode: "#a9a9a9" }
-// ];
-
     $effect(() => {
         listeId = configChangeEvent.current;
         config = configManager.selectedConfig[listeId];
     })
-
-    function updateListName() {
-        // configManager.selectedConfig[listeId].name = listName
-        // configManager.selectedConfig.update(configEl => {
-        //     configEl[listeId].name = config.name;   
-        //     return configEl;
-        // });
-    }
-
-    // function capitalizeFirstLetter(val) {
-    //     return String(val).charAt(0).toUpperCase() + String(val).slice(1);
-    // }
-
-    function updateConfig() {
-        console.log("config.type.iconType", config.type.iconType)
-        console.log("config.type.barType", config.type.barType)
-        // console.log(configManager.selectedConfig[listeId])
-        // configManager.selectedConfig.update(configEl => {
-        //     configEl[listeId].behavior = config.behavior;
-        //     configEl[listeId].style = config.style;
-        //     configEl[listeId].type = config.type;
-        //     return configEl;
-        // });
-
-    }
-
 
 </script>
 
@@ -62,8 +27,7 @@
         <input type="text"
         name="liste-name"
         id="liste-name"
-        bind:value={config.name} placeholder={$_('configPannel.listNamePlaceholder')}
-        oninput={updateListName} />
+        bind:value={config.name} placeholder={$_('configPannel.listNamePlaceholder')} />
     </div>
     {#if config.behavior}
     <div class="pannel-body">
@@ -75,8 +39,7 @@
                         <input
                             type="checkbox"
                             id={item.id}
-                            bind:checked={config.behavior[item.id]}
-                            onchange={updateConfig} />
+                            bind:checked={config.behavior[item.id]}/>
                         <label for={item.key}>{$_(item.label)}</label>
                         <span
                             class="help-badge"
@@ -89,8 +52,7 @@
                 <span class="help-badge" data-tooltip={$_('configPannel.help')}>?</span>
                 <SortSelect
                     bind:value={config.sort}
-                    options={CST.SORT_STRATEGY}
-                    onchange={updateConfig} />
+                    options={CST.SORT_STRATEGY}/>
             </div>
         </div>
         <div class="bloc">
@@ -108,9 +70,7 @@
                     class="help-badge"
                     data-tooltip={$_('configPannel.help')}>?</span>
                 <IconSelect
-                    bind:value={config.type.iconType}
-                    options={CST.ICON_TYPE}
-                    onchange={updateConfig} />
+                    bind:value={config.type.iconType}/>
             </div>
             <div class="row">
                 <p>{$_('configPannel.listHeaderBarColor')}</p>
@@ -118,8 +78,7 @@
                     class="help-badge"
                     data-tooltip={$_('configPannel.help')}>?</span>
                 <BarColorSelect
-                    bind:value={config.type.barType}
-                    options={CST.BAR_TYPE} />
+                    bind:value={config.type.barType}/>
             </div>
             <div class="row">
                 <p>{$_('configPannel.listHeaderBadge')}</p>
@@ -127,9 +86,7 @@
                     class="help-badge"
                     data-tooltip={$_('configPannel.help')}>?</span>
                 <CounterTypeSelect
-                    bind:value={config.type.viewerCountType}
-                    options={CST.COUNTER_TYPE}
-                    onchange={updateConfig} />
+                    bind:value={config.type.viewerCountType}/>
             </div>
             <!-- <div class="row">
                 <select name="theme" id="theme" bind:value={config.style.theme} onchange={updateConfig}>

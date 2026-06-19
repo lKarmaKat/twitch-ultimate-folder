@@ -1,16 +1,15 @@
 <script>
     import { _ } from 'svelte-i18n';
+    import * as CST from '../../constantes.js'
 
-    // value = id ("" = none), options = [{id, name, color}], onchange = callback
-    let { value = $bindable(""), options = [], onchange } = $props();
+    let { value = $bindable("") } = $props();
 
     let open = $state(false);
-    let selected = $derived(options.find(o => o.id === value));
+    let selected = $derived(CST.BAR_TYPE.find(o => o.id === value));
 
     function choose(id) {
         value = id;
         open = false;
-        onchange?.();
     }
 
     function onWindowClick(e) {
@@ -35,7 +34,7 @@
                     <span class="label">{$_('common.none')}</span>
                 </button>
             </li>
-            {#each options as opt}
+            {#each CST.BAR_TYPE as opt}
                 <li>
                     <button type="button" class="item" class:active={value === opt.id} onclick={() => choose(opt.id)}>
                         <span class="swatch" style:background={opt.color}></span>

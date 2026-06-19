@@ -1,17 +1,17 @@
 <script>
     import IconPicker from './icons/IconPicker.svelte';
+    import { sortIconsByLabel, ICON_BY_ID } from './icons/index';
     import { _ } from 'svelte-i18n';
 
-    // value = id de l'icône ("" = none), options = [{id, name}], onchange = callback
-    let { value = $bindable(""), options = [], onchange, darkTheme = true } = $props();
+    let { value = $bindable("") } = $props();
 
     let open = $state(false);
-    let selected = $derived(options.find(o => o.id === value));
+    let sortedOptions = $derived(sortIconsByLabel($_));
+    let selected = $derived(ICON_BY_ID.get(value));
 
     function choose(id) {
         value = id;
         open = false;
-        onchange?.();
     }
 
     // ferme le menu si on clique en dehors
@@ -27,7 +27,7 @@
         <span class="icon-slot">
             {#if value !== ""}<IconPicker iconType={value} />{/if}
         </span>
-        <span class="label">{selected ? $_(selected.name) : $_('common.none')}</span>
+        <span class="label">{selected ? $_(selected.key) : $_('common.none')}</span>
         <span class="caret" class:open>▲</span>
     </button>
 
@@ -39,11 +39,11 @@
                     <span class="label">{$_('common.none')}</span>
                 </button>
             </li>
-            {#each options as opt}
+            {#each sortedOptions as opt}
                 <li>
                     <button type="button" class="item" class:active={value === opt.id} onclick={() => choose(opt.id)}>
                         <span class="icon-slot"><IconPicker iconType={opt.id} /></span>
-                        <span class="label">{$_(opt.name)}</span>
+                        <span class="label">{$_(opt.key)}</span>
                     </button>
                 </li>
             {/each}

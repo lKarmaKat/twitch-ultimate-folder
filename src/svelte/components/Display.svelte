@@ -4,22 +4,6 @@
     import * as CST from '../../constantes.js'
 	import { writable } from 'svelte/store'
 	import Self from './Display.svelte'
-    import FolderIcon from './icons/FolderIcon.svelte';
-    import DotIcon from './icons/DotIcon.svelte';
-    import AngleIcon from './icons/AngleIcon.svelte';
-    import CrossIcon from './icons/CrossIcon.svelte';
-    import ValorantIcon from './icons/ValorantIcon.svelte';
-    import LOLIcon from './icons/LOLIcon.svelte';
-    import RocketLeague1Icon from './icons/RocketLeague1Icon.svelte';
-    import RocketLeague2Icon from './icons/RocketLeague2Icon.svelte';
-    import COD1Icon from './icons/COD1Icon.svelte';
-    import COD2Icon from './icons/COD2Icon.svelte';
-    import COD3Icon from './icons/COD3Icon.svelte';
-    import COD4Icon from './icons/COD4Icon.svelte';
-    import CSIcon from './icons/CSIcon.svelte';
-    import MinecraftIcon from './icons/MinecraftIcon.svelte';
-    import MinecraftIcon2 from './icons/MinecraftIcon2.svelte';
-    import CoffeeIcon from './icons/CoffeeIcon.svelte';
     import IconPicker from './icons/IconPicker.svelte';
     import CounterType from './CounterType.svelte';
 
