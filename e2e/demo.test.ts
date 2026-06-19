@@ -3,7 +3,7 @@ import { beforeAll, afterAll, vi, describe, beforeEach} from 'vitest'
 import { mount } from 'svelte';
 import * as sinon from 'sinon';
 import { addListener } from 'process';
-import {config, channelsRef, newChannels, newChannel} from '../svelte_tests/utils/const';
+import {config, channelsRef, newChannels, newChannel} from '../const';
 
 let deepClone = (obj: any) => JSON.parse(JSON.stringify(obj));
 

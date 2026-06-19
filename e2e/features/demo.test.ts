@@ -4,7 +4,7 @@ import { mount } from 'svelte';
 import * as sinon from 'sinon';
 import { addListener } from 'process';
 import { PopupPage } from '../pages/popup.page';
-import {config, channelsRef, newChannels, newChannel} from '../../svelte_tests/utils/const';
+import {config, channelsRef, newChannels, newChannel} from '../const';
 import * as CST from '../../src/constantes'
 
 
