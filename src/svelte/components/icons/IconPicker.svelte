@@ -25,6 +25,25 @@
     import GTA5Icon from './GTA5Icon.svelte';
     import MusicIcon1 from './MusicIcon1.svelte';
     import MusicIcon2 from './MusicIcon2.svelte';
+    import MarvelRivalsIcon from './MarvelRivalsIcon.svelte';
+    import ApexLegendsIcon from './ApexLegendsIcon.svelte';
+    import RobloxIcon from './RobloxIcon.svelte';
+    import DeadlockIcon from './DeadlockIcon.svelte';
+    import Battlefield6Icon from './Battlefield6Icon.svelte';
+    import CounterStrike2Icon from './CounterStrike2Icon.svelte';
+    import SplitgateIcon from './SplitgateIcon.svelte';
+    import HaloIcon from './HaloIcon.svelte';
+    import Smite2Icon from './Smite2Icon.svelte';
+    import Destiny2Icon from './Destiny2Icon.svelte';
+    import TeamfightTacticsIcon from './TeamfightTacticsIcon.svelte';
+    import OffTheGridIcon from './OffTheGridIcon.svelte';
+    import TwoXKOIcon from './2XKOIcon.svelte';
+    import PUBGIcon from './PUBGIcon.svelte';
+    import CallOfDutyIcon from './CallOfDutyIcon.svelte';
+    import BloodhuntIcon from './BloodhuntIcon.svelte';
+    import BrawlhallaIcon from './BrawlhallaIcon.svelte';
+    import ForHonorIcon from './ForHonorIcon.svelte';
+    import TheDivision2Icon from './TheDivision2Icon.svelte';
     let {iconType} = $props()
 </script>
 
@@ -80,5 +99,43 @@
     <MusicIcon1 />
 {:else if iconType === 26}
     <MusicIcon2 />
+{:else if iconType === 27}
+    <MarvelRivalsIcon />
+{:else if iconType === 28}
+    <ApexLegendsIcon />
+{:else if iconType === 29}
+    <RobloxIcon />
+{:else if iconType === 30}
+    <DeadlockIcon />
+{:else if iconType === 31}
+    <Battlefield6Icon />
+{:else if iconType === 32}
+    <CounterStrike2Icon />
+{:else if iconType === 33}
+    <SplitgateIcon />
+{:else if iconType === 34}
+    <HaloIcon />
+{:else if iconType === 35}
+    <Smite2Icon />
+{:else if iconType === 36}
+    <Destiny2Icon />
+{:else if iconType === 37}
+    <TeamfightTacticsIcon />
+{:else if iconType === 38}
+    <OffTheGridIcon />
+{:else if iconType === 39}
+    <TwoXKOIcon />
+{:else if iconType === 40}
+    <PUBGIcon />
+{:else if iconType === 41}
+    <CallOfDutyIcon />
+{:else if iconType === 42}
+    <BloodhuntIcon />
+{:else if iconType === 43}
+    <BrawlhallaIcon />
+{:else if iconType === 44}
+    <ForHonorIcon />
+{:else if iconType === 45}
+    <TheDivision2Icon />
 {/if}
 

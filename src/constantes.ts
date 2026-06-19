@@ -138,6 +138,63 @@ export const ICON_TYPE = [
   }, {
     id: 26,
     name: 'icon.music2'
+  }, {
+    id: 27,
+    name: 'icon.marvelRivals'
+  }, {
+    id: 28,
+    name: 'icon.apexLegends'
+  }, {
+    id: 29,
+    name: 'icon.roblox'
+  }, {
+    id: 30,
+    name: 'icon.deadlock'
+  }, {
+    id: 31,
+    name: 'icon.battlefield6'
+  }, {
+    id: 32,
+    name: 'icon.counterStrike2'
+  }, {
+    id: 33,
+    name: 'icon.splitgate'
+  }, {
+    id: 34,
+    name: 'icon.halo'
+  }, {
+    id: 35,
+    name: 'icon.smite2'
+  }, {
+    id: 36,
+    name: 'icon.destiny2'
+  }, {
+    id: 37,
+    name: 'icon.teamfightTactics'
+  }, {
+    id: 38,
+    name: 'icon.offTheGrid'
+  }, {
+    id: 39,
+    name: 'icon.xko2'
+  }, {
+    id: 40,
+    name: 'icon.pubg'
+  }, {
+    id: 41,
+    name: 'icon.callOfDuty'
+  }, {
+    id: 42,
+    name: 'icon.bloodhunt'
+  }, {
+    id: 43,
+    name: 'icon.brawlhalla'
+  }, {
+    id: 44,
+    name: 'icon.forHonor'
+  }, {
+    id: 45,
+    name: 'icon.theDivision2'
   }
 ]
 
