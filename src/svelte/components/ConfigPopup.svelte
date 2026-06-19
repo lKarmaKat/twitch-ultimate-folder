@@ -288,27 +288,5 @@ div.display-container {
   overflow-y: scroll;
   flex: 0 1 14%;
 
-  /* Firefox */
-  scrollbar-width: thin;                     /* auto | thin | none */
-  scrollbar-color: #1010da transparent;      /* thumb  track */
-}
-
-/* Chromium / Edge */
-div.channels-container::-webkit-scrollbar,
-div.display-container::-webkit-scrollbar {
-  width: 8px;
-}
-div.channels-container::-webkit-scrollbar-track,
-div.display-container::-webkit-scrollbar-track {
-  background: transparent;
-}
-div.channels-container::-webkit-scrollbar-thumb,
-div.display-container::-webkit-scrollbar-thumb {
-  background: #2020d6;
-  border-radius: 4px;
-}
-div.channels-container::-webkit-scrollbar-thumb:hover,
-div.display-container::-webkit-scrollbar-thumb:hover {
-  background: #1818c9;
 }
 </style>
