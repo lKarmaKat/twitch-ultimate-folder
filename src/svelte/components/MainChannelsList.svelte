@@ -68,8 +68,19 @@ function show() {
 </script>
 
 <style>
+    .channels-list-root {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        max-height: 100%;
+    }
+    .list-header {
+        flex: 0 0 auto;
+    }
     section {
-      overflow-y: scroll;
+      flex: 1 1 auto;
+      min-height: 0;
+      overflow-y: auto;
       /* max-height: 95%; */
     }
     input[type=text] {
@@ -81,7 +92,8 @@ function show() {
     input[type="text"]:focus {
         outline: none;
     }
-    :global(section a) {
+    :global(section#main-channels-list a) {
+      /* border: 1px solid red !important; */
         padding: 0.357em 0.57em;
     }
 
@@ -89,23 +101,26 @@ function show() {
 
 
 
-<!-- svelte-ignore a11y-click-events-have-key-events -->
-<!-- svelte-ignore a11y-no-static-element-interactions -->
- <!-- <div> -->
-  <!-- <input type="text" name="listFilter" id="listFilter" placeholder="Search through channels" bind:value={searchString} oninput={searchChange} /> -->
-  <input type="text" name="listFilter" id="listFilter" placeholder={$_('mainList.searchPlaceholder')} bind:value={searchString} />
- <!-- </div> -->
-<section onclick={show}  id="main-channels-list" class="channels" use:dndzone={{items: filtered, flipDurationMs, dropFromOthersDisabled: true}} onconsider={handleDndConsider} onfinalize={handleDndFinalize}>
-            {#each filtered as item(item.id)}
-            <DraggableChannel 
-            channelId={item.channel_id} 
-            channelName={item.channel_name} 
-            channelProfilePic={item.profile_image_url} 
-            viewerCount={item.viewer_count}
-            gameName={item.game_name}
-            isLive={item.isLive}
-            color=''
-            bearCard=true/>
-            {/each}
-</section>
+<div class="channels-list-root">
+  <div class="list-header">
+    <h2>{$_('configPopup.channelsList')}</h2>
+    <!-- <input type="text" name="listFilter" id="listFilter" placeholder="Search through channels" bind:value={searchString} oninput={searchChange} /> -->
+    <input type="text" name="listFilter" id="listFilter" placeholder={$_('mainList.searchPlaceholder')} bind:value={searchString} />
+  </div>
+  <!-- svelte-ignore a11y_click_events_have_key_events -->
+  <!-- svelte-ignore a11y_no_static_element_interactions -->
+  <section onclick={show}  id="main-channels-list" class="channels" use:dndzone={{items: filtered, flipDurationMs, dropFromOthersDisabled: true}} onconsider={handleDndConsider} onfinalize={handleDndFinalize}>
+              {#each filtered as item(item.id)}
+              <DraggableChannel
+              channelId={item.channel_id}
+              channelName={item.channel_name}
+              channelProfilePic={item.profile_image_url}
+              viewerCount={item.viewer_count}
+              gameName={item.game_name}
+              isLive={item.isLive}
+              color=''
+              bearCard=true/>
+              {/each}
+  </section>
+</div>
 

@@ -123,7 +123,6 @@
             {/if} -->
           </div>
         </div>
-        <h2>{$_('configPopup.channelsList')}</h2>
         <div class="flex-container">
           <div id="channels-ref-container" class="channels-container">
             {#if configManager.channelsPickRef.length > 0}
@@ -132,6 +131,7 @@
           </div>
           {#if configManager.channelsPickRef.length}
           <div id="config-list-container">
+            <h2>Channels</h2>
             <div id="config-list" class="channels-container">
               <ConfigList listId="rootList"
               configManager={configManager}
@@ -145,8 +145,11 @@
           </div>
           <!-- {#if !loading} -->
           {#if configManager.channelsPickRef.length && Object.getOwnPropertyNames(configManager.channelsConfigList).length > 0}
-          <div id="display-container" class="display-container">
-            <DisplayWrapper configManager={configManager} />
+          <div class="display-column">
+            <h2>Channels</h2>
+            <div id="display-container" class="display-container">
+              <DisplayWrapper configManager={configManager} />
+            </div>
           </div>
           {/if}
         </div>
@@ -239,10 +242,16 @@
     flex: 3.5 0 24rem;
     width: 24rem;
   }
-  div.display-container {
-    max-height: 100%;
-    overflow-y: scroll;
+  div.display-column {
+    display: flex;
+    flex-direction: column;
     flex: 0 0 24rem;
+    max-height: 100%;
+  }
+  div.display-container {
+    min-height: 0;
+    overflow-y: scroll;
+    flex: 1 1 auto;
   }
   div.channels-container {
     max-height: 100%;
