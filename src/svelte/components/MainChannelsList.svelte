@@ -76,6 +76,7 @@ function show() {
         font-size: 1em;
         background: transparent;
         border: none;
+        width: 90%;
     }
     input[type="text"]:focus {
         outline: none;
@@ -83,16 +84,17 @@ function show() {
     :global(section a) {
         padding: 0.357em 0.57em;
     }
+
 </style>
 
 
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <!-- svelte-ignore a11y-no-static-element-interactions -->
- <div>
+ <!-- <div> -->
   <!-- <input type="text" name="listFilter" id="listFilter" placeholder="Search through channels" bind:value={searchString} oninput={searchChange} /> -->
   <input type="text" name="listFilter" id="listFilter" placeholder={$_('mainList.searchPlaceholder')} bind:value={searchString} />
- </div>
+ <!-- </div> -->
 <section onclick={show}  id="main-channels-list" class="channels" use:dndzone={{items: filtered, flipDurationMs, dropFromOthersDisabled: true}} onconsider={handleDndConsider} onfinalize={handleDndFinalize}>
             {#each filtered as item(item.id)}
             <DraggableChannel 

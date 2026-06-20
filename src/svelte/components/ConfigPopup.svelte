@@ -125,22 +125,22 @@
         </div>
         <h2>{$_('configPopup.channelsList')}</h2>
         <div class="flex-container">
-          <div class="channels-container">
+          <div id="channels-ref-container" class="channels-container">
             {#if configManager.channelsPickRef.length > 0}
             <MainChannelsList items={configManager.channelsPickRef}/>
             {/if}
           </div>
           {#if configManager.channelsPickRef.length}
           <div id="config-list-container">
-          <div id="config-list" class="channels-container">
-            <ConfigList listId="rootList"
-            configManager={configManager}
-            requestDeleteToParent={promptResetConfig} />
-          </div>
+            <div id="config-list" class="channels-container">
+              <ConfigList listId="rootList"
+              configManager={configManager}
+              requestDeleteToParent={promptResetConfig} />
+            </div>
             <button class="save-btn" onclick={() => saveConfig()}>{$_('configPopup.save')}</button>
           </div>
           {/if}
-          <div class="config-container">
+          <div class="config-pannel-container">
             <ConfigPannel configManager={configManager} />
           </div>
           <!-- {#if !loading} -->
@@ -221,30 +221,32 @@
     left: 15%;
     top: 10%;
   }
+  #channels-ref-container {
+    flex: 1 0 14%;
+  }
   #config-list-container {
     display: flex;
     flex-direction: column;
     max-height: 100%;
-    flex: 0 1 14%
+    flex: 1 0 14%;
   }
   #config-list {
-    flex: 1 1 auto;
-    min-height: 0;        /* indispensable pour que overflow-y:scroll marche en flex */
+    flex: 1 0 auto;
+    min-height: 0;
   }
-  div.channels-container,
+
+  div.config-pannel-container {
+    flex: 3.5 0 24rem;
+    width: 24rem;
+  }
   div.display-container {
     max-height: 100%;
-    /* border: 1px solid blue; */
     overflow-y: scroll;
-    flex: 0 1 14%;
+    flex: 0 0 24rem;
   }
-  div.config-container {
-    /* width: 35%; */
-    flex: 3 1 30%;
-  }
-  div.display-container {
-    /* width: 23% */
-    flex: 1 1 15%;
+  div.channels-container {
+    max-height: 100%;
+    overflow-y: scroll;
   }
   .main {
     /* display: flex;
@@ -281,12 +283,4 @@
     color: inherit;
   }
 
-
-  div.channels-container,
-div.display-container {
-  max-height: 100%;
-  overflow-y: scroll;
-  flex: 0 1 14%;
-
-}
 </style>
