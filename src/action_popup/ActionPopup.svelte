@@ -138,7 +138,7 @@
               <div class="row-label">{$_('actionPopup.language')}</div>
             </div>
             <div class="lang-wrap">
-              <LanguageSelect bind:value={lang} options={languages} onchange={onLocaleChange} />
+              <LanguageSelect bind:value={lang} options={languages} onchange={onLocaleChange} dark={theme}/>
             </div>
           </div>
         </div>
@@ -179,7 +179,7 @@
     margin: 16px 12px 8px;
     background: #ffffff;
     border-radius: 14px;
-    overflow: hidden;
+    /* overflow: hidden; */
   }
 
   .card-header {

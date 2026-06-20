@@ -1,7 +1,7 @@
 <script>
     // Menu déroulant de langue, calqué sur BarColorSelect.svelte.
     // value = id de langue ('en' | 'fr'), options = [{id, name, flag}], onchange = callback
-    let { value = $bindable("en"), options = [], onchange } = $props();
+    let { value = $bindable("en"), options = [], onchange, dark } = $props();
 
     let open = $state(false);
     let selected = $derived(options.find(o => o.id === value));
@@ -19,7 +19,7 @@
 
 <svelte:window onclick={onWindowClick} />
 
-<div class="custom-select lang-select">
+<div class="custom-select lang-select" class:dark>
     <button type="button" class="trigger" onclick={() => open = !open}>
         {#if selected}<img class="flag" src={selected.flag} alt="" />{/if}
         <span class="label">{selected ? selected.name : ""}</span>
@@ -46,6 +46,10 @@
         width: 100%;
         font-size: 1em;
     }
+    .lang-select.dark,
+    .lang-select.dark label {
+        color: #f2f2f7;
+    }
     .trigger {
         display: flex;
         align-items: center;
@@ -57,6 +61,7 @@
         border-radius: 0.4em;
         cursor: pointer;
         text-align: left;
+        color: inherit;
     }
     .caret {
         margin-left: auto;
