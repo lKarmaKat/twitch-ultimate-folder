@@ -115,14 +115,16 @@
 	<!-- svelte-ignore a11y-no-static-element-interactions -->
 	<!-- svelte-ignore a11y_click_events_have_key_events -->
 	<!-- svelte-ignore a11y_no_static_element_interactions -->
+	 {#if listId !== 'rootList'}
 	<div class="list-header" onclick={selectConfig}>
 		<!-- <div class="header" style="background-color: {headerColor};"> -->
-		<p class="list-title">{configManager.selectedConfig[listId]?.name}</p>
+		<p class="list-title"><strong>{configManager.selectedConfig[listId]?.name}</strong></p>
 		<div class="list-side-menu">
 			<button id="add-list-{listId}" class="add" onclick={() => addNode()} title={$_('configList.addList', { values: { listId } })}>+</button>
 			<button class="delete" onclick={()=>{requestDeleteToParent(listId)}}>x</button>
 		</div>
 	</div>
+	{/if}
 	{#if configManager.selectedConfig[listId]?.hasOwnProperty("items")}
 	<div class="list-body" >
 		<section class="dnd-zone-r"
@@ -175,9 +177,9 @@
 </div>
 
 <style>
-.custom-shadow-item{
-	color: red;
-}
+	.custom-shadow-item{
+		color: red;
+	}
 	.channel {
 		position: relative;
 	}
