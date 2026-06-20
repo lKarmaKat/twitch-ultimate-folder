@@ -152,7 +152,7 @@ export class TwitchApi {
       };
     
       let queryParams = new URLSearchParams({
-          user_id: this.tokenManager.userId!,
+          user_id: String(this.tokenManager.userId!),
           first: String(100)
         });
     
