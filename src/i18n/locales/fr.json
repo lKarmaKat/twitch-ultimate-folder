@@ -57,7 +57,7 @@
   },
   "status": {
     "noLiveChannels": "No live channels in custom display",
-    "portDisconnected": "Port disconnected",
+    "portDisconnected": "La communication avec twitch a été perdu, tentative de reconnexion en cours.",
     "waitingConfig": "Waiting for config"
   },
   "sortSelect": {
