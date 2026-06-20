@@ -23,7 +23,7 @@
     {#if config}
     <div class="pannel-header">
         <!-- svelte-ignore missing-declaration -->
-        <p>{$_('configPannel.listName')}</p>
+        <p>{$_('configPannel.listName')} : </p>
         <input type="text"
         name="liste-name"
         id="liste-name"
@@ -137,12 +137,12 @@
     }
     .pannel-header {
         display: flex;
-        flex-direction: column;
+        flex-direction: row;
         padding: 0.3em 1em;
         border-radius: .3em;
     }
     .pannel-header input {
-        width: 90%;
+        /* width: 90%; */
     }
     .bloc {
         margin: 0.5em 0em;
