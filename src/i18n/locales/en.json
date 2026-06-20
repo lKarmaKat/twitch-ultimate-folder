@@ -22,7 +22,9 @@
     "title": "Organize your favorites",
     "channelsList": "Channels list",
     "save": "Save",
-    "resetPrompt": "Are you sure you want to reset the config named \"{name}\"?"
+    "resetPrompt": "Are you sure you want to reset the config named \"{name}\"?",
+    "configList": "Configuration",
+    "display": "Preview"
   },
   "configPannel": {
     "listName": "List name",

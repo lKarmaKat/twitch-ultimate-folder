@@ -103,11 +103,11 @@
         <div class="loading-overlay"></div>
       </div>
       {:else}
-        <div class="flex-config">
+        <!-- <div class="flex-config">
           <div class="left">
           </div>
           <div class="right">
-            <!-- {#if configManager.channelsConfigList.length > 0}
+            {#if configManager.channelsConfigList.length > 0}
             <div class="configs-container">
               <button onclick={newConfig}>
                 +
@@ -120,23 +120,47 @@
             </div>
             {:else}
               <p>No configs {configManager.channelsConfigList?.length}</p>
-            {/if} -->
+            {/if}
           </div>
-        </div>
-        <div class="flex-container">
-          <div id="channels-ref-container" class="channels-container">
-            {#if configManager.channelsPickRef.length > 0}
-            <MainChannelsList items={configManager.channelsPickRef}/>
+        </div> -->
+        <div class="content-column">
+          <div class="flex-container">
+            <div class="channels-ref-container col">
+              <h2 class="section-name">{$_('configPopup.channelsList')}</h2>
+              <div class="channels-container">
+                {#if configManager.channelsPickRef.length > 0}
+                <MainChannelsList items={configManager.channelsPickRef}/>
+                {/if}
+              </div>
+            </div>
+            {#if configManager.channelsPickRef.length}
+            <div class="config-list-container col">
+              <h2 class="section-name">{$_('configPopup.configList')}</h2>
+              <div id="config-list" class="channels-container">
+                <ConfigList listId="rootList"
+                configManager={configManager}
+                requestDeleteToParent={promptResetConfig} />
+              </div>
+            </div>
+            {/if}
+            <div class="config-pannel-container col">
+              <div class="section-name" aria-hidden="true">&nbsp;</div>
+              <div class="pannel-scroll">
+                <ConfigPannel configManager={configManager} />
+              </div>
+            </div>
+            <!-- {#if !loading} -->
+            {#if configManager.channelsPickRef.length && Object.getOwnPropertyNames(configManager.channelsConfigList).length > 0}
+            <div class="display-column col">
+              <h2 class="section-name">{$_('configPopup.display')}</h2>
+              <div id="display-container" class="display-container">
+                <DisplayWrapper configManager={configManager} />
+              </div>
+            </div>
             {/if}
           </div>
           {#if configManager.channelsPickRef.length}
-          <div id="config-list-container">
-            <h2>Channels</h2>
-            <div id="config-list" class="channels-container">
-              <ConfigList listId="rootList"
-              configManager={configManager}
-              requestDeleteToParent={promptResetConfig} />
-            </div>
+          <div class="footer-bar">
             <button class="save-btn" onclick={() => saveConfig()}>
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                 <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
@@ -144,18 +168,6 @@
               </svg>
               {$_('configPopup.save')}
             </button>
-          </div>
-          {/if}
-          <div class="config-pannel-container">
-            <ConfigPannel configManager={configManager} />
-          </div>
-          <!-- {#if !loading} -->
-          {#if configManager.channelsPickRef.length && Object.getOwnPropertyNames(configManager.channelsConfigList).length > 0}
-          <div class="display-column">
-            <h2>Channels</h2>
-            <div id="display-container" class="display-container">
-              <DisplayWrapper configManager={configManager} />
-            </div>
           </div>
           {/if}
         </div>
@@ -230,17 +242,17 @@
     left: 15%;
     top: 10%;
   }
-  #channels-ref-container {
+  .channels-ref-container {
     flex: 1 0 14%;
   }
-  #config-list-container {
+  .config-list-container {
     display: flex;
     flex-direction: column;
     max-height: 100%;
     flex: 1 0 14%;
   }
   #config-list {
-    flex: 1 0 auto;
+    flex: 1 1 auto;
     min-height: 0;
   }
 
@@ -259,24 +271,45 @@
     overflow-y: scroll;
     flex: 1 1 auto;
   }
-  div.channels-container {
-    max-height: 100%;
+  .col {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+  }
+  div.channels-container,
+  .pannel-scroll {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
     overflow-y: scroll;
+    max-height: 100%;
   }
   .main {
-    /* display: flex;
+    display: flex;
     flex-direction: column;
-    justify-content: space-between; */
-    height: 80%;
-    margin-top: 3em;
-    margin-bottom: 3em;
-    margin-left: 2em;
+    justify-content: start;
+    height: 100%;
+    padding-top: 0.5em;
+    padding-bottom: 3em;
+    padding-left: 2em;
     /* border: 1px solid red; */
+  }
+  .content-column {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
   }
   div.flex-container {
     display: flex;
     flex-direction: row;
-    height: 95%;
+    flex: 1 1 auto;
+    min-height: 0;
+  }
+  .footer-bar {
+    display: flex;
+    justify-content: flex-end;
+    flex: 0 0 auto;
+    padding: 0.75em 2em 0 0;
   }
   .flex-config {
     display: flex;
@@ -284,9 +317,6 @@
     justify-content: space-between;
   }
   .save-btn {
-    position: absolute;
-    right: 2em;
-    bottom: 1.5em;
     display: inline-flex;
     align-items: center;
     gap: 0.5em;
@@ -312,6 +342,11 @@
   .save-btn svg {
     width: 1.05em;
     height: 1.05em;
+  }
+
+  .main .section-name {
+    flex: 0 0 auto;
+    margin-bottom: .5rem;
   }
 
 </style>

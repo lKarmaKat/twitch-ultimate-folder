@@ -94,7 +94,7 @@ function show() {
     }
     :global(section#main-channels-list a) {
       /* border: 1px solid red !important; */
-        padding: 0.357em 0.57em;
+        padding: 0.357em 0em 0.357em 0.57em;
     }
 
 </style>
@@ -103,7 +103,6 @@ function show() {
 
 <div class="channels-list-root">
   <div class="list-header">
-    <h2>{$_('configPopup.channelsList')}</h2>
     <!-- <input type="text" name="listFilter" id="listFilter" placeholder="Search through channels" bind:value={searchString} oninput={searchChange} /> -->
     <input type="text" name="listFilter" id="listFilter" placeholder={$_('mainList.searchPlaceholder')} bind:value={searchString} />
   </div>
