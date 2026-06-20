@@ -94,7 +94,7 @@ function show() {
     }
     :global(section#main-channels-list a) {
       /* border: 1px solid red !important; */
-        padding: 0.357em 0em 0.357em 0.57em;
+        padding: 0.357em 0em 0.357em 0em;
     }
 
 </style>

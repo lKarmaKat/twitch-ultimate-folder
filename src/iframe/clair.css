@@ -42,11 +42,11 @@ input[type=text] {
 #main-channels-list .card::after {
     content: '';
     position: absolute;
-    width: 90%;
+    width: 100%;
     height: 1px;
     border-bottom: 1px solid rgb(191, 148, 255);
     bottom: 1px;
-    left: 5%;
+    left: 0%;
 }
 #config-list .list-header,
 .nested-list strong {
