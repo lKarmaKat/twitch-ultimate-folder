@@ -137,7 +137,13 @@
               configManager={configManager}
               requestDeleteToParent={promptResetConfig} />
             </div>
-            <button class="save-btn" onclick={() => saveConfig()}>{$_('configPopup.save')}</button>
+            <button class="save-btn" onclick={() => saveConfig()}>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
+                <path d="M17 21v-8H7v8M7 3v5h8"/>
+              </svg>
+              {$_('configPopup.save')}
+            </button>
           </div>
           {/if}
           <div class="config-pannel-container">
@@ -278,18 +284,34 @@
     justify-content: space-between;
   }
   .save-btn {
-    margin: .4em 1.5em .4em 0;
-    display: flex;
+    position: absolute;
+    right: 2em;
+    bottom: 1.5em;
+    display: inline-flex;
     align-items: center;
     gap: 0.5em;
-    width: 100%;
-    padding: 0.4em 0.5em;
-    background: #a970ff;
-    border: #a970ff;
-    border-radius: 0.3em;
+    width: auto;
+    padding: 0.6em 1.5em;
+    font-weight: 600;
+    font-size: 0.95em;
+    color: #fff;
+    background: linear-gradient(135deg, #a970ff, #7a3dff);
+    border: none;
+    border-radius: 0.625em;
+    box-shadow: 0 3px 12px rgba(122, 61, 255, 0.45);
     cursor: pointer;
-    text-align: left;
-    color: inherit;
+    transition: box-shadow 0.15s ease, transform 0.1s ease;
+  }
+  .save-btn:hover {
+    box-shadow: 0 5px 18px rgba(122, 61, 255, 0.6);
+  }
+  .save-btn:active {
+    transform: translateY(1px);
+    box-shadow: 0 2px 6px rgba(122, 61, 255, 0.5);
+  }
+  .save-btn svg {
+    width: 1.05em;
+    height: 1.05em;
   }
 
 </style>
