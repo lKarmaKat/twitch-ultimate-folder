@@ -35,7 +35,10 @@
     "listHeaderIcon": "List header icon",
     "listHeaderBarColor": "List header side bar color",
     "listHeaderBadge": "List header badge style",
-    "help": "Help"
+    "help": "Help",
+    "listIconHelp": "Icon displayed next to the list name",
+    "listHeaderBarColorHelp": "Color of the list's side bar",
+    "listCounterBadgeHelp": "Style of the badge showing the number of channels online"
   },
   "configList": {
     "alreadyInList": "The item is already in the list",

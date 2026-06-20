@@ -68,7 +68,7 @@
                 <p>{$_('configPannel.listHeaderIcon')}</p>
                 <span
                     class="help-badge"
-                    data-tooltip={$_('configPannel.help')}>?</span>
+                    data-tooltip={$_('configPannel.listIconHelp')}>?</span>
                 <IconSelect
                     bind:value={config.type.iconType}/>
             </div>
@@ -76,7 +76,7 @@
                 <p>{$_('configPannel.listHeaderBarColor')}</p>
                 <span
                     class="help-badge"
-                    data-tooltip={$_('configPannel.help')}>?</span>
+                    data-tooltip={$_('configPannel.listHeaderBarColorHelp')}>?</span>
                 <BarColorSelect
                     bind:value={config.type.barType}/>
             </div>
@@ -84,7 +84,7 @@
                 <p>{$_('configPannel.listHeaderBadge')}</p>
                 <span
                     class="help-badge"
-                    data-tooltip={$_('configPannel.help')}>?</span>
+                    data-tooltip={$_('configPannel.listCounterBadgeHelp')}>?</span>
                 <CounterTypeSelect
                     bind:value={config.type.viewerCountType}/>
             </div>

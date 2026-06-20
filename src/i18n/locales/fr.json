@@ -35,7 +35,10 @@
     "listHeaderIcon": "List header icon",
     "listHeaderBarColor": "List header side bar color",
     "listHeaderBadge": "List header badge style",
-    "help": "Help"
+    "help": "Help",
+    "listIconHelp": "Icone qui s'affiche à côté du nom de la liste",
+    "listHeaderBarColorHelp": "Couleur de la bar latérale de la liste",
+    "listCounterBadgeHelp": "Style du badge qui affiche le nombre de chaine en ligne"
   },
   "configList": {
     "alreadyInList": "L'élément est déjà dans la liste",
