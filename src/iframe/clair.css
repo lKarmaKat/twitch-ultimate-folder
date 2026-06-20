@@ -50,8 +50,9 @@ input[type=text] {
 }
 #config-list .list-header,
 .nested-list strong {
-    background-color: rgb(92, 22, 197, .4);
-    color: rgb(14, 14, 16);
+    background-color: rgb(229, 229, 231);
+    color: #7b3fc9;
+    /* color: rgb(14, 14, 16); */
 }
 
 .custom-select .menu,

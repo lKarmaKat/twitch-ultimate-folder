@@ -52,8 +52,9 @@ input[type=text] {
 
 #config-list .list-header,
 .nested-list strong {
-    background-color: rgb(74, 40, 124);
-    color: rgb(239, 239, 241);
+    background-color: rgb(57, 57, 65);
+    color: #bf94ff;
+    /* color: rgb(239, 239, 241); */
 }
 
 .custom-select .label {
