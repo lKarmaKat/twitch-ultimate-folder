@@ -49,7 +49,7 @@ export class TokenManager {
                     throw wrapError("TokenManager.getTokenFromStorage no refresh token", error);
                 }
                 await this.refreshAccessToken();
-                // await this.validateAuthToken();
+                await this.validateAuthToken();
             }
             console.log("Calling userAlreadyLoggedInCallbak")
             this.userAlreadyLoggedInCallbak(this.userId!);
