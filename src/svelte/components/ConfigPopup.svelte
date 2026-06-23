@@ -27,8 +27,9 @@
   }
 
   function promptResetConfig(param) {
-    let confName = configManager.selectedConfig[param].name;
-    let promptMsg = get(_)('configPopup.resetPrompt', { values: { name: confName } });
+    // let confName = configManager.selectedConfig[param].name;
+    // let promptMsg = get(_)('configPopup.resetPrompt', { values: { name: confName } });
+    let promptMsg = $_('configPopup.resetPrompt');
     let rep = prompt(promptMsg, "oui");
     if (rep === "oui") {
       configManager.resetConfig()
@@ -94,7 +95,7 @@
     <div class="header">
       <div class="left">{$_('configPopup.title')}</div>
       <div class="right">
-        <button onclick={() => closePopup()} class="cross">X</button>
+        <button onclick={() => closePopup()} class="close-btn cross">X</button>
       </div>
     </div>
     <div class="main">
@@ -161,7 +162,14 @@
           </div>
           {#if configManager.channelsPickRef.length}
           <div class="footer-bar">
-            <button class="save-btn" onclick={() => saveConfig()}>
+            <button class="reset-btn bottom-btn" onclick={() => promptResetConfig()}>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
+                <path d="M17 21v-8H7v8M7 3v5h8"/>
+              </svg>
+              {$_('configPopup.reset')}
+            </button>
+            <button class="save-btn bottom-btn" onclick={() => saveConfig()}>
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                 <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
                 <path d="M17 21v-8H7v8M7 3v5h8"/>
@@ -243,7 +251,7 @@
     top: 10%;
   }
   .channels-ref-container {
-    flex: 1 0 14%;
+    flex: 1 1 14%;
   }
   .config-list-container {
     display: flex;
@@ -275,12 +283,12 @@
     display: flex;
     flex-direction: column;
     min-height: 0;
+    min-width: 0
   }
   div.channels-container,
   .pannel-scroll {
     flex: 1 1 auto;
     min-height: 0;
-    overflow-y: auto;
     overflow-y: scroll;
     max-height: 100%;
   }
@@ -289,7 +297,7 @@
     flex-direction: column;
     justify-content: start;
     height: 100%;
-    padding-top: 0.5em;
+    padding-top: 0.75em;
     padding-bottom: 3em;
     padding-left: 2em;
     /* border: 1px solid red; */
@@ -304,19 +312,21 @@
     flex-direction: row;
     flex: 1 1 auto;
     min-height: 0;
+    
   }
   .footer-bar {
     display: flex;
     justify-content: flex-end;
     flex: 0 0 auto;
-    padding: 0.75em 2em 0 0;
+    padding: 1em 1.5em 1.2em 0;
   }
   .flex-config {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
   }
-  .save-btn {
+  .close-btn,
+  .bottom-btn {
     display: inline-flex;
     align-items: center;
     gap: 0.5em;
@@ -325,20 +335,36 @@
     font-weight: 600;
     font-size: 0.95em;
     color: #fff;
-    background: linear-gradient(135deg, #a970ff, #7a3dff);
     border: none;
     border-radius: 0.625em;
-    box-shadow: 0 3px 12px rgba(122, 61, 255, 0.45);
+    /* box-shadow: 0 3px 12px rgba(122, 61, 255, 0.45); */
     cursor: pointer;
     transition: box-shadow 0.15s ease, transform 0.1s ease;
   }
-  .save-btn:hover {
-    box-shadow: 0 5px 18px rgba(122, 61, 255, 0.6);
+  .close-btn,
+  .save-btn {
+    background: linear-gradient(135deg, #a970ff, #7a3dff);
   }
+  .close-btn {
+    padding: 0.4em 0.8em;
+    margin: 0.5em .4em .5em 0;
+  }
+  .reset-btn {
+    background: linear-gradient(135deg, #75282d, #ee4242);;
+    /* background: linear-gradient(135deg, #6d013c, #ee4242); */
+    margin-right: 1em;
+  }
+  .reset-btn:hover,
+  .save-btn:hover {
+    /* box-shadow: 0 5px 18px rgba(122, 61, 255, 0.6); */
+    transform: translateY(-1px);
+  }
+  .reset-btn:active,
   .save-btn:active {
     transform: translateY(1px);
-    box-shadow: 0 2px 6px rgba(122, 61, 255, 0.5);
+    /* box-shadow: 0 2px 6px rgba(122, 61, 255, 0.5); */
   }
+  .reset-btn svg,
   .save-btn svg {
     width: 1.05em;
     height: 1.05em;

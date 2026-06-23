@@ -82,12 +82,13 @@
       font-weight: 600;
     }
 
-    .close-btn {
+    /* .close-btn {
       background: transparent;
       border: none;
       color: #adadb8;
       cursor: pointer;
       padding: 8px;
+      margin: 0.8em .3em 0.8em 0;
       border-radius: 6px;
       transition: all 0.2s;
       display: flex;
@@ -98,7 +99,7 @@
     .close-btn:hover {
       background: #2d2d31;
       color: #efeff1;
-    }
+    } */
 
     /* Content */
     .popup-content {
