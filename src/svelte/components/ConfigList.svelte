@@ -245,7 +245,7 @@
 		/* border-radius: 7%; */
 	}
 	.list-container {
-		padding: 0 0 0 .1em;
+		/* padding: 0 0 0 .1em; */
 		border: 1px solid rgba(128, 128, 128, 0.295);
 	}
 	.nested-list {
