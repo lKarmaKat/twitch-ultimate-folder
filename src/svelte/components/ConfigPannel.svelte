@@ -48,8 +48,8 @@
                 {/each}
             </div>
             <div class="row">
-                <p>{$_('configPannel.sortStrategy')}</p>
-                <span class="help-badge" data-tooltip={$_('configPannel.help')}>?</span>
+                <p>{$_('configPannel.sortMode')}</p>
+                <span class="help-badge" data-tooltip={$_('configPannel.sortStrategy')}>?</span>
                 <SortSelect
                     bind:value={config.sort}
                     options={CST.SORT_STRATEGY}/>
@@ -202,9 +202,9 @@
     position: absolute;
     bottom: calc(100% + 6px);
     left: 50%;
-    transform: translateX(-15%) translateY(4px);
+    transform: translateX(5%) translateY(40%);
     width: max-content;
-    /* max-width: 200px; */
+    max-width: 200px;
     padding: 0.4em 0.6em;
     border-radius: 0.4em;
     background: #1f1f23;
@@ -221,7 +221,7 @@
 }
 
 /* Petite flèche */
-.help-badge::before {
+/* .help-badge::before {
     content: "";
     position: absolute;
     bottom: calc(100% + 1px);
@@ -233,10 +233,10 @@
     pointer-events: none;
     transition: opacity 0.12s ease, transform 0.12s ease;
     z-index: 10;
-}
+} */
 .help-badge:hover::after,
 .help-badge:hover::before {
     opacity: 1;
-    transform: translateX(-15%) translateY(0);
+    transform: translateX(5%) translateY(50%);
 }
 </style>

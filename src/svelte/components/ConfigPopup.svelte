@@ -292,6 +292,9 @@
     overflow-y: scroll;
     max-height: 100%;
   }
+  .pannel-scroll {
+    overflow-y: clip;
+  }
   .main {
     display: flex;
     flex-direction: column;

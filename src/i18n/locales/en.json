@@ -31,7 +31,7 @@
     "listName": "List name",
     "listNamePlaceholder": "Enter list name",
     "behavior": "Behavior",
-    "sortStrategy": "Sort strategy",
+    "sortStrategy": "custom sort let's you define the sort order, alpha/viewer is explicit enough, CAVEAT you should use ALPHA/VIEWER sort on a list that only contains channels",    "sortMode": "Sort Mode",
     "style": "Style",
     "listHeaderIcon": "List header icon",
     "listHeaderBarColor": "List header side bar color",
