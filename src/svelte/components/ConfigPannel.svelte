@@ -124,15 +124,38 @@
     </div>
     {/if}
 
-
+    {:else}
+        <div class="select-channel-flex">
+            <h2 class="blinker">Please click on a list header to customize it</h2>
+        </div>
     {/if}
 </div>
 
 
 <style>
+    .select-channel-flex {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: start;
+        margin: 6em 0 0 0;
+        height: 100%;
+    }
+    .select-channel-flex h2 {
+        opacity: 1.0;
+    }
+    .blinker {
+    animation: blinker 2s ease-in-out infinite;
+    }
+    @keyframes blinker {
+        from { opacity: 1; }
+        50%   { opacity: 0.6; }
+        to { opacity: 1; }
+    }
     .pannel-container {
         box-sizing: border-box;
         width: 100%;
+        height: 100%;
         padding: 0.3em 0.8em;
     }
     .pannel-header {
