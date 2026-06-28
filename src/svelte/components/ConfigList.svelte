@@ -10,7 +10,7 @@
 
 	  
 
-	let { configManager, listId, requestDeleteToParent } = $props()
+	let { configManager, listId, requestDeleteToParent, addRootNode = $bindable() } = $props()
 
 
 	// let duplicatedElementError = $derived(!)
@@ -87,6 +87,8 @@
 			console.log("looking for index", currentId)
 		} while (nodeExist);
 	}
+
+	addRootNode = addNode;
 
 	function removeChild(param) {
 		let indexToRemove = configManager.selectedConfig[listId].items.findIndex(e => e?.id === param)

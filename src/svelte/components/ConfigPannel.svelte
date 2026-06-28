@@ -203,7 +203,7 @@
     }
 
 /* La pastille "?" */
-.help-badge {
+/* .help-badge {
     position: relative;
     display: inline-flex;
     align-items: center;
@@ -219,7 +219,6 @@
     flex-shrink: 0;
 }
 
-/* Le tooltip */
 .help-badge::after {
     content: attr(data-tooltip);
     position: absolute;
@@ -241,7 +240,7 @@
     pointer-events: none;
     transition: opacity 0.12s ease, transform 0.12s ease;
     z-index: 10;
-}
+} */
 
 /* Petite flèche */
 /* .help-badge::before {
@@ -257,9 +256,9 @@
     transition: opacity 0.12s ease, transform 0.12s ease;
     z-index: 10;
 } */
-.help-badge:hover::after,
+/* .help-badge:hover::after,
 .help-badge:hover::before {
     opacity: 1;
     transform: translateX(5%) translateY(50%);
-}
+} */
 </style>

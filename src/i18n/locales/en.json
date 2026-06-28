@@ -25,7 +25,8 @@
     "resetPrompt": "Are you sure you want to reset the config?",
     "configList": "Configuration",
     "display": "Preview",
-    "reset": "Reset config"
+    "reset": "Reset config",
+    "addNewListToRoot": "Add new list to root element"
   },
   "configPannel": {
     "listName": "List name",

@@ -78,6 +78,11 @@
   //   currentConfig.set(configName);
   //   console.log(configName);
   // }
+  function addRootNodeFromConfigList() {
+    console.log("T'as bien cliqué");
+    addRootNode();
+  }
+  let addRootNode = $state();
 </script>
 
 <svelte:head>
@@ -136,11 +141,18 @@
             </div>
             {#if configManager.channelsPickRef.length}
             <div class="config-list-container col">
-              <h2 class="section-name">{$_('configPopup.configList')}</h2>
+              <div class="header-row-flex">
+                <h2 class="section-name">{$_('configPopup.configList')}</h2>
+                <button 
+                  class="root-list-btn help-badge"
+                  onclick={addRootNodeFromConfigList}
+                  data-tooltip={$_('configPopup.addNewListToRoot')}><strong>+</strong></button>
+              </div>
               <div id="config-list" class="channels-container">
                 <ConfigList listId="rootList"
                 configManager={configManager}
-                requestDeleteToParent={promptResetConfig} />
+                requestDeleteToParent={promptResetConfig} 
+                bind:addRootNode={addRootNode}/>
               </div>
             </div>
             {/if}
@@ -344,6 +356,12 @@
     cursor: pointer;
     transition: box-shadow 0.15s ease, transform 0.1s ease;
   }
+  .root-list-btn {
+    padding: 1.1em 1.9em;
+    border: none;
+    border-radius: 0.625em;
+  }
+  .root-list-btn,
   .close-btn,
   .save-btn {
     background: linear-gradient(135deg, #a970ff, #7a3dff);
@@ -376,6 +394,13 @@
   .main .section-name {
     flex: 0 0 auto;
     margin-bottom: .5rem;
+  }
+
+  .header-row-flex {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
   }
 
 </style>
