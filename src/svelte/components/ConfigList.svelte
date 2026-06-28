@@ -122,8 +122,8 @@
 		<!-- <div class="header" style="background-color: {headerColor};"> -->
 		<p class="list-title"><strong>{configManager.selectedConfig[listId]?.name}</strong></p>
 		<div class="list-side-menu">
-			<button id="add-list-{listId}" class="add" onclick={() => addNode()} title={$_('configList.addList', { values: { listId } })}>+</button>
-			<button class="delete" onclick={()=>{requestDeleteToParent(listId)}}>x</button>
+			<button id="add-list-{listId}" class="add-list" onclick={() => addNode()} title={$_('configList.addList', { values: { listId } })}>+</button>
+			<button class="delete delete-list" onclick={()=>{requestDeleteToParent(listId)}}>x</button>
 		</div>
 	</div>
 	{/if}
@@ -213,6 +213,9 @@
 		margin: 0em 0;
 	}
 	.list-side-menu {
+		display: flex;        
+    	align-self: stretch;  
+	    align-items: stretch; 
 		visibility: visible;
 		opacity: 0;
 		transition: opacity 0.2s linear;
@@ -236,7 +239,6 @@
 		flex-direction: row;
 		justify-content: space-between;
 		align-items: center;
-		padding: 0.3em 0 0.3em 0.4em !important;
 		position: relative;
 		/* background-color: rgb(191, 148, 255); */
 		width: 100%;
@@ -245,6 +247,9 @@
 		/* padding: 0.6em 0.3em 0 0.5em; */
 		/* border: 1px solid rgb(121, 36, 121); */
 		/* border-radius: 7%; */
+	}
+	.list-header .list-title {
+		padding: 0.3em 0 0.3em 0.4em !important;
 	}
 	.list-container {
 		/* padding: 0 0 0 .1em; */
@@ -257,6 +262,14 @@
 		border: 1px solid rgba(216, 57, 57, 0.685);
 		color: white;
 		background-color: rgba(216, 57, 57, 0.685);
+	}
+	.delete-list {
+		height: 100%;
+	}
+	.list-side-menu button{
+		height: 100%;
+		margin: 0 0.2em 0 0;
+		padding: 0.3em 0.5em;
 	}
 	.list-body {
 		margin: 0;
