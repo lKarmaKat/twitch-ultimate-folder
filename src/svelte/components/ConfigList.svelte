@@ -263,6 +263,20 @@
 		color: white;
 		background-color: rgba(216, 57, 57, 0.685);
 	}
+	.add-list {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.5em;
+		width: auto;
+		padding: 0.6em 1.5em;
+		font-weight: 600;
+		font-size: 0.95em;
+		color: #fff;
+		border: none;
+		cursor: pointer;
+		transition: box-shadow 0.15s ease, transform 0.1s ease;
+		background: linear-gradient(135deg, #a970ff, #7a3dff);
+	}
 	.delete-list {
 		height: 100%;
 	}
@@ -276,7 +290,7 @@
 		padding: 0;
 	}
 	:global(div.list-container section.increased-drop-margin) {
-	padding-bottom: 1.5em;
+		padding-bottom: 1.5em;
 	/* padding-top: 1em; */
 	/* border: 1px solid green; */
 	}
