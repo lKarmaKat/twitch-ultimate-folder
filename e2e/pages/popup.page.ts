@@ -34,6 +34,10 @@ export class PopupPage {
         return await this.popupFrame.locator('#config-list');
     }
 
+    async getNeedToConnect() {
+        return await this.popupFrame.locator('#need-connect').waitFor({ timeout: 500 });
+    }
+
     async getListInConfigChannelList(listId: string) {
         let configList = await this.getConfigChannelList();
         return await configList.locator(`#${listId}`);
@@ -117,7 +121,7 @@ export class PopupPage {
         if (!fr) throw new Error('Frame not found')
         await fr.evaluate(({conf, channelsRef, GET_STREAMS_REF, GET_CURRENT_CONFIGURATION}) => {
             // const iframe = (document.querySelector('#iframe-rem') as any).shadowRoot.querySelector('#iframe') as any;
-            const callback = (window as any).__onPortCallback;
+            const callback = (window as any).__portCallbackMap['eventbus'];
             if (!callback) throw new Error('Port callback not found in iframe');
 
             let deepClone = (obj: any) => JSON.parse(JSON.stringify(obj));
@@ -138,7 +142,7 @@ export class PopupPage {
         if (!fr) throw new Error('Frame not found')
         await fr.evaluate(({channelsRef, GET_STREAMS_REF}) => {
             // const iframe = (document.querySelector('#iframe-rem') as any).shadowRoot.querySelector('#iframe') as any;
-            const callback = (window as any).__onPortCallback;
+            const callback = (window as any).__portCallbackMap['eventbus'];
             if (!callback) throw new Error('Port callback not found in iframe');
 
             let deepClone = (obj: any) => JSON.parse(JSON.stringify(obj));
@@ -149,5 +153,14 @@ export class PopupPage {
         }, {channelsRef, GET_STREAMS_REF: CST.GET_STREAMS_REF})
     }
 
-    
+    async sendAuth(isConnected: boolean) {
+        let fr = this.page.frame({ name: 'inner-iframe' })
+        if (!fr) throw new Error('Frame not found')
+        await fr.evaluate((data) => {
+            console.log("LOOKING FOR PORT IN", (window as any).__portCallbackMap)
+            const callback =(window as any).__portCallbackMap?.['auth'];
+            if (!callback) throw new Error('Auth port callback not found in iframe');
+            callback({ data });
+        }, isConnected)
+    }
 }

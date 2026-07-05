@@ -122,7 +122,9 @@ setTimeout(()=> shortLoadingLogo = false, 200);
       <PortDisconnected />
     {/if}
     {#if !isUserConnected}
+    <div id="need-connect">
       {$_('display.needConnect')}
+    </div>
     {:else if !configManager.selectedConfig || configManager.channelsPickRefMap?.size === 0}
       <WaitingConfig />
     {:else if noLiveChannels}

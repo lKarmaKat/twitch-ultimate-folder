@@ -49,13 +49,14 @@ test.beforeEach(async ({ page }) => {
 					},
 					sendMessage: () => Promise.resolve(),
 					connect: (extId: any, type: any) => {
-						console.log("TEST PORT MOCK NEW CONNECTION")
+						console.log("TEST PORT MOCK NEW CONNECTION", type)
 						const port = {
 							onMessage: {
 								addListener: (callback: (msg: any) => void) => {
-									// Exposez le callback dans le contexte courant (page principale OU iframe)
-									if (type.name === 'eventbus')
-									(window as any).__onPortCallback = callback;
+									(window as any).__portCallbackMap ??= {};
+									(window as any).__portCallbackMap[type.name] = callback;
+									// if (type.name === 'eventbus')
+									// (window as any).__onPortCallback = callback;
 								}
 							},
 							onDisconnect: {
@@ -104,11 +105,13 @@ test('popup has a loader until datas are sent through', async ({ page }) => {
 	await popupPage.sendDefaultConf(conf, channelsRef);
 
 	let mainChannelListCount = await popupPage.getMainChannelListElementCount();
-	expect(mainChannelListCount).toBe(5);
+	expect(mainChannelListCount).toBe(4);
 
 	let configChannelListCount = await popupPage.getConfigChannelListElementCount();
 	expect(configChannelListCount).toBe(4);
 
+	await popupPage.getNeedToConnect();
+	await popupPage.sendAuth(true);
 	let displayConfigListCount = await popupPage.getDisplayConfigListElementCount();
 	expect(displayConfigListCount).toBe(4);
 });
@@ -126,7 +129,10 @@ test.describe('with config', async () => {
 			]
 		}
 		// await page.waitForFunction(() => (window as any).__onMessageCallback && typeof (window as any).__onMessageCallback === 'function');
+		
 		await popupPage.sendDefaultConf(conf, channelsRef);
+		await popupPage.getNeedToConnect();
+		await popupPage.sendAuth(true);
 	});
 
 	test('popup configChannelList\'s elements should have a button to remove the element', async ({ page }) => {

@@ -25,7 +25,7 @@
     }
 </style>
 
-<div class="flex-container">
+<div class="flex-container" id="#waiting-for-config-short">
     <p data-testid="status">{$_('status.waitingConfig')}</p>
     <div class="loader"></div>
 </div>
