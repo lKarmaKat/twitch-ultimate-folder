@@ -1,4 +1,4 @@
 export interface ChannelsFollowed {
-    broadcaster_id: number,
+    broadcaster_id: string,
     broadcaster_name: string
 }

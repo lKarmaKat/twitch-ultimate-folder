@@ -147,29 +147,34 @@
 					configManager={configManager} />
 			</div>
 			{:else if item.id === CST.ALL_OTHER_CHANNELS}
-				<DraggableChannel
-					channelId={CST.ALL_OTHER_CHANNELS_ELEMENT.channel_id}
-					channelName={$_('display.allOtherChannels')}
-					channelProfilePic={CST.ALL_OTHER_CHANNELS_ELEMENT.profile_image_url} 
-					viewerCount={CST.ALL_OTHER_CHANNELS_ELEMENT.viewer_count}
-					gameName={CST.ALL_OTHER_CHANNELS_ELEMENT.game_name}
-					isLive={CST.ALL_OTHER_CHANNELS_ELEMENT.isLive}
-					bearCard=true/>
+				<div class="channel">
+					<div class="">
+						<button class="delete" id="remove-{item?.channel_id}" onclick={()=>{removeChannel(item?.channel_id)}}>x</button>
+					</div>
+					<DraggableChannel
+						channelId={CST.ALL_OTHER_CHANNELS_ELEMENT.channel_id}
+						channelName={$_('display.allOtherChannels')}
+						channelProfilePic={CST.ALL_OTHER_CHANNELS_ELEMENT.profile_image_url} 
+						viewerCount={CST.ALL_OTHER_CHANNELS_ELEMENT.viewer_count}
+						gameName={CST.ALL_OTHER_CHANNELS_ELEMENT.game_name}
+						isLive={CST.ALL_OTHER_CHANNELS_ELEMENT.isLive}
+						bearCard=true/>
+				</div>
 			{:else}
 			{@const i = getNode(item)}
 				<div class="channel">
 					<div class="">
 						<button class="delete" id="remove-{i?.channel_id}" onclick={()=>{removeChannel(i?.channel_id)}}>x</button>
 					</div>
-				<DraggableChannel 
-					channelId={i?.channel_id} 
-					channelName={i?.channel_name} 
-					channelProfilePic={i?.profile_image_url} 
-					viewerCount={i?.viewer_count}
-					gameName={i?.game_name}
-					isLive={i?.isLive}/>
-					<!-- <div>chaine</div> -->
-					<!-- color={contentColor}/> -->
+					<DraggableChannel 
+						channelId={i?.channel_id} 
+						channelName={i?.channel_name} 
+						channelProfilePic={i?.profile_image_url} 
+						viewerCount={i?.viewer_count}
+						gameName={i?.game_name}
+						isLive={i?.isLive}/>
+						<!-- <div>chaine</div> -->
+						<!-- color={contentColor}/> -->
 				</div>
 				{/if}
 				{/each}

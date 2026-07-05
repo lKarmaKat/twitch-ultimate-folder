@@ -156,7 +156,7 @@
         box-sizing: border-box;
         width: 100%;
         height: 100%;
-        padding: 0.3em 0.8em;
+        padding: 0.3em 0.8em 0.3em 0em;
     }
     .pannel-header {
         display: flex;

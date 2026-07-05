@@ -298,13 +298,14 @@
     display: flex;
     flex-direction: column;
     min-height: 0;
-    min-width: 0
+    min-width: 0;
+    margin-right: 1em;
   }
   div.channels-container,
   .pannel-scroll {
     flex: 1 1 auto;
     min-height: 0;
-    overflow-y: scroll;
+    overflow-y: auto;
     max-height: 100%;
   }
   .pannel-scroll {

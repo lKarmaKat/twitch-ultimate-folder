@@ -10,18 +10,26 @@
 
     let searchString = $state('');
 
+    let itemsWithIds = $derived.by(() => {
+      if (!items) return [];
+      return items.map(item => ({
+        ...item,
+        id: item.channel_id + Math.round(Math.random() * 100000)
+      }));
+    });
+
 
     let filtered = $derived.by(() => {
-      if (!items || items.length < 1) {
+      if (!itemsWithIds || itemsWithIds.length < 1) {
         return writable([{
           id: -1,
           channel_name: get(_)('mainList.noChannels')
         }])
       }
-      let a = items;
-      let set = new Set(items);
+      let a = itemsWithIds;
+      let set = new Set(itemsWithIds);
       if (searchString.length > 0) {
-        a = items.filter(x => {
+        a = itemsWithIds.filter(x => {
           if (x.channel_name.toLowerCase().includes(searchString.toLowerCase()))
           return x.channel_name.toLowerCase().includes(searchString.toLowerCase());
         })
@@ -37,7 +45,7 @@
         const {trigger, id} = e.detail.info;
         if (trigger === TRIGGERS.DRAG_STARTED) {
             const idx = filtered.findIndex(item => item.id === id);
-            const newId = `${id}_copy_${Math.round(Math.random()*100000)}`;
+            const newId = id + Math.round(Math.random()*100000);
 						// the line below was added in order to be compatible with version svelte-dnd-action 0.7.4 and above 
 					  e.detail.items = e.detail.items.filter(item => !item[SHADOW_ITEM_MARKER_PROPERTY_NAME]);
             e.detail.items.splice(idx, 0, {...filtered[idx], id: newId});

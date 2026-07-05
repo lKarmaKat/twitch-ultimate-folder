@@ -3,7 +3,7 @@ import { wrapError } from './errors';
 import type { LiveStreamInfos } from './models/liveStreamInfos.model'
 import type { ProfilePicInfos } from './models/profilePicInfos.model'
 import type { StreamsInfos } from './models/streamsInfos.model';
-
+import  * as CST  from '../../src/constantes'
 
 export class DataFormatter {
     initComplete = false;
@@ -31,7 +31,7 @@ export class DataFormatter {
                 await this.getChannelProfilePicture();
             } else {
                 const newIds = Array.from(this.allFollowedStreams.keys())
-                    .filter(id => !this.profilePicInfo.has(id));
+                    .filter(id => !this.profilePicInfo.has(id) && id > 0);
                 if (newIds.length > 0) {
                     await this.getChannelProfilePicture(newIds);
                 }
@@ -58,7 +58,7 @@ export class DataFormatter {
     // }
 
     mixAllInfos() {
-        this.allFollowedStreams.forEach((value, key, map) => {
+        this.allFollowedStreams.forEach((value, key: number, map) => {
             value.profile_image_url = this.profilePicInfo.get(key)?.profile_image_url;
             let liveChannel = this.allLiveFollowedStreams.get(key);
             if (liveChannel) {
@@ -69,6 +69,16 @@ export class DataFormatter {
                 value.title = liveChannel.title;
             }
             map.set(key, value);
+            map.set(
+                CST.ALL_OTHER_CHANNELS_ELEMENT.id,
+                {
+                    // id: CST.ALL_OTHER_CHANNELS_ELEMENT.id * Math.round(Math.random()*100000),
+                    id: CST.ALL_OTHER_CHANNELS_ELEMENT.id,
+                    channel_id: CST.ALL_OTHER_CHANNELS_ELEMENT.id,
+                    channel_name: CST.ALL_OTHER_CHANNELS_ELEMENT.channel_name,
+                    isLive: false,
+                    profile_image_url: CST.ALL_OTHER_CHANNELS_ELEMENT.profile_image_url
+                } as StreamsInfos);
         })
     }
 
@@ -77,15 +87,24 @@ export class DataFormatter {
             .then(channels => {
                 channels.forEach(channel => {
                     this.allFollowedStreams.set(
-                        channel.broadcaster_id,
+                        parseInt(channel.broadcaster_id),
                         {
-                            id: channel.broadcaster_id + Math.round(Math.random()*100000),
-                            channel_id: channel.broadcaster_id,
+                            // id: parseInt(channel.broadcaster_id + Math.round(Math.random()*100000)),
+                            id: parseInt(channel.broadcaster_id),
+                            channel_id: parseInt(channel.broadcaster_id),
                             channel_name: channel.broadcaster_name,
                             isLive: false,
                         } as StreamsInfos);
                 });
-
+                    // this.allFollowedStreams.set(
+                    //     CST.ALL_OTHER_CHANNELS_ELEMENT.id,
+                    //     {
+                    //         id: CST.ALL_OTHER_CHANNELS_ELEMENT.id,// + Math.round(Math.random()*100000),
+                    //         channel_id: CST.ALL_OTHER_CHANNELS_ELEMENT.id,
+                    //         channel_name: CST.ALL_OTHER_CHANNELS_ELEMENT.channel_name,
+                    //         isLive: false,
+                    //         profile_image_url: CST.ALL_OTHER_CHANNELS_ELEMENT.profile_image_url
+                    //     } as StreamsInfos);
                 return this.allFollowedStreams;
             })
             .catch((error) => {
@@ -99,9 +118,9 @@ export class DataFormatter {
                 this.allLiveFollowedStreams.clear();
                 channels.forEach(channel => {
                     this.allLiveFollowedStreams.set(
-                        channel.user_id,
+                        parseInt(channel.user_id),
                         {
-                            id: channel.user_id,
+                            id: parseInt(channel.user_id),
                             viewer_count: channel.viewer_count,
                             language: channel.language,
                             game_name: channel.game_name,
@@ -123,7 +142,7 @@ export class DataFormatter {
             .then(channels => {
                 channels.forEach(channel => {
                     this.profilePicInfo.set(
-                        channel.id,
+                        parseInt(channel.id),
                         {
                             profile_image_url: channel.profile_image_url
                         } as ProfilePicInfos

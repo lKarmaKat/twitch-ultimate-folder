@@ -1,4 +1,4 @@
 export interface ProfilePicInfos {
-    id: number;
+    id: string;
     profile_image_url: string
 }

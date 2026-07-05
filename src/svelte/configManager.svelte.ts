@@ -16,9 +16,11 @@ class ConfigManager {
                     let alphaSort = (a: StreamsInfos, b: StreamsInfos) => {
                         return a.channel_name.localeCompare(b.channel_name);
                     }
-                    if (a.id === CST.ALL_OTHER_CHANNELS)
+                    // if (a.id === CST.ALL_OTHER_CHANNELS)
+                    if (a.id < 0 )
                         return -1;
-                    else if (b.id === CST.ALL_OTHER_CHANNELS)
+                    // else if (b.id === CST.ALL_OTHER_CHANNELS)
+                    else if (b.id < 0)
                         return 1;
                     else if (a.isLive && b.isLive) return alphaSort(a,b);
                     else if (a.isLive) return -1;
@@ -52,7 +54,9 @@ class ConfigManager {
                 }
             } else if (msg.type === CST.GET_STREAMS_REF) {
                 this.channelsPickRefMap.clear();
-                this.channelsPickRefMap.set(`${CST.ALL_OTHER_CHANNELS}`, CST.ALL_OTHER_CHANNELS_ELEMENT)
+                // let allChan = JSON.parse(JSON.stringify(CST.ALL_OTHER_CHANNELS_ELEMENT))
+                // allChan.id = -1  + Math.round(Math.random()*100000);
+                // this.channelsPickRefMap.set(`${CST.ALL_OTHER_CHANNELS}`, allChan)
                 for (const [id, streamInfo] of msg.data) {
                     this.channelsPickRefMap.set(id, streamInfo);
                 }
@@ -69,6 +73,10 @@ class ConfigManager {
     getLiveChannel(channelId: string) {
         const channel = this.getChannel(channelId);
         return channel?.isLive ? channel : undefined;
+    }
+
+    getAllOtherChannel() {
+        return this.channelsPickRef.find(e => e.id > 0);
     }
 
 

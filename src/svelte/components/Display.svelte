@@ -161,7 +161,8 @@
 				return ('' + an).localeCompare(bn)
 			}
 		};
-		let allOtherChannelsRef = configManager.getChannel(`${item.channel_id}`)
+		// let allOtherChannelsRef = configManager.getChannel(item.channel_id)
+		let allOtherChannelsRef = configManager.getAllOtherChannel()
 		if (allOtherChannelsRef.sort === CST.ALPHA_SORT) {
 			list.sort(alphaSortCallback);
 		} else  {
@@ -177,7 +178,8 @@
 		let allOtherChannels = false;
 		if (configManager.selectedConfig[listId] && configManager.selectedConfig[listId].items) {
 			for (let ch of configManager.selectedConfig[listId].items) {
-				if (ch.id === CST.ALL_OTHER_CHANNELS) {
+				// if (ch.id === CST.ALL_OTHER_CHANNELS) {
+				if (ch.channel_id < 0) {
 					return true;
 				} else if (ch.type === CST.TYPE_LIST) {
 					if (hasLiveChannelCallback(ch.id))
@@ -292,7 +294,8 @@
 							<div class="nested-list">
 								<Self  listId={item.id} configManager={configManager} />
 							</div>
-						{:else if item.channel_id === CST.ALL_OTHER_CHANNELS}
+						<!-- {:else if item.channel_id === CST.ALL_OTHER_CHANNELS} -->
+						{:else if item.channel_id < 0 }
 							{#each getAllOtherChannels(configManager.channelsPickRef, item) as other(`${other.channel_id}`)}
 								{@const i = getNode(other)}
 								<div class="channel-overlay li{listId}">
