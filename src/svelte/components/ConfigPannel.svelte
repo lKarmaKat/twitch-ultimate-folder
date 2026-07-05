@@ -14,7 +14,11 @@
     let config = $state();
     $effect(() => {
         listeId = configChangeEvent.current;
-        config = configManager.selectedConfig[listeId];
+        if (listeId) {
+            config = configManager.selectedConfig[listeId];
+        } else {
+            config = null;
+        }
     })
 
 </script>

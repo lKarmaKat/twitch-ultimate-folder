@@ -94,6 +94,7 @@
 		let indexToRemove = configManager.selectedConfig[listId].items.findIndex(e => e?.id === param)
 		if (indexToRemove >= 0) {
 			configManager.selectedConfig[listId].items.splice(indexToRemove,1);
+			configChangeEvent.current = null;
 		}
 	}
 
@@ -123,7 +124,7 @@
 		<p class="list-title"><strong>{configManager.selectedConfig[listId]?.name}</strong></p>
 		<div class="list-side-menu">
 			<button id="add-list-{listId}" class="add-list" onclick={() => addNode()} title={$_('configList.addList', { values: { listId } })}>+</button>
-			<button class="delete delete-list" onclick={()=>{requestDeleteToParent(listId)}}>x</button>
+			<button class="delete delete-list" onclick={(e)=>{  e.stopPropagation(); requestDeleteToParent(listId)}}>x</button>
 		</div>
 	</div>
 	{/if}
