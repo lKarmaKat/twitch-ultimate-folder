@@ -18,6 +18,11 @@ h2,
     background-color: #ffffff;
 }
 
+.confirm-modal {
+    background-color: #ffffff;
+    color: rgb(14, 14, 16);
+}
+
 .list-container {
     background-color: #efeff1 !important;
 }

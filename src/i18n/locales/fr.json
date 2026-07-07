@@ -26,6 +26,7 @@
     "configList": "Configuration",
     "display": "Prévisualisation",
     "reset": "Reset config",
+    "cancel": "Annuler",
     "addNewListToRoot": "Ajouter une nouvelle liste à la liste racine"
   },
   "configPannel": {

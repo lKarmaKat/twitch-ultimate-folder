@@ -26,16 +26,23 @@
     chrome.runtime.sendMessage({type: 'HIDE_POPUP'});
   }
 
+  let showResetConfirm = $state(false);
+
   function promptResetConfig(param) {
+      showResetConfirm = true;
+
     // let confName = configManager.selectedConfig[param].name;
     // let promptMsg = get(_)('configPopup.resetPrompt', { values: { name: confName } });
-    let promptMsg = $_('configPopup.resetPrompt');
-    let rep = prompt(promptMsg, "oui");
-    if (rep === "oui") {
-      configManager.resetConfig()
-    }
+    // let promptMsg = $_('configPopup.resetPrompt');
+    // let rep = prompt(promptMsg, "oui");
+    // if (rep === "oui") {
+    //   configManager.resetConfig()
+    // }
   }
-  
+  function confirmReset() {
+  configManager.resetConfig();
+  showResetConfirm = false;
+}
   function saveConfig() {
     configManager.saveConfig(configManager.selectedConfig);
   }
@@ -104,6 +111,45 @@
       </div>
     </div>
     <div class="main">
+      {#if showResetConfirm}
+        <div
+          class="reset-confirm-overlay"
+          role="presentation"
+          onclick={() => (showResetConfirm = false)}
+          onkeydown={(e) => e.key === 'Escape' && (showResetConfirm = false)}
+        >
+          <div
+            class="confirm-modal"
+            id="reset-confirm"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="reset-confirm-title"
+            tabindex="-1"
+            onclick={(e) => e.stopPropagation()}
+            onkeydown={(e) => e.stopPropagation()}
+          >
+            <div class="confirm-modal-header">
+              <button
+                id="reset-confirm-close"
+                class="close-btn cross"
+                aria-label={$_('configPopup.cancel')}
+                onclick={() => (showResetConfirm = false)}
+              >X</button>
+            </div>
+
+            <p id="reset-confirm-title" class="confirm-text">{$_('configPopup.resetPrompt')}</p>
+
+            <div class="confirm-actions">
+              <button id="reset-confirm-yes" class="reset-btn bottom-btn" onclick={confirmReset}>
+                {$_('configPopup.reset')}
+              </button>
+              <button id="reset-confirm-no" class="save-btn bottom-btn" onclick={() => (showResetConfirm = false)}>
+                {$_('configPopup.cancel')}
+              </button>
+            </div>
+          </div>
+        </div>
+      {/if}
       {#if loading}
       <div class="loading-wrapper">
         <div class="loading-overlay"></div>
@@ -144,6 +190,7 @@
               <div class="header-row-flex">
                 <h2 class="section-name">{$_('configPopup.configList')}</h2>
                 <button 
+                  id="add-root-list"
                   class="root-list-btn help-badge"
                   onclick={addRootNodeFromConfigList}
                   data-tooltip={$_('configPopup.addNewListToRoot')}><strong>+</strong></button>
@@ -174,7 +221,7 @@
           </div>
           {#if configManager.channelsPickRef.length}
           <div class="footer-bar">
-            <button class="reset-btn bottom-btn" onclick={() => promptResetConfig()}>
+            <button id="reset-btn" class="reset-btn bottom-btn" onclick={() => promptResetConfig()}>
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                 <path d="M3 6h18"/>
                 <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
@@ -405,6 +452,41 @@
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
+  }
+
+  .reset-confirm-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0.5); /* grise le popup, identique clair/sombre */
+  }
+  .confirm-modal {
+    min-width: 300px;
+    max-width: 90%;
+    padding: 0.5em 1.5em 1.4em;
+    border-radius: 0.75em;
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.45);
+    font-family: sans-serif;
+  }
+  .confirm-modal-header {
+    display: flex;
+    justify-content: flex-end;
+  }
+  .confirm-text {
+    margin: 0.25em 0 1.5em;
+    text-align: center;
+    line-height: 1.4;
+  }
+  .confirm-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.75em;
+  }
+  .confirm-actions .reset-btn {
+    margin-right: 0; /* neutralise le margin-right:1em existant */
   }
 
 </style>

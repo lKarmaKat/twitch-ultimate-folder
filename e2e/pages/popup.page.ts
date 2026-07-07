@@ -23,7 +23,7 @@ export class PopupPage {
     }
     
     async getMainChannelListElement() {
-        return await this.popupFrame.locator('#main-channels-list a');
+        return  this.popupFrame.locator('#main-channels-list a');
     }
 
     async getConfigChannelListElementCount() {
@@ -31,7 +31,7 @@ export class PopupPage {
     }
 
     async getConfigChannelList() {
-        return await this.popupFrame.locator('#config-list');
+        return  this.popupFrame.locator('#config-list');
     }
 
     async getNeedToConnect() {
@@ -40,7 +40,7 @@ export class PopupPage {
 
     async getListInConfigChannelList(listId: string) {
         let configList = await this.getConfigChannelList();
-        return await configList.locator(`#${listId}`);
+        return  configList.locator(`#${listId}`);
     }
 
     async countNumberDirectSubLists(listId: string) {
@@ -49,7 +49,7 @@ export class PopupPage {
     }
 
     async countNumberDirectElementInList(listId: string) {
-        let list = await (await this.getListInConfigChannelList(listId))
+        let list = await this.getListInConfigChannelList(listId)
         let c = await list.locator(':scope > .list-body > section > div.channel, :scope > .list-body > section > div.nested-list').count()
         return c;
     }
@@ -64,6 +64,21 @@ export class PopupPage {
         await listHeader.getByRole('button').getByText('x').click();
     }
 
+    async clickResetConfig() {
+        await this.popupFrame.locator('#reset-btn').click();
+    }
+
+    async confirmReset() {
+        await this.popupFrame.locator('#reset-confirm-yes').click();
+    }
+
+    async cancelReset() {
+        await this.popupFrame.locator('#reset-confirm-no').click();
+    }
+
+    async clickAddRootList() {
+        await this.popupFrame.locator('#add-root-list').click();
+    }
     async clickRemoveChannel(channelId: string) {
         await this.popupFrame.locator(channelId).click();
     }

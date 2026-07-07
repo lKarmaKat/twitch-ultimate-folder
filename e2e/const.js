@@ -6,10 +6,9 @@ export const config = {
         "id": "list 10",
         "name": "list 10",
         "behavior": {
-            "extendOnClick": false,
-            "extendOnHover": false,
-            "extendedOnStartup": true,
-            "isPinnable": true
+            0: true,
+            1: false,
+            2: false
         },
         "items": [
             {
@@ -46,10 +45,9 @@ export const config = {
         "id": "node1",
         "name": "liste principale",
         "behavior": {
-            "extendOnClick": false,
-            "extendOnHover": false,
-            "extendedOnStartup": true,
-            "isPinnable": true
+            0: true,
+            1: false,
+            2: false
         },
         "items": [
             {

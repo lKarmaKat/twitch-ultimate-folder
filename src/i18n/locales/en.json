@@ -26,6 +26,7 @@
     "configList": "Configuration",
     "display": "Preview",
     "reset": "Reset config",
+    "cancel": "Cancel",
     "addNewListToRoot": "Add new list to root element"
   },
   "configPannel": {

@@ -136,8 +136,10 @@ test.describe('with config', async () => {
 	});
 
 	test('popup configChannelList\'s elements should have a button to remove the element', async ({ page }) => {
+		expect(await popupPage.getConfigChannelListElementCount()).toBe(4)
 		await popupPage.clickRemoveList('list-10')
 		expect(await popupPage.countNumberDirectSubLists('list-rootList')).toBe(1);
+		expect(await popupPage.getConfigChannelListElementCount()).toBe(2)
 	});
 
 	test('click on \'+\' sign adds a new list', async ({page}) => {
@@ -214,5 +216,9 @@ test.describe('with config', async () => {
 		expect(await popupPage.getDisplayConfigListElementCount()).toBe(4)
 	})
 
-
+	test('configPopup should have a button to reset the config', async ({ page }) => {
+		await popupPage.clickResetConfig();
+		await popupPage.confirmReset();
+		expect(await popupPage.countNumberDirectElementInList('list-rootList')).toBe(0);
+	});
 })

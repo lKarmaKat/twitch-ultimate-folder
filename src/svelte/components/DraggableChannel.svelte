@@ -186,7 +186,7 @@
     <!-- <div class="layout-container" style="background-color: {color};"> -->
         <div class="flex-profile-picture">
             <div class="profile-picture">
-                <img class="profile-picture" class:bearCard class:offline={!isLive} src={channelProfilePic} alt="" />
+                <img class={['profile-picture', bearCard && 'bearCard', !isLive && 'offline']} src={channelProfilePic} alt="" />
             </div>
         </div>
         <div class="layout">

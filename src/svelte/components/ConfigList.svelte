@@ -110,6 +110,13 @@
 		// selectSelfForConfig(listId);
 		configChangeEvent.current = listId;
 	}
+
+	function preventDefault(fn) {
+		return function (event) {
+			event.preventDesfault();
+			fn.call(this, event);
+		};
+	}
 </script>
 
 
@@ -138,7 +145,6 @@
 		onfinalize ={handleDndFinalize}>
 		<!-- style="background-color: {contentColor};">		 -->
 			{#each configManager.selectedConfig[listId].items as item(item.id)}
-
 			{#if item.type === CST.TYPE_LIST}
 			<div class="nested-list" id={listId + "nested"}>
 				<!-- svelte-ignore svelte_self_deprecated -->
@@ -147,7 +153,7 @@
 					requestDeleteToParent={removeChild}
 					configManager={configManager} />
 			</div>
-			{:else if item.id === CST.ALL_OTHER_CHANNELS}
+			{:else if item.channel_id === CST.ALL_OTHER_CHANNELS}
 				<div class="channel">
 					<div class="">
 						<button class="delete" id="remove-{item?.channel_id}" onclick={()=>{removeChannel(item?.channel_id)}}>x</button>
