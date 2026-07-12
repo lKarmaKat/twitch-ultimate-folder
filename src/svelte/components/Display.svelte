@@ -9,9 +9,6 @@
 
     let { listId = "rootList", configManager }  = $props();
 	
-    let behavior;
-    // let behavior = $derived(configManager.selectedConfig[listId]?.behavior);
-    let style;
 	let type = $derived.by(() => {
 		return configManager.selectedConfig[listId]?.type
 	});
@@ -23,11 +20,10 @@
 		return color.color;
 	});
 
-	// console.log(`liste ${listId}`, $channelConfig)
-	let extendedOnStartup=false;
-	let extendOnHover=false;
-	let extendOnClick=false;
-	let isPinnable=false;
+	let behavior = $derived(configManager.selectedConfig[listId]?.behavior ?? {});
+	let startupExtended = $derived(behavior[CST.EXTENDED_ON_STARTUP] ?? false);
+	let hoverEnabled = $derived(behavior[CST.EXTENDEDS_ON_HOVER] ?? false);
+	let clickEnabled = $derived(behavior[CST.EXTENDEDS_ON_CLICK] ?? false);
 
 	let header = $derived.by(() => {
 		return configManager.selectedConfig[listId]?.style.header;
@@ -36,9 +32,15 @@
 		return configManager.selectedConfig[listId]?.style.content;
 	});
 
-	let extended = $derived.by(() => {
-		return configManager.selectedConfig[listId].behavior[CST.EXTENDED_ON_STARTUP] || false;
+	// Session state: reset to the startup value whenever the config is reloaded
+	// (save / reset / init) or the startup checkbox is edited live in the popup.
+	let openState = $state(false);
+	$effect(() => {
+		configManager.selectedConfig;
+		openState = startupExtended;
 	});
+
+	let extended = $derived(openState);
 
 	let displayList = $derived.by(() => {
 		let channelsId = configManager.selectedConfig[listId].items.filter(e => e.channel_id);
@@ -61,9 +63,9 @@
 	}
 
     function toggleAutoCollapse(e) {
-        console.log("display", configManager.selectedConfig[listId]);
-		extended = !extended;
         e.stopPropagation();
+        if (!clickEnabled) return;
+		openState = !openState;
     }
 
 	function getSetAllChannelsInConfig() {
@@ -263,11 +265,11 @@
 	<!-- svelte-ignore a11y-no-static-element-interactions -->
 	<!-- svelte-ignore a11y-click-events-have-key-events -->
 	 {#if liveChannels}
-	<div id="display-component" class="list-container">
+	<div id="display-component" class="list-container" class:hover-enabled={hoverEnabled}>
 		{#if listId !== 'rootList'}
 		<!-- svelte-ignore a11y_click_events_have_key_events -->
 		<!-- svelte-ignore a11y_no_static_element_interactions -->
-		<div class="list-header" style="--header-color:{header?.headerColor};--theme-color:{barTypeColor}" class:border={barTypeColor} onclick={toggleAutoCollapse}>
+		<div class="list-header" style="--header-color:{header?.headerColor};--theme-color:{barTypeColor}" class:border={barTypeColor} class:clickable={clickEnabled} onclick={toggleAutoCollapse}>
 			<div class="left">
 				<div class="flex-row">
 					<span class="display-icon-container" class:extended>
@@ -451,11 +453,17 @@
 	.list-body div {
 		overflow: hidden;
 	}
-	.list-header:hover ~ .list-body,
-	.list-header ~ .list-body:hover,
+	/* Direct child combinator: Display is recursive, so every nesting level shares
+	   the same scope class — a descendant selector would leak the parent's hover
+	   setting onto children that have it disabled. */
+	.list-container.hover-enabled > .list-header:hover ~ .list-body,
+	.list-container.hover-enabled > .list-header ~ .list-body:hover,
 	.list-body.extended,
 	.list-container > .list-body:first-child {
 		grid-template-rows: 1fr;
+	}
+	.list-header.clickable {
+		cursor: pointer;
 	}
 	.channel-overlay {
 		cursor: pointer;
