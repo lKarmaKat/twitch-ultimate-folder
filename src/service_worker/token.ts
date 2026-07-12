@@ -109,7 +109,7 @@ export class TokenManager {
         return this.fetchingPromise;
     }
 
-    async chromeStorageToken(): Promise<void> {
+    private async chromeStorageToken(): Promise<void> {
         const data = await chrome.storage.local.get([
             'twitchToken', 'tokenExpirationDate', 'nextValidationDate', 'refreshToken'
         ]);
@@ -129,14 +129,14 @@ export class TokenManager {
         }
     }
 
-    isTokenValid(): boolean {
+    private isTokenValid(): boolean {
         if (this.nextValidationDate && this.tokenExpirationDate) {
             return Date.now() < this.nextValidationDate && Date.now() < this.tokenExpirationDate;
         }
         return false;
     }
 
-    async getNewTokenAndValidate(callback: any): Promise<string> {
+    private async getNewTokenAndValidate(callback: any): Promise<string> {
         try {
             await this.getNewAuthToken(callback);
             await this.validateAuthToken();
@@ -146,7 +146,7 @@ export class TokenManager {
         }
     }
 
-    async getNewAuthToken(callback: any): Promise<void> {
+    private async getNewAuthToken(callback: any): Promise<void> {
         // if (this.authAutoFailed) {
         //     throw new Error('TokenManager.getNewAuthToken auth previously failed');
         // }
@@ -251,7 +251,7 @@ export class TokenManager {
         throw new Error('TokenManager.pollForDeviceToken token expired before user authorized');
     }
 
-    async validateAuthToken(): Promise<void> {
+    private async validateAuthToken(): Promise<void> {
         const response = await fetch("https://id.twitch.tv/oauth2/validate", {
             method: 'GET',
             headers: { Authorization: 'OAuth ' + this.token }
@@ -269,7 +269,7 @@ export class TokenManager {
         });
     }
 
-    async refreshAccessToken(): Promise<string> {
+    private async refreshAccessToken(): Promise<string> {
         if (!this.refreshToken) throw new Error('TokenManager.refreshAccessToken No refresh token');
 
         const body = new URLSearchParams({
@@ -299,7 +299,7 @@ export class TokenManager {
         return this.token!;
     }
 
-    setTokenExpirationDate(expires_in: number) {
+    private setTokenExpirationDate(expires_in: number) {
         this.tokenExpirationDate = Date.now() + (expires_in * 1000);
         this.nextValidationDate = Date.now() + this.tokenValidationInterval;
     }
