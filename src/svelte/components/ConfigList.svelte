@@ -1,11 +1,12 @@
 <script>
   	import DraggableChannel from './DraggableChannel.svelte'
-	import { parentFinalizeEvent, configChangeEvent } from "../event.svelte.js";
+	import { parentFinalizeEvent, configChangeEvent, allOthersChannelSelectedEvent } from "../event.svelte.js";
   	import * as CST from '../../constantes.js'
 	import { dndzone, SHADOW_ITEM_MARKER_PROPERTY_NAME } from 'svelte-dnd-action';
 	import { _ } from 'svelte-i18n';
 	import { get } from 'svelte/store';
 	import Self from './ConfigList.svelte'
+    import CogBtn from './CogBtn.svelte';
 
 
 	  
@@ -109,6 +110,8 @@
 		// TODO use writable
 		// selectSelfForConfig(listId);
 		configChangeEvent.current = listId;
+
+		allOthersChannelSelectedEvent.current = false;
 	}
 
 	function preventDefault(fn) {
@@ -116,6 +119,11 @@
 			event.preventDesfault();
 			fn.call(this, event);
 		};
+	}
+
+	function selectAllOtherChannels() {
+		configChangeEvent.current = null;
+		allOthersChannelSelectedEvent.current = true;
 	}
 </script>
 
@@ -131,6 +139,7 @@
 		<p class="list-title"><strong>{configManager.selectedConfig[listId]?.name}</strong></p>
 		<div class="list-side-menu">
 			<button id="add-list-{listId}" class="add-list" onclick={() => addNode()} title={$_('configList.addList', { values: { listId } })}>+</button>
+			<CogBtn />
 			<button class="delete delete-list" onclick={(e)=>{  e.stopPropagation(); requestDeleteToParent(listId)}}>x</button>
 		</div>
 	</div>
@@ -155,7 +164,8 @@
 			</div>
 			{:else if item.channel_id === CST.ALL_OTHER_CHANNELS}
 				<div class="channel">
-					<div class="">
+					<div class="other-channels-side-menu">
+						<CogBtn onclick={selectAllOtherChannels} />
 						<button class="delete" id="remove-{item?.channel_id}" onclick={()=>{removeChannel(item?.channel_id)}}>x</button>
 					</div>
 					<DraggableChannel
@@ -170,7 +180,7 @@
 			{:else}
 			{@const i = getNode(item)}
 				<div class="channel">
-					<div class="">
+					<div class="channel-side-menu">
 						<button class="delete" id="remove-{i?.channel_id}" onclick={()=>{removeChannel(i?.channel_id)}}>x</button>
 					</div>
 					<DraggableChannel 
@@ -197,16 +207,21 @@
 	.channel {
 		position: relative;
 	}
-	.channel .delete {
+	/* menus flottants à droite d'une chaîne, par-dessus la carte DraggableChannel */
+	.channel-side-menu,
+	.other-channels-side-menu {
 		position: absolute;
+		top: 0;
 		right: 0;
-		top: 0%;
-		width: 10%;
 		height: 100%;
-		visibility: visible;
-		transition: opacity 0.2s linear;
-		opacity: 0;
+		width: auto;
+		display: flex;
+		flex-direction: row;
+		align-items: stretch;
+		gap: 0.2em;
 		z-index: 999;
+		opacity: 0;
+		transition: opacity 0.2s linear;
 	}
 	section {
 		position: relative;
@@ -225,21 +240,32 @@
 		margin: 0em 0;
 	}
 	.list-side-menu {
-		display: flex;        
-    	align-self: stretch;  
-	    align-items: stretch; 
-		visibility: visible;
-		opacity: 0;
-		transition: opacity 0.2s linear;
-		size: 2em;
-		margin: 0;
+		display: flex;
+		flex-direction: row;
+		align-items: stretch;
+		align-self: stretch;
+		gap: 0.2em;
+		margin-left: auto;	/* colle le menu à droite du header */
+		flex: 0 0 auto;
+		width: auto;		/* annule le div { width: 100% } ci-dessus */
 		padding: 0;
 		max-height: 100%;
-		width: fit-content;
+		opacity: 0;
+		transition: opacity 0.2s linear;
 	}
-	.channel:hover .delete,
+	/* les enfants (dont le <div> racine de CogBtn) restent des items de la row */
+	.list-side-menu > :global(*),
+	.other-channels-side-menu > :global(*),
+	.channel-side-menu > :global(*) {
+		display: flex;
+		align-items: center;
+		flex: 0 0 auto;
+		width: auto;
+	}
 	.list-header:hover .list-side-menu,
-	.list-side-menu:hover {
+	.list-side-menu:hover,
+	.channel:hover .other-channels-side-menu,
+	.channel:hover .channel-side-menu {
 		opacity: 1;
 	}
 	button {
@@ -250,7 +276,7 @@
 		display: flex;
 		flex-direction: row;
 		justify-content: space-between;
-		align-items: center;
+		align-items: stretch;
 		position: relative;
 		/* background-color: rgb(191, 148, 255); */
 		width: 100%;
@@ -292,9 +318,11 @@
 	.delete-list {
 		height: 100%;
 	}
-	.list-side-menu button{
+	.list-side-menu button,
+	.other-channels-side-menu button,
+	.channel-side-menu button{
 		height: 100%;
-		margin: 0 0.2em 0 0;
+		margin: 0;
 		padding: 0.3em 0.5em;
 	}
 	.list-body {
