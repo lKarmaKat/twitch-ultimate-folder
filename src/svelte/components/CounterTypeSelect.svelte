@@ -5,7 +5,8 @@
 
     let { value = $bindable("") } = $props();
 
-    const SAMPLE = 42; // valeur fictive pour l'aperçu
+    const LIVE_CHANNELS_IN_LIST = 16; // valeur fictive pour l'aperçu
+    const TOTAL_CHANNELS_IN_LIST = 42;
 
     let open = $state(false);
     let selected = $derived(CST.COUNTER_TYPE.find(o => o.id === value));
@@ -25,7 +26,10 @@
 <div class="custom-select counter-select">
     <button type="button" class="trigger" onclick={() => open = !open}>
         <span class="preview">
-            {#if value !== ""}<CounterType counter={SAMPLE} viewerCountType={value} />{/if}
+            {#if value !== ""}<CounterType 
+                                counter={LIVE_CHANNELS_IN_LIST} 
+                                totalChannels={TOTAL_CHANNELS_IN_LIST} 
+                                viewerCountType={value} />{/if}
         </span>
         <span class="label">{selected ? $_(selected.name) : $_('common.none')}</span>
         <span class="caret" class:open>▲</span>
@@ -42,7 +46,10 @@
             {#each CST.COUNTER_TYPE as opt}
                 <li>
                     <button type="button" class="item" class:active={value === opt.id} onclick={() => choose(opt.id)}>
-                        <span class="preview"><CounterType counter={SAMPLE} viewerCountType={opt.id} /></span>
+                        <span class="preview"><CounterType 
+                                                counter={LIVE_CHANNELS_IN_LIST} 
+                                                totalChannels={TOTAL_CHANNELS_IN_LIST} 
+                                                viewerCountType={opt.id} /></span>
                         <span class="label">{$_(opt.name)}</span>
                     </button>
                 </li>

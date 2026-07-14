@@ -66,6 +66,7 @@ input[type=text] {
     color: rgb(14, 14, 16);
 }
 
+.live-icon svg,
 .icon-container svg {
     fill: #7b3fc9
 }

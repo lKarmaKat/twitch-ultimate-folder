@@ -104,7 +104,9 @@
   "counterType": {
     "bareCounter": "bare counter",
     "badge": "badge",
-    "nakedBadge": "naked badge"
+    "nakedBadge": "naked badge",
+    "withTotalCount": "Avec compteur total de chaines",
+    "withLiveIcon": "Avec compteur total de chaines et icon live/non live"
   },
   "icon": {
     "folder": "dossier",

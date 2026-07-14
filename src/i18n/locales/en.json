@@ -103,7 +103,9 @@
   "counterType": {
     "bareCounter": "bare counter",
     "badge": "badge",
-    "nakedBadge": "naked badge"
+    "nakedBadge": "naked badge",
+    "withTotalCount": "With total channel count",
+    "withLiveIcon": "With total channel count and live/offline icon"
   },
   "icon": {
     "folder": "folder",

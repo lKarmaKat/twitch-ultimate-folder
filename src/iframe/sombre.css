@@ -72,9 +72,11 @@ input[type=text] {
     color: #adadb8;
 }
 
+.live-icon svg,
 .icon-container svg {
     fill: #bf94ff; 
 }
+
 
 .icon-container .dot {
     background: #bf94ff;

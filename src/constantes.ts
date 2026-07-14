@@ -84,6 +84,12 @@ export const COUNTER_TYPE = [
   }, {
     id: 3,
     name: 'counterType.nakedBadge'
+  }, {
+    id: 4,
+    name: 'counterType.withTotalCount'
+  }, {
+    id: 5,
+    name: 'counterType.withLiveIcon'
   }
 ]
 

@@ -105,24 +105,23 @@
 		return false;
 	}
 
-	let counter = $derived.by(() => {
+	let channelsCounters = $derived.by(() => {
 		let set = getChannelsInConfig();
-		let containsAllOtherChannels = hasAllOtherChannels(set);
-		if (containsAllOtherChannels) {
+		if (hasAllOtherChannels(set)) {
 			let item = CST.ALL_OTHER_CHANNELS_ELEMENT;
 			let s = getAllOtherChannels(configManager.channelsPickRef, item);
 			set = new Set();
 			s.forEach(e => set.add(e.channel_id));
 		}
-		let count = 0;
+		let live = 0;
 		set.forEach(e => {
-			let channel = configManager.getLiveChannel(e);
-			if (channel) {
-				count++;
-			}
-		})
-		return count;
+			if (configManager.getLiveChannel(e)) live++;
+		});
+		return { live, total: set.size };
 	});
+
+	let liveChannelsCounter = $derived(channelsCounters.live);
+	let totalChannelsCount = $derived(channelsCounters.total);
 
 	function getAllOtherChannels(ref, item) {
 		let set = getSetAllChannelsInConfig();
@@ -283,7 +282,7 @@
 
 			</div>
 			<div class="right">
-				<CounterType counter={counter} viewerCountType={type.viewerCountType} />
+				<CounterType counter={liveChannelsCounter} totalChannels={totalChannelsCount} viewerCountType={type.viewerCountType} />
 			</div>
 		</div>
 		{/if}
