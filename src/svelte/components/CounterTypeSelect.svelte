@@ -8,54 +8,54 @@
     const LIVE_CHANNELS_IN_LIST = 16; // valeur fictive pour l'aperçu
     const TOTAL_CHANNELS_IN_LIST = 42;
 
-    let open = $state(false);
+    const uid = $props.id();
     let selected = $derived(CST.COUNTER_TYPE.find(o => o.id === value));
 
-    function choose(id) {
-        value = id;
-        open = false;
-    }
+    let triggerEl = $state();
+    let menuStyle = $state("");
 
-    function onWindowClick(e) {
-        if (!e.target.closest('.counter-select')) open = false;
+    function positionMenu(e) {
+        if (e.newState !== 'open') return;
+        const r = triggerEl.getBoundingClientRect();
+        menuStyle = `top:${r.bottom + 2}px; left:${r.left}px; width:${r.width}px;`;
     }
 </script>
 
-<svelte:window onclick={onWindowClick} />
-
 <div class="custom-select counter-select">
-    <button type="button" class="trigger" onclick={() => open = !open}>
+    <button type="button" class="trigger" bind:this={triggerEl} popovertarget="menu-{uid}">
         <span class="preview">
-            {#if value !== ""}<CounterType 
-                                counter={LIVE_CHANNELS_IN_LIST} 
-                                totalChannels={TOTAL_CHANNELS_IN_LIST} 
+            {#if value !== ""}<CounterType
+                                counter={LIVE_CHANNELS_IN_LIST}
+                                totalChannels={TOTAL_CHANNELS_IN_LIST}
                                 viewerCountType={value} />{/if}
         </span>
         <span class="label">{selected ? $_(selected.name) : $_('common.none')}</span>
-        <span class="caret" class:open>▲</span>
+        <span class="caret">▲</span>
     </button>
 
-    {#if open}
-        <ul class="menu">
+    <ul class="menu" popover id="menu-{uid}" style={menuStyle} onbeforetoggle={positionMenu}>
+        <li>
+            <button type="button" class="item" class:active={value === ""}
+                popovertarget="menu-{uid}" popovertargetaction="hide"
+                onclick={() => value = ""}>
+                <span class="preview"></span>
+                <span class="label">{$_('common.none')}</span>
+            </button>
+        </li>
+        {#each CST.COUNTER_TYPE as opt}
             <li>
-                <button type="button" class="item" class:active={value === ""} onclick={() => choose("")}>
-                    <span class="preview"></span>
-                    <span class="label">{$_('common.none')}</span>
+                <button type="button" class="item" class:active={value === opt.id}
+                    popovertarget="menu-{uid}" popovertargetaction="hide"
+                    onclick={() => value = opt.id}>
+                    <span class="preview"><CounterType
+                                            counter={LIVE_CHANNELS_IN_LIST}
+                                            totalChannels={TOTAL_CHANNELS_IN_LIST}
+                                            viewerCountType={opt.id} /></span>
+                    <span class="label">{$_(opt.name)}</span>
                 </button>
             </li>
-            {#each CST.COUNTER_TYPE as opt}
-                <li>
-                    <button type="button" class="item" class:active={value === opt.id} onclick={() => choose(opt.id)}>
-                        <span class="preview"><CounterType 
-                                                counter={LIVE_CHANNELS_IN_LIST} 
-                                                totalChannels={TOTAL_CHANNELS_IN_LIST} 
-                                                viewerCountType={opt.id} /></span>
-                        <span class="label">{$_(opt.name)}</span>
-                    </button>
-                </li>
-            {/each}
-        </ul>
-    {/if}
+        {/each}
+    </ul>
 </div>
 
 <style>
@@ -82,14 +82,10 @@
         color: grey;
         rotate: 180deg;
     }
-    .caret.open { transform: rotate(180deg); }
+    .counter-select:has(.menu:popover-open) .caret { transform: rotate(180deg); }
 
     .menu {
-        position: absolute;
-        z-index: 10;
-        top: calc(100% + 2px);
-        left: 0;
-        width: 100%;
+        position: fixed;
         max-height: 240px;
         overflow-y: auto;
         margin: 0;
@@ -97,6 +93,8 @@
         list-style: none;
         border: 1px solid grey;
         border-radius: 0.4em;
+        background: inherit;
+        color: inherit;
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
     }
     .item {

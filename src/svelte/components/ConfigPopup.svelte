@@ -356,7 +356,7 @@
     max-height: 100%;
   }
   .pannel-scroll {
-    overflow-y: clip;
+    overflow-y: auto;
   }
   .main {
     display: flex;

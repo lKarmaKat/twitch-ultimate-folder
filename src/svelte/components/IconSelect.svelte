@@ -5,50 +5,49 @@
 
     let { value = $bindable("") } = $props();
 
-    let open = $state(false);
+    const uid = $props.id();
     let sortedOptions = $derived(sortIconsByLabel($_));
     let selected = $derived(ICON_BY_ID.get(value));
 
-    function choose(id) {
-        value = id;
-        open = false;
-    }
+    let triggerEl = $state();
+    let menuStyle = $state("");
 
-    // ferme le menu si on clique en dehors
-    function onWindowClick(e) {
-        if (!e.target.closest('.icon-select')) open = false;
+    function positionMenu(e) {
+        if (e.newState !== 'open') return;
+        const r = triggerEl.getBoundingClientRect();
+        menuStyle = `top:${r.bottom + 2}px; left:${r.left}px; width:${r.width}px;`;
     }
 </script>
 
-<svelte:window onclick={onWindowClick} />
-
 <div class="custom-select icon-select">
-    <button type="button" class="trigger" onclick={() => open = !open}>
+    <button type="button" class="trigger" bind:this={triggerEl} popovertarget="menu-{uid}">
         <span class="icon-slot">
             {#if value !== ""}<IconPicker iconType={value} />{/if}
         </span>
         <span class="label">{selected ? $_(selected.key) : $_('common.none')}</span>
-        <span class="caret" class:open>▲</span>
+        <span class="caret">▲</span>
     </button>
 
-    {#if open}
-        <ul class="menu">
+    <ul class="menu" popover id="menu-{uid}" style={menuStyle} onbeforetoggle={positionMenu}>
+        <li>
+            <button type="button" class="item" class:active={value === ""}
+                popovertarget="menu-{uid}" popovertargetaction="hide"
+                onclick={() => value = ""}>
+                <span class="icon-slot"></span>
+                <span class="label">{$_('common.none')}</span>
+            </button>
+        </li>
+        {#each sortedOptions as opt}
             <li>
-                <button type="button" class="item" class:active={value === ""} onclick={() => choose("")}>
-                    <span class="icon-slot"></span>
-                    <span class="label">{$_('common.none')}</span>
+                <button type="button" class="item" class:active={value === opt.id}
+                    popovertarget="menu-{uid}" popovertargetaction="hide"
+                    onclick={() => value = opt.id}>
+                    <span class="icon-slot"><IconPicker iconType={opt.id} /></span>
+                    <span class="label">{$_(opt.key)}</span>
                 </button>
             </li>
-            {#each sortedOptions as opt}
-                <li>
-                    <button type="button" class="item" class:active={value === opt.id} onclick={() => choose(opt.id)}>
-                        <span class="icon-slot"><IconPicker iconType={opt.id} /></span>
-                        <span class="label">{$_(opt.key)}</span>
-                    </button>
-                </li>
-            {/each}
-        </ul>
-    {/if}
+        {/each}
+    </ul>
 </div>
 
 <style>
@@ -75,14 +74,10 @@
         rotate: 180deg;
         color: grey;
     }
-    .caret.open { transform: rotate(180deg); }
+    .icon-select:has(.menu:popover-open) .caret { transform: rotate(180deg); }
 
     .menu {
-        position: absolute;
-        z-index: 10;
-        top: calc(100% + 2px);
-        left: 0;
-        width: 100%;
+        position: fixed;
         max-height: 240px;
         overflow-y: auto;
         margin: 0;
@@ -90,6 +85,8 @@
         list-style: none;
         border: 1px solid grey;
         border-radius: 0.4em;
+        background: inherit;
+        color: inherit;
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
     }
     .item {

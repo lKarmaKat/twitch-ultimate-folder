@@ -4,39 +4,41 @@
     // value = id de la stratégie de tri, options = [{id, type, name}], onchange = callback
     let { value = $bindable(), options = [], onchange } = $props();
 
-    let open = $state(false);
+    const uid = $props.id();
     let selected = $derived(options.find(o => o.id === value));
+
+    let triggerEl = $state();
+    let menuStyle = $state("");
 
     function choose(id) {
         value = id;
-        open = false;
         onchange?.();
     }
 
-    function onWindowClick(e) {
-        if (!e.target.closest('.sort-select')) open = false;
+    function positionMenu(e) {
+        if (e.newState !== 'open') return;
+        const r = triggerEl.getBoundingClientRect();
+        menuStyle = `top:${r.bottom + 2}px; left:${r.left}px; width:${r.width}px;`;
     }
 </script>
 
-<svelte:window onclick={onWindowClick} />
-
 <div class="custom-select sort-select">
-    <button type="button" class="trigger" onclick={() => open = !open}>
+    <button type="button" class="trigger" bind:this={triggerEl} popovertarget="menu-{uid}">
         <span class="label">{selected ? $_(selected.name) : $_('sortSelect.placeholder')}</span>
-        <span class="caret" class:open>▲</span>
+        <span class="caret">▲</span>
     </button>
 
-    {#if open}
-        <ul class="menu">
-            {#each options as opt}
-                <li>
-                    <button type="button" class="item" class:active={value === opt.id} onclick={() => choose(opt.id)}>
-                        <span class="label">{$_(opt.name)}</span>
-                    </button>
-                </li>
-            {/each}
-        </ul>
-    {/if}
+    <ul class="menu" popover id="menu-{uid}" style={menuStyle} onbeforetoggle={positionMenu}>
+        {#each options as opt}
+            <li>
+                <button type="button" class="item" class:active={value === opt.id}
+                    popovertarget="menu-{uid}" popovertargetaction="hide"
+                    onclick={() => choose(opt.id)}>
+                    <span class="label">{$_(opt.name)}</span>
+                </button>
+            </li>
+        {/each}
+    </ul>
 </div>
 
 <style>
@@ -63,14 +65,10 @@
         rotate: 180deg;
         color: grey;
     }
-    .caret.open { transform: rotate(180deg); }
+    .sort-select:has(.menu:popover-open) .caret { transform: rotate(180deg); }
 
     .menu {
-        position: absolute;
-        z-index: 10;
-        top: calc(100% + 2px);
-        left: 0;
-        width: 100%;
+        position: fixed;
         max-height: 240px;
         overflow-y: auto;
         margin: 0;
@@ -78,6 +76,8 @@
         list-style: none;
         border: 1px solid grey;
         border-radius: 0.4em;
+        background: inherit;
+        color: inherit;
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
     }
     .item {
