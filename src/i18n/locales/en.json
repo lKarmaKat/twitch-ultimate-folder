@@ -42,7 +42,9 @@
     "listIconHelp": "Icon displayed next to the list name",
     "listHeaderBarColorHelp": "Color of the list's side bar",
     "listCounterBadgeHelp": "Style of the badge showing the number of channels online",
-    "selectListPrompt": "Please click on a list header to customize it"
+    "selectListPrompt": "Please click on a list header to customize it",
+    "headerMode": "Header",
+    "headerModeHelp": "Show a clickable header above 'All other channels'. Clicking it toggles the sort (alphabetical / viewer count) for the current session, without changing the saved config."
   },
   "configList": {
     "alreadyInList": "The item is already in the list",
@@ -108,6 +110,10 @@
     "custom": "Custom sort",
     "viewer": "Viewer count sort",
     "alpha": "Alpha sort"
+  },
+  "allOtherHeader": {
+    "none": "None",
+    "sortable": "Sortable header"
   },
   "bar": {
     "purple": "purple",

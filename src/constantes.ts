@@ -34,6 +34,13 @@ export const CUSTOM_SORT = 0;
 export const VIEWER_SORT = 1;
 export const ALPHA_SORT = 2;
 
+export const ALL_OTHER_HEADER_NONE = 0;
+export const ALL_OTHER_HEADER_SORTABLE = 1;
+export const ALL_OTHER_HEADER_TYPE = [
+  { id: ALL_OTHER_HEADER_NONE, name: 'allOtherHeader.none' },
+  { id: ALL_OTHER_HEADER_SORTABLE, name: 'allOtherHeader.sortable' },
+];
+
 export const PARAM_ALIGNMENT_LEFT = 'alignmentLeft';
 
 export const HEADER_TYPE_HEIGHT = [ // Not currently used
@@ -155,6 +162,7 @@ export const ALL_OTHER_CHANNELS_ELEMENT = {
         "channel_id": ALL_OTHER_CHANNELS,
         "channel_name": "All others channels",
         "sort": ALPHA_SORT,
+        "type": ALL_OTHER_HEADER_NONE,
         "isLive": false,
         "profile_image_url": "../../assets/all_other_channels.png",
         "viewer_count": 0, 

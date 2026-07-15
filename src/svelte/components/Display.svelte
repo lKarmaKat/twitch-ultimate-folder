@@ -3,8 +3,10 @@
 	import { maybeTooltip, tooltip } from "../tooltip.svelte";
     import * as CST from '../../constantes.js'
 	import { writable } from 'svelte/store'
+	import { _ } from 'svelte-i18n';
 	import Self from './Display.svelte'
     import IconPicker from './icons/IconPicker.svelte';
+    import SortIndicatorIcon from './icons/SortIndicatorIcon.svelte';
     import CounterType from './CounterType.svelte';
 
     let { listId = "rootList", configManager }  = $props();
@@ -123,7 +125,22 @@
 	let liveChannelsCounter = $derived(channelsCounters.live);
 	let totalChannelsCount = $derived(channelsCounters.total);
 
-	function getAllOtherChannels(ref, item) {
+	// Tri "live" du bloc all-others : état de session, initialisé depuis la valeur
+	// `sort` configurée et réinitialisé au (re)chargement de la config. Un clic sur le
+	// header le change sans modifier la config persistée.
+	let otherLiveSort = $state();
+	$effect(() => {
+		configManager.selectedConfig;
+		const it = configManager.selectedConfig[listId]?.items?.find(i => i.channel_id === CST.ALL_OTHER_CHANNELS);
+		otherLiveSort = it?.sort;
+	});
+
+	function toggleOtherSort(e) {
+		e.stopPropagation();
+		otherLiveSort = otherLiveSort === CST.ALPHA_SORT ? CST.VIEWER_SORT : CST.ALPHA_SORT;
+	}
+
+	function getAllOtherChannels(ref, item, sortOverride) {
 		let set = getSetAllChannelsInConfig();
 		let list = [];
 		let c = 0;
@@ -162,7 +179,8 @@
 				return ('' + an).localeCompare(bn)
 			}
 		};
-		if (item?.sort === undefined || item.sort === CST.VIEWER_SORT) {
+		const sortVal = sortOverride ?? item?.sort;
+		if (sortVal === undefined || sortVal === CST.VIEWER_SORT) {
 			list.sort(viewerCountSortCallback);
 		} else  {
 			list.sort(alphaSortCallback);
@@ -295,7 +313,15 @@
 							</div>
 						<!-- {:else if item.channel_id === CST.ALL_OTHER_CHANNELS} -->
 						{:else if item.channel_id < 0 }
-							{#each getAllOtherChannels(configManager.channelsPickRef, item) as other(`${other.channel_id}`)}
+							{#if item.type === CST.ALL_OTHER_HEADER_SORTABLE}
+								<!-- svelte-ignore a11y_click_events_have_key_events -->
+								<!-- svelte-ignore a11y_no_static_element_interactions -->
+								<div class="list-header all-other-header clickable" onclick={toggleOtherSort}>
+									<p class="list-title">{$_('display.allOtherChannels')}</p>
+									<span class="all-other-sort-icon"><SortIndicatorIcon sort={otherLiveSort} /></span>
+								</div>
+							{/if}
+							{#each getAllOtherChannels(configManager.channelsPickRef, item, otherLiveSort) as other(`${other.channel_id}`)}
 								{@const i = getNode(other)}
 								<div class="channel-overlay li{listId}">
 									<DraggableChannel 
@@ -461,6 +487,23 @@
 	}
 	.list-header.clickable {
 		cursor: pointer;
+	}
+	/* Header du bloc "all others" : couleurs (fond/texte) héritées de .list-header
+	   via dark_channel.css ; couleur du svg via .icon-container. */
+	.all-other-header {
+		padding: 0.4em 0 0.4em 0.4em;
+		user-select: none;
+	}
+	.all-other-header .list-title {
+		padding: 0;
+	}
+	.all-other-sort-icon {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 1.2em;
+		height: 1.2em;
+		margin-right: 0.4em;
 	}
 	.channel-overlay {
 		cursor: pointer;

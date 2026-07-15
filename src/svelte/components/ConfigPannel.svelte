@@ -14,12 +14,14 @@
     let listConfig = $state();
     let allOtherItem = $state();
     const sortOptions = CST.SORT_STRATEGY.filter(s => s.id !== CST.CUSTOM_SORT);
+    const headerOptions = CST.ALL_OTHER_HEADER_TYPE;
     $effect(() => {
         listeId = configChangeEvent.current;
         if (listeId) {
             listConfig = configManager.selectedConfig[listeId];
             let item = listConfig?.items?.find(i => i.channel_id === CST.ALL_OTHER_CHANNELS);
             if (item && item.sort === undefined) item.sort = CST.ALPHA_SORT;
+            if (item && item.type === undefined) item.type = CST.ALL_OTHER_HEADER_NONE;
             allOtherItem = item;
         } else {
             listConfig = null;
@@ -42,6 +44,13 @@
             </div>
             <div class="pannel-body">
                 <div class="bloc">
+                    <div class="row">
+                        <p>{$_('configPannel.headerMode')}</p>
+                        <span class="help-badge" data-tooltip={$_('configPannel.headerModeHelp')}>?</span>
+                        <SortSelect
+                            bind:value={allOtherItem.type}
+                            options={headerOptions}/>
+                    </div>
                     <div class="row">
                         <p>{$_('configPannel.sortMode')}</p>
                         <span class="help-badge" data-tooltip={$_('configPannel.sortStrategy')}>?</span>
