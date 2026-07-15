@@ -1,0 +1,10 @@
+{
+    "extName": {
+        "message": "Ultimate Twitch Folders",
+        "description": "Nome dell'estensione"
+    },
+    "extDescription": {
+        "message": "Consente di riorganizzare i canali seguiti creando liste/sottoliste",
+        "description": "Descrizione dell'estensione"
+    }
+}

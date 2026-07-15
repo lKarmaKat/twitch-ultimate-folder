@@ -1,0 +1,10 @@
+{
+    "extName": {
+        "message": "Ultimate Twitch Folders",
+        "description": "Tilläggets namn"
+    },
+    "extDescription": {
+        "message": "Gör det möjligt att omorganisera kanalerna du följer genom att skapa listor/underlistor",
+        "description": "Tilläggets beskrivning"
+    }
+}

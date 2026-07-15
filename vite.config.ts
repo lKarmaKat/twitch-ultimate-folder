@@ -7,8 +7,10 @@ export default defineConfig(({ command, mode }) => {
   const isDev = mode !== 'production'
   console.log("CMD", command)
   console.log("MODE", mode)
+  const locales = ['en', 'fr', 'es', 'de', 'it', 'pt_BR', 'pt_PT', 'hr', 'ru', 'pl', 'sv', 'fi', 'no', 'el', 'bg']
   const staticCopyTargets = [
     { src: 'public/manifest.json', dest: '.' },
+    ...locales.map(locale => ({ src: `public/_locales/${locale}/messages.json`, dest: `_locales/${locale}` })),
     { src: 'src/iframe/*.css', dest: 'assets' },
     { src: 'src/assets/*.{css,png}', dest: 'assets' },
     { src: 'src/assets/selected_icons/*.png', dest: 'assets' },

@@ -1,0 +1,10 @@
+{
+    "extName": {
+        "message": "Ultimate Twitch Folders",
+        "description": "Име на разширението"
+    },
+    "extDescription": {
+        "message": "Позволява да реорганизирате каналите, които следвате, като създавате списъци/подсписъци",
+        "description": "Описание на разширението"
+    }
+}

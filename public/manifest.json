@@ -1,6 +1,7 @@
 {
-    "name": "Ultimate Twitch Folders",
-    "description": "Allows to reorganize the channels you follow by making lists/sublists",
+    "name": "__MSG_extName__",
+    "description": "__MSG_extDescription__",
+    "default_locale": "en",
     "version": "1.0",
     "manifest_version": 3,
     "background": {

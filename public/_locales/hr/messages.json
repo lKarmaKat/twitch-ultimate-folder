@@ -1,0 +1,10 @@
+{
+    "extName": {
+        "message": "Ultimate Twitch Folders",
+        "description": "Naziv ekstenzije"
+    },
+    "extDescription": {
+        "message": "Omogućuje reorganizaciju kanala koje pratite stvaranjem popisa/podpopisa",
+        "description": "Opis ekstenzije"
+    }
+}

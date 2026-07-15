@@ -1,0 +1,10 @@
+{
+    "extName": {
+        "message": "Ultimate Twitch Folders",
+        "description": "Nom de l'extension"
+    },
+    "extDescription": {
+        "message": "Permet de réorganiser les chaînes suivies en créant des listes/sous-listes",
+        "description": "Description de l'extension"
+    }
+}

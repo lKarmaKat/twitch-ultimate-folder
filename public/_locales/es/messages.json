@@ -1,0 +1,10 @@
+{
+    "extName": {
+        "message": "Ultimate Twitch Folders",
+        "description": "Nombre de la extensión"
+    },
+    "extDescription": {
+        "message": "Permite reorganizar los canales que sigues creando listas/sublistas",
+        "description": "Descripción de la extensión"
+    }
+}

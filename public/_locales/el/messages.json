@@ -1,0 +1,10 @@
+{
+    "extName": {
+        "message": "Ultimate Twitch Folders",
+        "description": "Όνομα επέκτασης"
+    },
+    "extDescription": {
+        "message": "Σας επιτρέπει να αναδιοργανώνετε τα κανάλια που ακολουθείτε δημιουργώντας λίστες/υπολίστες",
+        "description": "Περιγραφή επέκτασης"
+    }
+}

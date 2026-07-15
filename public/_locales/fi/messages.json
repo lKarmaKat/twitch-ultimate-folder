@@ -1,0 +1,10 @@
+{
+    "extName": {
+        "message": "Ultimate Twitch Folders",
+        "description": "Laajennuksen nimi"
+    },
+    "extDescription": {
+        "message": "Mahdollistaa seuraamiesi kanavien uudelleenjärjestelyn luomalla listoja/alilistoja",
+        "description": "Laajennuksen kuvaus"
+    }
+}
