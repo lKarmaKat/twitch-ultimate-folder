@@ -1,6 +1,6 @@
 {
   "common": {
-    "none": "none"
+    "none": "aucun"
   },
   "actionPopup": {
     "authTitle": "Connexion Twitch requise",
@@ -8,10 +8,10 @@
     "authInstructionAfter": "et entrez ce code :",
     "authWaiting": "En attente de l'autorisation…",
     "preferences": "Préférences",
-    "openConfig": "Open config popup",
+    "openConfig": "Ouvrir la fenêtre de configuration",
     "theme": "Thème",
-    "dark": "Dark",
-    "light": "Light",
+    "dark": "Sombre",
+    "light": "Clair",
     "alignment": "Alignement des chaines",
     "alignmentSub": "Si vous utilisez BTTV pour changer la disposition du chat",
     "right": "Droite",
@@ -25,53 +25,53 @@
     "resetPrompt": "Étes vous sûr de vouloir supprimer la configuration ?",
     "configList": "Configuration",
     "display": "Prévisualisation",
-    "reset": "Reset config",
+    "reset": "Réinitialiser la configuration",
     "cancel": "Annuler",
     "addNewListToRoot": "Ajouter une nouvelle liste à la liste racine"
   },
   "configPannel": {
-    "listName": "List name",
-    "listNamePlaceholder": "Enter list name",
-    "behavior": "Behavior",
-    "sortStrategy": "custom sort let's you define the sort order, alpha/viewer is explicit enough, CAVEAT you should use ALPHA/VIEWER sort on a list that only contains channels",
-    "sortMode": "Sort Mode",
+    "listName": "Nom de la liste",
+    "listNamePlaceholder": "Entrez le nom de la liste",
+    "behavior": "Comportement",
+    "sortStrategy": "le tri personnalisé vous permet de définir l'ordre de tri, alpha/viewer est suffisamment explicite, ATTENTION vous devriez utiliser le tri ALPHA/VIEWER sur une liste qui ne contient que des chaines",
+    "sortMode": "Mode de tri",
     "style": "Style",
-    "listHeaderIcon": "List header icon",
-    "listHeaderBarColor": "List header side bar color",
-    "listHeaderBadge": "List header badge style",
-    "help": "Help",
+    "listHeaderIcon": "Icône d'en-tête de liste",
+    "listHeaderBarColor": "Couleur de la barre latérale d'en-tête de liste",
+    "listHeaderBadge": "Style du badge d'en-tête de liste",
+    "help": "Aide",
     "listIconHelp": "Icone qui s'affiche à côté du nom de la liste",
     "listHeaderBarColorHelp": "Couleur de la bar latérale de la liste",
     "listCounterBadgeHelp": "Style du badge qui affiche le nombre de chaine en ligne"
   },
   "configList": {
     "alreadyInList": "L'élément est déjà dans la liste",
-    "addList": "Add new list in {listId}"
+    "addList": "Ajouter une nouvelle liste dans {listId}"
   },
   "mainList": {
-    "searchPlaceholder": "Search through channels",
+    "searchPlaceholder": "Rechercher parmi les chaines",
     "noChannels": "Aucune chaine à montrer"
   },
   "display": {
-    "needConnect": "Seems like you need to connect",
-    "allOtherChannels": "All others channels"
+    "needConnect": "Il semble que vous devez vous connecter",
+    "allOtherChannels": "Toutes les autres chaines"
   },
   "channel": {
-    "offline": "Offline"
+    "offline": "Hors ligne"
   },
   "status": {
-    "noLiveChannels": "No live channels in custom display",
+    "noLiveChannels": "Aucune chaine en direct dans l'affichage personnalisé",
     "portDisconnected": "La communication avec twitch a été perdu, tentative de reconnexion en cours.",
-    "waitingConfig": "Waiting for config"
+    "waitingConfig": "En attente de la configuration"
   },
   "sortSelect": {
-    "placeholder": "Select sort"
+    "placeholder": "Sélectionner un tri"
   },
   "titlePopup": {
-    "closeDialog": "Close dialog"
+    "closeDialog": "Fermer la fenêtre"
   },
   "counter": {
-    "live": "live"
+    "live": "en direct"
   },
   "language": {
     "en": "English",
@@ -79,32 +79,32 @@
   },
   "behaviour": {
     "extendedOnStartup": {
-      "label": "Extended on startup",
+      "label": "Déplié au démarrage",
       "tooltip": "Liste déjà dépliée au chargement de la page."
     },
     "extendsOnHover": {
-      "label": "Extends on hover",
+      "label": "Se déplie au survol",
       "tooltip": "La liste se déplie au survol de la souris."
     },
     "extendsOnClick": {
-      "label": "Extends on click",
+      "label": "Se déplie au clic",
       "tooltip": "La liste se déplie/replie au clic sur le header."
     }
   },
   "sort": {
-    "custom": "Custom sort",
-    "viewer": "Viewer count sort",
-    "alpha": "Alpha sort"
+    "custom": "Tri personnalisé",
+    "viewer": "Tri par nombre de viewers",
+    "alpha": "Tri alphabétique"
   },
   "bar": {
-    "purple": "purple",
-    "green": "green",
+    "purple": "violet",
+    "green": "vert",
     "orange": "orange"
   },
   "counterType": {
-    "bareCounter": "bare counter",
+    "bareCounter": "compteur simple",
     "badge": "badge",
-    "nakedBadge": "naked badge",
+    "nakedBadge": "badge nu",
     "withTotalCount": "Avec compteur total de chaines",
     "withLiveIcon": "Avec compteur total de chaines et icon live/non live"
   },
@@ -124,7 +124,7 @@
     "counterStrike": "Counter Strike",
     "minecraft": "Minecraft",
     "minecraft2": "Minecraft (2)",
-    "coffee": "Coffee",
+    "coffee": "Café",
     "dota": "Dota",
     "fortnite": "Fortnite",
     "fortnite2": "Fortnite (2)",
