@@ -3,41 +3,51 @@
     // value = id de langue ('en' | 'fr'), options = [{id, name, flag}], onchange = callback
     let { value = $bindable("en"), options = [], onchange, dark } = $props();
 
-    let open = $state(false);
+    const uid = $props.id();
     let selected = $derived(options.find(o => o.id === value));
+
+    let triggerEl = $state();
+    let menuStyle = $state("");
 
     function choose(id) {
         value = id;
-        open = false;
         onchange?.();
     }
 
-    function onWindowClick(e) {
-        if (!e.target.closest('.lang-select')) open = false;
+    function positionMenu(e) {
+        if (e.newState !== 'open') return;
+        const margin = 4;
+        const r = triggerEl.getBoundingClientRect();
+        const spaceBelow = window.innerHeight - r.bottom - margin;
+        const spaceAbove = r.top - margin;
+        const openUp = spaceBelow < 150 && spaceAbove > spaceBelow;
+        const maxHeight = Math.max(80, Math.min(240, openUp ? spaceAbove : spaceBelow));
+
+        menuStyle = openUp
+            ? `top:auto; bottom:${window.innerHeight - r.top + margin}px; left:${r.left}px; right:auto; width:${r.width}px; max-height:${maxHeight}px;`
+            : `top:${r.bottom + margin}px; bottom:auto; left:${r.left}px; right:auto; width:${r.width}px; max-height:${maxHeight}px;`;
     }
 </script>
 
-<svelte:window onclick={onWindowClick} />
-
 <div class="custom-select lang-select" class:dark>
-    <button type="button" class="trigger" onclick={() => open = !open}>
+    <button type="button" class="trigger" bind:this={triggerEl} popovertarget="menu-{uid}">
         {#if selected}<img class="flag" src={selected.flag} alt="" />{/if}
         <span class="label">{selected ? selected.name : ""}</span>
-        <span class="caret" class:open>▲</span>
+        <span class="caret">▲</span>
     </button>
 
-    {#if open}
-        <ul class="menu">
-            {#each options as opt}
-                <li>
-                    <button type="button" class="item" class:active={value === opt.id} onclick={() => choose(opt.id)}>
-                        <img class="flag" src={opt.flag} alt="" />
-                        <span class="label">{opt.name}</span>
-                    </button>
-                </li>
-            {/each}
-        </ul>
-    {/if}
+    <ul class="menu" popover id="menu-{uid}" style={menuStyle} onbeforetoggle={positionMenu}>
+        {#each options as opt}
+            <li>
+                <button type="button" class="item" class:active={value === opt.id}
+                    popovertarget="menu-{uid}" popovertargetaction="hide"
+                    onclick={() => choose(opt.id)}>
+                    <img class="flag" src={opt.flag} alt="" />
+                    <span class="label">{opt.name}</span>
+                </button>
+            </li>
+        {/each}
+    </ul>
 </div>
 
 <style>
@@ -49,6 +59,9 @@
     .lang-select.dark,
     .lang-select.dark label {
         color: #f2f2f7;
+    }
+    .lang-select.dark .menu {
+        background: #2c2c2e;
     }
     .trigger {
         display: flex;
@@ -69,20 +82,17 @@
         color: grey;
         transition: transform 0.15s ease;
     }
-    .caret.open { transform: rotate(180deg); }
+    .lang-select:has(.menu:popover-open) .caret { transform: rotate(180deg); }
 
     .menu {
-        position: absolute;
-        z-index: 10;
-        top: calc(100% + 2px);
-        left: 0;
-        width: 100%;
-        max-height: 240px;
+        position: fixed;
+        inset: auto;
         overflow-y: auto;
         margin: 0;
         padding: 0.25em;
         list-style: none;
-        background: inherit;
+        background: #ffffff;
+        color: inherit;
         border: 1px solid grey;
         border-radius: 0.4em;
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
