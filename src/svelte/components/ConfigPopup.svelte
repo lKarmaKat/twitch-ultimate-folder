@@ -116,8 +116,7 @@
           class="reset-confirm-overlay"
           role="presentation"
           onclick={() => (showResetConfirm = false)}
-          onkeydown={(e) => e.key === 'Escape' && (showResetConfirm = false)}
-        >
+          onkeydown={(e) => e.key === 'Escape' && (showResetConfirm = false)}>
           <div
             class="confirm-modal"
             id="reset-confirm"

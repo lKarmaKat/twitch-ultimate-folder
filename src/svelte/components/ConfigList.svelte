@@ -122,7 +122,7 @@
 	}
 
 	function selectAllOtherChannels() {
-		configChangeEvent.current = null;
+		configChangeEvent.current = listId;
 		allOthersChannelSelectedEvent.current = true;
 	}
 </script>
@@ -139,7 +139,6 @@
 		<p class="list-title"><strong>{configManager.selectedConfig[listId]?.name}</strong></p>
 		<div class="list-side-menu">
 			<button id="add-list-{listId}" class="add-list" onclick={() => addNode()} title={$_('configList.addList', { values: { listId } })}>+</button>
-			<CogBtn />
 			<button class="delete delete-list" onclick={(e)=>{  e.stopPropagation(); requestDeleteToParent(listId)}}>x</button>
 		</div>
 	</div>

@@ -162,12 +162,10 @@
 				return ('' + an).localeCompare(bn)
 			}
 		};
-		// let allOtherChannelsRef = configManager.getChannel(item.channel_id)
-		let allOtherChannelsRef = configManager.getAllOtherChannel()
-		if (allOtherChannelsRef.sort === CST.ALPHA_SORT) {
-			list.sort(alphaSortCallback);
-		} else  {
+		if (item?.sort === undefined || item.sort === CST.VIEWER_SORT) {
 			list.sort(viewerCountSortCallback);
+		} else  {
+			list.sort(alphaSortCallback);
 		}
 		return list;
 	}

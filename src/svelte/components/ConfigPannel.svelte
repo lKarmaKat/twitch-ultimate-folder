@@ -12,12 +12,18 @@
     let { configManager } = $props();
     let listeId;
     let listConfig = $state();
+    let allOtherItem = $state();
+    const sortOptions = CST.SORT_STRATEGY.filter(s => s.id !== CST.CUSTOM_SORT);
     $effect(() => {
         listeId = configChangeEvent.current;
         if (listeId) {
             listConfig = configManager.selectedConfig[listeId];
+            let item = listConfig?.items?.find(i => i.channel_id === CST.ALL_OTHER_CHANNELS);
+            if (item && item.sort === undefined) item.sort = CST.ALPHA_SORT;
+            allOtherItem = item;
         } else {
             listConfig = null;
+            allOtherItem = null;
         }
     })
 
@@ -29,7 +35,24 @@
 </script>
 
 <div class="pannel-container">
-    {#if listConfig}
+    {#if allOthersChannelSelectedEvent.current}
+        {#if allOtherItem}
+            <div class="pannel-header">
+                <p>{$_('display.allOtherChannels')}</p>
+            </div>
+            <div class="pannel-body">
+                <div class="bloc">
+                    <div class="row">
+                        <p>{$_('configPannel.sortMode')}</p>
+                        <span class="help-badge" data-tooltip={$_('configPannel.sortStrategy')}>?</span>
+                        <SortSelect
+                            bind:value={allOtherItem.sort}
+                            options={sortOptions}/>
+                    </div>
+                </div>
+            </div>
+        {/if}
+    {:else if listConfig}
         <div class="pannel-header">
             <!-- svelte-ignore missing-declaration -->
             <p>{$_('configPannel.listName')} : </p>
@@ -38,102 +61,100 @@
             id="liste-name"
             bind:value={listConfig.name} placeholder={$_('configPannel.listNamePlaceholder')} />
         </div>
-    {#if listConfig.behavior}
-        <div class="pannel-body">
-            <div class="bloc">
-                <p>{$_('configPannel.behavior')}</p>
-                <div class="grid">
-                    {#each CST.BEHAVIOUR as item}
-                        <div class="behavior-item">
-                            <input
-                                type="checkbox"
-                                id={item.id}
-                                bind:checked={listConfig.behavior[item.id]}/>
-                            <label for={item.key}>{$_(item.label)}</label>
-                            <span
-                                class="help-badge"
-                                data-tooltip={$_(item.tooltip)}>?</span>
-                        </div>
-                    {/each}
-                </div>
-                <div class="row">
-                    <p>{$_('configPannel.sortMode')}</p>
-                    <span class="help-badge" data-tooltip={$_('configPannel.sortStrategy')}>?</span>
-                    <SortSelect
-                        bind:value={listConfig.sort}
-                        options={CST.SORT_STRATEGY}/>
-                </div>
-            </div>
-            <div class="bloc">
-                <p>{$_('configPannel.style')}</p>
-                <!-- <div class="row">
-                    <select name="header-size" id="header-size" bind:value={config.type.height} onchange={updateConfig}>
-                        {#each CST.HEADER_TYPE_HEIGHT as headerHeight}
-                            <option value={headerHeight.id}>{headerHeight.name}</option>
+        {#if listConfig.behavior}
+            <div class="pannel-body">
+                <div class="bloc">
+                    <p>{$_('configPannel.behavior')}</p>
+                    <div class="grid">
+                        {#each CST.BEHAVIOUR as item}
+                            <div class="behavior-item">
+                                <input
+                                    type="checkbox"
+                                    id={item.id}
+                                    bind:checked={listConfig.behavior[item.id]}/>
+                                <label for={item.key}>{$_(item.label)}</label>
+                                <span
+                                    class="help-badge"
+                                    data-tooltip={$_(item.tooltip)}>?</span>
+                            </div>
                         {/each}
-                    </select>
-                </div> -->
-                <div class="row">
-                    <p>{$_('configPannel.listHeaderIcon')}</p>
-                    <span
-                        class="help-badge"
-                        data-tooltip={$_('configPannel.listIconHelp')}>?</span>
-                    <IconSelect
-                        bind:value={listConfig.type.iconType}/>
+                    </div>
+                    <div class="row">
+                        <p>{$_('configPannel.sortMode')}</p>
+                        <span class="help-badge" data-tooltip={$_('configPannel.sortStrategy')}>?</span>
+                        <SortSelect
+                            bind:value={listConfig.sort}
+                            options={CST.SORT_STRATEGY}/>
+                    </div>
                 </div>
-                <div class="row">
-                    <p>{$_('configPannel.listHeaderBarColor')}</p>
-                    <span
-                        class="help-badge"
-                        data-tooltip={$_('configPannel.listHeaderBarColorHelp')}>?</span>
-                    <BarColorSelect
-                        bind:value={listConfig.type.barType}/>
-                </div>
-                <div class="row">
-                    <p>{$_('configPannel.listHeaderBadge')}</p>
-                    <span
-                        class="help-badge"
-                        data-tooltip={$_('configPannel.listCounterBadgeHelp')}>?</span>
-                    <CounterTypeSelect
-                        bind:value={listConfig.type.viewerCountType}/>
-                </div>
-                <!-- <div class="row">
-                    <select name="theme" id="theme" bind:value={config.style.theme} onchange={updateConfig}>
-                        <option value={CST.SYSTEM_STYLE}>System theme</option>
-                        <option value={CST.CUSTOM_STYLE}>Custom</option>
-                    </select>
-                </div> -->
-                <!-- {#if config.style.theme === CST.CUSTOM_STYLE}
-                <div class="row">
-                    <p>Header color</p>
-                    <select name="header-color" id="header-color" bind:value={config.style.header.headerColor} onchange={updateConfig}>
-                        {#each colorsList as color}
+                <div class="bloc">
+                    <p>{$_('configPannel.style')}</p>
+                    <!-- <div class="row">
+                        <select name="header-size" id="header-size" bind:value={config.type.height} onchange={updateConfig}>
+                            {#each CST.HEADER_TYPE_HEIGHT as headerHeight}
+                                <option value={headerHeight.id}>{headerHeight.name}</option>
+                            {/each}
+                        </select>
+                    </div> -->
+                    <div class="row">
+                        <p>{$_('configPannel.listHeaderIcon')}</p>
+                        <span
+                            class="help-badge"
+                            data-tooltip={$_('configPannel.listIconHelp')}>?</span>
+                        <IconSelect
+                            bind:value={listConfig.type.iconType}/>
+                    </div>
+                    <div class="row">
+                        <p>{$_('configPannel.listHeaderBarColor')}</p>
+                        <span
+                            class="help-badge"
+                            data-tooltip={$_('configPannel.listHeaderBarColorHelp')}>?</span>
+                        <BarColorSelect
+                            bind:value={listConfig.type.barType}/>
+                    </div>
+                    <div class="row">
+                        <p>{$_('configPannel.listHeaderBadge')}</p>
+                        <span
+                            class="help-badge"
+                            data-tooltip={$_('configPannel.listCounterBadgeHelp')}>?</span>
+                        <CounterTypeSelect
+                            bind:value={listConfig.type.viewerCountType}/>
+                    </div>
+                    <!-- <div class="row">
+                        <select name="theme" id="theme" bind:value={config.style.theme} onchange={updateConfig}>
+                            <option value={CST.SYSTEM_STYLE}>System theme</option>
+                            <option value={CST.CUSTOM_STYLE}>Custom</option>
+                        </select>
+                    </div> -->
+                    <!-- {#if config.style.theme === CST.CUSTOM_STYLE}
+                    <div class="row">
+                        <p>Header color</p>
+                        <select name="header-color" id="header-color" bind:value={config.style.header.headerColor} onchange={updateConfig}>
+                            {#each colorsList as color}
+                                <option value={color.colorCode}>
+                                    {capitalizeFirstLetter(color.colorName)}
+                                </option>
+                            {/each}
+                        </select>
+                        <input type="color" name="header-color" id="header-color"
+                        bind:value={config.style.header.headerColor} onchange={updateConfig}><label for="header-color"></label>
+                    </div>
+                    <div class="row">
+                        <p>Content color</p>
+                        <select name="header-color" id="header-color" bind:value={config.style.content.contentColor} onchange={updateConfig}>
+                            {#each colorsList as color}
                             <option value={color.colorCode}>
                                 {capitalizeFirstLetter(color.colorName)}
                             </option>
-                        {/each}
-                    </select>
-                    <input type="color" name="header-color" id="header-color"
-                    bind:value={config.style.header.headerColor} onchange={updateConfig}><label for="header-color"></label>
+                            {/each}
+                        </select>
+                        <input type="color" name="header-color" id="content-color"
+                        bind:value={config.style.content.contentColor} onchange={updateConfig}><label for="content-color"></label>   
+                    </div>
+                    {/if} -->
                 </div>
-                <div class="row">
-                    <p>Content color</p>
-                    <select name="header-color" id="header-color" bind:value={config.style.content.contentColor} onchange={updateConfig}>
-                        {#each colorsList as color}
-                        <option value={color.colorCode}>
-                            {capitalizeFirstLetter(color.colorName)}
-                        </option>
-                        {/each}
-                    </select>
-                    <input type="color" name="header-color" id="content-color"
-                    bind:value={config.style.content.contentColor} onchange={updateConfig}><label for="content-color"></label>   
-                </div>
-                {/if} -->
             </div>
-        </div>
-    {/if}
-    {:else if allOthersChannelSelectedEvent.current}
-            <p>BITE</p>
+        {/if}
     {:else}
         <div class="select-channel-flex">
             <h2 class="blinker">{$_('configPannel.selectListPrompt')}</h2>

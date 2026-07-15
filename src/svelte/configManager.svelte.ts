@@ -75,12 +75,6 @@ class ConfigManager {
         return channel?.isLive ? channel : undefined;
     }
 
-    getAllOtherChannel() {
-        return this.channelsPickRef.find(e => e.id > 0);
-    }
-
-
-
 
     saveConfig(toSaveChannels: I_CONFIG) {
         let copy = this.cleanRecursively('rootList', JSON.parse(JSON.stringify(toSaveChannels)));
@@ -94,7 +88,10 @@ class ConfigManager {
                 if ((toSaveChannels[listId].items[currentId] as any).type === CST.TYPE_LIST) {
                     this.cleanRecursively((toSaveChannels[listId].items[currentId] as any).id, toSaveChannels);
                 } else {
-                    toSaveChannels[listId].items[currentId] = {channel_id: toSaveChannels[listId].items[currentId].channel_id, id: toSaveChannels[listId].items[currentId].id}
+                    const it = toSaveChannels[listId].items[currentId];
+                    toSaveChannels[listId].items[currentId] = (it as any).channel_id < 0
+                        ? {channel_id: (it as any).channel_id, id: (it as any).id, sort: (it as any).sort}
+                        : {channel_id: (it as any).channel_id, id: (it as any).id}
                     // delete (item as any).channel_name;
                     // delete (item as any).game_name;
                     // delete (item as any).isLive;
