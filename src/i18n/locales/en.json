@@ -41,7 +41,8 @@
     "help": "Help",
     "listIconHelp": "Icon displayed next to the list name",
     "listHeaderBarColorHelp": "Color of the list's side bar",
-    "listCounterBadgeHelp": "Style of the badge showing the number of channels online"
+    "listCounterBadgeHelp": "Style of the badge showing the number of channels online",
+    "selectListPrompt": "Please click on a list header to customize it"
   },
   "configList": {
     "alreadyInList": "The item is already in the list",
@@ -74,7 +75,20 @@
   },
   "language": {
     "en": "English",
-    "fr": "Français"
+    "fr": "Français",
+    "es": "Español",
+    "de": "Deutsch",
+    "it": "Italiano",
+    "pt_BR": "Português (Brasil)",
+    "pt_PT": "Português (Portugal)",
+    "hr": "Hrvatski",
+    "ru": "Русский",
+    "pl": "Polski",
+    "sv": "Svenska",
+    "fi": "Suomi",
+    "no": "Norsk",
+    "el": "Ελληνικά",
+    "bg": "Български"
   },
   "behaviour": {
     "extendedOnStartup": {

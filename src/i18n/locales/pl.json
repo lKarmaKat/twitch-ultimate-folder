@@ -1,0 +1,172 @@
+{
+  "common": {
+    "none": "brak"
+  },
+  "actionPopup": {
+    "authTitle": "Wymagane połączenie z Twitch",
+    "authInstructionBefore": "Przejdź do",
+    "authInstructionAfter": "i wpisz ten kod:",
+    "authWaiting": "Oczekiwanie na autoryzację…",
+    "preferences": "Preferencje",
+    "openConfig": "Otwórz okno konfiguracji",
+    "theme": "Motyw",
+    "dark": "Ciemny",
+    "light": "Jasny",
+    "alignment": "Wyrównanie kanałów",
+    "alignmentSub": "Jeśli używasz BTTV do zmiany układu czatu",
+    "right": "Prawo",
+    "left": "Lewo",
+    "language": "Język"
+  },
+  "configPopup": {
+    "title": "Zorganizuj swoje ulubione",
+    "channelsList": "Lista kanałów",
+    "save": "Zapisz",
+    "resetPrompt": "Czy na pewno chcesz zresetować konfigurację?",
+    "configList": "Konfiguracja",
+    "display": "Podgląd",
+    "reset": "Zresetuj konfigurację",
+    "cancel": "Anuluj",
+    "addNewListToRoot": "Dodaj nową listę do elementu głównego"
+  },
+  "configPannel": {
+    "listName": "Nazwa listy",
+    "listNamePlaceholder": "Wpisz nazwę listy",
+    "behavior": "Zachowanie",
+    "sortStrategy": "Sortowanie niestandardowe pozwala samodzielnie określić kolejność; alpha/viewer jest wystarczająco jasne. UWAGA: sortowanie ALPHA/VIEWER powinno być używane tylko na liście zawierającej wyłącznie kanały",
+    "sortMode": "Tryb sortowania",
+    "style": "Styl",
+    "listHeaderIcon": "Ikona nagłówka listy",
+    "listHeaderBarColor": "Kolor paska bocznego nagłówka listy",
+    "listHeaderBadge": "Styl odznaki nagłówka listy",
+    "help": "Pomoc",
+    "listIconHelp": "Ikona wyświetlana obok nazwy listy",
+    "listHeaderBarColorHelp": "Kolor paska bocznego listy",
+    "listCounterBadgeHelp": "Styl odznaki pokazującej liczbę kanałów online",
+    "selectListPrompt": "Kliknij nagłówek listy, aby ją dostosować"
+  },
+  "configList": {
+    "alreadyInList": "Ten element jest już na liście",
+    "addList": "Dodaj nową listę w {listId}"
+  },
+  "mainList": {
+    "searchPlaceholder": "Szukaj wśród kanałów",
+    "noChannels": "Brak kanałów do wyświetlenia"
+  },
+  "display": {
+    "needConnect": "Wygląda na to, że musisz się połączyć",
+    "allOtherChannels": "Wszystkie pozostałe kanały"
+  },
+  "channel": {
+    "offline": "Niedostępny"
+  },
+  "status": {
+    "noLiveChannels": "Brak kanałów na żywo w widoku niestandardowym",
+    "portDisconnected": "Utracono połączenie z Twitch, trwa ponowne łączenie…",
+    "waitingConfig": "Oczekiwanie na konfigurację"
+  },
+  "sortSelect": {
+    "placeholder": "Wybierz sortowanie"
+  },
+  "titlePopup": {
+    "closeDialog": "Zamknij okno"
+  },
+  "counter": {
+    "live": "live"
+  },
+  "language": {
+    "en": "English",
+    "fr": "Français",
+    "es": "Español",
+    "de": "Deutsch",
+    "it": "Italiano",
+    "pt_BR": "Português (Brasil)",
+    "pt_PT": "Português (Portugal)",
+    "hr": "Hrvatski",
+    "ru": "Русский",
+    "pl": "Polski",
+    "sv": "Svenska",
+    "fi": "Suomi",
+    "no": "Norsk",
+    "el": "Ελληνικά",
+    "bg": "Български"
+  },
+  "behaviour": {
+    "extendedOnStartup": {
+      "label": "Rozwinięta przy starcie",
+      "tooltip": "Lista jest już rozwinięta po załadowaniu strony."
+    },
+    "extendsOnHover": {
+      "label": "Rozwija się po najechaniu",
+      "tooltip": "Lista rozwija się po najechaniu na nią kursorem myszy."
+    },
+    "extendsOnClick": {
+      "label": "Rozwija się po kliknięciu",
+      "tooltip": "Lista rozwija/zwija się po kliknięciu nagłówka."
+    }
+  },
+  "sort": {
+    "custom": "Sortowanie niestandardowe",
+    "viewer": "Sortowanie według liczby widzów",
+    "alpha": "Sortowanie alfabetyczne"
+  },
+  "bar": {
+    "purple": "fioletowy",
+    "green": "zielony",
+    "orange": "pomarańczowy"
+  },
+  "counterType": {
+    "bareCounter": "prosty licznik",
+    "badge": "odznaka",
+    "nakedBadge": "prosta odznaka",
+    "withTotalCount": "Z łączną liczbą kanałów",
+    "withLiveIcon": "Z łączną liczbą kanałów oraz ikoną na żywo/offline"
+  },
+  "icon": {
+    "folder": "folder",
+    "dot": "kropka",
+    "angle": "strzałka",
+    "cross": "krzyżyk",
+    "valorant": "Valorant",
+    "lol": "League of Legends",
+    "rocketLeague1": "Rocket League",
+    "rocketLeague2": "Rocket League (2)",
+    "cod1": "CoD Warzone",
+    "cod2": "CoD Warzone (2)",
+    "cod3": "CoD Warzone (3)",
+    "cod4": "CoD Warzone (4)",
+    "counterStrike": "Counter Strike",
+    "minecraft": "Minecraft",
+    "minecraft2": "Minecraft (2)",
+    "coffee": "Kawa",
+    "dota": "Dota",
+    "fortnite": "Fortnite",
+    "fortnite2": "Fortnite (2)",
+    "overwatch": "Overwatch",
+    "arcRaiders": "Arc Raiders",
+    "rainbow6": "Rainbow 6",
+    "gta5": "GTA 5",
+    "gta6": "GTA 6",
+    "music1": "Muzyka (1)",
+    "music2": "Muzyka (2)",
+    "marvelRivals": "Marvel Rivals",
+    "apexLegends": "Apex Legends",
+    "roblox": "Roblox",
+    "deadlock": "Deadlock",
+    "battlefield6": "Battlefield 6",
+    "counterStrike2": "Counter-Strike 2",
+    "splitgate": "Splitgate",
+    "halo": "Halo",
+    "smite2": "Smite 2",
+    "destiny2": "Destiny 2",
+    "teamfightTactics": "Teamfight Tactics",
+    "offTheGrid": "Off The Grid",
+    "xko2": "2XKO",
+    "pubg": "PUBG",
+    "callOfDuty": "Call of Duty",
+    "bloodhunt": "Bloodhunt",
+    "brawlhalla": "Brawlhalla",
+    "forHonor": "For Honor",
+    "theDivision2": "The Division 2"
+  }
+}

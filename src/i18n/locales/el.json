@@ -1,0 +1,172 @@
+{
+  "common": {
+    "none": "κανένα"
+  },
+  "actionPopup": {
+    "authTitle": "Απαιτείται σύνδεση με το Twitch",
+    "authInstructionBefore": "Μεταβείτε στο",
+    "authInstructionAfter": "και εισαγάγετε αυτόν τον κωδικό:",
+    "authWaiting": "Αναμονή έγκρισης…",
+    "preferences": "Προτιμήσεις",
+    "openConfig": "Άνοιγμα παραθύρου ρυθμίσεων",
+    "theme": "Θέμα",
+    "dark": "Σκούρο",
+    "light": "Ανοιχτό",
+    "alignment": "Στοίχιση καναλιών",
+    "alignmentSub": "Αν χρησιμοποιείτε το BTTV για να αλλάξετε τη διάταξη της συνομιλίας",
+    "right": "Δεξιά",
+    "left": "Αριστερά",
+    "language": "Γλώσσα"
+  },
+  "configPopup": {
+    "title": "Οργανώστε τα αγαπημένα σας",
+    "channelsList": "Λίστα καναλιών",
+    "save": "Αποθήκευση",
+    "resetPrompt": "Είστε σίγουροι ότι θέλετε να επαναφέρετε τις ρυθμίσεις;",
+    "configList": "Ρυθμίσεις",
+    "display": "Προεπισκόπηση",
+    "reset": "Επαναφορά ρυθμίσεων",
+    "cancel": "Ακύρωση",
+    "addNewListToRoot": "Προσθήκη νέας λίστας στο ριζικό στοιχείο"
+  },
+  "configPannel": {
+    "listName": "Όνομα λίστας",
+    "listNamePlaceholder": "Εισαγάγετε το όνομα της λίστας",
+    "behavior": "Συμπεριφορά",
+    "sortStrategy": "Η προσαρμοσμένη ταξινόμηση σάς επιτρέπει να ορίσετε τη σειρά ταξινόμησης· η ταξινόμηση alpha/θεατές είναι αρκετά σαφής. ΠΡΟΣΟΧΗ: χρησιμοποιήστε την ταξινόμηση ALPHA/VIEWER μόνο σε λίστα που περιέχει αποκλειστικά κανάλια",
+    "sortMode": "Λειτουργία ταξινόμησης",
+    "style": "Στυλ",
+    "listHeaderIcon": "Εικονίδιο κεφαλίδας λίστας",
+    "listHeaderBarColor": "Χρώμα πλευρικής μπάρας κεφαλίδας λίστας",
+    "listHeaderBadge": "Στυλ σήματος κεφαλίδας λίστας",
+    "help": "Βοήθεια",
+    "listIconHelp": "Εικονίδιο που εμφανίζεται δίπλα στο όνομα της λίστας",
+    "listHeaderBarColorHelp": "Χρώμα της πλευρικής μπάρας της λίστας",
+    "listCounterBadgeHelp": "Στυλ του σήματος που εμφανίζει τον αριθμό των συνδεδεμένων καναλιών",
+    "selectListPrompt": "Κάντε κλικ στην κεφαλίδα μιας λίστας για να την προσαρμόσετε"
+  },
+  "configList": {
+    "alreadyInList": "Το στοιχείο υπάρχει ήδη στη λίστα",
+    "addList": "Προσθήκη νέας λίστας στο {listId}"
+  },
+  "mainList": {
+    "searchPlaceholder": "Αναζήτηση στα κανάλια",
+    "noChannels": "Δεν υπάρχουν κανάλια για εμφάνιση"
+  },
+  "display": {
+    "needConnect": "Φαίνεται πως χρειάζεται να συνδεθείτε",
+    "allOtherChannels": "Όλα τα άλλα κανάλια"
+  },
+  "channel": {
+    "offline": "Εκτός σύνδεσης"
+  },
+  "status": {
+    "noLiveChannels": "Δεν υπάρχουν κανάλια σε ζωντανή μετάδοση στην προσαρμοσμένη προβολή",
+    "portDisconnected": "Η σύνδεση με το Twitch χάθηκε, γίνεται επανασύνδεση…",
+    "waitingConfig": "Αναμονή ρυθμίσεων"
+  },
+  "sortSelect": {
+    "placeholder": "Επιλογή ταξινόμησης"
+  },
+  "titlePopup": {
+    "closeDialog": "Κλείσιμο παραθύρου"
+  },
+  "counter": {
+    "live": "live"
+  },
+  "language": {
+    "en": "English",
+    "fr": "Français",
+    "es": "Español",
+    "de": "Deutsch",
+    "it": "Italiano",
+    "pt_BR": "Português (Brasil)",
+    "pt_PT": "Português (Portugal)",
+    "hr": "Hrvatski",
+    "ru": "Русский",
+    "pl": "Polski",
+    "sv": "Svenska",
+    "fi": "Suomi",
+    "no": "Norsk",
+    "el": "Ελληνικά",
+    "bg": "Български"
+  },
+  "behaviour": {
+    "extendedOnStartup": {
+      "label": "Ανεπτυγμένη κατά την εκκίνηση",
+      "tooltip": "Η λίστα είναι ήδη ανεπτυγμένη κατά τη φόρτωση της σελίδας."
+    },
+    "extendsOnHover": {
+      "label": "Αναπτύσσεται με το πέρασμα του ποντικιού",
+      "tooltip": "Η λίστα αναπτύσσεται όταν περνάτε το ποντίκι από πάνω της."
+    },
+    "extendsOnClick": {
+      "label": "Αναπτύσσεται με κλικ",
+      "tooltip": "Η λίστα αναπτύσσεται/συμπτύσσεται όταν κάνετε κλικ στην κεφαλίδα."
+    }
+  },
+  "sort": {
+    "custom": "Προσαρμοσμένη ταξινόμηση",
+    "viewer": "Ταξινόμηση κατά αριθμό θεατών",
+    "alpha": "Αλφαβητική ταξινόμηση"
+  },
+  "bar": {
+    "purple": "μοβ",
+    "green": "πράσινο",
+    "orange": "πορτοκαλί"
+  },
+  "counterType": {
+    "bareCounter": "απλός μετρητής",
+    "badge": "σήμα",
+    "nakedBadge": "απλό σήμα",
+    "withTotalCount": "Με συνολικό αριθμό καναλιών",
+    "withLiveIcon": "Με συνολικό αριθμό καναλιών και εικονίδιο ζωντανής/εκτός σύνδεσης"
+  },
+  "icon": {
+    "folder": "φάκελος",
+    "dot": "τελεία",
+    "angle": "βέλος",
+    "cross": "σταυρός",
+    "valorant": "Valorant",
+    "lol": "League of Legends",
+    "rocketLeague1": "Rocket League",
+    "rocketLeague2": "Rocket League (2)",
+    "cod1": "CoD Warzone",
+    "cod2": "CoD Warzone (2)",
+    "cod3": "CoD Warzone (3)",
+    "cod4": "CoD Warzone (4)",
+    "counterStrike": "Counter Strike",
+    "minecraft": "Minecraft",
+    "minecraft2": "Minecraft (2)",
+    "coffee": "Καφές",
+    "dota": "Dota",
+    "fortnite": "Fortnite",
+    "fortnite2": "Fortnite (2)",
+    "overwatch": "Overwatch",
+    "arcRaiders": "Arc Raiders",
+    "rainbow6": "Rainbow 6",
+    "gta5": "GTA 5",
+    "gta6": "GTA 6",
+    "music1": "Μουσική (1)",
+    "music2": "Μουσική (2)",
+    "marvelRivals": "Marvel Rivals",
+    "apexLegends": "Apex Legends",
+    "roblox": "Roblox",
+    "deadlock": "Deadlock",
+    "battlefield6": "Battlefield 6",
+    "counterStrike2": "Counter-Strike 2",
+    "splitgate": "Splitgate",
+    "halo": "Halo",
+    "smite2": "Smite 2",
+    "destiny2": "Destiny 2",
+    "teamfightTactics": "Teamfight Tactics",
+    "offTheGrid": "Off The Grid",
+    "xko2": "2XKO",
+    "pubg": "PUBG",
+    "callOfDuty": "Call of Duty",
+    "bloodhunt": "Bloodhunt",
+    "brawlhalla": "Brawlhalla",
+    "forHonor": "For Honor",
+    "theDivision2": "The Division 2"
+  }
+}

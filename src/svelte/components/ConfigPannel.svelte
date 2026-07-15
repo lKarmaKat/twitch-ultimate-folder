@@ -136,7 +136,7 @@
             <p>BITE</p>
     {:else}
         <div class="select-channel-flex">
-            <h2 class="blinker">Please click on a list header to customize it</h2>
+            <h2 class="blinker">{$_('configPannel.selectListPrompt')}</h2>
         </div>
     {/if}
 </div>

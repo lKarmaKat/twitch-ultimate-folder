@@ -1,0 +1,172 @@
+{
+  "common": {
+    "none": "ingen"
+  },
+  "actionPopup": {
+    "authTitle": "Twitch-tilkobling kreves",
+    "authInstructionBefore": "Gå til",
+    "authInstructionAfter": "og skriv inn denne koden:",
+    "authWaiting": "Venter på autorisasjon…",
+    "preferences": "Innstillinger",
+    "openConfig": "Åpne konfigurasjonsvinduet",
+    "theme": "Tema",
+    "dark": "Mørk",
+    "light": "Lys",
+    "alignment": "Kanaljustering",
+    "alignmentSub": "Hvis du bruker BTTV til å endre chattlayouten",
+    "right": "Høyre",
+    "left": "Venstre",
+    "language": "Språk"
+  },
+  "configPopup": {
+    "title": "Organiser favorittene dine",
+    "channelsList": "Kanalliste",
+    "save": "Lagre",
+    "resetPrompt": "Er du sikker på at du vil tilbakestille konfigurasjonen?",
+    "configList": "Konfigurasjon",
+    "display": "Forhåndsvisning",
+    "reset": "Tilbakestill konfigurasjon",
+    "cancel": "Avbryt",
+    "addNewListToRoot": "Legg til ny liste i rotelementet"
+  },
+  "configPannel": {
+    "listName": "Listenavn",
+    "listNamePlaceholder": "Skriv inn listenavn",
+    "behavior": "Atferd",
+    "sortStrategy": "Egendefinert sortering lar deg selv bestemme rekkefølgen; alpha/viewer er tydelig nok. OBS: bruk ALPHA/VIEWER-sortering kun på en liste som bare inneholder kanaler",
+    "sortMode": "Sorteringsmodus",
+    "style": "Stil",
+    "listHeaderIcon": "Ikon for listeoverskrift",
+    "listHeaderBarColor": "Farge på sidefeltet i listeoverskriften",
+    "listHeaderBadge": "Merkestil for listeoverskrift",
+    "help": "Hjelp",
+    "listIconHelp": "Ikon som vises ved siden av listenavnet",
+    "listHeaderBarColorHelp": "Farge på listens sidefelt",
+    "listCounterBadgeHelp": "Stil på merket som viser antall kanaler online",
+    "selectListPrompt": "Klikk på en listeoverskrift for å tilpasse den"
+  },
+  "configList": {
+    "alreadyInList": "Elementet finnes allerede i listen",
+    "addList": "Legg til ny liste i {listId}"
+  },
+  "mainList": {
+    "searchPlaceholder": "Søk blant kanaler",
+    "noChannels": "Ingen kanaler å vise"
+  },
+  "display": {
+    "needConnect": "Det ser ut som du må koble til",
+    "allOtherChannels": "Alle andre kanaler"
+  },
+  "channel": {
+    "offline": "Frakoblet"
+  },
+  "status": {
+    "noLiveChannels": "Ingen direktesendte kanaler i tilpasset visning",
+    "portDisconnected": "Mistet forbindelsen til Twitch, kobler til på nytt…",
+    "waitingConfig": "Venter på konfigurasjon"
+  },
+  "sortSelect": {
+    "placeholder": "Velg sortering"
+  },
+  "titlePopup": {
+    "closeDialog": "Lukk vindu"
+  },
+  "counter": {
+    "live": "live"
+  },
+  "language": {
+    "en": "English",
+    "fr": "Français",
+    "es": "Español",
+    "de": "Deutsch",
+    "it": "Italiano",
+    "pt_BR": "Português (Brasil)",
+    "pt_PT": "Português (Portugal)",
+    "hr": "Hrvatski",
+    "ru": "Русский",
+    "pl": "Polski",
+    "sv": "Svenska",
+    "fi": "Suomi",
+    "no": "Norsk",
+    "el": "Ελληνικά",
+    "bg": "Български"
+  },
+  "behaviour": {
+    "extendedOnStartup": {
+      "label": "Utvidet ved oppstart",
+      "tooltip": "Listen er allerede utvidet når siden lastes."
+    },
+    "extendsOnHover": {
+      "label": "Utvides ved hover",
+      "tooltip": "Listen utvides når du holder musepekeren over den."
+    },
+    "extendsOnClick": {
+      "label": "Utvides ved klikk",
+      "tooltip": "Listen utvides/kollapser når du klikker på overskriften."
+    }
+  },
+  "sort": {
+    "custom": "Egendefinert sortering",
+    "viewer": "Sortering etter antall seere",
+    "alpha": "Alfabetisk sortering"
+  },
+  "bar": {
+    "purple": "lilla",
+    "green": "grønn",
+    "orange": "oransje"
+  },
+  "counterType": {
+    "bareCounter": "enkel teller",
+    "badge": "merke",
+    "nakedBadge": "enkelt merke",
+    "withTotalCount": "Med totalt antall kanaler",
+    "withLiveIcon": "Med totalt antall kanaler og direkte/offline-ikon"
+  },
+  "icon": {
+    "folder": "mappe",
+    "dot": "prikk",
+    "angle": "pil",
+    "cross": "kryss",
+    "valorant": "Valorant",
+    "lol": "League of Legends",
+    "rocketLeague1": "Rocket League",
+    "rocketLeague2": "Rocket League (2)",
+    "cod1": "CoD Warzone",
+    "cod2": "CoD Warzone (2)",
+    "cod3": "CoD Warzone (3)",
+    "cod4": "CoD Warzone (4)",
+    "counterStrike": "Counter Strike",
+    "minecraft": "Minecraft",
+    "minecraft2": "Minecraft (2)",
+    "coffee": "Kaffe",
+    "dota": "Dota",
+    "fortnite": "Fortnite",
+    "fortnite2": "Fortnite (2)",
+    "overwatch": "Overwatch",
+    "arcRaiders": "Arc Raiders",
+    "rainbow6": "Rainbow 6",
+    "gta5": "GTA 5",
+    "gta6": "GTA 6",
+    "music1": "Musikk (1)",
+    "music2": "Musikk (2)",
+    "marvelRivals": "Marvel Rivals",
+    "apexLegends": "Apex Legends",
+    "roblox": "Roblox",
+    "deadlock": "Deadlock",
+    "battlefield6": "Battlefield 6",
+    "counterStrike2": "Counter-Strike 2",
+    "splitgate": "Splitgate",
+    "halo": "Halo",
+    "smite2": "Smite 2",
+    "destiny2": "Destiny 2",
+    "teamfightTactics": "Teamfight Tactics",
+    "offTheGrid": "Off The Grid",
+    "xko2": "2XKO",
+    "pubg": "PUBG",
+    "callOfDuty": "Call of Duty",
+    "bloodhunt": "Bloodhunt",
+    "brawlhalla": "Brawlhalla",
+    "forHonor": "For Honor",
+    "theDivision2": "The Division 2"
+  }
+}

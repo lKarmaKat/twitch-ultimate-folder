@@ -1,0 +1,172 @@
+{
+  "common": {
+    "none": "ingen"
+  },
+  "actionPopup": {
+    "authTitle": "Twitch-anslutning krävs",
+    "authInstructionBefore": "Gå till",
+    "authInstructionAfter": "och ange den här koden:",
+    "authWaiting": "Väntar på auktorisering…",
+    "preferences": "Inställningar",
+    "openConfig": "Öppna konfigurationsfönstret",
+    "theme": "Tema",
+    "dark": "Mörkt",
+    "light": "Ljust",
+    "alignment": "Kanaljustering",
+    "alignmentSub": "Om du använder BTTV för att ändra chattlayouten",
+    "right": "Höger",
+    "left": "Vänster",
+    "language": "Språk"
+  },
+  "configPopup": {
+    "title": "Organisera dina favoriter",
+    "channelsList": "Kanallista",
+    "save": "Spara",
+    "resetPrompt": "Är du säker på att du vill återställa konfigurationen?",
+    "configList": "Konfiguration",
+    "display": "Förhandsgranskning",
+    "reset": "Återställ konfiguration",
+    "cancel": "Avbryt",
+    "addNewListToRoot": "Lägg till ny lista i rotelementet"
+  },
+  "configPannel": {
+    "listName": "Listnamn",
+    "listNamePlaceholder": "Ange listnamn",
+    "behavior": "Beteende",
+    "sortStrategy": "Med anpassad sortering kan du själv bestämma sorteringsordningen; alpha/viewer är tydliga nog. OBS: använd ALPHA/VIEWER-sortering endast på en lista som bara innehåller kanaler",
+    "sortMode": "Sorteringsläge",
+    "style": "Stil",
+    "listHeaderIcon": "Ikon för listhuvud",
+    "listHeaderBarColor": "Färg på sidofältet i listhuvudet",
+    "listHeaderBadge": "Badge-stil för listhuvud",
+    "help": "Hjälp",
+    "listIconHelp": "Ikon som visas bredvid listnamnet",
+    "listHeaderBarColorHelp": "Färg på listans sidofält",
+    "listCounterBadgeHelp": "Stil på badgen som visar antalet kanaler online",
+    "selectListPrompt": "Klicka på ett listhuvud för att anpassa det"
+  },
+  "configList": {
+    "alreadyInList": "Objektet finns redan i listan",
+    "addList": "Lägg till ny lista i {listId}"
+  },
+  "mainList": {
+    "searchPlaceholder": "Sök bland kanaler",
+    "noChannels": "Inga kanaler att visa"
+  },
+  "display": {
+    "needConnect": "Det verkar som att du behöver ansluta",
+    "allOtherChannels": "Alla andra kanaler"
+  },
+  "channel": {
+    "offline": "Frånkopplad"
+  },
+  "status": {
+    "noLiveChannels": "Inga livekanaler i anpassad vy",
+    "portDisconnected": "Anslutningen till Twitch förlorades, återansluter…",
+    "waitingConfig": "Väntar på konfiguration"
+  },
+  "sortSelect": {
+    "placeholder": "Välj sortering"
+  },
+  "titlePopup": {
+    "closeDialog": "Stäng dialogruta"
+  },
+  "counter": {
+    "live": "live"
+  },
+  "language": {
+    "en": "English",
+    "fr": "Français",
+    "es": "Español",
+    "de": "Deutsch",
+    "it": "Italiano",
+    "pt_BR": "Português (Brasil)",
+    "pt_PT": "Português (Portugal)",
+    "hr": "Hrvatski",
+    "ru": "Русский",
+    "pl": "Polski",
+    "sv": "Svenska",
+    "fi": "Suomi",
+    "no": "Norsk",
+    "el": "Ελληνικά",
+    "bg": "Български"
+  },
+  "behaviour": {
+    "extendedOnStartup": {
+      "label": "Utfälld vid start",
+      "tooltip": "Listan är redan utfälld när sidan laddas."
+    },
+    "extendsOnHover": {
+      "label": "Fälls ut vid hovring",
+      "tooltip": "Listan fälls ut när du för musen över den."
+    },
+    "extendsOnClick": {
+      "label": "Fälls ut vid klick",
+      "tooltip": "Listan fälls ut/ihop när du klickar på rubriken."
+    }
+  },
+  "sort": {
+    "custom": "Anpassad sortering",
+    "viewer": "Sortering efter antal tittare",
+    "alpha": "Alfabetisk sortering"
+  },
+  "bar": {
+    "purple": "lila",
+    "green": "grön",
+    "orange": "orange"
+  },
+  "counterType": {
+    "bareCounter": "enkel räknare",
+    "badge": "badge",
+    "nakedBadge": "enkel badge",
+    "withTotalCount": "Med totalt antal kanaler",
+    "withLiveIcon": "Med totalt antal kanaler och live/offline-ikon"
+  },
+  "icon": {
+    "folder": "mapp",
+    "dot": "punkt",
+    "angle": "pil",
+    "cross": "kryss",
+    "valorant": "Valorant",
+    "lol": "League of Legends",
+    "rocketLeague1": "Rocket League",
+    "rocketLeague2": "Rocket League (2)",
+    "cod1": "CoD Warzone",
+    "cod2": "CoD Warzone (2)",
+    "cod3": "CoD Warzone (3)",
+    "cod4": "CoD Warzone (4)",
+    "counterStrike": "Counter Strike",
+    "minecraft": "Minecraft",
+    "minecraft2": "Minecraft (2)",
+    "coffee": "Kaffe",
+    "dota": "Dota",
+    "fortnite": "Fortnite",
+    "fortnite2": "Fortnite (2)",
+    "overwatch": "Overwatch",
+    "arcRaiders": "Arc Raiders",
+    "rainbow6": "Rainbow 6",
+    "gta5": "GTA 5",
+    "gta6": "GTA 6",
+    "music1": "Musik (1)",
+    "music2": "Musik (2)",
+    "marvelRivals": "Marvel Rivals",
+    "apexLegends": "Apex Legends",
+    "roblox": "Roblox",
+    "deadlock": "Deadlock",
+    "battlefield6": "Battlefield 6",
+    "counterStrike2": "Counter-Strike 2",
+    "splitgate": "Splitgate",
+    "halo": "Halo",
+    "smite2": "Smite 2",
+    "destiny2": "Destiny 2",
+    "teamfightTactics": "Teamfight Tactics",
+    "offTheGrid": "Off The Grid",
+    "xko2": "2XKO",
+    "pubg": "PUBG",
+    "callOfDuty": "Call of Duty",
+    "bloodhunt": "Bloodhunt",
+    "brawlhalla": "Brawlhalla",
+    "forHonor": "For Honor",
+    "theDivision2": "The Division 2"
+  }
+}

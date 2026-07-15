@@ -1,0 +1,172 @@
+{
+  "common": {
+    "none": "nijedan"
+  },
+  "actionPopup": {
+    "authTitle": "Potrebna je Twitch veza",
+    "authInstructionBefore": "Idite na",
+    "authInstructionAfter": "i unesite ovaj kod:",
+    "authWaiting": "Čeka se autorizacija…",
+    "preferences": "Postavke",
+    "openConfig": "Otvori prozor za konfiguraciju",
+    "theme": "Tema",
+    "dark": "Tamna",
+    "light": "Svijetla",
+    "alignment": "Poravnanje kanala",
+    "alignmentSub": "Ako koristite BTTV za promjenu izgleda chata",
+    "right": "Desno",
+    "left": "Lijevo",
+    "language": "Jezik"
+  },
+  "configPopup": {
+    "title": "Organizirajte svoje favorite",
+    "channelsList": "Popis kanala",
+    "save": "Spremi",
+    "resetPrompt": "Jeste li sigurni da želite poništiti konfiguraciju?",
+    "configList": "Konfiguracija",
+    "display": "Pregled",
+    "reset": "Poništi konfiguraciju",
+    "cancel": "Odustani",
+    "addNewListToRoot": "Dodaj novi popis u korijenski element"
+  },
+  "configPannel": {
+    "listName": "Naziv popisa",
+    "listNamePlaceholder": "Unesite naziv popisa",
+    "behavior": "Ponašanje",
+    "sortStrategy": "Prilagođeno razvrstavanje omogućuje vam da sami odredite redoslijed; alpha/gledatelji je dovoljno jasno. POZOR: razvrstavanje ALPHA/VIEWER koristite samo na popisu koji sadrži isključivo kanale",
+    "sortMode": "Način razvrstavanja",
+    "style": "Stil",
+    "listHeaderIcon": "Ikona zaglavlja popisa",
+    "listHeaderBarColor": "Boja bočne trake zaglavlja popisa",
+    "listHeaderBadge": "Stil oznake zaglavlja popisa",
+    "help": "Pomoć",
+    "listIconHelp": "Ikona prikazana pored naziva popisa",
+    "listHeaderBarColorHelp": "Boja bočne trake popisa",
+    "listCounterBadgeHelp": "Stil oznake koja prikazuje broj kanala na mreži",
+    "selectListPrompt": "Kliknite na zaglavlje popisa da biste ga prilagodili"
+  },
+  "configList": {
+    "alreadyInList": "Stavka je već na popisu",
+    "addList": "Dodaj novi popis u {listId}"
+  },
+  "mainList": {
+    "searchPlaceholder": "Pretraži kanale",
+    "noChannels": "Nema kanala za prikaz"
+  },
+  "display": {
+    "needConnect": "Čini se da se trebate povezati",
+    "allOtherChannels": "Svi ostali kanali"
+  },
+  "channel": {
+    "offline": "Izvan mreže"
+  },
+  "status": {
+    "noLiveChannels": "Nema kanala uživo u prilagođenom prikazu",
+    "portDisconnected": "Veza s Twitchom izgubljena, ponovno povezivanje u tijeku…",
+    "waitingConfig": "Čekanje konfiguracije"
+  },
+  "sortSelect": {
+    "placeholder": "Odaberi razvrstavanje"
+  },
+  "titlePopup": {
+    "closeDialog": "Zatvori dijalog"
+  },
+  "counter": {
+    "live": "live"
+  },
+  "language": {
+    "en": "English",
+    "fr": "Français",
+    "es": "Español",
+    "de": "Deutsch",
+    "it": "Italiano",
+    "pt_BR": "Português (Brasil)",
+    "pt_PT": "Português (Portugal)",
+    "hr": "Hrvatski",
+    "ru": "Русский",
+    "pl": "Polski",
+    "sv": "Svenska",
+    "fi": "Suomi",
+    "no": "Norsk",
+    "el": "Ελληνικά",
+    "bg": "Български"
+  },
+  "behaviour": {
+    "extendedOnStartup": {
+      "label": "Prošireno pri pokretanju",
+      "tooltip": "Popis je već proširen prilikom učitavanja stranice."
+    },
+    "extendsOnHover": {
+      "label": "Proširuje se pri prelasku mišem",
+      "tooltip": "Popis se proširuje pri prelasku mišem preko njega."
+    },
+    "extendsOnClick": {
+      "label": "Proširuje se na klik",
+      "tooltip": "Popis se proširuje/skuplja klikom na zaglavlje."
+    }
+  },
+  "sort": {
+    "custom": "Prilagođeno razvrstavanje",
+    "viewer": "Razvrstavanje po broju gledatelja",
+    "alpha": "Abecedno razvrstavanje"
+  },
+  "bar": {
+    "purple": "ljubičasta",
+    "green": "zelena",
+    "orange": "narančasta"
+  },
+  "counterType": {
+    "bareCounter": "jednostavni brojač",
+    "badge": "oznaka",
+    "nakedBadge": "jednostavna oznaka",
+    "withTotalCount": "S ukupnim brojem kanala",
+    "withLiveIcon": "S ukupnim brojem kanala i ikonom uživo/izvan mreže"
+  },
+  "icon": {
+    "folder": "mapa",
+    "dot": "točka",
+    "angle": "strelica",
+    "cross": "križ",
+    "valorant": "Valorant",
+    "lol": "League of Legends",
+    "rocketLeague1": "Rocket League",
+    "rocketLeague2": "Rocket League (2)",
+    "cod1": "CoD Warzone",
+    "cod2": "CoD Warzone (2)",
+    "cod3": "CoD Warzone (3)",
+    "cod4": "CoD Warzone (4)",
+    "counterStrike": "Counter Strike",
+    "minecraft": "Minecraft",
+    "minecraft2": "Minecraft (2)",
+    "coffee": "Kava",
+    "dota": "Dota",
+    "fortnite": "Fortnite",
+    "fortnite2": "Fortnite (2)",
+    "overwatch": "Overwatch",
+    "arcRaiders": "Arc Raiders",
+    "rainbow6": "Rainbow 6",
+    "gta5": "GTA 5",
+    "gta6": "GTA 6",
+    "music1": "Glazba (1)",
+    "music2": "Glazba (2)",
+    "marvelRivals": "Marvel Rivals",
+    "apexLegends": "Apex Legends",
+    "roblox": "Roblox",
+    "deadlock": "Deadlock",
+    "battlefield6": "Battlefield 6",
+    "counterStrike2": "Counter-Strike 2",
+    "splitgate": "Splitgate",
+    "halo": "Halo",
+    "smite2": "Smite 2",
+    "destiny2": "Destiny 2",
+    "teamfightTactics": "Teamfight Tactics",
+    "offTheGrid": "Off The Grid",
+    "xko2": "2XKO",
+    "pubg": "PUBG",
+    "callOfDuty": "Call of Duty",
+    "bloodhunt": "Bloodhunt",
+    "brawlhalla": "Brawlhalla",
+    "forHonor": "For Honor",
+    "theDivision2": "The Division 2"
+  }
+}

@@ -1,0 +1,172 @@
+{
+  "common": {
+    "none": "ei mitään"
+  },
+  "actionPopup": {
+    "authTitle": "Twitch-yhteys vaaditaan",
+    "authInstructionBefore": "Siirry osoitteeseen",
+    "authInstructionAfter": "ja syötä tämä koodi:",
+    "authWaiting": "Odotetaan valtuutusta…",
+    "preferences": "Asetukset",
+    "openConfig": "Avaa asetusikkuna",
+    "theme": "Teema",
+    "dark": "Tumma",
+    "light": "Vaalea",
+    "alignment": "Kanavien tasaus",
+    "alignmentSub": "Jos käytät BTTV:tä chatin asettelun muuttamiseen",
+    "right": "Oikea",
+    "left": "Vasen",
+    "language": "Kieli"
+  },
+  "configPopup": {
+    "title": "Järjestä suosikkisi",
+    "channelsList": "Kanavaluettelo",
+    "save": "Tallenna",
+    "resetPrompt": "Haluatko varmasti nollata asetukset?",
+    "configList": "Asetukset",
+    "display": "Esikatselu",
+    "reset": "Nollaa asetukset",
+    "cancel": "Peruuta",
+    "addNewListToRoot": "Lisää uusi lista juurielementtiin"
+  },
+  "configPannel": {
+    "listName": "Listan nimi",
+    "listNamePlaceholder": "Syötä listan nimi",
+    "behavior": "Käyttäytyminen",
+    "sortStrategy": "Mukautetun lajittelun avulla voit määrittää järjestyksen itse; alpha/viewer on riittävän selkeä. HUOM: käytä ALPHA/VIEWER-lajittelua vain listassa, joka sisältää pelkästään kanavia",
+    "sortMode": "Lajittelutila",
+    "style": "Tyyli",
+    "listHeaderIcon": "Listan otsikon kuvake",
+    "listHeaderBarColor": "Listan otsikon sivupalkin väri",
+    "listHeaderBadge": "Listan otsikon merkin tyyli",
+    "help": "Ohje",
+    "listIconHelp": "Kuvake, joka näytetään listan nimen vieressä",
+    "listHeaderBarColorHelp": "Listan sivupalkin väri",
+    "listCounterBadgeHelp": "Verkossa olevien kanavien määrää näyttävän merkin tyyli",
+    "selectListPrompt": "Napsauta listan otsikkoa mukauttaaksesi sitä"
+  },
+  "configList": {
+    "alreadyInList": "Kohde on jo listalla",
+    "addList": "Lisää uusi lista kohteeseen {listId}"
+  },
+  "mainList": {
+    "searchPlaceholder": "Hae kanavista",
+    "noChannels": "Ei näytettäviä kanavia"
+  },
+  "display": {
+    "needConnect": "Näyttää siltä, että sinun täytyy kirjautua",
+    "allOtherChannels": "Kaikki muut kanavat"
+  },
+  "channel": {
+    "offline": "Poissa verkosta"
+  },
+  "status": {
+    "noLiveChannels": "Ei livekanavia mukautetussa näkymässä",
+    "portDisconnected": "Yhteys Twitchiin katkesi, yhdistetään uudelleen…",
+    "waitingConfig": "Odotetaan asetuksia"
+  },
+  "sortSelect": {
+    "placeholder": "Valitse lajittelu"
+  },
+  "titlePopup": {
+    "closeDialog": "Sulje ikkuna"
+  },
+  "counter": {
+    "live": "live"
+  },
+  "language": {
+    "en": "English",
+    "fr": "Français",
+    "es": "Español",
+    "de": "Deutsch",
+    "it": "Italiano",
+    "pt_BR": "Português (Brasil)",
+    "pt_PT": "Português (Portugal)",
+    "hr": "Hrvatski",
+    "ru": "Русский",
+    "pl": "Polski",
+    "sv": "Svenska",
+    "fi": "Suomi",
+    "no": "Norsk",
+    "el": "Ελληνικά",
+    "bg": "Български"
+  },
+  "behaviour": {
+    "extendedOnStartup": {
+      "label": "Laajennettu käynnistyksessä",
+      "tooltip": "Lista on jo laajennettuna sivun latautuessa."
+    },
+    "extendsOnHover": {
+      "label": "Laajenee kohdistettaessa",
+      "tooltip": "Lista laajenee, kun hiiri viedään sen päälle."
+    },
+    "extendsOnClick": {
+      "label": "Laajenee napsautettaessa",
+      "tooltip": "Lista laajenee/supistuu, kun otsikkoa napsautetaan."
+    }
+  },
+  "sort": {
+    "custom": "Mukautettu lajittelu",
+    "viewer": "Lajittelu katsojamäärän mukaan",
+    "alpha": "Aakkosjärjestys"
+  },
+  "bar": {
+    "purple": "violetti",
+    "green": "vihreä",
+    "orange": "oranssi"
+  },
+  "counterType": {
+    "bareCounter": "yksinkertainen laskuri",
+    "badge": "merkki",
+    "nakedBadge": "pelkkä merkki",
+    "withTotalCount": "Kanavien kokonaismäärällä",
+    "withLiveIcon": "Kanavien kokonaismäärällä sekä live/offline-kuvakkeella"
+  },
+  "icon": {
+    "folder": "kansio",
+    "dot": "piste",
+    "angle": "nuoli",
+    "cross": "risti",
+    "valorant": "Valorant",
+    "lol": "League of Legends",
+    "rocketLeague1": "Rocket League",
+    "rocketLeague2": "Rocket League (2)",
+    "cod1": "CoD Warzone",
+    "cod2": "CoD Warzone (2)",
+    "cod3": "CoD Warzone (3)",
+    "cod4": "CoD Warzone (4)",
+    "counterStrike": "Counter Strike",
+    "minecraft": "Minecraft",
+    "minecraft2": "Minecraft (2)",
+    "coffee": "Kahvi",
+    "dota": "Dota",
+    "fortnite": "Fortnite",
+    "fortnite2": "Fortnite (2)",
+    "overwatch": "Overwatch",
+    "arcRaiders": "Arc Raiders",
+    "rainbow6": "Rainbow 6",
+    "gta5": "GTA 5",
+    "gta6": "GTA 6",
+    "music1": "Musiikki (1)",
+    "music2": "Musiikki (2)",
+    "marvelRivals": "Marvel Rivals",
+    "apexLegends": "Apex Legends",
+    "roblox": "Roblox",
+    "deadlock": "Deadlock",
+    "battlefield6": "Battlefield 6",
+    "counterStrike2": "Counter-Strike 2",
+    "splitgate": "Splitgate",
+    "halo": "Halo",
+    "smite2": "Smite 2",
+    "destiny2": "Destiny 2",
+    "teamfightTactics": "Teamfight Tactics",
+    "offTheGrid": "Off The Grid",
+    "xko2": "2XKO",
+    "pubg": "PUBG",
+    "callOfDuty": "Call of Duty",
+    "bloodhunt": "Bloodhunt",
+    "brawlhalla": "Brawlhalla",
+    "forHonor": "For Honor",
+    "theDivision2": "The Division 2"
+  }
+}

@@ -1,0 +1,172 @@
+{
+  "common": {
+    "none": "няма"
+  },
+  "actionPopup": {
+    "authTitle": "Изисква се връзка с Twitch",
+    "authInstructionBefore": "Отидете на",
+    "authInstructionAfter": "и въведете този код:",
+    "authWaiting": "Изчакване на разрешение…",
+    "preferences": "Предпочитания",
+    "openConfig": "Отваряне на прозореца за конфигурация",
+    "theme": "Тема",
+    "dark": "Тъмна",
+    "light": "Светла",
+    "alignment": "Подравняване на каналите",
+    "alignmentSub": "Ако използвате BTTV, за да промените оформлението на чата",
+    "right": "Дясно",
+    "left": "Ляво",
+    "language": "Език"
+  },
+  "configPopup": {
+    "title": "Организирайте любимите си",
+    "channelsList": "Списък с канали",
+    "save": "Запази",
+    "resetPrompt": "Сигурни ли сте, че искате да нулирате конфигурацията?",
+    "configList": "Конфигурация",
+    "display": "Преглед",
+    "reset": "Нулиране на конфигурацията",
+    "cancel": "Отказ",
+    "addNewListToRoot": "Добавяне на нов списък към основния елемент"
+  },
+  "configPannel": {
+    "listName": "Име на списъка",
+    "listNamePlaceholder": "Въведете име на списъка",
+    "behavior": "Поведение",
+    "sortStrategy": "Персонализираното сортиране ви позволява сами да зададете реда; alpha/viewer е достатъчно ясно. ВНИМАНИЕ: използвайте сортиране ALPHA/VIEWER само в списък, съдържащ единствено канали",
+    "sortMode": "Режим на сортиране",
+    "style": "Стил",
+    "listHeaderIcon": "Икона на заглавието на списъка",
+    "listHeaderBarColor": "Цвят на страничната лента на заглавието на списъка",
+    "listHeaderBadge": "Стил на значката на заглавието на списъка",
+    "help": "Помощ",
+    "listIconHelp": "Икона, показвана до името на списъка",
+    "listHeaderBarColorHelp": "Цвят на страничната лента на списъка",
+    "listCounterBadgeHelp": "Стил на значката, показваща броя на онлайн каналите",
+    "selectListPrompt": "Щракнете върху заглавието на списък, за да го персонализирате"
+  },
+  "configList": {
+    "alreadyInList": "Елементът вече е в списъка",
+    "addList": "Добавяне на нов списък в {listId}"
+  },
+  "mainList": {
+    "searchPlaceholder": "Търсене сред каналите",
+    "noChannels": "Няма канали за показване"
+  },
+  "display": {
+    "needConnect": "Изглежда, че трябва да се свържете",
+    "allOtherChannels": "Всички останали канали"
+  },
+  "channel": {
+    "offline": "Извън линия"
+  },
+  "status": {
+    "noLiveChannels": "Няма канали на живо в персонализирания изглед",
+    "portDisconnected": "Връзката с Twitch е загубена, повторно свързване…",
+    "waitingConfig": "Изчакване на конфигурация"
+  },
+  "sortSelect": {
+    "placeholder": "Избери сортиране"
+  },
+  "titlePopup": {
+    "closeDialog": "Затвори прозореца"
+  },
+  "counter": {
+    "live": "live"
+  },
+  "language": {
+    "en": "English",
+    "fr": "Français",
+    "es": "Español",
+    "de": "Deutsch",
+    "it": "Italiano",
+    "pt_BR": "Português (Brasil)",
+    "pt_PT": "Português (Portugal)",
+    "hr": "Hrvatski",
+    "ru": "Русский",
+    "pl": "Polski",
+    "sv": "Svenska",
+    "fi": "Suomi",
+    "no": "Norsk",
+    "el": "Ελληνικά",
+    "bg": "Български"
+  },
+  "behaviour": {
+    "extendedOnStartup": {
+      "label": "Разгънат при стартиране",
+      "tooltip": "Списъкът вече е разгънат при зареждане на страницата."
+    },
+    "extendsOnHover": {
+      "label": "Разгъва се при посочване",
+      "tooltip": "Списъкът се разгъва при преминаване на курсора върху него."
+    },
+    "extendsOnClick": {
+      "label": "Разгъва се при клик",
+      "tooltip": "Списъкът се разгъва/свива при клик върху заглавието."
+    }
+  },
+  "sort": {
+    "custom": "Персонализирано сортиране",
+    "viewer": "Сортиране по брой зрители",
+    "alpha": "Азбучно сортиране"
+  },
+  "bar": {
+    "purple": "лилаво",
+    "green": "зелено",
+    "orange": "оранжево"
+  },
+  "counterType": {
+    "bareCounter": "прост брояч",
+    "badge": "значка",
+    "nakedBadge": "проста значка",
+    "withTotalCount": "С общ брой канали",
+    "withLiveIcon": "С общ брой канали и икона на живо/офлайн"
+  },
+  "icon": {
+    "folder": "папка",
+    "dot": "точка",
+    "angle": "стрелка",
+    "cross": "кръст",
+    "valorant": "Valorant",
+    "lol": "League of Legends",
+    "rocketLeague1": "Rocket League",
+    "rocketLeague2": "Rocket League (2)",
+    "cod1": "CoD Warzone",
+    "cod2": "CoD Warzone (2)",
+    "cod3": "CoD Warzone (3)",
+    "cod4": "CoD Warzone (4)",
+    "counterStrike": "Counter Strike",
+    "minecraft": "Minecraft",
+    "minecraft2": "Minecraft (2)",
+    "coffee": "Кафе",
+    "dota": "Dota",
+    "fortnite": "Fortnite",
+    "fortnite2": "Fortnite (2)",
+    "overwatch": "Overwatch",
+    "arcRaiders": "Arc Raiders",
+    "rainbow6": "Rainbow 6",
+    "gta5": "GTA 5",
+    "gta6": "GTA 6",
+    "music1": "Музика (1)",
+    "music2": "Музика (2)",
+    "marvelRivals": "Marvel Rivals",
+    "apexLegends": "Apex Legends",
+    "roblox": "Roblox",
+    "deadlock": "Deadlock",
+    "battlefield6": "Battlefield 6",
+    "counterStrike2": "Counter-Strike 2",
+    "splitgate": "Splitgate",
+    "halo": "Halo",
+    "smite2": "Smite 2",
+    "destiny2": "Destiny 2",
+    "teamfightTactics": "Teamfight Tactics",
+    "offTheGrid": "Off The Grid",
+    "xko2": "2XKO",
+    "pubg": "PUBG",
+    "callOfDuty": "Call of Duty",
+    "bloodhunt": "Bloodhunt",
+    "brawlhalla": "Brawlhalla",
+    "forHonor": "For Honor",
+    "theDivision2": "The Division 2"
+  }
+}

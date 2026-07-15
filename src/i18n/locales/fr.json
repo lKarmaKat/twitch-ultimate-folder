@@ -42,7 +42,8 @@
     "help": "Aide",
     "listIconHelp": "Icone qui s'affiche à côté du nom de la liste",
     "listHeaderBarColorHelp": "Couleur de la bar latérale de la liste",
-    "listCounterBadgeHelp": "Style du badge qui affiche le nombre de chaine en ligne"
+    "listCounterBadgeHelp": "Style du badge qui affiche le nombre de chaine en ligne",
+    "selectListPrompt": "Cliquez sur l'en-tête d'une liste pour la personnaliser"
   },
   "configList": {
     "alreadyInList": "L'élément est déjà dans la liste",
@@ -71,11 +72,24 @@
     "closeDialog": "Fermer la fenêtre"
   },
   "counter": {
-    "live": "en direct"
+    "live": "live"
   },
   "language": {
     "en": "English",
-    "fr": "Français"
+    "fr": "Français",
+    "es": "Español",
+    "de": "Deutsch",
+    "it": "Italiano",
+    "pt_BR": "Português (Brasil)",
+    "pt_PT": "Português (Portugal)",
+    "hr": "Hrvatski",
+    "ru": "Русский",
+    "pl": "Polski",
+    "sv": "Svenska",
+    "fi": "Suomi",
+    "no": "Norsk",
+    "el": "Ελληνικά",
+    "bg": "Български"
   },
   "behaviour": {
     "extendedOnStartup": {
