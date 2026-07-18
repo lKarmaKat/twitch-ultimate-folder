@@ -104,7 +104,7 @@ let sendCurrentConfigOnConnect = (port: chrome.runtime.Port) => {
   }
 }
 
-let themeSombre = true;
+let themeSombre = false;
 chrome.storage.local.get("theme").then((data) => {
   themeSombre = data.theme === 1 ? true : false;
 });
@@ -116,7 +116,7 @@ let sendCurrentThemeOnConnect = (port: chrome.runtime.Port) => {
 }
 let currentAlignmentLeft = true;
 chrome.storage.local.get("alignmentLeft").then((data) => {
-  currentAlignmentLeft = data.currentAlignment === 1 ? true : false;
+  currentAlignmentLeft = data.alignmentLeft === 0 ? false : true ;
 })
 let sendCurrentAlignmentOnConnect = (port: chrome.runtime.Port) => {
   port.postMessage({
