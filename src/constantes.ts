@@ -108,8 +108,8 @@ export const NEW_LIST: t.I_NEW_LIST = {
             ],
             behavior: {
                 [EXTENDED_ON_STARTUP]: true,
-                [EXTENDEDS_ON_HOVER]: false,
-                [EXTENDEDS_ON_CLICK]: false
+                [EXTENDEDS_ON_HOVER]: true,
+                [EXTENDEDS_ON_CLICK]: true
             },
             sort: SORT_STRATEGY[CUSTOM_SORT].id,
             style: {
