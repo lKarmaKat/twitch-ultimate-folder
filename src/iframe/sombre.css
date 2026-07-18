@@ -45,6 +45,66 @@ input[type=text] {
     caret-color: white;
 }
 
+input[type=checkbox] {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 18px;
+    height: 18px;
+    margin: 0;
+    border: 2px solid #55555f;
+    border-radius: 4px;
+    background: #18181b;
+    cursor: pointer;
+    position: relative;
+    flex-shrink: 0;
+    transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+
+input[type=checkbox]::after {
+    content: '';
+    position: absolute;
+    left: 4.5px;
+    top: 1px;
+    width: 5px;
+    height: 9px;
+    border-style: solid;
+    border-width: 0 2px 2px 0;
+    border-color: transparent;
+    transform: rotate(45deg);
+}
+
+input[type=checkbox]:hover {
+    border-color: #bf94ff;
+}
+
+input[type=checkbox]:checked {
+    background: #bf94ff;
+    border-color: #bf94ff;
+}
+
+input[type=checkbox]:checked::after {
+    border-color: #0e0e10;
+    animation: checkbox-pop 0.18s ease;
+}
+
+input[type=checkbox]:focus-visible {
+    outline: 2px solid rgba(191, 148, 255, 0.5);
+    outline-offset: 2px;
+}
+
+@keyframes checkbox-pop {
+    50% { transform: rotate(45deg) scale(1.25); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    input[type=checkbox] {
+        transition: none;
+    }
+    input[type=checkbox]:checked::after {
+        animation: none;
+    }
+}
+
 #main-channels-list .card::after {
     content: '';
     position: absolute;
