@@ -29,6 +29,7 @@ export let TYPE_LIST = 'list'
 export const EXTENDED_ON_STARTUP = 0;
 export const EXTENDEDS_ON_HOVER = 1;
 export const EXTENDEDS_ON_CLICK = 2;
+export const SHOW_EVEN_IF_NO_LIVE = 3;
 
 export const CUSTOM_SORT = 0;
 export const VIEWER_SORT = 1;
@@ -55,7 +56,8 @@ export const HEADER_TYPE_HEIGHT = [ // Not currently used
 export const BEHAVIOUR = [
 {id: EXTENDED_ON_STARTUP, label: 'behaviour.extendedOnStartup.label', tooltip: 'behaviour.extendedOnStartup.tooltip'},
 {id: EXTENDEDS_ON_HOVER, label: 'behaviour.extendsOnHover.label', tooltip: 'behaviour.extendsOnHover.tooltip'},
-{id: EXTENDEDS_ON_CLICK, label: 'behaviour.extendsOnClick.label', tooltip: 'behaviour.extendsOnClick.tooltip'}
+{id: EXTENDEDS_ON_CLICK, label: 'behaviour.extendsOnClick.label', tooltip: 'behaviour.extendsOnClick.tooltip'},
+{id: SHOW_EVEN_IF_NO_LIVE, label: 'behaviour.showEvenIfOffline.label', tooltip: 'behaviour.showEvenIfOffline.tooltip'},
 ];
 
 export const SORT_STRATEGY = [
@@ -109,7 +111,8 @@ export const NEW_LIST: t.I_NEW_LIST = {
             behavior: {
                 [EXTENDED_ON_STARTUP]: true,
                 [EXTENDEDS_ON_HOVER]: true,
-                [EXTENDEDS_ON_CLICK]: true
+                [EXTENDEDS_ON_CLICK]: true,
+                [SHOW_EVEN_IF_NO_LIVE]: false
             },
             sort: SORT_STRATEGY[CUSTOM_SORT].id,
             style: {

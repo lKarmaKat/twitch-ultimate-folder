@@ -105,6 +105,10 @@
     "extendsOnClick": {
       "label": "Se déplie au clic",
       "tooltip": "La liste se déplie/replie au clic sur le header."
+    },
+    "showEvenIfOffline": {
+      "label": "Toujours afficher",
+      "tooltip": "La liste s'affiche même si aucune chaine n'est en ligne"
     }
   },
   "sort": {

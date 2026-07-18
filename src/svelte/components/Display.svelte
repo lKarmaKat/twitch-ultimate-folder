@@ -26,6 +26,7 @@
 	let startupExtended = $derived(behavior[CST.EXTENDED_ON_STARTUP] ?? false);
 	let hoverEnabled = $derived(behavior[CST.EXTENDEDS_ON_HOVER] ?? false);
 	let clickEnabled = $derived(behavior[CST.EXTENDEDS_ON_CLICK] ?? false);
+	let showEvenIfEmpty = $derived(behavior[CST.SHOW_EVEN_IF_NO_LIVE] ?? false);
 
 	let header = $derived.by(() => {
 		return configManager.selectedConfig[listId]?.style.header;
@@ -279,7 +280,7 @@
 	</div> -->
 	<!-- svelte-ignore a11y-no-static-element-interactions -->
 	<!-- svelte-ignore a11y-click-events-have-key-events -->
-	 {#if liveChannels}
+	 {#if liveChannels || showEvenIfEmpty}
 	<div id="display-component" class="list-container" class:hover-enabled={hoverEnabled}>
 		{#if listId !== 'rootList'}
 		<!-- svelte-ignore a11y_click_events_have_key_events -->
