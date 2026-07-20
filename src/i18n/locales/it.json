@@ -61,7 +61,11 @@
     "offline": "Non in linea"
   },
   "status": {
-    "noLiveChannels": "Nessun canale in diretta nella visualizzazione personalizzata",
+    "noLiveChannels": "Nessun canale in diretta",
+    "noLiveChannelsHint": "Nessuno dei canali nelle tue cartelle è online in questo momento.",
+    "emptyConfig": "Nessuna cartella configurata",
+    "emptyConfigHint": "Organizza in cartelle i canali che segui per ritrovarli qui.",
+    "openConfig": "Configura le mie cartelle",
     "portDisconnected": "Connessione a Twitch persa, riconnessione in corso…",
     "waitingConfig": "In attesa della configurazione"
   },

@@ -61,7 +61,11 @@
     "offline": "Nicht online"
   },
   "status": {
-    "noLiveChannels": "Keine Live-Kanäle in der benutzerdefinierten Anzeige",
+    "noLiveChannels": "Keine Kanäle live",
+    "noLiveChannelsHint": "Keiner der Kanäle in deinen Ordnern ist gerade online.",
+    "emptyConfig": "Noch keine Ordner eingerichtet",
+    "emptyConfigHint": "Sortiere die Kanäle, denen du folgst, in Ordner, um sie hier zu finden.",
+    "openConfig": "Meine Ordner einrichten",
     "portDisconnected": "Verbindung zu Twitch verloren, Wiederverbindung läuft…",
     "waitingConfig": "Warte auf Konfiguration"
   },

@@ -143,12 +143,23 @@ let sendCurrentAuth = (port: chrome.runtime.Port) => {
     "data": tokenManager.token ? true : false
   });
 }
+// Messages entrants sur un port déjà ouvert (la sidebar en maintient un).
+let handlePortMessage = (message: any) => {
+  if (message?.type === CST.OPEN_OPTIONS_PAGE) {
+    // TODO: nécessite une page d'options — déclarer "options_ui" dans
+    // public/manifest.json et créer la page. Sans ça, l'appel rejette.
+    chrome.runtime.openOptionsPage()
+      .catch(err => logBackgroundError("background:openOptionsPage", err));
+  }
+};
+
 let portManager = new PortManager(sendCurrentConfigOnConnect,
                                   sendStreamInfoOnConnect,
                                   sendCurrentThemeOnConnect,
                                   sendCurrentAlignmentOnConnect,
                                 sendCurrentAuth,
-                                sendCurrentLocaleOnConnect);
+                                sendCurrentLocaleOnConnect,
+                                handlePortMessage);
 
 // userUpdate.subscribe((userValid: boolean) => {
 //   if (!userValid) return;

@@ -8,6 +8,7 @@
     import IconPicker from './icons/IconPicker.svelte';
     import SortIndicatorIcon from './icons/SortIndicatorIcon.svelte';
     import CounterType from './CounterType.svelte';
+	import { hasVisibleContent } from '../listVisibility.js';
 
     let { listId = "rootList", configManager }  = $props();
 	
@@ -26,7 +27,6 @@
 	let startupExtended = $derived(behavior[CST.EXTENDED_ON_STARTUP] ?? false);
 	let hoverEnabled = $derived(behavior[CST.EXTENDEDS_ON_HOVER] ?? false);
 	let clickEnabled = $derived(behavior[CST.EXTENDEDS_ON_CLICK] ?? false);
-	let showEvenIfEmpty = $derived(behavior[CST.SHOW_EVEN_IF_NO_LIVE] ?? false);
 
 	let header = $derived.by(() => {
 		return configManager.selectedConfig[listId]?.style.header;
@@ -190,32 +190,7 @@
 	}
 
 
-	let hasLiveChannelCallback = (listId) => {
-		let liveChannels = new Set();
-		let otherListWithOnlineChannel = false
-		let allOtherChannels = false;
-		if (configManager.selectedConfig[listId] && configManager.selectedConfig[listId].items) {
-			for (let ch of configManager.selectedConfig[listId].items) {
-				// if (ch.id === CST.ALL_OTHER_CHANNELS) {
-				if (ch.channel_id < 0) {
-					return true;
-				} else if (ch.type === CST.TYPE_LIST) {
-					if (hasLiveChannelCallback(ch.id))
-					return true;
-				} else {
-					if (getNodeIfLive(ch)) {
-						return true;
-					}
-				}
-			}
-			// counter = liveChannels.size;
-		}
-		return false;
-	}
-
-	let liveChannels = $derived.by(() => {
-		return hasLiveChannelCallback(listId)
-	})
+	let visible = $derived(hasVisibleContent(configManager, listId));
 
 	function getListChannelsSortedByStrategy(channelsList) {
 		let sortedList = [...channelsList];
@@ -280,7 +255,7 @@
 	</div> -->
 	<!-- svelte-ignore a11y-no-static-element-interactions -->
 	<!-- svelte-ignore a11y-click-events-have-key-events -->
-	 {#if liveChannels || showEvenIfEmpty}
+	 {#if visible}
 	<div id="display-component" class="list-container" class:hover-enabled={hoverEnabled}>
 		{#if listId !== 'rootList'}
 		<!-- svelte-ignore a11y_click_events_have_key_events -->

@@ -4,8 +4,9 @@
   import ConfigManager from '../configManager.svelte';
   import PortConnector from '../portConnector.svelte.js';
   import NoLiveChannels from './NoLiveChannels.svelte';
+  import EmptyConfig from './EmptyConfig.svelte';
   import { alignmentLeft, portConnected } from '../event.svelte.js';
-  import * as CST from '../../constantes'
+  import { hasAnyChannel, hasVisibleContent } from '../listVisibility.js';
   import PortDisconnected from './PortDisconnected.svelte';
   import { _ } from 'svelte-i18n';
   import { applyLocale } from '../../i18n/index.js';
@@ -66,46 +67,18 @@
   let localePort = new PortConnector(localeCb, 'locale');
 
 
-function checkForLiveChannelInList(listId) {
-  const items = configManager?.selectedConfig?.[listId]?.items;
-  
-  if (!items || items.length === 0) {
-    return false;
-  }
-  
-  for (let currentChannel of items) {
-    if (currentChannel.type === CST.TYPE_LIST) {
-      // console.log("checkingList for", currentChannel.id);
-      if (checkForLiveChannelInList(currentChannel.id)) {
-        return true; // Sortie anticipée
-      }
-    }
-    else if (currentChannel.channel_id === CST.ALL_OTHER_CHANNELS) {
-        return true;
-    }
-    else if (currentChannel.channel_id) {
-      const channelInfo = configManager.channelsPickRefMap?.get(currentChannel.channel_id);
-      if (!channelInfo) {
-        // console.warn("Channel not found in map:", currentChannel.channel_id);
-        continue;
-      }
-      if (channelInfo.isLive) {
-        return true;
-      }
-    }
-  }
-  
-  return false;
-}
+  // Aucune chaine nulle part dans l'arbre : l'utilisateur n'a rien configuré.
+  let configEmpty = $derived.by(() => {
+    if (!configManager?.selectedConfig) return false;
+    return !hasAnyChannel(configManager, 'rootList');
+  })
 
+  // Message de repli : affiché quand, et seulement quand, Display ne rendrait
+  // rien. Une liste marquée "afficher même hors ligne" suffit donc à le masquer.
   let noLiveChannels = $derived.by(() => {
-    // console.log("+++ start noLiveChannels")
     if (configManager?.selectedConfig && configManager.channelsPickRef?.length > 0) {
-      let result = checkForLiveChannelInList('rootList');
-      // console.log("--- final result ", result)
-      return !result;
+      return !hasVisibleContent(configManager, 'rootList');
     }
-    // console.log("--- default true noLiveChannels");
     return true;
   })
 
@@ -127,6 +100,8 @@ setTimeout(()=> shortLoadingLogo = false, 200);
     </div>
     {:else if !configManager.selectedConfig || configManager.channelsPickRefMap?.size === 0}
       <WaitingConfig />
+    {:else if configEmpty}
+      <EmptyConfig configManager={configManager} />
     {:else if noLiveChannels}
       <NoLiveChannels />
     {:else if configManager.selectedConfig && Object.getOwnPropertyNames(configManager.selectedConfig).length > 0 && configManager.channelsPickRefMap?.size > 0}

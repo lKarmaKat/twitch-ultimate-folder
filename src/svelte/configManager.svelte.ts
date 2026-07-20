@@ -109,6 +109,11 @@ class ConfigManager {
         this.selectedConfig = CST.createStartupConf();
     }
 
+    /** Demande au service worker d'ouvrir la page d'options, via le port déjà ouvert. */
+    openOptionsPage() {
+        this.bridge.send({ type: CST.OPEN_OPTIONS_PAGE });
+    }
+
 
 }
 

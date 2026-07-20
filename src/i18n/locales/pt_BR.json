@@ -61,7 +61,11 @@
     "offline": "Desconectado"
   },
   "status": {
-    "noLiveChannels": "Nenhum canal ao vivo na exibição personalizada",
+    "noLiveChannels": "Nenhum canal ao vivo",
+    "noLiveChannelsHint": "Nenhum dos canais nas suas pastas está online no momento.",
+    "emptyConfig": "Nenhuma pasta criada ainda",
+    "emptyConfigHint": "Organize os canais que você segue em pastas para encontrá-los aqui.",
+    "openConfig": "Configurar minhas pastas",
     "portDisconnected": "Conexão com a Twitch perdida, reconectando…",
     "waitingConfig": "Aguardando configuração"
   },

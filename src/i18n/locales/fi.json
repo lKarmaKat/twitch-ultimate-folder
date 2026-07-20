@@ -61,7 +61,11 @@
     "offline": "Poissa verkosta"
   },
   "status": {
-    "noLiveChannels": "Ei livekanavia mukautetussa näkymässä",
+    "noLiveChannels": "Ei kanavia livenä",
+    "noLiveChannelsHint": "Yksikään kansioidesi kanava ei ole juuri nyt verkossa.",
+    "emptyConfig": "Ei vielä luotuja kansioita",
+    "emptyConfigHint": "Lajittele seuraamasi kanavat kansioihin, niin löydät ne täältä.",
+    "openConfig": "Määritä kansioni",
     "portDisconnected": "Yhteys Twitchiin katkesi, yhdistetään uudelleen…",
     "waitingConfig": "Odotetaan asetuksia"
   },

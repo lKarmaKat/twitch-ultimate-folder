@@ -61,7 +61,11 @@
     "offline": "Izvan mreže"
   },
   "status": {
-    "noLiveChannels": "Nema kanala uživo u prilagođenom prikazu",
+    "noLiveChannels": "Nema kanala uživo",
+    "noLiveChannelsHint": "Nijedan kanal iz vaših mapa trenutačno nije na mreži.",
+    "emptyConfig": "Još nema postavljenih mapa",
+    "emptyConfigHint": "Razvrstajte kanale koje pratite u mape kako biste ih pronašli ovdje.",
+    "openConfig": "Postavi moje mape",
     "portDisconnected": "Veza s Twitchom izgubljena, ponovno povezivanje u tijeku…",
     "waitingConfig": "Čekanje konfiguracije"
   },

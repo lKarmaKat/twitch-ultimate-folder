@@ -42,6 +42,11 @@ class PortConnector {
         }
     }
 
+    /** Envoie un message au service worker sur le port déjà ouvert. */
+    send(msg) {
+        this.port?.postMessage(msg);
+    }
+
     repollForPort() {
         if (this.reconnectInterval !== null) return;
 

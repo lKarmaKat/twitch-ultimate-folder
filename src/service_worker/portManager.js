@@ -1,13 +1,14 @@
 class PortManager {
     ports = [];
     externalPorts = [];
-    constructor(sendCurrentConfigOnConnect, sendStreamInfoOnConnect, sendCurrentThemeOnConnect, sendCurrentAlignmentOnConnect, sendCurrentAuth, sendCurrentLocaleOnConnect) {
+    constructor(sendCurrentConfigOnConnect, sendStreamInfoOnConnect, sendCurrentThemeOnConnect, sendCurrentAlignmentOnConnect, sendCurrentAuth, sendCurrentLocaleOnConnect, onPortMessage = (_message, _port) => {}) {
         console.log("##### Port manager constr");
         chrome.runtime.onConnect.addListener((port) => {
             this.ports.push(port);
             console.log("+ new connection", port);
             port.onMessage.addListener((message, port) => {
                 console.log("+ received :", message, "from ", port);
+                onPortMessage(message, port);
                 this.sendMessageToTabs({message: "received"});
             });
 
@@ -37,6 +38,7 @@ class PortManager {
                 console.log("+ external new connection  port", port);
                 port.onMessage.addListener((message, port) => {
                     console.log("+ received :", message, "from ", port);
+                    onPortMessage(message, port);
                     this.sendMessageToTabs({message: "received"});
                 });
                 

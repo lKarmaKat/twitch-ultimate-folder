@@ -61,7 +61,11 @@
     "offline": "Niedostępny"
   },
   "status": {
-    "noLiveChannels": "Brak kanałów na żywo w widoku niestandardowym",
+    "noLiveChannels": "Brak kanałów na żywo",
+    "noLiveChannelsHint": "Żaden z kanałów w Twoich folderach nie jest teraz online.",
+    "emptyConfig": "Nie utworzono jeszcze folderów",
+    "emptyConfigHint": "Posegreguj obserwowane kanały w foldery, aby znaleźć je tutaj.",
+    "openConfig": "Skonfiguruj moje foldery",
     "portDisconnected": "Utracono połączenie z Twitch, trwa ponowne łączenie…",
     "waitingConfig": "Oczekiwanie na konfigurację"
   },
