@@ -106,7 +106,7 @@ class ConfigManager {
     }
 
     resetConfig() {
-        this.selectedConfig = CST.STARTUP_CONF;
+        this.selectedConfig = CST.createStartupConf();
     }
 
 

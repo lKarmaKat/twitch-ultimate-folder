@@ -103,60 +103,82 @@ export const COUNTER_TYPE = [
 ]
 
 
-export const NEW_LIST: t.I_NEW_LIST = {
-            id:'node1',
-            name:'default',
-            items:[
-            ],
-            behavior: {
-                [EXTENDED_ON_STARTUP]: true,
-                [EXTENDEDS_ON_HOVER]: true,
-                [EXTENDEDS_ON_CLICK]: true,
-                [SHOW_EVEN_IF_NO_LIVE]: false
-            },
-            sort: SORT_STRATEGY[CUSTOM_SORT].id,
-            style: {
-                theme: SYSTEM_STYLE,
-                header: {
-                  headerColor: "#808080",
-                  borderColor: "#808080",
-                  borderWidth: null,
-                  borderRadius: null
-                },
-                content: {
-                  contentColor: "#808080",
-                  contentWidth: null,
-                  contentRadius: null,
-                  borderColor: "#808080",
-                  borderWidth: null,
-                  borderRadius: null
-                }
-            },
-            type: {
-              height: 0,
-              iconType: 0,
-              barType: 0,
-              viewerCountType: 2
-            }
-          }
+// Les objets ci-dessous doivent être créés frais à chaque usage : les affecter
+// directement partagerait la référence du template, et toute mutation de
+// l'appelant (renommage, ajout d'items, cases de comportement) corromprait
+// silencieusement le défaut de toutes les listes créées ensuite.
+export function createNewList(): t.I_NEW_LIST {
+  return {
+    id: 'node1',
+    name: 'default',
+    items: [],
+    behavior: {
+      [EXTENDED_ON_STARTUP]: true,
+      [EXTENDEDS_ON_HOVER]: true,
+      [EXTENDEDS_ON_CLICK]: true,
+      [SHOW_EVEN_IF_NO_LIVE]: false
+    },
+    sort: SORT_STRATEGY[CUSTOM_SORT].id,
+    style: {
+      theme: SYSTEM_STYLE,
+      header: {
+        headerColor: "#808080",
+        borderColor: "#808080",
+        borderWidth: null,
+        borderRadius: null
+      },
+      content: {
+        contentColor: "#808080",
+        contentWidth: null,
+        contentRadius: null,
+        borderColor: "#808080",
+        borderWidth: null,
+        borderRadius: null
+      }
+    },
+    type: {
+      height: 0,
+      iconType: 0,
+      barType: 0,
+      viewerCountType: 2
+    }
+  };
+}
 
+export function createStartupConf(): t.I_CONFIG {
+  return { rootList: createNewList() };
+}
 
+// Gèle récursivement : les modules ES étant en mode strict, un site de mutation
+// oublié lève une TypeError au lieu de corrompre le template en silence.
+function deepFreeze<T>(o: T): T {
+  Object.values(o as any).forEach(v => {
+    if (v && typeof v === 'object') deepFreeze(v);
+  });
+  return Object.freeze(o);
+}
 
+/** Lecture seule. Pour un objet modifiable, utiliser createNewList(). */
+export const NEW_LIST: t.I_NEW_LIST = deepFreeze(createNewList());
 
-export const STARTUP_CONF: t.I_CONFIG = {
-          rootList: NEW_LIST
-        };
+/** Lecture seule. Pour un objet modifiable, utiliser createStartupConf(). */
+export const STARTUP_CONF: t.I_CONFIG = deepFreeze(createStartupConf());
 // export let NAMED_CONFIG: t.NamedConfig = {
 //       configName: 'default',
 //       config: STARTUP_CONF
 // }
-export const STARTUP_USER_CONFIGS: t.UserConfigs = {
-    userId: 0,
+export function createStartupUserConfigs(userId = 0): t.UserConfigs {
+  return {
+    userId,
     currentConfig: 'default',
     configsList: [
-      STARTUP_CONF
+      createStartupConf()
     ]
+  };
 }
+
+/** Lecture seule. Pour un objet modifiable, utiliser createStartupUserConfigs(). */
+export const STARTUP_USER_CONFIGS: t.UserConfigs = deepFreeze(createStartupUserConfigs());
 
 export const currentConfig = 'currentConfig';
 

@@ -36,16 +36,20 @@ export class ConfigManager {
         if (this.userConfigsPromise) return this.userConfigsPromise;
 
         const userId = this.userId;
-
+        console.log("user");
         this.userConfigsPromise = (async (): Promise<UserConfigs | null> => {
             const data: { [key: string]: UserConfigs } = await chrome.storage.local.get(String(userId));
             let userStructure: UserConfigs = data[String(userId)];
-
+            
+            console.log("user");
             if (userStructure && Object.getOwnPropertyNames(userStructure).length > 0) {
+                console.log("2");
                 if (!userStructure.currentConfig) {
+                    console.log("3");
                     if (userStructure.configsList.length === 0) {
+                        console.log("4");
                         userStructure.currentConfig = CST.NEW_LIST.name;
-                        userStructure.configsList = [CST.STARTUP_CONF];
+                        userStructure.configsList = [CST.createStartupConf()];
                     } else {
                         userStructure.currentConfig = userStructure.configsList[0].rootList.name;
                     }
@@ -53,13 +57,11 @@ export class ConfigManager {
                 this.userConfigs = userStructure;
                 return userStructure;
             }
-
-            const startConfig: UserConfigs = {
-                ...CST.STARTUP_USER_CONFIGS,
-                currentConfig: CST.STARTUP_USER_CONFIGS.configsList[0].rootList.name,
-                userId,
-            };
+            
+            const startConfig: UserConfigs = CST.createStartupUserConfigs(userId);
+            startConfig.currentConfig = startConfig.configsList[0].rootList.name;
             this.userConfigs = startConfig;
+            console.log("5");
             return startConfig;
         })().finally(() => {
             this.userConfigsPromise = null;

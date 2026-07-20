@@ -191,7 +191,7 @@ chrome.runtime.onMessage.addListener(async (msg, sender, sendResponse) => {
     return false;
   }
   else if (msg.type === CST.RESET_CONFIG) {
-    configManager!.saveConfig(CST.STARTUP_CONF).then((currentConfig) => {
+    configManager!.saveConfig(CST.createStartupConf()).then((currentConfig) => {
       portManager.sendMessageToAllTabs(CST.GET_CURRENT_CONFIGURATION, currentConfig);
     }).catch(err => logBackgroundError("background:resetConfig", err));
     return false;

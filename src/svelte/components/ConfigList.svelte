@@ -75,17 +75,15 @@
 		do {
 			nodeExist = configManager.selectedConfig[currentId];
 			if (!nodeExist) {
-				newNode = CST.NEW_LIST;
+				newNode = CST.createNewList();
 				newNode.id = 'list' + currentId;
 				newNode.name = 'list ' + currentId;
-				// liste[currentId] = structuredClone(newNode);
-				// liste[listId]["items"].push({id: currentId, type: CST.TYPE_LIST});
-				configManager.selectedConfig[currentId] = structuredClone(newNode);
+				configManager.selectedConfig[currentId] = newNode;
 				configManager.selectedConfig[listId]["items"].push({id: currentId, type: CST.TYPE_LIST})
 			} else {
 				currentId++;
 			}
-			console.log("looking for index", currentId)
+			// console.log("looking for index", currentId)
 		} while (nodeExist);
 	}
 
