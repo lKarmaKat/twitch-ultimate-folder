@@ -17,7 +17,6 @@ npm run check            # Type-check with svelte-check + tsc
 
 npm run test             # Jest unit tests (token logic)
 npm run test:coverage    # Jest with coverage report
-npm run test:svelte      # Vitest component tests
 
 npm run e2e              # Playwright E2E (headless)
 npm run e2e:headed       # Playwright with browser visible
@@ -84,7 +83,7 @@ The content script uses `MutationObserver` to detect when Twitch's sidebar rende
 - **TypeScript** strict mode, path aliases `@/*` and `@src/*`
 - **Vite** + `@samrum/vite-plugin-web-extension` for extension bundling
 - **svelte-dnd-action** for drag-and-drop channel reordering
-- **Jest** for unit tests, **Vitest** for Svelte component tests, **Playwright** for E2E
+- **Jest** for unit tests, **Playwright** for E2E
 
 ## Build output
 

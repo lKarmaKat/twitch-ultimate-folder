@@ -1,5 +1,5 @@
 import { TokenManager } from "./token";
-import { logErrorChain, wrapError } from "./errors";
+import { wrapError } from "./errors";
 import type { ChannelsFollowed } from './models/rest/channels-followed';
 import type { ProfilePicInfos } from './models/profilePicInfos.model';
 import type { StreamsFollowed } from './models/rest/streams-followed';

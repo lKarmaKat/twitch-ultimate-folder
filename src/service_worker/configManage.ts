@@ -1,5 +1,4 @@
 import { TwitchApi } from './twitch';
-import type { User } from './models/user';
 import type { UserConfigs, I_NEW_LIST, I_CONFIG } from './models/userStructure'
 // import type { Writable } from "svelte/store";
 import * as CST from '../constantes'
