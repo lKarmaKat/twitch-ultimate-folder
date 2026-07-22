@@ -2,6 +2,39 @@
   "common": {
     "none": "aucun"
   },
+  "help": {
+    "pageTitle": "Ultimate Twitch Folders — Aide",
+    "tocTitle": "Sommaire",
+    "openHelp": "Ouvrir l'aide",
+    "purpose": {
+      "title": "À quoi sert cette extension ?",
+      "intro": "Cette extension vous permet de réorganiser les chaînes que vous suivez sur Twitch selon une configuration que vous créez vous-même. À la place de la liste unique proposée par Twitch, votre barre latérale affiche la structure que vous avez définie.",
+      "hierarchyTitle": "Listes, sous-listes et sous-sous-listes",
+      "hierarchy": "Vous pouvez regrouper vos chaînes en listes, imbriquer une liste dans une autre, puis imbriquer encore un niveau plus bas. De quoi séparer vos chaînes par jeu, par communauté ou selon le critère qui vous convient, au niveau de détail que vous souhaitez.",
+      "sortingTitle": "Le tri au sein d'une liste",
+      "sorting": "Dans chaque liste, vous choisissez l'ordre d'affichage des chaînes : par nombre de viewers, par ordre alphabétique, ou selon un ordre personnalisé que vous définissez vous-même en déplaçant les chaînes.",
+      "outsideTitle": "Les chaînes hors de toute liste",
+      "outside": "Les chaînes que vous n'avez placées dans aucune liste ne sont pas perdues : elles restent regroupées et vous pouvez les organiser également, afin que toutes les chaînes que vous suivez restent accessibles depuis la barre latérale."
+    },
+    "createConfig": {
+      "title": "Comment créer une configuration",
+      "openTitle": "Ouvrir la fenêtre de configuration",
+      "openStep1": "Cliquez sur l'icône de l'extension dans la barre d'outils de votre navigateur.",
+      "openStep2": "Cliquez ensuite sur le bouton « {button} ». La fenêtre de configuration s'ouvre par-dessus Twitch.",
+      "sectionsTitle": "Les quatre sections de la fenêtre",
+      "sectionsIntro": "La fenêtre se divise en quatre sections, de gauche à droite.",
+      "channelsTitle": "1. Les chaînes que vous suivez",
+      "channels": "La liste complète des chaînes que vous suivez, avec un champ de recherche pour en retrouver une rapidement. C'est ici que vous piochez les chaînes à placer dans votre configuration.",
+      "currentTitle": "2. La configuration actuelle",
+      "current": "La structure que vous êtes en train de construire. Vous y ajoutez de nouvelles listes, vous les imbriquez et vous les renommez.",
+      "pannelTitle": "3. Le panneau de configuration",
+      "pannel": "Les réglages de l'élément sélectionné. Il reste vide tant que vous n'avez pas cliqué sur l'en-tête d'une liste, ou sur le bouton de configuration d'un élément « All other channels ». Vous y réglez le comportement, le tri et le style de cet élément.",
+      "previewTitle": "4. L'aperçu",
+      "preview": "Un aperçu en direct de votre configuration, qui se comporte exactement comme elle le fera dans la barre latérale de Twitch une fois sauvegardée.",
+      "savingTitle": "La sauvegarde",
+      "saving": "N'oubliez pas de sauvegarder votre configuration avant de quitter la fenêtre : toute modification non sauvegardée est perdue."
+    }
+  },
   "actionPopup": {
     "authTitle": "Connexion Twitch requise",
     "authInstructionBefore": "Rendez-vous sur",

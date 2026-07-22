@@ -26,6 +26,12 @@
     chrome.runtime.sendMessage({type: 'HIDE_POPUP'});
   }
 
+  // Page d'extension ouverte dans un onglet dedie : pas besoin de la declarer
+  // dans web_accessible_resources, l'appel part deja d'un contexte extension.
+  function openHelp() {
+    chrome.tabs.create({ url: chrome.runtime.getURL('src/iframe/help.html') });
+  }
+
   let showResetConfirm = $state(false);
 
   function promptResetConfig(param) {
@@ -107,6 +113,7 @@
     <div class="header">
       <div class="left">{$_('configPopup.title')}</div>
       <div class="right">
+        <button onclick={() => openHelp()} class="close-btn" title={$_('help.openHelp')} aria-label={$_('help.openHelp')}>?</button>
         <button onclick={() => closePopup()} class="close-btn cross">X</button>
       </div>
     </div>

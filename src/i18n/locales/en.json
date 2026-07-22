@@ -2,6 +2,39 @@
   "common": {
     "none": "none"
   },
+  "help": {
+    "pageTitle": "Ultimate Twitch Folders — Help",
+    "tocTitle": "Contents",
+    "openHelp": "Open help",
+    "purpose": {
+      "title": "What is this extension for?",
+      "intro": "This extension lets you reorganise the channels you follow on Twitch according to a configuration you build yourself. Instead of the single flat list Twitch gives you, your sidebar shows the structure you defined.",
+      "hierarchyTitle": "Lists, sub-lists and sub-sub-lists",
+      "hierarchy": "You can group your channels into lists, nest a list inside another, and nest again one level deeper. This lets you separate your channels by game, by community, or by any criterion that suits you, at the level of detail you want.",
+      "sortingTitle": "Sorting inside a list",
+      "sorting": "Inside each list you choose how the channels are ordered: by viewer count, in alphabetical order, or in a custom order that you set yourself by moving the channels around.",
+      "outsideTitle": "Channels outside any list",
+      "outside": "Channels you have not placed in any list are not lost: they stay grouped together and you can organise them too, so every channel you follow remains reachable from the sidebar."
+    },
+    "createConfig": {
+      "title": "How to create a configuration",
+      "openTitle": "Opening the configuration window",
+      "openStep1": "Click the extension icon in your browser toolbar.",
+      "openStep2": "Then click the « {button} » button. The configuration window opens on top of Twitch.",
+      "sectionsTitle": "The four sections of the window",
+      "sectionsIntro": "The window is split into four sections, from left to right.",
+      "channelsTitle": "1. The channels you follow",
+      "channels": "The full list of channels you follow, with a search field to find one quickly. This is where you pick the channels to place in your configuration.",
+      "currentTitle": "2. The current configuration",
+      "current": "The structure you are building. Here you add new lists, nest them, and rename them.",
+      "pannelTitle": "3. The configuration panel",
+      "pannel": "The settings of the selected element. It stays empty until you click the header of a list, or the configuration button of an « All other channels » element. You then set the behaviour, the sort order and the style of that element.",
+      "previewTitle": "4. The preview",
+      "preview": "A live preview of your configuration, which behaves exactly as it will in the Twitch sidebar once saved.",
+      "savingTitle": "Saving",
+      "saving": "Do not forget to save your configuration before closing the window: any change that has not been saved is lost."
+    }
+  },
   "actionPopup": {
     "authTitle": "Twitch connection required",
     "authInstructionBefore": "Go to",

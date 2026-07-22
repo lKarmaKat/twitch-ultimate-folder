@@ -4,44 +4,14 @@
   import { get } from 'svelte/store';
   import { applyLocale } from '../i18n/index.js';
   import LanguageSelect from '../svelte/components/LanguageSelect.svelte';
-  import enFlag from '../assets/flags/en.svg';
-  import frFlag from '../assets/flags/fr.svg';
-  import esFlag from '../assets/flags/es.svg';
-  import deFlag from '../assets/flags/de.svg';
-  import itFlag from '../assets/flags/it.svg';
-  import ptBrFlag from '../assets/flags/pt_BR.svg';
-  import ptPtFlag from '../assets/flags/pt_PT.svg';
-  import hrFlag from '../assets/flags/hr.svg';
-  import ruFlag from '../assets/flags/ru.svg';
-  import plFlag from '../assets/flags/pl.svg';
-  import svFlag from '../assets/flags/sv.svg';
-  import fiFlag from '../assets/flags/fi.svg';
-  import noFlag from '../assets/flags/no.svg';
-  import elFlag from '../assets/flags/el.svg';
-  import bgFlag from '../assets/flags/bg.svg';
+  import { LANGUAGES } from '../i18n/languages.js';
 
   // 'loading' | 'auth' | 'config'  (remplace le jonglage de l'attribut `hidden`)
   let view = $state('loading');
 
   // Langue courante (initialisée depuis svelte-i18n, déjà configuré par setupI18n).
   let lang = $state(get(locale) ?? 'en');
-  const languages = [
-    { id: 'en', name: 'English', flag: enFlag },
-    { id: 'fr', name: 'Français', flag: frFlag },
-    { id: 'es', name: 'Español', flag: esFlag },
-    { id: 'de', name: 'Deutsch', flag: deFlag },
-    { id: 'it', name: 'Italiano', flag: itFlag },
-    { id: 'pt_BR', name: 'Português (Brasil)', flag: ptBrFlag },
-    { id: 'pt_PT', name: 'Português (Portugal)', flag: ptPtFlag },
-    { id: 'hr', name: 'Hrvatski', flag: hrFlag },
-    { id: 'ru', name: 'Русский', flag: ruFlag },
-    { id: 'pl', name: 'Polski', flag: plFlag },
-    { id: 'sv', name: 'Svenska', flag: svFlag },
-    { id: 'fi', name: 'Suomi', flag: fiFlag },
-    { id: 'no', name: 'Norsk', flag: noFlag },
-    { id: 'el', name: 'Ελληνικά', flag: elFlag },
-    { id: 'bg', name: 'Български', flag: bgFlag },
-  ];
+  const languages = LANGUAGES;
 
   // Code d'activation Twitch (device flow)
   let userCode = $state('');
@@ -77,6 +47,11 @@
   // --- Actions ---
   function openConfigPopup() {
     chrome.runtime.sendMessage({ type: CST.DISPLAY_POPUP });
+  }
+
+  // Page d'extension ouverte dans un onglet dedie.
+  function openHelp() {
+    chrome.tabs.create({ url: chrome.runtime.getURL('src/iframe/help.html') });
   }
 
   async function onThemeChange() {
@@ -124,6 +99,11 @@
         <div class="card">
           <div class="card-header">
             <h1>{$_('actionPopup.preferences')}</h1>
+            <button
+              class="help-btn"
+              onclick={openHelp}
+              title={$_('help.openHelp')}
+              aria-label={$_('help.openHelp')}>?</button>
           </div>
 
           <div class="row">
@@ -209,8 +189,31 @@
   }
 
   .card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
     padding: 14px 16px 10px;
     border-bottom: 0.5px solid rgba(0, 0, 0, 0.1);
+  }
+
+  .help-btn {
+    flex-shrink: 0;
+    width: 20px;
+    height: 20px;
+    padding: 0;
+    border: none;
+    border-radius: 50%;
+    background: #9147ff;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 1;
+    cursor: pointer;
+  }
+
+  .help-btn:hover {
+    background: #772ce8;
   }
 
   .card-header h1 {
