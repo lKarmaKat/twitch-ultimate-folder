@@ -166,7 +166,7 @@
         {/if}
     {:else}
         <div class="select-channel-flex">
-            <h2 class="blinker">{$_('configPannel.selectListPrompt')}</h2>
+            <p class="blinker">{$_('configPannel.selectListPrompt')}</p>
         </div>
     {/if}
 </div>
@@ -178,11 +178,12 @@
         flex-direction: column;
         align-items: center;
         justify-content: start;
-        margin: 6em 0 0 0;
+        padding: 6em 0 0 0;
         height: 100%;
     }
-    .select-channel-flex h2 {
+    .select-channel-flex p {
         opacity: 1.0;
+        font-size: 1.5em;
     }
     .blinker {
     animation: blinker 2s ease-in-out infinite;
@@ -196,16 +197,21 @@
         box-sizing: border-box;
         width: 100%;
         height: 100%;
-        padding: 0.3em 0.8em 0.3em 0em;
+        padding: 0.3em 0em 0.3em 0em;
     }
     .pannel-header {
         display: flex;
         flex-direction: row;
         padding: 0.3em 1em;
         border-radius: .3em;
+        min-width: 0;
     }
     .pannel-header input {
-        /* width: 90%; */
+        flex: 1 1 auto;
+        /* Sans ça l'input garde sa largeur intrinseque (size=20) et deborde */
+        min-width: 0;
+        /* width: 100%; */
+        width: auto;
     }
     .bloc {
         margin: 0.5em 0em;

@@ -356,6 +356,7 @@
   }
   .pannel-scroll {
     overflow-y: auto;
+    overflow-x: hidden;
   }
   .main {
     display: flex;
