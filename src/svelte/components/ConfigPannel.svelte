@@ -177,13 +177,14 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-        justify-content: start;
-        padding: 6em 0 0 0;
+        justify-content: center;
+        padding: 0;
         height: 100%;
     }
     .select-channel-flex p {
         opacity: 1.0;
         font-size: 1.5em;
+        text-align: center;
     }
     .blinker {
     animation: blinker 2s ease-in-out infinite;
