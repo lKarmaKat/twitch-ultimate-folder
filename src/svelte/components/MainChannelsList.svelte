@@ -125,7 +125,8 @@ function show() {
               viewerCount={item.viewer_count}
               gameName={item.game_name}
               isLive={item.isLive}
-              bearCard=true/>
+              greyIfOffline={false}
+              showOffline={true}/>
               {/each}
   </section>
 </div>

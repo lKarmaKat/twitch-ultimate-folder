@@ -172,7 +172,7 @@
 						viewerCount={CST.ALL_OTHER_CHANNELS_ELEMENT.viewer_count}
 						gameName={CST.ALL_OTHER_CHANNELS_ELEMENT.game_name}
 						isLive={CST.ALL_OTHER_CHANNELS_ELEMENT.isLive}
-						bearCard=true/>
+						greyIfOffline={false}/>
 				</div>
 			{:else}
 			{@const i = getNode(item)}
@@ -186,7 +186,9 @@
 						channelProfilePic={i?.profile_image_url} 
 						viewerCount={i?.viewer_count}
 						gameName={i?.game_name}
-						isLive={i?.isLive}/>
+						isLive={i?.isLive}
+						greyIfOffline={true}
+						showOffline={true}/>
 						<!-- <div>chaine</div> -->
 						<!-- color={contentColor}/> -->
 				</div>

@@ -2,7 +2,18 @@
     import { maybeTooltip, tooltip } from "../tooltip.svelte";
     import { _ } from 'svelte-i18n';
 
-    let { channelId, channelName, channelProfilePic, viewerCount, gameName = null, isLive, title = '' , color = '', blockNavigation = true, bearCard = false } = $props();
+    let { channelId, 
+        channelName, 
+        channelProfilePic, 
+        viewerCount, 
+        gameName = null, 
+        isLive, 
+        title = '' , 
+        color = '', 
+        blockNavigation = true, 
+        showOffline = false,
+        greyIfOffline = false
+    } = $props();
 
 	function navigate(event) {
         event.preventDefault();
@@ -119,7 +130,7 @@
         border: none;
         /* vertical-align: top; */
     }
-    .profile-picture img.offline:not(.bearCard) {
+    .profile-picture img.offline.greyIfOffline {
         filter: grayscale(100%);
     }
     a {
@@ -186,7 +197,7 @@
     <!-- <div class="layout-container" style="background-color: {color};"> -->
         <div class="flex-profile-picture">
             <div class="profile-picture">
-                <img class={['profile-picture', bearCard && 'bearCard', !isLive && 'offline']} src={channelProfilePic} alt="" />
+                <img class={['profile-picture', greyIfOffline && 'greyIfOffline', !isLive && 'offline']} src={channelProfilePic} alt="" />
             </div>
         </div>
         <div class="layout">
@@ -206,7 +217,7 @@
                             <!-- <p class="viewer-count">{viewerCount}</p> -->
                             <p class="viewer-count">{formatter.format(viewerCount)}</p>
                         </div>
-                    {:else if !bearCard }
+                    {:else if showOffline }
                         <div class="offline">{$_('channel.offline')}</div>
                     {/if}
                 </div>
