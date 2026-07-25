@@ -113,9 +113,10 @@ export class TokenManager {
         const data = await chrome.storage.local.get([
             'twitchToken', 'tokenExpirationDate', 'nextValidationDate', 'refreshToken'
         ]);
-        if (!data.twitchToken || !data.tokenExpirationDate || !data.nextValidationDate || !data.refreshToken) {
-            console.log('Something missing in storage', data.twitchToken, data.tokenExpirationDate, data.nextValidationDate, data.refreshToken);
-        }
+        const missing = (['twitchToken', 'tokenExpirationDate', 'nextValidationDate', 'refreshToken'] as const)
+            .filter(k => !data[k]);
+        if (missing.length) console.log('Something missing in storage:', missing.join(', '));
+
         if (!data.refreshToken) {
             this.noTokenFound();
             return Promise.reject("Something missing to validate token");
@@ -226,7 +227,7 @@ export class TokenManager {
         });
 
         while (Date.now() < expiresAt) {
-            console.log("Polling with device_code", device_code)
+            // console.log("Polling with device_code", device_code)
             await new Promise(r => setTimeout(r, interval * 1000));
             const response = await fetch(this.TOKEN_URL, { method: 'POST', body });
             const data = await response.json();
