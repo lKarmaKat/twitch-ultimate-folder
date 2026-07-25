@@ -30,8 +30,7 @@ Open the action popup by clicking the extension icon in your browser toolbar, th
 <summary><b>How to find the extension icon</b></summary>
 
 <!-- <figure> -->
-  https://github.com/lKarmaKat/twitch-ultimate-folder/src/assets/webm/Video.webm
-
+[Video.webm](https://github.com/user-attachments/assets/0ddc5818-8131-472b-aacb-546bbb880ee8)
 
   <!-- <figcaption>How to find the extension icon.</figcaption> -->
 <!-- </figure> -->
@@ -41,8 +40,8 @@ Depending on your browser, the icon may be hidden behind the extensions puzzle p
 </details>
 
 <!-- <figure> -->
-  https://github.com/lKarmaKat/twitch-ultimate-folder/src/assets/webm/Video.webm
-  <!-- <figcaption>Opening the configuration window from the action popup.</figcaption> -->
+[Video.webm](https://github.com/user-attachments/assets/0ddc5818-8131-472b-aacb-546bbb880ee8)
+<!-- <figcaption>Opening the configuration window from the action popup.</figcaption> -->
 <!-- </figure> -->
 
 **The four sections of the window**
@@ -62,8 +61,8 @@ The window is split into four sections, from left to right.
    A live preview of your configuration, which behaves exactly as it will in the Twitch sidebar once saved.
 
 <!-- <figure> -->
-  https://github.com/lKarmaKat/twitch-ultimate-folder/src/assets/webm/Video.webm
-  <!-- <figcaption>Detail of the sections.</figcaption> -->
+[Video.webm](https://github.com/user-attachments/assets/0ddc5818-8131-472b-aacb-546bbb880ee8)
+<!-- <figcaption>Detail of the sections.</figcaption> -->
 <!-- </figure> -->
 
 ### How to create a list, and change its name and behaviour
@@ -71,18 +70,18 @@ The window is split into four sections, from left to right.
 In the second section, click the **+** button to add a new list. The list appears with a default name; click its header to select it, and the configuration panel on the right fills up with its settings. From there you rename it and set how it behaves in the sidebar.
 
 <!-- <figure> -->
-  https://github.com/lKarmaKat/twitch-ultimate-folder/src/assets/webm/Video.webm
-  <!-- <figcaption>Adding a new list and changing its behaviour.</figcaption> -->
+[Video.webm](https://github.com/user-attachments/assets/0ddc5818-8131-472b-aacb-546bbb880ee8)
+<!-- <figcaption>Adding a new list and changing its behaviour.</figcaption> -->
 <!-- </figure> -->
 
 #### How to delete a channel/list
 
 Every channel and every list in your configuration carries a **✕** button. Clicking it removes the element from the configuration. Removing a list also removes everything it contained — the channels are not deleted from your Twitch follows, they simply go back to being unplaced.
 
-<figure>
-    https://github.com/lKarmaKat/twitch-ultimate-folder/src/assets/webm/Video.webm
-  <figcaption>How to remove a channel/list.</figcaption>
-</figure>
+<!-- <figure> -->
+[Video.webm](https://github.com/user-attachments/assets/0ddc5818-8131-472b-aacb-546bbb880ee8)
+  <!-- <figcaption>How to remove a channel/list.</figcaption> -->
+<!-- </figure> -->
 
 <details>
 <summary><b>How to rename a list</b></summary>
@@ -90,8 +89,8 @@ Every channel and every list in your configuration carries a **✕** button. Cli
 Select the list by clicking its header, then edit the **List name** field in the configuration panel. The name updates live in the preview.
 
 <!-- <figure> -->
-    https://github.com/lKarmaKat/twitch-ultimate-folder/src/assets/webm/Video.webm
-  <!-- <figcaption>Renaming a list from the configuration panel.</figcaption> -->
+[Video.webm](https://github.com/user-attachments/assets/0ddc5818-8131-472b-aacb-546bbb880ee8)
+<!-- <figcaption>Renaming a list from the configuration panel.</figcaption> -->
 <!-- </figure> -->
 
 </details>
@@ -167,8 +166,8 @@ They all report the same information; what changes is how much room it takes and
 Drag a channel from the first section — the channels you follow — and drop it into a list of the second section. Use the search field above the list to find a channel quickly instead of scrolling.
 
 <!-- <figure> -->
-  https://github.com/lKarmaKat/twitch-ultimate-folder/src/assets/webm/Video.webm
-  <!-- <figcaption>Adding channels to a list.</figcaption> -->
+[Video.webm](https://github.com/user-attachments/assets/0ddc5818-8131-472b-aacb-546bbb880ee8)
+<!-- <figcaption>Adding channels to a list.</figcaption> -->
 <!-- </figure> -->
 
 ### How to move a channel/list
@@ -176,7 +175,7 @@ Drag a channel from the first section — the channels you follow — and drop i
 Dragging works inside the configuration too. Grab a channel to move it from one list to another, or grab a list by its header to move the whole list, with everything inside it, somewhere else in the structure.
 
 <!-- <figure> -->
-  https://github.com/lKarmaKat/twitch-ultimate-folder/src/assets/webm/Video.webm
+  [Video.webm](https://github.com/user-attachments/assets/0ddc5818-8131-472b-aacb-546bbb880ee8)
   <!-- <figcaption>Moving a channel and a list inside the configuration.</figcaption> -->
 <!-- </figure> -->
 
@@ -190,7 +189,7 @@ It has its own configuration, reached through its settings button rather than by
 - **Sortable header** — a clickable header appears. Clicking it switches the sort between alphabetical and viewer count for the current session only, without touching your saved configuration.
 
 <!-- <figure> -->
-  https://github.com/lKarmaKat/twitch-ultimate-folder/src/assets/webm/Video.webm
+  [Video.webm](https://github.com/user-attachments/assets/0ddc5818-8131-472b-aacb-546bbb880ee8)
   <!-- <figcaption>Dragging the « All other channels » element and setting it up.</figcaption> -->
 <!-- </figure> -->
 
@@ -207,7 +206,7 @@ The action popup — the small panel that opens when you click the extension ico
 Switch between the dark and light theme. The change applies immediately to the sidebar, the configuration window and this help page.
 
 <!-- <figure> -->
-  https://github.com/lKarmaKat/twitch-ultimate-folder/src/assets/webm/Video.webm
+  [Video.webm](https://github.com/user-attachments/assets/0ddc5818-8131-472b-aacb-546bbb880ee8)
   <!-- <figcaption>Switching between the dark and light theme.</figcaption> -->
 <!-- </figure> -->
 
@@ -216,7 +215,7 @@ Switch between the dark and light theme. The change applies immediately to the s
 This setting controls which side the channel title appears on when you hover a live channel in the sidebar. Switch it to the other side if the title ends up under another panel — typically when BTTV has moved the chat layout around.
 
 <!-- <figure> -->
-  https://github.com/lKarmaKat/twitch-ultimate-folder/src/assets/webm/Video.webm
+ [Video.webm](https://github.com/user-attachments/assets/0ddc5818-8131-472b-aacb-546bbb880ee8)
   <!-- <figcaption>Changing the side the channel title is displayed on.</figcaption> -->
 <!-- </figure> -->
 
@@ -225,7 +224,7 @@ This setting controls which side the channel title appears on when you hover a l
 Pick your language from the list. Every open surface — the sidebar, the configuration window, this help page — updates straight away, with no page refresh.
 
 <!-- <figure> -->
-  https://github.com/lKarmaKat/twitch-ultimate-folder/src/assets/webm/Video.webm
+  [Video.webm](https://github.com/user-attachments/assets/0ddc5818-8131-472b-aacb-546bbb880ee8)
   <!-- <figcaption>Changing the language, applied live without a refresh.</figcaption> -->
 <!-- </figure> -->
 
