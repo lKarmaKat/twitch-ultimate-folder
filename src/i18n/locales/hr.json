@@ -68,7 +68,9 @@
     "emptyConfigHint": "Razvrstajte kanale koje pratite u mape kako biste ih pronašli ovdje.",
     "openConfig": "Otvori prozor za konfiguraciju",
     "howToCreateConfig": "Kako stvoriti moju konfiguraciju",
-    "portDisconnected": "Veza s Twitchom izgubljena, ponovno povezivanje u tijeku…",
+    "portDisconnected": "Veza je prekinuta",
+    "reconnectIn": "Novi pokušaj za {seconds} s",
+    "reconnecting": "Ponovno povezivanje…",
     "waitingConfig": "Čekanje konfiguracije"
   },
   "sortSelect": {

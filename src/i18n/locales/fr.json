@@ -205,7 +205,9 @@
     "emptyConfigHint": "Rangez vos chaines suivies dans des dossiers pour les retrouver ici.",
     "openConfig": "Ouvrir la popup de config",
     "howToCreateConfig": "Comment créer ma configuration",
-    "portDisconnected": "La communication avec twitch a été perdu, tentative de reconnexion en cours.",
+    "portDisconnected": "Connexion perdue",
+    "reconnectIn": "Nouvelle tentative dans {seconds} s",
+    "reconnecting": "Reconnexion en cours…",
     "waitingConfig": "En attente de la configuration"
   },
   "sortSelect": {

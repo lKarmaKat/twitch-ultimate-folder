@@ -68,7 +68,9 @@
     "emptyConfigHint": "Sortiere die Kanäle, denen du folgst, in Ordner, um sie hier zu finden.",
     "openConfig": "Konfigurationsfenster öffnen",
     "howToCreateConfig": "So erstelle ich meine Konfiguration",
-    "portDisconnected": "Verbindung zu Twitch verloren, Wiederverbindung läuft…",
+    "portDisconnected": "Verbindung unterbrochen",
+    "reconnectIn": "Neuer Versuch in {seconds} s",
+    "reconnecting": "Verbinde erneut…",
     "waitingConfig": "Warte auf Konfiguration"
   },
   "sortSelect": {

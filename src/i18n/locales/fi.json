@@ -68,7 +68,9 @@
     "emptyConfigHint": "Lajittele seuraamasi kanavat kansioihin, niin löydät ne täältä.",
     "openConfig": "Avaa asetusikkuna",
     "howToCreateConfig": "Kuinka luon määritykseni",
-    "portDisconnected": "Yhteys Twitchiin katkesi, yhdistetään uudelleen…",
+    "portDisconnected": "Yhteys katkesi",
+    "reconnectIn": "Uusi yritys {seconds} s kuluttua",
+    "reconnecting": "Yhdistetään uudelleen…",
     "waitingConfig": "Odotetaan asetuksia"
   },
   "sortSelect": {

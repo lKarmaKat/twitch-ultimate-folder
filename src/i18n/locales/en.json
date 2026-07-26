@@ -205,7 +205,9 @@
     "emptyConfigHint": "Sort the channels you follow into folders to find them here.",
     "openConfig": "Open config popup",
     "howToCreateConfig": "How to create my configuration",
-    "portDisconnected": "Connection to Twitch lost, reconnecting…",
+    "portDisconnected": "Connection lost",
+    "reconnectIn": "Retrying in {seconds} s",
+    "reconnecting": "Reconnecting…",
     "waitingConfig": "Waiting for config"
   },
   "sortSelect": {

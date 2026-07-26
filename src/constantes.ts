@@ -10,6 +10,8 @@ export const SAVE_CHANNELS_LIST = 'SAVE_CHANNELS_LIST';
 export const RESET_CONFIG = 'RESET_CONFIG';
 export const DISPLAY_POPUP = 'DISPLAY_POPUP';
 export const OPEN_HELP_PAGE = 'OPEN_HELP_PAGE';
+/** Poignée de main postée par le service worker à chaque connexion de port. */
+export const PORT_READY = 'PORT_READY';
 export const HIDE_POPUP = 'HIDE_POPUP';
 export const THEME = 'THEME';
 export const CHANGE_THEME = 'CHANGE_THEME';

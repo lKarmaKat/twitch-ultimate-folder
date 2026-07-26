@@ -68,7 +68,9 @@
     "emptyConfigHint": "Подредете каналите, които следвате, в папки, за да ги намирате тук.",
     "openConfig": "Отваряне на прозореца за конфигурация",
     "howToCreateConfig": "Как да създам своята конфигурация",
-    "portDisconnected": "Връзката с Twitch е загубена, повторно свързване…",
+    "portDisconnected": "Връзката е прекъсната",
+    "reconnectIn": "Нов опит след {seconds} с",
+    "reconnecting": "Повторно свързване…",
     "waitingConfig": "Изчакване на конфигурация"
   },
   "sortSelect": {

@@ -68,7 +68,9 @@
     "emptyConfigHint": "Posegreguj obserwowane kanały w foldery, aby znaleźć je tutaj.",
     "openConfig": "Otwórz okno konfiguracji",
     "howToCreateConfig": "Jak utworzyć moją konfigurację",
-    "portDisconnected": "Utracono połączenie z Twitch, trwa ponowne łączenie…",
+    "portDisconnected": "Utracono połączenie",
+    "reconnectIn": "Ponowna próba za {seconds} s",
+    "reconnecting": "Ponowne łączenie…",
     "waitingConfig": "Oczekiwanie na konfigurację"
   },
   "sortSelect": {

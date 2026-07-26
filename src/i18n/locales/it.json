@@ -68,7 +68,9 @@
     "emptyConfigHint": "Organizza in cartelle i canali che segui per ritrovarli qui.",
     "openConfig": "Apri la finestra di configurazione",
     "howToCreateConfig": "Come creare la mia configurazione",
-    "portDisconnected": "Connessione a Twitch persa, riconnessione in corso…",
+    "portDisconnected": "Connessione persa",
+    "reconnectIn": "Nuovo tentativo tra {seconds} s",
+    "reconnecting": "Riconnessione…",
     "waitingConfig": "In attesa della configurazione"
   },
   "sortSelect": {

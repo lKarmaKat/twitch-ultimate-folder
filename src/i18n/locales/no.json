@@ -68,7 +68,9 @@
     "emptyConfigHint": "Sorter kanalene du følger i mapper for å finne dem her.",
     "openConfig": "Åpne konfigurasjonsvinduet",
     "howToCreateConfig": "Slik lager du konfigurasjonen din",
-    "portDisconnected": "Mistet forbindelsen til Twitch, kobler til på nytt…",
+    "portDisconnected": "Tilkoblingen ble brutt",
+    "reconnectIn": "Nytt forsøk om {seconds} s",
+    "reconnecting": "Kobler til igjen…",
     "waitingConfig": "Venter på konfigurasjon"
   },
   "sortSelect": {

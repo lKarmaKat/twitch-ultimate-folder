@@ -68,7 +68,9 @@
     "emptyConfigHint": "Ταξινομήστε τα κανάλια που ακολουθείτε σε φακέλους για να τα βρίσκετε εδώ.",
     "openConfig": "Άνοιγμα παραθύρου ρυθμίσεων",
     "howToCreateConfig": "Πώς να δημιουργήσω τη διαμόρφωσή μου",
-    "portDisconnected": "Η σύνδεση με το Twitch χάθηκε, γίνεται επανασύνδεση…",
+    "portDisconnected": "Η σύνδεση χάθηκε",
+    "reconnectIn": "Νέα προσπάθεια σε {seconds} δευτ.",
+    "reconnecting": "Επανασύνδεση…",
     "waitingConfig": "Αναμονή ρυθμίσεων"
   },
   "sortSelect": {

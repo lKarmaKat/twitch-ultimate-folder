@@ -68,7 +68,9 @@
     "emptyConfigHint": "Распределите отслеживаемые каналы по папкам, чтобы находить их здесь.",
     "openConfig": "Открыть окно настроек",
     "howToCreateConfig": "Как создать мою конфигурацию",
-    "portDisconnected": "Соединение с Twitch потеряно, выполняется переподключение…",
+    "portDisconnected": "Соединение потеряно",
+    "reconnectIn": "Повтор через {seconds} с",
+    "reconnecting": "Переподключение…",
     "waitingConfig": "Ожидание конфигурации"
   },
   "sortSelect": {

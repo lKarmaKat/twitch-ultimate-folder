@@ -68,7 +68,9 @@
     "emptyConfigHint": "Sortera kanalerna du följer i mappar för att hitta dem här.",
     "openConfig": "Öppna konfigurationsfönstret",
     "howToCreateConfig": "Så skapar du din konfiguration",
-    "portDisconnected": "Anslutningen till Twitch förlorades, återansluter…",
+    "portDisconnected": "Anslutningen bröts",
+    "reconnectIn": "Nytt försök om {seconds} s",
+    "reconnecting": "Återansluter…",
     "waitingConfig": "Väntar på konfiguration"
   },
   "sortSelect": {
