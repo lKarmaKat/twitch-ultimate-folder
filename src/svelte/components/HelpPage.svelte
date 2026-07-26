@@ -2,6 +2,7 @@
   import * as CST from '../../constantes.js';
   import { _, locale } from 'svelte-i18n';
   import { get } from 'svelte/store';
+  import { onMount } from 'svelte';
   import { applyLocale } from '../../i18n/index.js';
   import { LANGUAGES } from '../../i18n/languages.js';
   import LanguageSelect from './LanguageSelect.svelte';
@@ -99,6 +100,32 @@
     const el = document.getElementById(location.hash.slice(1));
     if (el?.tagName === 'DETAILS') el.open = true;
   }
+
+  // Le navigateur traite le fragment d'URL au parsing du document, or
+  // help_inject.js ne monte cette page qu'apres setupI18n() : a cet instant la
+  // cible n'existe pas encore et le saut natif tombe dans le vide. `onhashchange`
+  // ne rattrape rien non plus, il ne se declenche pas au chargement initial.
+  // On rejoue donc le saut nous-memes.
+  function scrollToHash() {
+    if (!location.hash) return;
+    const el = document.getElementById(location.hash.slice(1));
+    if (!el) return;
+    openTargetDetails();
+    el.scrollIntoView();
+  }
+
+  onMount(() => {
+    if (!location.hash) return;
+    // Un frame d'attente : le DOM vient d'etre insere, la mise en page ne l'est
+    // pas encore.
+    requestAnimationFrame(scrollToHash);
+    // Les vignettes sont en `height: auto` avec preload="metadata" : leur
+    // hauteur reelle n'arrive qu'apres coup et decale tout ce qui les suit.
+    // On repositionne une fois les medias mesures.
+    if (document.readyState === 'complete') return;
+    window.addEventListener('load', scrollToHash, { once: true });
+    return () => window.removeEventListener('load', scrollToHash);
+  });
 
   // Garde-fou du sommaire manuel : une ancre sans cible ne provoque aucune
   // erreur au runtime, on la signale donc au moins en dev.

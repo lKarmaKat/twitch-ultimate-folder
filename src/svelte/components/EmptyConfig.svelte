@@ -4,7 +4,13 @@
     let { configManager } = $props();
 
     function openConfig() {
-        configManager.openOptionsPage();
+        configManager.openConfigPopup();
+    }
+
+    // chrome.tabs est hors de portée d'un content script : le service worker
+    // ouvre l'onglet a notre place, sur la section « créer une configuration ».
+    function openHelp() {
+        configManager.openHelpPage('#create-config');
     }
 </script>
 
@@ -20,9 +26,15 @@
     <p class="message" data-testid="status">{$_('status.emptyConfig')}</p>
     <p class="hint">{$_('status.emptyConfigHint')}</p>
 
-    <button type="button" class="config-link" onclick={openConfig}>
-        {$_('status.openConfig')}
-    </button>
+    <div class="links">
+        <button type="button" class="config-link" onclick={openConfig}>
+            {$_('status.openConfig')}
+        </button>
+
+        <button type="button" class="config-link" onclick={openHelp}>
+            {$_('status.howToCreateConfig')}
+        </button>
+    </div>
 </div>
 
 <style>
@@ -69,8 +81,17 @@
         text-wrap: balance;
     }
 
-    .config-link {
+    /* Les deux liens forment un bloc : le `gap` du .empty-state les écarterait
+       autant que des paragraphes, alors qu'ils vont ensemble. */
+    .links {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.1em;
         margin-top: 0.2em;
+    }
+
+    .config-link {
         padding: 0.35em 0.2em;
         border: none;
         background: none;

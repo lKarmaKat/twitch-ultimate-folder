@@ -109,9 +109,14 @@ class ConfigManager {
         this.selectedConfig = CST.createStartupConf();
     }
 
-    /** Demande au service worker d'ouvrir la page d'options, via le port déjà ouvert. */
-    openOptionsPage() {
-        this.bridge.send({ type: CST.OPEN_OPTIONS_PAGE });
+    /**
+     * Demande au service worker d'afficher l'iframe de configuration dans
+     * l'onglet courant, via le port déjà ouvert. Même chemin que le bouton de
+     * l'action popup, mais le service worker cible l'onglet du port plutôt que
+     * l'onglet actif.
+     */
+    openConfigPopup() {
+        this.bridge.send({ type: CST.DISPLAY_POPUP });
     }
 
     /**

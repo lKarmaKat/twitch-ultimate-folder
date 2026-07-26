@@ -66,7 +66,8 @@
     "noLiveChannelsHint": "Ingen av kanalene i mappene dine er tilkoblet akkurat nå.",
     "emptyConfig": "Ingen mapper opprettet ennå",
     "emptyConfigHint": "Sorter kanalene du følger i mapper for å finne dem her.",
-    "openConfig": "Sett opp mappene mine",
+    "openConfig": "Åpne konfigurasjonsvinduet",
+    "howToCreateConfig": "Slik lager du konfigurasjonen din",
     "portDisconnected": "Mistet forbindelsen til Twitch, kobler til på nytt…",
     "waitingConfig": "Venter på konfigurasjon"
   },

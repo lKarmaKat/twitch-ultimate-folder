@@ -144,12 +144,18 @@ let sendCurrentAuth = (port: chrome.runtime.Port) => {
   });
 }
 // Messages entrants sur un port déjà ouvert (la sidebar en maintient un).
-let handlePortMessage = (message: any) => {
-  if (message?.type === CST.OPEN_OPTIONS_PAGE) {
-    // TODO: nécessite une page d'options — déclarer "options_ui" dans
-    // public/manifest.json et créer la page. Sans ça, l'appel rejette.
-    chrome.runtime.openOptionsPage()
-      .catch(err => logBackgroundError("background:openOptionsPage", err));
+let handlePortMessage = (message: any, port?: chrome.runtime.Port) => {
+  if (message?.type === CST.DISPLAY_POPUP) {
+    // La sidebar sait dans quel onglet elle vit : on cible l'onglet du port
+    // plutôt que le "currentWindow actif" utilisé par le chemin action popup,
+    // qui viserait le mauvais onglet si l'utilisateur en a changé.
+    const tabId = port?.sender?.tab?.id;
+    if (tabId === undefined) return;
+    chrome.tabs.sendMessage(tabId, { type: CST.DISPLAY_POPUP }, () => {
+      if (chrome.runtime.lastError) {
+        logBackgroundError("background:displayPopup", chrome.runtime.lastError);
+      }
+    });
   } else if (message?.type === CST.OPEN_HELP_PAGE) {
     // La sidebar vit dans un content script : chrome.tabs y est indisponible,
     // et help.html n'est pas dans web_accessible_resources. L'ouverture passe

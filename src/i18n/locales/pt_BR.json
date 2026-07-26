@@ -66,7 +66,8 @@
     "noLiveChannelsHint": "Nenhum dos canais nas suas pastas está online no momento.",
     "emptyConfig": "Nenhuma pasta criada ainda",
     "emptyConfigHint": "Organize os canais que você segue em pastas para encontrá-los aqui.",
-    "openConfig": "Configurar minhas pastas",
+    "openConfig": "Abrir janela de configuração",
+    "howToCreateConfig": "Como criar minha configuração",
     "portDisconnected": "Conexão com a Twitch perdida, reconectando…",
     "waitingConfig": "Aguardando configuração"
   },

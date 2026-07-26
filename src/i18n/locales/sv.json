@@ -66,7 +66,8 @@
     "noLiveChannelsHint": "Ingen av kanalerna i dina mappar är online just nu.",
     "emptyConfig": "Inga mappar har skapats än",
     "emptyConfigHint": "Sortera kanalerna du följer i mappar för att hitta dem här.",
-    "openConfig": "Ställ in mina mappar",
+    "openConfig": "Öppna konfigurationsfönstret",
+    "howToCreateConfig": "Så skapar du din konfiguration",
     "portDisconnected": "Anslutningen till Twitch förlorades, återansluter…",
     "waitingConfig": "Väntar på konfiguration"
   },

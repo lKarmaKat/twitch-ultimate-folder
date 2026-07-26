@@ -203,7 +203,8 @@
     "noLiveChannelsHint": "None of the channels in your folders are online right now.",
     "emptyConfig": "No folders set up yet",
     "emptyConfigHint": "Sort the channels you follow into folders to find them here.",
-    "openConfig": "Set up my folders",
+    "openConfig": "Open config popup",
+    "howToCreateConfig": "How to create my configuration",
     "portDisconnected": "Connection to Twitch lost, reconnecting…",
     "waitingConfig": "Waiting for config"
   },

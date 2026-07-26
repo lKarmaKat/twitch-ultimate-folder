@@ -66,7 +66,8 @@
     "noLiveChannelsHint": "Nijedan kanal iz vaših mapa trenutačno nije na mreži.",
     "emptyConfig": "Još nema postavljenih mapa",
     "emptyConfigHint": "Razvrstajte kanale koje pratite u mape kako biste ih pronašli ovdje.",
-    "openConfig": "Postavi moje mape",
+    "openConfig": "Otvori prozor za konfiguraciju",
+    "howToCreateConfig": "Kako stvoriti moju konfiguraciju",
     "portDisconnected": "Veza s Twitchom izgubljena, ponovno povezivanje u tijeku…",
     "waitingConfig": "Čekanje konfiguracije"
   },

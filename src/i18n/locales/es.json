@@ -66,7 +66,8 @@
     "noLiveChannelsHint": "Ninguno de los canales de tus carpetas está en línea ahora mismo.",
     "emptyConfig": "Aún no hay carpetas configuradas",
     "emptyConfigHint": "Ordena en carpetas los canales que sigues para encontrarlos aquí.",
-    "openConfig": "Configurar mis carpetas",
+    "openConfig": "Abrir ventana de configuración",
+    "howToCreateConfig": "Cómo crear mi configuración",
     "portDisconnected": "Se perdió la conexión con Twitch, reconectando…",
     "waitingConfig": "Esperando configuración"
   },
