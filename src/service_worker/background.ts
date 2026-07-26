@@ -74,9 +74,13 @@ async function onSessionUserChanged(sessionUserId: number | null) {
     return;
   }
 
-  await initServices(sessionUserId);
-  if (epoch !== switchEpoch) return;
+  // READY dès que le token est utilisable, SANS attendre initServices : celui-ci
+  // déclenche le premier chargement Helix complet (chaînes suivies + lives +
+  // photos de profil, tous paginés), soit plusieurs secondes sur un gros compte.
+  // Les pages savent afficher « en attente de données » ; leur laisser « à
+  // autoriser » pendant ce temps serait faux, l'autorisation est acquise.
   broadcastAuth(CST.AUTH_READY);
+  await initServices(sessionUserId);
 }
 
 // Token devenu irrécupérable en cours de session (révocation depuis les
@@ -289,9 +293,7 @@ self.addEventListener('beforeunload', () => {
   portManager.closeAllPorts();
 });
 
-// Listener volontairement NON async : Chrome n'interprète que `return true`
-// comme « je répondrai plus tard ». Chaque branche asynchrone fait donc son
-// travail dans une IIFE et rend `true` de façon synchrone.
+
 chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
     void sender;
     console.log("MESSAGE", msg.type, msg.data);
@@ -345,8 +347,10 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
               // Surtout pas onSessionUserChanged() ici : son garde d'idempotence
               // verrait `userId === currentUserId` et ne ferait rien. Le compte
               // n'a pas changé, c'est son autorisation qui vient d'aboutir.
-              await initServices(userId);
+              // READY d'abord : inutile de faire patienter l'utilisateur
+              // derrière le premier chargement Helix.
               broadcastAuth(CST.AUTH_READY);
+              await initServices(userId);
             })
             .catch((err) => {
               // Code expiré, refusé, ou onglet fermé pendant le polling.

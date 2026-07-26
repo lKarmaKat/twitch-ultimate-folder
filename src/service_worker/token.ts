@@ -213,6 +213,11 @@ export class TokenManager {
             }
         })().finally(() => {
             this.authInProgressPromise = null;
+            // Un code d'activation n'existe que TANT QU'IL attend d'être saisi.
+            // Le laisser en place après coup fait afficher indéfiniment à
+            // l'action popup un code déjà consommé — y compris, et surtout,
+            // après une autorisation réussie.
+            this.currentDeviceCodeInfo = null;
         });
 
         return this.authInProgressPromise;

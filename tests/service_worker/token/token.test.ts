@@ -268,7 +268,9 @@ describe("TokenManager", () => {
                 user_code: "USER_CODE",
                 verification_uri: "https://twitch.tv/activate",
             });
-            expect(manager.currentDeviceCodeInfo).toMatchObject({ device_code: "DEV_CODE" });
+            // Le code est retiré une fois le flow terminé : sinon l'action
+            // popup continuerait d'afficher un code déjà consommé.
+            expect(manager.currentDeviceCodeInfo).toBeNull();
             expect(manager.userId).toBe(USER_ID);
             // L'userId doit être connu AVANT l'écriture : sinon aucune clé sous
             // laquelle persister le token reçu.
@@ -276,6 +278,46 @@ describe("TokenManager", () => {
                 twitchToken: "new_token",
                 refreshToken: "refresh_new",
             });
+        });
+
+        test("currentDeviceCodeInfo n'existe QUE pendant l'attente de saisie", async () => {
+            // C'est cet objet que l'action popup interroge pour réafficher un
+            // code en cours ; s'il survit au flow, la popup reste bloquée sur
+            // la vue d'autorisation après une autorisation pourtant réussie.
+            jest.useFakeTimers();
+            const manager = new TokenManager();
+            mockFetchByUrl({
+                device: deviceOk(),
+                token: [
+                    res({ message: "authorization_pending" }),
+                    res({ access_token: "new_token", expires_in: 3600 }),
+                ],
+                validate: res({ user_id: USER_ID, expires_in: 3600 }),
+            });
+
+            const promise = manager.startAuthFor(USER_ID, jest.fn());
+            await advance(1000); // code émis, saisie en attente
+            expect(manager.currentDeviceCodeInfo).toMatchObject({ user_code: "USER_CODE" });
+
+            await advance(1000); // autorisation reçue
+            await expect(promise).resolves.toBe("new_token");
+            expect(manager.currentDeviceCodeInfo).toBeNull();
+        });
+
+        test("device flow en échec → le code est retiré aussi", async () => {
+            jest.useFakeTimers();
+            const manager = new TokenManager();
+            mockFetchByUrl({
+                device: deviceOk(),
+                token: res({ message: "access_denied" }),
+            });
+
+            const promise = manager.startAuthFor(USER_ID, jest.fn());
+            const expectation = expect(promise).rejects.toThrow("TokenManager.startAuthFor");
+            await advance(1000);
+            await expectation;
+
+            expect(manager.currentDeviceCodeInfo).toBeNull();
         });
 
         test("requestDeviceCode KO → throw", async () => {
