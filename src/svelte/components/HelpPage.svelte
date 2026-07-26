@@ -26,6 +26,39 @@
     applyLocale(lang);
   }
 
+  // TODO placeholder : un seul clip sert pour toutes les demos. Remplacer par
+  // un fichier par section (cf. README) quand les captures seront faites.
+  const DEMO = '/assets/webm/Video.webm';
+
+  const ISSUES_URL = 'https://github.com/lKarmaKat/twitch-ultimate-folder/issues/new';
+  // TODO : remplacer par le vrai compte Ko-fi.
+  const KOFI_URL = 'https://ko-fi.com/YOUR_KOFI_HANDLE';
+
+  // Lightbox : `lightbox` porte la legende de la video ouverte, ou null.
+  // La vignette reste figee sur sa premiere image ; seule la copie agrandie joue.
+  let lightbox = $state(null);
+  let lightboxVideo = $state(null);
+
+  function openLightbox(caption) {
+    lightbox = { caption };
+  }
+
+  function closeLightbox() {
+    lightbox = null;
+  }
+
+  // Rembobinage explicite : `currentTime = 0` suffit sur un <video>, la ou un
+  // GIF imposerait de reassigner son src.
+  function replay() {
+    if (!lightboxVideo) return;
+    lightboxVideo.currentTime = 0;
+    lightboxVideo.play();
+  }
+
+  function onKeydown(e) {
+    if (lightbox && e.key === 'Escape') closeLightbox();
+  }
+
   // Sommaire ecrit a la main : ces ids doivent correspondre aux ancres posees
   // sur les titres du contenu. Le tableau ne sert qu'au controle des ancres
   // orphelines en dev.
@@ -34,15 +67,36 @@
     'hierarchy',
     'sorting',
     'outside',
+    'offline',
     'create-config',
     'open-window',
+    'find-icon',
     'sections',
     'sec-channels',
     'sec-config',
     'sec-pannel',
     'sec-preview',
+    'add-list',
+    'remove-item',
+    'rename-list',
+    'list-behaviour',
+    'header-icons',
+    'header-badges',
+    'add-channel',
+    'move-item',
+    'all-other',
     'saving',
+    'action-popup',
+    'issues',
+    'support',
   ];
+
+  // Une ancre qui pointe dans un <details> replie ne mene nulle part sur les
+  // navigateurs qui ne le deplient pas d'eux-memes : on l'ouvre a la main.
+  function openTargetDetails() {
+    const el = document.getElementById(location.hash.slice(1));
+    if (el?.tagName === 'DETAILS') el.open = true;
+  }
 
   // Garde-fou du sommaire manuel : une ancre sans cible ne provoque aucune
   // erreur au runtime, on la signale donc au moins en dev.
@@ -54,6 +108,8 @@
   });
 </script>
 
+<svelte:window onkeydown={onKeydown} onhashchange={openTargetDetails} />
+
 <svelte:head>
   <title>{$_('help.pageTitle')}</title>
   {#if darkTheme}
@@ -62,6 +118,27 @@
     <link rel="stylesheet" href="/assets/clair.css">
   {/if}
 </svelte:head>
+
+<!-- Une seule definition de la vignette video : elle se repete une douzaine
+     de fois, et la lightbox doit rester identique partout. -->
+{#snippet media(caption)}
+  <figure class="help-media">
+    <button class="shot" type="button" onclick={() => openLightbox(caption)}>
+      <video src={DEMO} preload="metadata" muted playsinline></video>
+      <span class="shot-hint">{$_('help.media.hint')} ⤢</span>
+    </button>
+    <figcaption>{caption}</figcaption>
+  </figure>
+{/snippet}
+
+<!-- TODO : remplacer par <img src="/assets/screenshots/…"> quand les captures
+     existeront. Le bloc garde la place et le ratio en attendant. -->
+{#snippet screenshot(alt, caption)}
+  <figure class="help-media">
+    <div class="shot-todo" role="img" aria-label={alt}>{alt}</div>
+    <figcaption>{caption}</figcaption>
+  </figure>
+{/snippet}
 
 <div class="help-layout" class:dark={darkTheme}>
   <aside class="sidebar">
@@ -78,6 +155,7 @@
             <li><a href="#hierarchy">{$_('help.purpose.hierarchyTitle')}</a></li>
             <li><a href="#sorting">{$_('help.purpose.sortingTitle')}</a></li>
             <li><a href="#outside">{$_('help.purpose.outsideTitle')}</a></li>
+            <li><a href="#offline">{$_('help.purpose.offlineTitle')}</a></li>
           </ul>
         </li>
         <li>
@@ -93,9 +171,25 @@
                 <li><a href="#sec-preview">{$_('help.createConfig.previewTitle')}</a></li>
               </ul>
             </li>
+            <li>
+              <a href="#add-list">{$_('help.createConfig.addListTitle')}</a>
+              <ul>
+                <li><a href="#remove-item">{$_('help.createConfig.removeTitle')}</a></li>
+                <li><a href="#rename-list">{$_('help.createConfig.renameTitle')}</a></li>
+                <li><a href="#list-behaviour">{$_('help.createConfig.behaviourTitle')}</a></li>
+                <li><a href="#header-icons">{$_('help.createConfig.iconsTitle')}</a></li>
+                <li><a href="#header-badges">{$_('help.createConfig.badgesTitle')}</a></li>
+              </ul>
+            </li>
+            <li><a href="#add-channel">{$_('help.createConfig.addChannelTitle')}</a></li>
+            <li><a href="#move-item">{$_('help.createConfig.moveTitle')}</a></li>
+            <li><a href="#all-other">{$_('help.createConfig.allOtherTitle')}</a></li>
             <li><a href="#saving">{$_('help.createConfig.savingTitle')}</a></li>
           </ul>
         </li>
+        <li><a href="#action-popup">{$_('help.actionPopup.title')}</a></li>
+        <li><a href="#issues">{$_('help.issues.title')}</a></li>
+        <li><a href="#support">{$_('help.support.title')}</a></li>
       </ul>
     </nav>
   </aside>
@@ -115,19 +209,25 @@
     <h3 id="outside">{$_('help.purpose.outsideTitle')}</h3>
     <p>{$_('help.purpose.outside')}</p>
 
+    <h3 id="offline">{$_('help.purpose.offlineTitle')}</h3>
+    <p>{$_('help.purpose.offline')}</p>
+    <p>{$_('help.purpose.offlineAlwaysShow', { values: { behaviour: $_('behaviour.showEvenIfOffline.label') } })}</p>
+
     <h2 id="create-config">{$_('help.createConfig.title')}</h2>
 
     <h3 id="open-window">{$_('help.createConfig.openTitle')}</h3>
     <p>{$_('help.createConfig.openStep1')}</p>
     <p>{$_('help.createConfig.openStep2', { values: { button: $_('actionPopup.openConfig') } })}</p>
 
-    <!-- Exemple d'integration d'un media (voir .help-media plus bas) :
-    <figure class="help-media">
-      <video src="/assets/help-open-config.webm" autoplay loop muted playsinline
-             aria-label={$_('help.createConfig.openMediaAlt')}></video>
-      <figcaption>{$_('help.createConfig.openMediaAlt')}</figcaption>
-    </figure>
-    -->
+    <details id="find-icon">
+      <summary>{$_('help.createConfig.findIconTitle')}</summary>
+      <div class="details-body">
+        {@render media($_('help.createConfig.findIconCaption'))}
+        <p>{$_('help.createConfig.findIcon')}</p>
+      </div>
+    </details>
+
+    {@render media($_('help.createConfig.openCaption'))}
 
     <h3 id="sections">{$_('help.createConfig.sectionsTitle')}</h3>
     <p>{$_('help.createConfig.sectionsIntro')}</p>
@@ -144,10 +244,151 @@
     <h4 id="sec-preview">{$_('help.createConfig.previewTitle')}</h4>
     <p>{$_('help.createConfig.preview')}</p>
 
+    {@render media($_('help.createConfig.sectionsCaption'))}
+
+    <h3 id="add-list">{$_('help.createConfig.addListTitle')}</h3>
+    <p>{$_('help.createConfig.addList')}</p>
+    {@render media($_('help.createConfig.addListCaption'))}
+
+    <h4 id="remove-item">{$_('help.createConfig.removeTitle')}</h4>
+    <p>{$_('help.createConfig.remove')}</p>
+    {@render media($_('help.createConfig.removeCaption'))}
+
+    <details id="rename-list">
+      <summary>{$_('help.createConfig.renameTitle')}</summary>
+      <div class="details-body">
+        <p>{$_('help.createConfig.rename', { values: { field: $_('configPannel.listName') } })}</p>
+        {@render media($_('help.createConfig.renameCaption'))}
+      </div>
+    </details>
+
+    <details id="list-behaviour">
+      <summary>{$_('help.createConfig.behaviourTitle')}</summary>
+      <div class="details-body">
+        <p>{$_('help.createConfig.behaviourIntro')}</p>
+        <ul class="defs">
+          <li><b>{$_('behaviour.extendedOnStartup.label')}</b> — {$_('help.createConfig.behaviourStartup')}</li>
+          <li><b>{$_('behaviour.extendsOnHover.label')}</b> — {$_('help.createConfig.behaviourHover')}</li>
+          <li><b>{$_('behaviour.extendsOnClick.label')}</b> — {$_('help.createConfig.behaviourClick')}</li>
+          <li><b>{$_('behaviour.showEvenIfOffline.label')}</b> — {$_('help.createConfig.behaviourAlways')}</li>
+        </ul>
+
+        <h5>{$_('help.createConfig.sortModeTitle')}</h5>
+        <p>
+          {$_('help.createConfig.sortModeIntro', { values: {
+            custom: $_('sort.custom'), viewer: $_('sort.viewer'), alpha: $_('sort.alpha')
+          } })}
+        </p>
+        <p class="warning">{$_('help.createConfig.sortModeWarning')}</p>
+        <p>{$_('help.createConfig.sortModeRule')}</p>
+
+        {@render screenshot($_('help.createConfig.behaviourShotAlt'), $_('help.createConfig.behaviourShotCaption'))}
+      </div>
+    </details>
+
+    <details id="header-icons">
+      <summary>{$_('help.createConfig.iconsTitle')}</summary>
+      <div class="details-body">
+        <p>{$_('help.createConfig.icons1')}</p>
+        <p>{$_('help.createConfig.icons2')}</p>
+        <p>{$_('help.createConfig.icons3')}</p>
+        {@render screenshot($_('help.createConfig.iconsShotAlt'), $_('help.createConfig.iconsShotCaption'))}
+      </div>
+    </details>
+
+    <details id="header-badges">
+      <summary>{$_('help.createConfig.badgesTitle')}</summary>
+      <div class="details-body">
+        <p>{$_('help.createConfig.badgesIntro')}</p>
+        <p>{$_('help.createConfig.badgesCount')}</p>
+        <ul class="defs">
+          <li><b>{$_('counterType.bareCounter')}</b> — {$_('help.createConfig.badgesBare')}</li>
+          <li><b>{$_('counterType.badge')}</b> — {$_('help.createConfig.badgesBadge')}</li>
+          <li><b>{$_('counterType.nakedBadge')}</b> — {$_('help.createConfig.badgesNaked')}</li>
+          <li><b>{$_('counterType.withTotalCount')}</b> — {$_('help.createConfig.badgesTotal')}</li>
+          <li><b>{$_('counterType.withLiveIcon')}</b> — {$_('help.createConfig.badgesLiveIcon')}</li>
+        </ul>
+        <p>{$_('help.createConfig.badgesOutro')}</p>
+        {@render screenshot($_('help.createConfig.badgesShotAlt'), $_('help.createConfig.badgesShotCaption'))}
+      </div>
+    </details>
+
+    <h3 id="add-channel">{$_('help.createConfig.addChannelTitle')}</h3>
+    <p>{$_('help.createConfig.addChannel')}</p>
+    {@render media($_('help.createConfig.addChannelCaption'))}
+
+    <h3 id="move-item">{$_('help.createConfig.moveTitle')}</h3>
+    <p>{$_('help.createConfig.move')}</p>
+    {@render media($_('help.createConfig.moveCaption'))}
+
+    <h3 id="all-other">{$_('help.createConfig.allOtherTitle')}</h3>
+    <p>{$_('help.createConfig.allOther1')}</p>
+    <p>{$_('help.createConfig.allOther2')}</p>
+    <ul class="defs">
+      <li><b>{$_('allOtherHeader.none')}</b> — {$_('help.createConfig.allOtherNone')}</li>
+      <li><b>{$_('allOtherHeader.sortable')}</b> — {$_('help.createConfig.allOtherSortable')}</li>
+    </ul>
+    {@render media($_('help.createConfig.allOtherCaption'))}
+
     <h3 id="saving">{$_('help.createConfig.savingTitle')}</h3>
     <p class="callout">{$_('help.createConfig.saving')}</p>
+
+    <h2 id="action-popup">{$_('help.actionPopup.title')}</h2>
+    <p>{$_('help.actionPopup.intro')}</p>
+
+    <h3>{$_('actionPopup.theme')}</h3>
+    <p>{$_('help.actionPopup.theme')}</p>
+    {@render media($_('help.actionPopup.themeCaption'))}
+
+    <h3>{$_('actionPopup.alignment')}</h3>
+    <p>{$_('help.actionPopup.alignment')}</p>
+    {@render media($_('help.actionPopup.alignmentCaption'))}
+
+    <h3>{$_('actionPopup.language')}</h3>
+    <p>{$_('help.actionPopup.language')}</p>
+    {@render media($_('help.actionPopup.languageCaption'))}
+
+    <h2 id="issues">{$_('help.issues.title')}</h2>
+    <p>
+      {$_('help.issues.intro')}
+      <a class="link" href={ISSUES_URL} target="_blank" rel="noopener noreferrer">{$_('help.issues.link')}</a>
+    </p>
+    <p>{$_('help.issues.listIntro')}</p>
+    <ul class="defs">
+      <li>{$_('help.issues.expected')}</li>
+      <li>{$_('help.issues.steps')}</li>
+      <li>{$_('help.issues.browser')}</li>
+      <li>{$_('help.issues.reload')}</li>
+    </ul>
+    <p>{$_('help.issues.logsIntro')}</p>
+    <ul class="defs">
+      <li>{$_('help.issues.logsPage')}</li>
+      <li>{$_('help.issues.logsWorker')}</li>
+    </ul>
+    <p>{$_('help.issues.recording')}</p>
+
+    <h2 id="support">{$_('help.support.title')}</h2>
+    <p>{$_('help.support.text')}</p>
+    <p>
+      <a class="kofi" href={KOFI_URL} target="_blank" rel="noopener noreferrer">☕ {$_('help.support.link')}</a>
+    </p>
   </main>
 </div>
+
+{#if lightbox}
+  <div class="lb">
+    <!-- Le fond est un bouton : il ferme au clic et reste atteignable au clavier. -->
+    <button class="lb-backdrop" type="button" aria-label={$_('help.media.close')} onclick={closeLightbox}></button>
+    <div class="lb-panel" role="dialog" aria-modal="true" aria-label={lightbox.caption}>
+      <button class="lb-close" type="button" aria-label={$_('help.media.close')} onclick={closeLightbox}>✕</button>
+      <video bind:this={lightboxVideo} src={DEMO} autoplay muted playsinline controls></video>
+      <div class="lb-bar">
+        <button class="lb-replay" type="button" onclick={replay}>↺ {$_('help.media.replay')}</button>
+        <p class="lb-caption">{lightbox.caption}</p>
+      </div>
+    </div>
+  </div>
+{/if}
 
 <style>
   :global(body) {
@@ -257,10 +498,15 @@
     font-size: 1em;
     color: var(--help-muted);
   }
+  .content h5 {
+    margin: 1.2em 0 0.3em 0;
+    font-size: 0.95em;
+  }
   /* Evite que le titre vise se colle au bord haut lors d'un saut d'ancre. */
   .content h2,
   .content h3,
-  .content h4 {
+  .content h4,
+  .content details {
     scroll-margin-top: 1em;
   }
   .content p {
@@ -274,24 +520,199 @@
     border-radius: 0 0.3em 0.3em 0;
     background-color: var(--help-hover);
   }
+  .warning {
+    padding: 0.8em 1em;
+    border-left: 3px solid #e0a800;
+    border-radius: 0 0.3em 0.3em 0;
+    background-color: rgba(224, 168, 0, 0.12);
+  }
+  .defs {
+    margin: 0 0 1em 0;
+    padding-left: 1.2em;
+    max-width: 70ch;
+    line-height: 1.6;
+  }
+  .defs li {
+    margin-bottom: 0.4em;
+  }
+  .link,
+  .kofi {
+    color: var(--help-accent);
+  }
+  .kofi {
+    display: inline-block;
+    padding: 0.5em 1em;
+    border: 1px solid var(--help-border);
+    border-radius: 0.4em;
+    text-decoration: none;
+  }
+  .kofi:hover {
+    background-color: var(--help-hover);
+  }
 
-  /* ---- Medias (gif / webm / mp4) ---- */
+  /* ---- Sections repliables ---- */
+  .content details {
+    margin: 1em 0 1.5em 0;
+    max-width: 70ch;
+    border: 1px solid var(--help-border);
+    border-radius: 0.5em;
+    background-color: var(--help-sidebar-bg);
+  }
+  .content summary {
+    padding: 0.7em 1em;
+    font-weight: 600;
+    color: var(--help-accent);
+    cursor: pointer;
+  }
+  .content summary:hover {
+    background-color: var(--help-hover);
+  }
+  .details-body {
+    padding: 0 1em 1em 1em;
+  }
+  .details-body > :global(*:first-child) {
+    margin-top: 0;
+  }
+
+  /* ---- Medias (webm) ---- */
   .help-media {
     margin: 1em 0 1.5em 0;
     max-width: 70ch;
   }
-  .help-media :global(video),
-  .help-media :global(img) {
+  .shot {
+    display: block;
+    position: relative;
+    width: 100%;
+    padding: 0;
+    border: 1px solid var(--help-border);
+    border-radius: 0.5em;
+    background-color: var(--help-sidebar-bg);
+    overflow: hidden;
+    cursor: zoom-in;
+  }
+  .shot:focus-visible {
+    outline: 2px solid var(--help-accent);
+    outline-offset: 3px;
+  }
+  .shot video {
     display: block;
     width: 100%;
     height: auto;
-    border: 1px solid var(--help-border);
-    border-radius: 0.5em;
   }
-  .help-media :global(figcaption) {
+  /* Bandeau bas : n'occulte jamais le contenu du clip. */
+  .shot-hint {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 0.5em 0.8em;
+    background: linear-gradient(transparent, rgba(10, 10, 12, 0.92) 45%);
+    color: #fff;
+    font-size: 0.8em;
+    text-align: left;
+    transform: translateY(100%);
+    transition: transform 0.2s ease-out;
+  }
+  .shot:hover .shot-hint,
+  .shot:focus-visible .shot-hint {
+    transform: translateY(0);
+  }
+  .help-media figcaption {
     margin-top: 0.4em;
     font-size: 0.85em;
     color: var(--help-muted);
+  }
+  /* Emplacement d'une capture pas encore realisee. */
+  .shot-todo {
+    display: grid;
+    place-items: center;
+    aspect-ratio: 16 / 10;
+    padding: 1em;
+    border: 1px dashed var(--help-border);
+    border-radius: 0.5em;
+    background-color: var(--help-sidebar-bg);
+    color: var(--help-muted);
+    font-size: 0.85em;
+    text-align: center;
+  }
+
+  /* ---- Lightbox ---- */
+  .lb {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+  }
+  .lb-backdrop {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+    padding: 0;
+    background-color: rgba(8, 8, 10, 0.82);
+    cursor: zoom-out;
+  }
+  .lb-panel {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    grid-template-rows: 1fr auto;
+    gap: 1em;
+    padding: 4vh 5vw;
+    pointer-events: none;
+  }
+  .lb-panel video {
+    place-self: center;
+    width: min(72rem, 100%);
+    max-height: 100%;
+    border-radius: 0.5em;
+    background-color: #000;
+    pointer-events: auto;
+  }
+  .lb-bar {
+    display: flex;
+    align-items: center;
+    gap: 1em;
+    width: min(72rem, 100%);
+    margin: 0 auto;
+    pointer-events: auto;
+  }
+  .lb-caption {
+    margin: 0;
+    color: rgba(255, 255, 255, 0.78);
+    font-size: 0.9em;
+  }
+  .lb-replay,
+  .lb-close {
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    background-color: rgba(255, 255, 255, 0.08);
+    color: #fff;
+    cursor: pointer;
+  }
+  .lb-replay {
+    flex: 0 0 auto;
+    padding: 0.6em 1.2em;
+    border-radius: 2em;
+    font-size: 0.85em;
+  }
+  .lb-close {
+    position: absolute;
+    top: 1em;
+    right: 1em;
+    width: 2.6em;
+    height: 2.6em;
+    border-radius: 50%;
+    pointer-events: auto;
+  }
+  .lb-replay:hover,
+  .lb-close:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+  }
+  .lb-replay:focus-visible,
+  .lb-close:focus-visible,
+  .lb-backdrop:focus-visible {
+    outline: 2px solid var(--help-accent, #bf94ff);
+    outline-offset: 2px;
   }
 
   @media (max-width: 720px) {
@@ -307,6 +728,16 @@
     }
     .content {
       padding: 1.5em;
+    }
+    .lb-bar {
+      flex-wrap: wrap;
+      gap: 0.6em;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .shot-hint {
+      transition: none;
     }
   }
 </style>
