@@ -27,7 +27,9 @@ jobs:
       - run: npm ci
       - run: npm run check
       - run: npm test
-      - run: npm run build
+      - run: npm run build:chrome
+        # Just making sure that firefox build passes
+      - run: npm run build:firefox
 
   e2e:
     name: E2E (chromium)

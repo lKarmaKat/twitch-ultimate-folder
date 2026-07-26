@@ -1,17 +1,19 @@
 {
   "name": "twitch-ultimate-folder",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
   "type": "module",
   "engines": {
     "node": ">=24"
   },
   "scripts": {
     "dev": "vite",
-    "build": "vite build --mode production",
-    "build:dev": "vite build --mode development",
-    "watch": "vite build --mode development --watch",
-    "c:build": "rm -r dist/ && vite build",
+    "build": "npm run build:chrome && npm run build:firefox",
+    "build:chrome": "cross-env TARGET_BROWSER=chrome vite build --mode production",
+    "build:firefox": "cross-env TARGET_BROWSER=firefox vite build --mode production",
+    "build:dev": "cross-env TARGET_BROWSER=chrome vite build --mode development",
+    "watch": "cross-env TARGET_BROWSER=chrome vite build --mode development --watch",
+    "c:build": "node -e \"require('fs').rmSync('dist',{recursive:true,force:true})\" && npm run build",
     "preview": "vite preview",
     "check": "svelte-check --tsconfig ./tsconfig.app.json && tsc -p tsconfig.node.json",
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
@@ -35,6 +37,7 @@
     "@types/jest": "^30.0.0",
     "@types/node": "^24.10.1",
     "babel-jest": "^30.2.0",
+    "cross-env": "^10.1.0",
     "jest-chrome": "^0.8.0",
     "jest-webextension-mock": "^4.0.0",
     "jsdom": "^27.4.0",
