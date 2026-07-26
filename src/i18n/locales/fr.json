@@ -23,11 +23,11 @@
       "title": "Comment se connecter la première fois",
       "intro": "Cette extension ne lit jamais votre compte Twitch d'elle-même. Pour construire votre barre latérale, elle a besoin de la liste des chaînes que vous suivez, et Twitch ne la transmet que si vous l'y autorisez : vous devez autoriser l'application sur votre compte, une fois. Tant que ce n'est pas fait, l'extension n'a accès à rien et votre barre latérale reste vide.",
       "stepsTitle": "Autoriser l'application",
-      "step1": "Cliquez sur l'icône de l'extension dans la barre d'outils de votre navigateur. La popup s'ouvre sur un code d'activation.",
+      "step1": "Dans la barre latérale de Twitch, là où l'extension affichera vos dossiers, cliquez sur « Autoriser l'extension ». Un code d'activation apparaît.",
       "step2": "Cliquez sur le code. Twitch s'ouvre sur twitch.tv/activate, le code déjà rempli.",
       "step3": "Autorisez l'application à accéder à votre compte.",
-      "outro": "C'est tout. Revenez sur votre onglet Twitch : la barre latérale se remplit d'elle-même au bout de quelques secondes, et la question ne vous sera plus posée — l'extension maintient l'autorisation active toute seule. Vous pouvez la révoquer à tout moment depuis les paramètres de votre compte Twitch, section « Connexions ».",
-      "caption": "Autoriser l'application depuis la popup de l'extension."
+      "outro": "C'est tout. La barre latérale se remplit d'elle-même au bout de quelques secondes, et la question ne vous sera plus posée — l'extension maintient l'autorisation active toute seule. Vous pouvez la révoquer à tout moment depuis les paramètres de votre compte Twitch, section « Connexions ».",
+      "caption": "Autoriser l'application depuis la barre latérale de Twitch."
     },
     "createConfig": {
       "title": "Comment créer une configuration",
@@ -138,15 +138,12 @@
     }
   },
   "actionPopup": {
-    "authTitle": "Connexion Twitch requise",
-    "authInstructionBefore": "Rendez-vous sur",
-    "authInstructionAfter": "et entrez ce code :",
-    "authWaiting": "En attente de l'autorisation…",
     "preferences": "Préférences",
     "openConfig": "Ouvrir la fenêtre de configuration",
     "notOnTwitch": "Ouvrez un onglet Twitch pour utiliser l'extension",
     "noSession": "Connectez-vous à votre compte Twitch",
-    "authorize": "Autoriser l'extension",
+    "seeSidebar": "Suivez les instructions affichées dans la barre latérale de Twitch",
+    "expandSideNav": "Dépliez la barre latérale de Twitch pour autoriser l'extension",
     "theme": "Thème",
     "dark": "Sombre",
     "light": "Clair",
@@ -200,8 +197,13 @@
     "offline": "Hors ligne"
   },
   "status": {
-    "needConnect": "Il semble que vous devez vous connecter",
-    "needConnectHint": "Autorisez l'extension depuis l'icône de la barre d'outils pour afficher les chaines que vous suivez.",
+    "needConnect": "Autorisation requise",
+    "needConnectHint": "L'extension a besoin de votre autorisation pour avoir accès aux chaines que vous suivez afin de pouvoir personnaliser votre expérience.",
+    "authorize": "Autoriser l'extension",
+    "authTitle": "Connexion Twitch requise",
+    "authInstructionBefore": "Rendez-vous sur",
+    "authInstructionAfter": "et entrez ce code ou cliquez sur le code ci-dessous :",
+    "authWaiting": "En attente de l'autorisation…",
     "noLiveChannels": "Aucune chaine en direct",
     "noLiveChannelsHint": "Aucune chaine de vos dossiers n'est en ligne pour le moment.",
     "emptyConfig": "Aucun dossier configuré",

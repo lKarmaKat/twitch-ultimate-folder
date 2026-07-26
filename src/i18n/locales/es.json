@@ -3,15 +3,12 @@
     "none": "ninguno"
   },
   "actionPopup": {
-    "authTitle": "Se requiere conexión a Twitch",
-    "authInstructionBefore": "Ve a",
-    "authInstructionAfter": "e introduce este código:",
-    "authWaiting": "Esperando autorización…",
     "preferences": "Preferencias",
     "openConfig": "Abrir ventana de configuración",
     "notOnTwitch": "Abre una pestaña de Twitch para usar la extensión",
     "noSession": "Inicia sesión en tu cuenta de Twitch",
-    "authorize": "Autorizar la extensión",
+    "seeSidebar": "Sigue las instrucciones que aparecen en la barra lateral de Twitch",
+    "expandSideNav": "Despliega la barra lateral de Twitch para autorizar la extensión",
     "theme": "Tema",
     "dark": "Oscuro",
     "light": "Claro",
@@ -63,8 +60,13 @@
     "offline": "Sin conexión"
   },
   "status": {
-    "needConnect": "Parece que necesitas conectarte",
-    "needConnectHint": "Autoriza la extensión desde el icono de la barra de herramientas para mostrar los canales que sigues.",
+    "needConnect": "Autorización requerida",
+    "needConnectHint": "La extensión necesita tu autorización para acceder a los canales que sigues y personalizar tu experiencia.",
+    "authorize": "Autorizar la extensión",
+    "authTitle": "Se requiere conexión a Twitch",
+    "authInstructionBefore": "Ve a",
+    "authInstructionAfter": "e introduce este código o haz clic en el código de abajo:",
+    "authWaiting": "Esperando autorización…",
     "noLiveChannels": "Ningún canal en directo",
     "noLiveChannelsHint": "Ninguno de los canales de tus carpetas está en línea ahora mismo.",
     "emptyConfig": "Aún no hay carpetas configuradas",

@@ -6,22 +6,21 @@
   import LanguageSelect from '../svelte/components/LanguageSelect.svelte';
   import { LANGUAGES } from '../i18n/languages.js';
 
-  // 'loading' | 'auth' | 'config'  (remplace le jonglage de l'attribut `hidden`)
+  // 'loading' | 'config'  (remplace le jonglage de l'attribut `hidden`)
   let view = $state('loading');
 
   // Langue courante (initialisée depuis svelte-i18n, déjà configuré par setupI18n).
   let lang = $state(get(locale) ?? 'en');
   const languages = LANGUAGES;
 
-  // Code d'activation Twitch (device flow)
-  let userCode = $state('');
-  let verificationUri = $state('');
-
   // Ce que la premiere ligne de la carte doit proposer. Resolu depuis l'onglet
   // ACTIF : la popup peut tres bien etre ouverte depuis une page qui n'est pas
   // Twitch, ou aucun content script ne tourne.
   let authState = $state(null);
-  let authorizing = $state(false);
+  // Le device flow vit dans la sidebar, que `:host([collapsed])` masque quand
+  // la barre laterale de Twitch est repliee. Y renvoyer sans le dire serait un
+  // cul-de-sac : aucune surface visible ne permettrait d'autoriser l'extension.
+  let sideNavCollapsed = $state(false);
 
   // Toggles. `theme` true = thème sombre (cohérent avec la popup de config).
   let theme = $state(false);
@@ -42,36 +41,13 @@
 
   chrome.runtime.sendMessage({ type: CST.IS_USER_LOGGED_IN }, (response) => {
     authState = response?.state ?? CST.AUTH_NOT_ON_TWITCH;
-    if (response?.user_code) {
-      // Device flow deja en cours : la popup a ete fermee puis rouverte pendant
-      // que l'utilisateur saisissait son code.
-      userCode = response.user_code;
-      verificationUri = response.verification_uri;
-      view = 'auth';
-    } else {
-      view = 'config';
-    }
+    sideNavCollapsed = response?.sideNavCollapsed === true;
+    view = 'config';
   });
 
   // --- Actions ---
   function openConfigPopup() {
     chrome.runtime.sendMessage({ type: CST.DISPLAY_POPUP });
-  }
-
-  // Seule voie d'entree du device flow : il ne se declenche jamais tout seul,
-  // sinon ouvrir la popup sur un compte secondaire demanderait une autorisation
-  // que personne n'a sollicitee.
-  async function startAuth() {
-    authorizing = true;
-    const response = await chrome.runtime.sendMessage({ type: CST.START_AUTH });
-    authorizing = false;
-    if (response?.user_code) {
-      userCode = response.user_code;
-      verificationUri = response.verification_uri;
-      view = 'auth';
-    } else {
-      authState = response?.state ?? CST.AUTH_NO_SESSION;
-    }
   }
 
   // Page d'extension ouverte dans un onglet dedie.
@@ -106,50 +82,61 @@
         <div class="loading-overlay"></div>
       </div>
     </div>
-  {:else if view === 'auth'}
-    <div class="auth-container">
-      <div class="auth-flex">
-        <svg width="32px" height="32px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="auth-icon">
-          <path d="M12 1L3 5v6c0 5.25 3.75 10.15 9 11.25C17.25 21.15 21 16.25 21 11V5L12 1z" />
-        </svg>
-        <p class="auth-title">{$_('actionPopup.authTitle')}</p>
-        <p class="auth-instruction">{$_('actionPopup.authInstructionBefore')} <strong>twitch.tv/activate</strong> {$_('actionPopup.authInstructionAfter')}</p>
-        <a class="auth-code" href={verificationUri} target="_blank" rel="noopener noreferrer">{userCode}</a>
-        <p class="auth-waiting">{$_('actionPopup.authWaiting')}</p>
-      </div>
-    </div>
   {:else}
     <div class="config-container">
       <div class="popup">
         <div class="card">
-          <div class="card-header">
-            <h1>{$_('actionPopup.preferences')}</h1>
-            <button
-              class="help-btn"
-              onclick={openHelp}
-              title={$_('help.openHelp')}
-              aria-label={$_('help.openHelp')}>?</button>
-          </div>
+          {#if authState === CST.AUTH_NEED_AUTH}
+            <!-- L'autorisation se donne desormais depuis la sidebar. Plutot que
+                 de loger ce renvoi dans une ligne de reglage, l'en-tete porte
+                 l'etat : c'est le sujet de la popup tant qu'elle n'a rien
+                 d'autre a proposer. Meme bouclier et meme composition que
+                 NeedToConnect, pour que les deux surfaces se repondent. -->
+            <div class="state-header">
+              <button
+                class="help-btn"
+                onclick={openHelp}
+                title={$_('help.openHelp')}
+                aria-label={$_('help.openHelp')}>?</button>
 
-          <!-- Seule cette ligne depend du compte. Theme, alignement et langue
-               sont des preferences du profil navigateur et restent utilisables
-               meme hors de Twitch. -->
-          <div class="row">
-            <div class="row-info">
-              {#if authState === CST.AUTH_READY}
-                <button class="btn btn-primary" onclick={openConfigPopup}>{$_('actionPopup.openConfig')}</button>
-              {:else if authState === CST.AUTH_NEED_AUTH}
-                <button
-                  class="btn btn-primary"
-                  onclick={startAuth}
-                  disabled={authorizing}>{$_('actionPopup.authorize')}</button>
-              {:else if authState === CST.AUTH_NO_SESSION}
-                <div class="row-notice">{$_('actionPopup.noSession')}</div>
-              {:else}
-                <div class="row-notice">{$_('actionPopup.notOnTwitch')}</div>
-              {/if}
+              <span class="icon-plate" aria-hidden="true">
+                <svg viewBox="0 0 24 24">
+                  <path d="M12 1L3 5v6c0 5.25 3.75 10.15 9 11.25C17.25 21.15 21 16.25 21 11V5L12 1z" />
+                </svg>
+              </span>
+
+              <!-- Cle partagee avec la sidebar : meme etat, memes mots, une
+                   seule verite a traduire. -->
+              <p class="state-title">{$_('status.needConnect')}</p>
+              <p class="state-message">
+                {sideNavCollapsed ? $_('actionPopup.expandSideNav') : $_('actionPopup.seeSidebar')}
+              </p>
             </div>
-          </div>
+          {:else}
+            <div class="card-header">
+              <h1>{$_('actionPopup.preferences')}</h1>
+              <button
+                class="help-btn"
+                onclick={openHelp}
+                title={$_('help.openHelp')}
+                aria-label={$_('help.openHelp')}>?</button>
+            </div>
+
+            <!-- Seule cette ligne depend du compte. Theme, alignement et langue
+                 sont des preferences du profil navigateur et restent utilisables
+                 meme hors de Twitch. -->
+            <div class="row">
+              <div class="row-info">
+                {#if authState === CST.AUTH_READY}
+                  <button class="btn btn-primary" onclick={openConfigPopup}>{$_('actionPopup.openConfig')}</button>
+                {:else if authState === CST.AUTH_NO_SESSION}
+                  <div class="row-notice">{$_('actionPopup.noSession')}</div>
+                {:else}
+                  <div class="row-notice">{$_('actionPopup.notOnTwitch')}</div>
+                {/if}
+              </div>
+            </div>
+          {/if}
 
           <label class="row" for="theme">
             <div class="row-info">
@@ -260,6 +247,61 @@
     font-weight: 600;
     color: #1c1c1e;
     letter-spacing: -0.01em;
+  }
+
+  /* ——— En-tête d'état (autorisation requise) ———
+     Remplace .card-header : le message est le titre de la popup, pas une ligne
+     dedans. Le bouton d'aide sort du flux pour que la colonne reste centrée
+     sur l'icône et le texte. */
+  .state-header {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    padding: 18px 16px 16px;
+    text-align: center;
+    border-bottom: 0.5px solid rgba(0, 0, 0, 0.1);
+  }
+
+  .state-header .help-btn {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+  }
+
+  .icon-plate {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    /* Violet translucide : lisible sur les deux fonds, rien à faire varier. */
+    background: rgba(145, 71, 255, 0.16);
+  }
+
+  .icon-plate svg {
+    width: 22px;
+    height: 22px;
+    fill: #7b3fc9;
+  }
+
+  .state-title {
+    margin: 0;
+    font-size: 15px;
+    font-weight: 650;
+    color: #1c1c1e;
+    letter-spacing: -0.01em;
+  }
+
+  .state-message {
+    margin: 0;
+    max-width: 240px;
+    font-size: 13px;
+    line-height: 1.42;
+    color: #56525f;
+    text-wrap: balance;
   }
 
   .row {
@@ -455,59 +497,6 @@
     }
   }
 
-  /* ——— Auth (device code) ——— */
-  .auth-flex {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 16px 12px;
-    gap: 8px;
-    text-align: center;
-  }
-
-  .auth-icon {
-    flex-shrink: 0;
-    fill: #7b3fc9;
-  }
-
-  .auth-title {
-    margin: 0;
-    font-size: 13px;
-    font-weight: 600;
-  }
-
-  .auth-instruction {
-    margin: 0;
-    font-size: 12px;
-    opacity: 0.85;
-  }
-
-  .auth-code {
-    display: inline-block;
-    padding: 6px 14px;
-    border-radius: 6px;
-    font-size: 18px;
-    font-weight: 700;
-    letter-spacing: 0.15em;
-    text-decoration: none;
-    cursor: pointer;
-    background: #f0e6ff;
-    color: #7b3fc9;
-    border: 1px solid #7b3fc9;
-  }
-
-  .auth-waiting {
-    margin: 0;
-    font-size: 11px;
-    opacity: 0.6;
-  }
-
-  .auth-flex p,
-  .auth-flex strong {
-    color: black;
-  }
-
   /* ——— Thème sombre (activé par le toggle, cohérent avec la popup de config) ——— */
   :global(body):has(.app.dark),
   .app.dark {
@@ -528,6 +517,22 @@
 
   .app.dark .card-header h1 {
     color: #f2f2f7;
+  }
+
+  .app.dark .state-header {
+    border-bottom-color: rgba(255, 255, 255, 0.1);
+  }
+
+  .app.dark .icon-plate svg {
+    fill: #a970ff;
+  }
+
+  .app.dark .state-title {
+    color: #f2f2f7;
+  }
+
+  .app.dark .state-message {
+    color: #b0adb8;
   }
 
   .app.dark .row:active {
@@ -552,20 +557,5 @@
 
   .app.dark .sw .track {
     background: #39393d;
-  }
-
-  .app.dark .auth-flex p,
-  .app.dark .auth-flex strong {
-    color: #f2f2f7;
-  }
-
-  .app.dark .auth-code {
-    background: #3a2d52;
-    color: #cbb6ff;
-    border-color: #7b3fc9;
-  }
-
-  .app.dark .auth-icon {
-    fill: #a970ff;
   }
 </style>

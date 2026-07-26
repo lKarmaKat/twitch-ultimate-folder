@@ -3,15 +3,12 @@
     "none": "ingen"
   },
   "actionPopup": {
-    "authTitle": "Twitch-anslutning krävs",
-    "authInstructionBefore": "Gå till",
-    "authInstructionAfter": "och ange den här koden:",
-    "authWaiting": "Väntar på auktorisering…",
     "preferences": "Inställningar",
     "openConfig": "Öppna konfigurationsfönstret",
     "notOnTwitch": "Öppna en Twitch-flik för att använda tillägget",
     "noSession": "Logga in på ditt Twitch-konto",
-    "authorize": "Auktorisera tillägget",
+    "seeSidebar": "Följ instruktionerna i Twitchs sidofält",
+    "expandSideNav": "Fäll ut Twitchs sidofält för att auktorisera tillägget",
     "theme": "Tema",
     "dark": "Mörkt",
     "light": "Ljust",
@@ -63,8 +60,13 @@
     "offline": "Frånkopplad"
   },
   "status": {
-    "needConnect": "Det verkar som att du behöver ansluta",
-    "needConnectHint": "Godkänn tillägget via ikonen i verktygsfältet för att visa kanalerna du följer.",
+    "needConnect": "Auktorisering krävs",
+    "needConnectHint": "Tillägget behöver din auktorisering för att komma åt kanalerna du följer och anpassa din upplevelse.",
+    "authorize": "Auktorisera tillägget",
+    "authTitle": "Twitch-anslutning krävs",
+    "authInstructionBefore": "Gå till",
+    "authInstructionAfter": "och ange den här koden eller klicka på koden nedan:",
+    "authWaiting": "Väntar på auktorisering…",
     "noLiveChannels": "Inga kanaler live",
     "noLiveChannelsHint": "Ingen av kanalerna i dina mappar är online just nu.",
     "emptyConfig": "Inga mappar har skapats än",

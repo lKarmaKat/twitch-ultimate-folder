@@ -3,15 +3,12 @@
     "none": "nijedan"
   },
   "actionPopup": {
-    "authTitle": "Potrebna je Twitch veza",
-    "authInstructionBefore": "Idite na",
-    "authInstructionAfter": "i unesite ovaj kod:",
-    "authWaiting": "Čeka se autorizacija…",
     "preferences": "Postavke",
     "openConfig": "Otvori prozor za konfiguraciju",
     "notOnTwitch": "Otvorite Twitch karticu za korištenje proširenja",
     "noSession": "Prijavite se na svoj Twitch račun",
-    "authorize": "Autoriziraj proširenje",
+    "seeSidebar": "Slijedite upute prikazane u Twitch bočnoj traci",
+    "expandSideNav": "Proširite Twitch bočnu traku kako biste autorizirali proširenje",
     "theme": "Tema",
     "dark": "Tamna",
     "light": "Svijetla",
@@ -63,8 +60,13 @@
     "offline": "Izvan mreže"
   },
   "status": {
-    "needConnect": "Čini se da se trebate povezati",
-    "needConnectHint": "Odobrite proširenje putem ikone na alatnoj traci kako bi se prikazali kanali koje pratite.",
+    "needConnect": "Potrebna je autorizacija",
+    "needConnectHint": "Proširenje treba vašu autorizaciju za pristup kanalima koje pratite i prilagodbu vašeg iskustva.",
+    "authorize": "Autoriziraj proširenje",
+    "authTitle": "Potrebna je Twitch veza",
+    "authInstructionBefore": "Idite na",
+    "authInstructionAfter": "i unesite ovaj kod ili kliknite na kod ispod:",
+    "authWaiting": "Čeka se autorizacija…",
     "noLiveChannels": "Nema kanala uživo",
     "noLiveChannelsHint": "Nijedan kanal iz vaših mapa trenutačno nije na mreži.",
     "emptyConfig": "Još nema postavljenih mapa",

@@ -3,15 +3,12 @@
     "none": "brak"
   },
   "actionPopup": {
-    "authTitle": "Wymagane połączenie z Twitch",
-    "authInstructionBefore": "Przejdź do",
-    "authInstructionAfter": "i wpisz ten kod:",
-    "authWaiting": "Oczekiwanie na autoryzację…",
     "preferences": "Preferencje",
     "openConfig": "Otwórz okno konfiguracji",
     "notOnTwitch": "Otwórz kartę Twitch, aby korzystać z rozszerzenia",
     "noSession": "Zaloguj się na swoje konto Twitch",
-    "authorize": "Autoryzuj rozszerzenie",
+    "seeSidebar": "Postępuj zgodnie z instrukcjami na pasku bocznym Twitcha",
+    "expandSideNav": "Rozwiń pasek boczny Twitcha, aby autoryzować rozszerzenie",
     "theme": "Motyw",
     "dark": "Ciemny",
     "light": "Jasny",
@@ -63,8 +60,13 @@
     "offline": "Niedostępny"
   },
   "status": {
-    "needConnect": "Wygląda na to, że musisz się połączyć",
-    "needConnectHint": "Autoryzuj rozszerzenie za pomocą ikony na pasku narzędzi, aby wyświetlić obserwowane kanały.",
+    "needConnect": "Wymagana autoryzacja",
+    "needConnectHint": "Rozszerzenie potrzebuje Twojej autoryzacji, aby uzyskać dostęp do obserwowanych kanałów i spersonalizować Twoje doświadczenie.",
+    "authorize": "Autoryzuj rozszerzenie",
+    "authTitle": "Wymagane połączenie z Twitch",
+    "authInstructionBefore": "Przejdź do",
+    "authInstructionAfter": "i wpisz ten kod lub kliknij kod poniżej:",
+    "authWaiting": "Oczekiwanie na autoryzację…",
     "noLiveChannels": "Brak kanałów na żywo",
     "noLiveChannelsHint": "Żaden z kanałów w Twoich folderach nie jest teraz online.",
     "emptyConfig": "Nie utworzono jeszcze folderów",

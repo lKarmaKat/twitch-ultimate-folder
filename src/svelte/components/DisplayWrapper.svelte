@@ -54,10 +54,30 @@
   // null tant que le service worker n'a pas tranché : on affiche l'écran
   // d'attente plutôt qu'un faux « non connecté ».
   let authState = $state(null);
+  // { user_code, verification_uri } pendant un device flow. Diffusé à TOUS les
+  // onglets Twitch, pas seulement à celui d'où part le clic.
+  let deviceCode = $state(null);
+  // Entre le clic et l'arrivée du code : un aller-retour vers /oauth2/device.
+  let authorizing = $state(false);
   let authCb = (msg) => {
+    if (msg.type === CST.AUTH_DEVICE_CODE) {
+      deviceCode = msg.data;
+      return;
+    }
     authState = msg.data;
+    // Le background diffuse un état à la fin de chaque flow — READY en cas de
+    // succès, NEED_AUTH en cas d'échec ou d'expiration. C'est notre unique
+    // signal de remise à zéro : sans lui, un flow échoué laisserait un code
+    // périmé à l'écran et un bouton désactivé pour toujours.
+    deviceCode = null;
+    authorizing = false;
   }
   let authPort = new PortConnector(authCb, 'auth');
+
+  function startAuth() {
+    authorizing = true;
+    authPort.send({ type: CST.START_AUTH });
+  }
 
   let alignmentCb = (data) => {
     alignmentLeft.current = data.data;
@@ -98,7 +118,11 @@
   {/if}
 
   {#if authState === CST.AUTH_NEED_AUTH}
-    <NeedToConnect configManager={configManager} />
+    <NeedToConnect
+      configManager={configManager}
+      deviceCode={deviceCode}
+      authorizing={authorizing}
+      onAuthorize={startAuth} />
   {:else if authState === CST.AUTH_NO_SESSION}
     <!-- Filet de sécurité : le content script a normalement déjà rendu la
          sidebar à Twitch en repassant le conteneur en `collapsed`. -->

@@ -3,15 +3,12 @@
     "none": "ei mitään"
   },
   "actionPopup": {
-    "authTitle": "Twitch-yhteys vaaditaan",
-    "authInstructionBefore": "Siirry osoitteeseen",
-    "authInstructionAfter": "ja syötä tämä koodi:",
-    "authWaiting": "Odotetaan valtuutusta…",
     "preferences": "Asetukset",
     "openConfig": "Avaa asetusikkuna",
     "notOnTwitch": "Avaa Twitch-välilehti käyttääksesi laajennusta",
     "noSession": "Kirjaudu Twitch-tilillesi",
-    "authorize": "Valtuuta laajennus",
+    "seeSidebar": "Seuraa Twitchin sivupalkissa näkyviä ohjeita",
+    "expandSideNav": "Laajenna Twitchin sivupalkki valtuuttaaksesi laajennuksen",
     "theme": "Teema",
     "dark": "Tumma",
     "light": "Vaalea",
@@ -63,8 +60,13 @@
     "offline": "Poissa verkosta"
   },
   "status": {
-    "needConnect": "Näyttää siltä, että sinun täytyy kirjautua",
-    "needConnectHint": "Valtuuta laajennus työkalurivin kuvakkeesta, jotta seuraamasi kanavat näkyvät.",
+    "needConnect": "Valtuutus vaaditaan",
+    "needConnectHint": "Laajennus tarvitsee valtuutuksesi päästäkseen seuraamiisi kanaviin ja mukauttaakseen kokemustasi.",
+    "authorize": "Valtuuta laajennus",
+    "authTitle": "Twitch-yhteys vaaditaan",
+    "authInstructionBefore": "Siirry osoitteeseen",
+    "authInstructionAfter": "ja syötä tämä koodi tai napsauta alla olevaa koodia:",
+    "authWaiting": "Odotetaan valtuutusta…",
     "noLiveChannels": "Ei kanavia livenä",
     "noLiveChannelsHint": "Yksikään kansioidesi kanava ei ole juuri nyt verkossa.",
     "emptyConfig": "Ei vielä luotuja kansioita",

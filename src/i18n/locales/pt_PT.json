@@ -3,15 +3,12 @@
     "none": "nenhum"
   },
   "actionPopup": {
-    "authTitle": "Ligação à Twitch necessária",
-    "authInstructionBefore": "Vá a",
-    "authInstructionAfter": "e introduza este código:",
-    "authWaiting": "A aguardar autorização…",
     "preferences": "Preferências",
     "openConfig": "Abrir janela de configuração",
     "notOnTwitch": "Abra um separador do Twitch para usar a extensão",
     "noSession": "Inicie sessão na sua conta Twitch",
-    "authorize": "Autorizar a extensão",
+    "seeSidebar": "Siga as instruções apresentadas na barra lateral da Twitch",
+    "expandSideNav": "Expanda a barra lateral da Twitch para autorizar a extensão",
     "theme": "Tema",
     "dark": "Escuro",
     "light": "Claro",
@@ -63,8 +60,13 @@
     "offline": "Desconectado"
   },
   "status": {
-    "needConnect": "Parece que precisa de se ligar",
-    "needConnectHint": "Autorize a extensão através do ícone na barra de ferramentas para mostrar os canais que segue.",
+    "needConnect": "Autorização necessária",
+    "needConnectHint": "A extensão precisa da sua autorização para aceder aos canais que segue e personalizar a sua experiência.",
+    "authorize": "Autorizar a extensão",
+    "authTitle": "Ligação à Twitch necessária",
+    "authInstructionBefore": "Vá a",
+    "authInstructionAfter": "e introduza este código ou clique no código abaixo:",
+    "authWaiting": "A aguardar autorização…",
     "noLiveChannels": "Sem canais em direto",
     "noLiveChannelsHint": "Nenhum dos canais nas suas pastas está online neste momento.",
     "emptyConfig": "Ainda não há pastas configuradas",

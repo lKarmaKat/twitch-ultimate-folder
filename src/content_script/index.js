@@ -34,6 +34,17 @@ function getSessionUserId() {
   }
 }
 
+/**
+ * État replié de la barre latérale de Twitch, que l'extension ne fait
+ * qu'observer. Il compte désormais au-delà de l'affichage : le panneau
+ * d'autorisation vit dans la sidebar, or `:host([collapsed])` le masque
+ * entièrement. Repliée, il n'existe donc plus aucune surface visible pour
+ * autoriser l'extension, et l'action popup doit le dire.
+ */
+function isSideNavCollapsed() {
+  return !!document.querySelector('.side-nav--collapsed');
+}
+
 let sessionUserId = getSessionUserId();
 let sidebarDiv = null;
 // Remplacée par injectScript(). Tant que rien n'est injecté, il n'y a rien à
@@ -73,7 +84,7 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
   else if (msg.type === GET_SESSION_USER) {
     // Chemin action popup : elle peut être ouverte alors que le service worker
     // vient de se réveiller et n'a plus l'état en mémoire.
-    sendResponse(getSessionUserId());
+    sendResponse({ userId: getSessionUserId(), sideNavCollapsed: isSideNavCollapsed() });
     return true;
   }
 
@@ -122,7 +133,7 @@ function injectScript() {
   const sections = () => document.querySelectorAll('#side-nav .side-nav-section');
 
   applyVisibility = () => {
-    const collapsed = document.querySelector('.side-nav--collapsed');
+    const collapsed = isSideNavCollapsed();
     // Déconnexion Twitch : on rend la sidebar au site plutôt que de retirer le
     // noeud du DOM. Retirer #sidebar_shadow n'annulerait ni les ports ni le
     // ping périodique de PortConnector (le module a déjà été évalué), et une

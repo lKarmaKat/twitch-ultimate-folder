@@ -3,15 +3,12 @@
     "none": "keine"
   },
   "actionPopup": {
-    "authTitle": "Twitch-Verbindung erforderlich",
-    "authInstructionBefore": "Gehe zu",
-    "authInstructionAfter": "und gib diesen Code ein:",
-    "authWaiting": "Warte auf Autorisierung…",
     "preferences": "Einstellungen",
     "openConfig": "Konfigurationsfenster öffnen",
     "notOnTwitch": "Öffne einen Twitch-Tab, um die Erweiterung zu nutzen",
     "noSession": "Melde dich bei deinem Twitch-Konto an",
-    "authorize": "Erweiterung autorisieren",
+    "seeSidebar": "Folge den Anweisungen in der Twitch-Seitenleiste",
+    "expandSideNav": "Klappe die Twitch-Seitenleiste aus, um die Erweiterung zu autorisieren",
     "theme": "Design",
     "dark": "Dunkel",
     "light": "Hell",
@@ -63,8 +60,13 @@
     "offline": "Nicht online"
   },
   "status": {
-    "needConnect": "Es scheint, dass du dich anmelden musst",
-    "needConnectHint": "Autorisiere die Erweiterung über das Symbol in der Symbolleiste, um die Kanäle anzuzeigen, denen du folgst.",
+    "needConnect": "Autorisierung erforderlich",
+    "needConnectHint": "Die Erweiterung benötigt deine Autorisierung, um auf die Kanäle zuzugreifen, denen du folgst, und dein Erlebnis anzupassen.",
+    "authorize": "Erweiterung autorisieren",
+    "authTitle": "Twitch-Verbindung erforderlich",
+    "authInstructionBefore": "Gehe zu",
+    "authInstructionAfter": "und gib diesen Code ein oder klicke auf den Code unten:",
+    "authWaiting": "Warte auf Autorisierung…",
     "noLiveChannels": "Keine Kanäle live",
     "noLiveChannelsHint": "Keiner der Kanäle in deinen Ordnern ist gerade online.",
     "emptyConfig": "Noch keine Ordner eingerichtet",

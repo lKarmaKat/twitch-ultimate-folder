@@ -38,6 +38,22 @@ function broadcastAuth(state: string) {
   portManager.sendMessageToAllTabs(CST.AUTH_STATE, state, "auth");
 }
 
+/**
+ * Diffuse le code d'activation à TOUTES les sidebars ouvertes, et pas seulement
+ * à celle d'où part le clic : l'utilisateur qui a plusieurs onglets Twitch doit
+ * pouvoir saisir le code depuis n'importe lequel.
+ *
+ * Il n'existe pas de diffusion « code effacé » : les sidebars jettent leur code
+ * dès qu'un AUTH_STATE arrive, et le background en émet un à la fin de chaque
+ * flow, succès (READY) comme échec (NEED_AUTH).
+ */
+function broadcastDeviceCode(info: { user_code: string; verification_uri: string }) {
+  portManager.sendMessageToAllTabs(CST.AUTH_DEVICE_CODE, {
+    user_code: info.user_code,
+    verification_uri: info.verification_uri
+  }, "auth");
+}
+
 function teardown() {
   streamsDatasPoller?.stop();
   streamsDatasPoller = null;
@@ -127,15 +143,39 @@ function queryActiveTab(): Promise<chrome.tabs.Tab | undefined> {
   });
 }
 
-function askTabForSession(tabId: number): Promise<string | null> {
+interface TabSession {
+  userId: string | null;
+  /** Sidebar Twitch repliée : le panneau d'autorisation y est invisible. */
+  sideNavCollapsed: boolean;
+}
+
+function askTabForSession(tabId: number): Promise<TabSession> {
   return new Promise(resolve => {
     chrome.tabs.sendMessage(tabId, { type: CST.GET_SESSION_USER }, (response) => {
       // Pas de content script à l'autre bout (page pas encore chargée, ou
       // onglet Twitch ouvert avant l'installation) : lastError, pas un crash.
-      if (chrome.runtime.lastError) return resolve(null);
-      resolve(typeof response === 'string' ? response : null);
+      if (chrome.runtime.lastError || !response) {
+        return resolve({ userId: null, sideNavCollapsed: false });
+      }
+      resolve({
+        userId: typeof response.userId === 'string' ? response.userId : null,
+        sideNavCollapsed: response.sideNavCollapsed === true
+      });
     });
   });
+}
+
+/**
+ * Réamorce le pipeline depuis un onglet précis. Utilisé quand le service worker
+ * a été tué : `currentUserId` est alors perdu alors que l'onglet, lui, n'a
+ * aucune raison de re-signaler une session qui n'a pas changé de son point de vue.
+ */
+async function resolveSessionForTab(tabId: number): Promise<TabSession> {
+  const session = await askTabForSession(tabId);
+  // Appel inconditionnel : la garde d'idempotence d'onSessionUserChanged sait
+  // déjà distinguer « rien n'a changé » de « état jamais établi ».
+  await onSessionUserChanged(session.userId ? Number(session.userId) : null);
+  return session;
 }
 
 /**
@@ -147,28 +187,23 @@ function askTabForSession(tabId: number): Promise<string | null> {
  * L'onglet actif, et non « un onglet Twitch quelconque », parce que c'est déjà
  * la cible de « Ouvrir la configuration » : le message affiché reste donc exact.
  */
-async function resolveActiveTabSession(): Promise<string> {
+async function resolveActiveTabSession(): Promise<{ state: string; sideNavCollapsed: boolean }> {
   const tab = await queryActiveTab();
-  if (!tab?.url || !tab.url.startsWith('https://www.twitch.tv/')) return CST.AUTH_NOT_ON_TWITCH;
-  if (tab.id === undefined) return CST.AUTH_NOT_ON_TWITCH;
-
-  const sessionUserId = await askTabForSession(tab.id);
-  if (!sessionUserId) {
-    await onSessionUserChanged(null);
-    return CST.AUTH_NO_SESSION;
+  if (!tab?.url || !tab.url.startsWith('https://www.twitch.tv/') || tab.id === undefined) {
+    return { state: CST.AUTH_NOT_ON_TWITCH, sideNavCollapsed: false };
   }
 
   // Réveil du service worker, ou session apparue pendant qu'il dormait : on
-  // reconstruit le pipeline AVANT de répondre. Sinon on afficherait « Autoriser
+  // reconstruit le pipeline AVANT de répondre. Sinon on afficherait « autorisez
   // l'extension » à quelqu'un qui l'a déjà autorisée, simplement parce que
   // currentUserId a été perdu avec le worker.
-  if (currentUserId !== Number(sessionUserId)) {
-    await onSessionUserChanged(Number(sessionUserId));
-  }
+  const session = await resolveSessionForTab(tab.id);
+  if (!session.userId) return { state: CST.AUTH_NO_SESSION, sideNavCollapsed: false };
 
-  return currentUserId !== null && tokenManager.token
-    ? CST.AUTH_READY
-    : CST.AUTH_NEED_AUTH;
+  return {
+    state: currentUserId !== null && tokenManager.token ? CST.AUTH_READY : CST.AUTH_NEED_AUTH,
+    sideNavCollapsed: session.sideNavCollapsed
+  };
 }
 
 let sendStreamInfoOnConnect = (port: chrome.runtime.Port) => {
@@ -238,6 +273,21 @@ let sendCurrentAuth = (port: chrome.runtime.Port) => {
     "data": currentAuthState
   });
 
+  // Onglet ouvert (ou rechargé) PENDANT un device flow lancé depuis un autre :
+  // il a manqué la diffusion, son port n'existait pas encore. Sans ce rattrapage
+  // il afficherait le bouton « Autoriser », dont le clic retomberait sur la
+  // branche `authInProgressPromise` de TokenManager — laquelle n'appelle pas le
+  // callback : l'onglet resterait bloqué sans jamais voir de code.
+  // Après le AUTH_STATE ci-dessus, jamais avant : la sidebar efface son code à
+  // chaque état reçu, l'ordre inverse effacerait ce qu'on vient d'envoyer.
+  const pending = tokenManager.currentDeviceCodeInfo;
+  if (pending?.user_code) {
+    port.postMessage({
+      "type": CST.AUTH_DEVICE_CODE,
+      "data": { user_code: pending.user_code, verification_uri: pending.verification_uri }
+    });
+  }
+
   // Le service worker a pu être tué puis relancé alors que l'onglet, lui, est
   // resté ouvert : le content script n'a alors aucune raison de re-signaler sa
   // session (elle n'a pas changé de son point de vue) et plus rien ne serait
@@ -245,13 +295,58 @@ let sendCurrentAuth = (port: chrome.runtime.Port) => {
   if (currentAuthState !== null) return;
   const tabId = port.sender?.tab?.id;
   if (tabId === undefined) return;
-  askTabForSession(tabId)
-    .then(id => onSessionUserChanged(id ? Number(id) : null))
+  resolveSessionForTab(tabId)
     .catch(err => logBackgroundError("background:sendCurrentAuth:recover", err));
+}
+
+/**
+ * Device flow déclenché depuis la sidebar. Seule voie d'entrée : l'action popup
+ * ne fait plus qu'y renvoyer. Rien ne repart en réponse — le code d'activation
+ * est diffusé à tous les onglets, y compris celui qui a cliqué.
+ */
+function startAuthFromPort(port: chrome.runtime.Port) {
+  (async () => {
+    const tabId = port.sender?.tab?.id;
+    if (currentUserId === null && tabId !== undefined) {
+      await resolveSessionForTab(tabId);
+    }
+    if (currentUserId === null) {
+      // Déconnecté de Twitch entre l'affichage du bouton et le clic.
+      broadcastAuth(CST.AUTH_NO_SESSION);
+      return;
+    }
+
+    const userId = currentUserId;
+    try {
+      await tokenManager.startAuthFor(userId, broadcastDeviceCode);
+      // Le polling dure des dizaines de secondes : l'utilisateur a pu changer de
+      // compte entre-temps, auquel cas onSessionUserChanged a déjà diffusé
+      // l'état du nouveau. Parler ici le contredirait.
+      if (currentUserId !== userId) return;
+      // Surtout pas onSessionUserChanged() ici : sa garde d'idempotence verrait
+      // `userId === currentUserId` et ne ferait rien. Le compte n'a pas changé,
+      // c'est son autorisation qui vient d'aboutir.
+      // READY d'abord : inutile de faire patienter l'utilisateur derrière le
+      // premier chargement Helix.
+      broadcastAuth(CST.AUTH_READY);
+      await initServices(userId);
+    } catch (err) {
+      // Code expiré, refusé, ou bascule de compte pendant le polling. Rediffuser
+      // NEED_AUTH efface au passage le code périmé dans toutes les sidebars —
+      // mais seulement si le compte courant est toujours celui qu'on autorisait.
+      logBackgroundError("background:startAuth:deviceFlow", err);
+      if (currentUserId === userId) broadcastAuth(CST.AUTH_NEED_AUTH);
+    }
+  })().catch(err => logBackgroundError("background:startAuth", err));
 }
 // Messages entrants sur un port déjà ouvert (la sidebar en maintient un).
 let handlePortMessage = (message: any, port?: chrome.runtime.Port) => {
-  if (message?.type === CST.DISPLAY_POPUP) {
+  if (message?.type === CST.START_AUTH) {
+    // Passe par le port et non par chrome.runtime.onMessage : `port.sender.tab`
+    // identifie l'onglet demandeur, on résout donc la session depuis CET onglet
+    // plutôt que depuis l'onglet actif, qui peut être un autre.
+    if (port) startAuthFromPort(port);
+  } else if (message?.type === CST.DISPLAY_POPUP) {
     // La sidebar sait dans quel onglet elle vit : on cible l'onglet du port
     // plutôt que le "currentWindow actif" utilisé par le chemin action popup,
     // qui viserait le mauvais onglet si l'utilisateur en a changé.
@@ -307,63 +402,16 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
     }
 
     if (msg.type === CST.IS_USER_LOGGED_IN) { // Envoyé par l'action popup à son ouverture
-      (async () => {
-        // Un device flow déjà en cours prime : la popup a pu être fermée puis
-        // rouverte pendant que l'utilisateur saisissait le code.
-        if (tokenManager.currentDeviceCodeInfo?.user_code) {
-          sendResponse({
-            state: CST.AUTH_NEED_AUTH,
-            user_code: tokenManager.currentDeviceCodeInfo.user_code,
-            verification_uri: tokenManager.currentDeviceCodeInfo.verification_uri
-          });
-          return;
-        }
-        sendResponse({ state: await resolveActiveTabSession() });
-      })().catch(err => {
-        logBackgroundError("background:isUserLoggedIn", err);
-        sendResponse({ state: CST.AUTH_NOT_ON_TWITCH });
-      });
-      return true;
-    }
-
-    if (msg.type === CST.START_AUTH) { // Geste explicite : bouton « Autoriser »
-      (async () => {
-        if (currentUserId === null) {
-          // Service worker réveillé, ou session apparue pendant que la popup
-          // était ouverte : resolveActiveTabSession réamorce le pipeline.
-          const state = await resolveActiveTabSession();
-          if (currentUserId === null) {
-            sendResponse({ state });
-            return;
-          }
-        }
-
-        const userId = currentUserId;
-        const info = await new Promise<any>((resolve, reject) => {
-          // Le device code arrive AVANT la fin du flow : on répond dès qu'il est
-          // connu, le polling se poursuit en arrière-plan.
-          tokenManager.startAuthFor(userId, (deviceInfo) => resolve(deviceInfo))
-            .then(async () => {
-              // Surtout pas onSessionUserChanged() ici : son garde d'idempotence
-              // verrait `userId === currentUserId` et ne ferait rien. Le compte
-              // n'a pas changé, c'est son autorisation qui vient d'aboutir.
-              // READY d'abord : inutile de faire patienter l'utilisateur
-              // derrière le premier chargement Helix.
-              broadcastAuth(CST.AUTH_READY);
-              await initServices(userId);
-            })
-            .catch((err) => {
-              // Code expiré, refusé, ou onglet fermé pendant le polling.
-              logBackgroundError("background:startAuth:deviceFlow", err);
-              broadcastAuth(CST.AUTH_NEED_AUTH);
-              reject(err); // sans effet si le device code a déjà été renvoyé
-            });
+      // La popup ne déclenche plus le device flow et n'affiche plus de code :
+      // elle n'a besoin que de savoir quoi dire. `sideNavCollapsed` distingue
+      // « suivez les instructions dans la sidebar » de « dépliez d'abord la
+      // sidebar », faute de quoi on renverrait vers un panneau invisible.
+      resolveActiveTabSession()
+        .then(({ state, sideNavCollapsed }) => sendResponse({ state, sideNavCollapsed }))
+        .catch(err => {
+          logBackgroundError("background:isUserLoggedIn", err);
+          sendResponse({ state: CST.AUTH_NOT_ON_TWITCH, sideNavCollapsed: false });
         });
-        sendResponse({ state: CST.AUTH_NEED_AUTH, ...info });
-      })().catch(err => {
-        logBackgroundError("background:startAuth", err);
-        sendResponse({ state: CST.AUTH_NEED_AUTH });
-      });
       return true;
     }
 

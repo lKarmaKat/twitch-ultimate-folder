@@ -119,6 +119,37 @@ test('popup has a loader until datas are sent through', async ({ page }) => {
 });
 
 
+test('the device code is shown in the sidebar and cleared when the flow ends', async () => {
+	let conf: any = {
+		userId: 0,
+		currentConfig: "liste principale",
+		configsList: [deepClone(config)]
+	}
+	await popupPage.sendDefaultConf(conf, channelsRef);
+	await popupPage.sendAuth(CST.AUTH_NEED_AUTH);
+	await popupPage.getNeedToConnect();
+
+	// Avant tout clic : le bouton, jamais le code. Un device flow lancé au rendu
+	// brûlerait un code d'activation à chaque navigation Twitch.
+	await expect(await popupPage.getAuthorizeButton()).toBeVisible();
+	await expect(await popupPage.getDeviceCode()).toHaveCount(0);
+
+	// Diffusion du code : elle atteint tous les onglets, y compris ceux d'où
+	// personne n'a cliqué — d'où ce test sans passer par le bouton.
+	await popupPage.sendDeviceCode('LZMRQHDQ');
+	const code = await popupPage.getDeviceCode();
+	await expect(code).toHaveText('LZMRQHDQ');
+	await expect(code).toHaveAttribute('href', 'https://www.twitch.tv/activate');
+	await expect(await popupPage.getAuthorizeButton()).toHaveCount(0);
+
+	// Échec ou expiration : le background rediffuse NEED_AUTH, seul signal
+	// d'effacement d'un code désormais périmé.
+	await popupPage.sendAuth(CST.AUTH_NEED_AUTH);
+	await expect(await popupPage.getDeviceCode()).toHaveCount(0);
+	await expect(await popupPage.getAuthorizeButton()).toBeVisible();
+});
+
+
 
 test.describe('with config', async () => {
 	test.beforeEach(async ({ page }) => {

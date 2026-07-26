@@ -38,6 +38,14 @@ export class PopupPage {
         return await this.popupFrame.locator('#need-connect').waitFor({ timeout: 500 });
     }
 
+    async getAuthorizeButton() {
+        return this.popupFrame.locator('#authorize-btn');
+    }
+
+    async getDeviceCode() {
+        return this.popupFrame.locator('#device-code');
+    }
+
     async getListInConfigChannelList(listId: string) {
         let configList = await this.getConfigChannelList();
         return  configList.locator(`#${listId}`);
@@ -175,13 +183,28 @@ export class PopupPage {
      * Valeurs attendues : CST.AUTH_NO_SESSION | AUTH_NEED_AUTH | AUTH_READY.
      */
     async sendAuth(authState: string) {
+        await this.sendOnAuthPort(CST.AUTH_STATE, authState);
+    }
+
+    /**
+     * Code d'activation poussé sur le port `auth`. Le background le diffuse à
+     * TOUS les onglets Twitch, pas seulement à celui d'où part le clic : c'est
+     * pourquoi il voyage sur son propre message plutôt qu'en réponse.
+     */
+    async sendDeviceCode(userCode: string, verificationUri = 'https://www.twitch.tv/activate') {
+        await this.sendOnAuthPort(CST.AUTH_DEVICE_CODE, {
+            user_code: userCode,
+            verification_uri: verificationUri
+        });
+    }
+
+    private async sendOnAuthPort(type: string, data: any) {
         let fr = this.page.frame({ name: 'inner-iframe' })
         if (!fr) throw new Error('Frame not found')
-        await fr.evaluate((data) => {
-            console.log("LOOKING FOR PORT IN", (window as any).__portCallbackMap)
-            const callback =(window as any).__portCallbackMap?.['auth'];
+        await fr.evaluate(({ type, data }) => {
+            const callback = (window as any).__portCallbackMap?.['auth'];
             if (!callback) throw new Error('Auth port callback not found in iframe');
-            callback({ data });
-        }, authState)
+            callback({ type, data });
+        }, { type, data })
     }
 }

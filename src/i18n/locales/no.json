@@ -3,15 +3,12 @@
     "none": "ingen"
   },
   "actionPopup": {
-    "authTitle": "Twitch-tilkobling kreves",
-    "authInstructionBefore": "Gå til",
-    "authInstructionAfter": "og skriv inn denne koden:",
-    "authWaiting": "Venter på autorisasjon…",
     "preferences": "Innstillinger",
     "openConfig": "Åpne konfigurasjonsvinduet",
     "notOnTwitch": "Åpne en Twitch-fane for å bruke utvidelsen",
     "noSession": "Logg inn på Twitch-kontoen din",
-    "authorize": "Autoriser utvidelsen",
+    "seeSidebar": "Følg instruksjonene i Twitch-sidepanelet",
+    "expandSideNav": "Utvid Twitch-sidepanelet for å autorisere utvidelsen",
     "theme": "Tema",
     "dark": "Mørk",
     "light": "Lys",
@@ -63,8 +60,13 @@
     "offline": "Frakoblet"
   },
   "status": {
-    "needConnect": "Det ser ut som du må koble til",
-    "needConnectHint": "Godkjenn utvidelsen fra ikonet på verktøylinjen for å vise kanalene du følger.",
+    "needConnect": "Autorisasjon kreves",
+    "needConnectHint": "Utvidelsen trenger din autorisasjon for å få tilgang til kanalene du følger og tilpasse opplevelsen din.",
+    "authorize": "Autoriser utvidelsen",
+    "authTitle": "Twitch-tilkobling kreves",
+    "authInstructionBefore": "Gå til",
+    "authInstructionAfter": "og skriv inn denne koden eller klikk på koden nedenfor:",
+    "authWaiting": "Venter på autorisasjon…",
     "noLiveChannels": "Ingen kanaler direkte",
     "noLiveChannelsHint": "Ingen av kanalene i mappene dine er tilkoblet akkurat nå.",
     "emptyConfig": "Ingen mapper opprettet ennå",
