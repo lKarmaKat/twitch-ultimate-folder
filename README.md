@@ -22,6 +22,34 @@ A channel that is not streaming never appears in the sidebar. This also applies 
 
 If you want a list to stay visible even when nobody in it is live, turn on its **Always show** behaviour. A list also stays visible when one of its sub-lists has something live in it, or when it contains the « All other channels » element.
 
+## How to connect the first time
+
+> [!IMPORTANT]
+> This extension never reads your Twitch account on its own. To build your sidebar it needs the list of channels you follow, and Twitch only hands that list over if **you** allow it: you have to authorise the application on your account, once. As long as this is not done, the extension has access to nothing and your sidebar stays empty.
+
+**Authorising the application**
+
+1. Click the extension icon in your browser toolbar. The popup opens on an activation code.
+2. Click the code. Twitch opens on **twitch.tv/activate** with the code already filled in.
+3. Authorise the application to access your account.
+<!-- Links stay this way for github compatibility -->
+https://github.com/user-attachments/assets/0ddc5818-8131-472b-aacb-546bbb880ee8
+
+That is all. Go back to your Twitch tab: the sidebar fills itself in after a few seconds, and you will not be asked again — the extension keeps the authorisation alive on its own. You can revoke it at any time from your Twitch settings, under **Connections**.
+
+<details>
+<summary><b>How to find the extension icon</b></summary>
+
+<!-- <figure> -->
+https://github.com/user-attachments/assets/0ddc5818-8131-472b-aacb-546bbb880ee8
+
+  <!-- <figcaption>How to find the extension icon.</figcaption> -->
+<!-- </figure> -->
+
+Depending on your browser, the icon may be hidden behind the extensions puzzle piece. Pin it once and it stays in the toolbar.
+
+</details>
+
 ## How to create a configuration
 
 Open the action popup by clicking the extension icon in your browser toolbar, then click **Open config popup**. The configuration window opens on top of Twitch.
@@ -30,7 +58,7 @@ Open the action popup by clicking the extension icon in your browser toolbar, th
 <summary><b>How to find the extension icon</b></summary>
 
 <!-- <figure> -->
-[Video.webm](https://github.com/user-attachments/assets/0ddc5818-8131-472b-aacb-546bbb880ee8)
+https://github.com/user-attachments/assets/0ddc5818-8131-472b-aacb-546bbb880ee8
 
   <!-- <figcaption>How to find the extension icon.</figcaption> -->
 <!-- </figure> -->
@@ -40,7 +68,7 @@ Depending on your browser, the icon may be hidden behind the extensions puzzle p
 </details>
 
 <!-- <figure> -->
-[Video.webm](https://github.com/user-attachments/assets/0ddc5818-8131-472b-aacb-546bbb880ee8)
+https://github.com/user-attachments/assets/0ddc5818-8131-472b-aacb-546bbb880ee8
 <!-- <figcaption>Opening the configuration window from the action popup.</figcaption> -->
 <!-- </figure> -->
 
@@ -61,7 +89,7 @@ The window is split into four sections, from left to right.
    A live preview of your configuration, which behaves exactly as it will in the Twitch sidebar once saved.
 
 <!-- <figure> -->
-[Video.webm](https://github.com/user-attachments/assets/0ddc5818-8131-472b-aacb-546bbb880ee8)
+https://github.com/user-attachments/assets/0ddc5818-8131-472b-aacb-546bbb880ee8
 <!-- <figcaption>Detail of the sections.</figcaption> -->
 <!-- </figure> -->
 
@@ -70,7 +98,7 @@ The window is split into four sections, from left to right.
 In the second section, click the **+** button to add a new list. The list appears with a default name; click its header to select it, and the configuration panel on the right fills up with its settings. From there you rename it and set how it behaves in the sidebar.
 
 <!-- <figure> -->
-[Video.webm](https://github.com/user-attachments/assets/0ddc5818-8131-472b-aacb-546bbb880ee8)
+https://github.com/user-attachments/assets/0ddc5818-8131-472b-aacb-546bbb880ee8
 <!-- <figcaption>Adding a new list and changing its behaviour.</figcaption> -->
 <!-- </figure> -->
 
@@ -79,7 +107,7 @@ In the second section, click the **+** button to add a new list. The list appear
 Every channel and every list in your configuration carries a **✕** button. Clicking it removes the element from the configuration. Removing a list also removes everything it contained — the channels are not deleted from your Twitch follows, they simply go back to being unplaced.
 
 <!-- <figure> -->
-[Video.webm](https://github.com/user-attachments/assets/0ddc5818-8131-472b-aacb-546bbb880ee8)
+https://github.com/user-attachments/assets/0ddc5818-8131-472b-aacb-546bbb880ee8
   <!-- <figcaption>How to remove a channel/list.</figcaption> -->
 <!-- </figure> -->
 
@@ -89,7 +117,7 @@ Every channel and every list in your configuration carries a **✕** button. Cli
 Select the list by clicking its header, then edit the **List name** field in the configuration panel. The name updates live in the preview.
 
 <!-- <figure> -->
-[Video.webm](https://github.com/user-attachments/assets/0ddc5818-8131-472b-aacb-546bbb880ee8)
+https://github.com/user-attachments/assets/0ddc5818-8131-472b-aacb-546bbb880ee8
 <!-- <figcaption>Renaming a list from the configuration panel.</figcaption> -->
 <!-- </figure> -->
 
@@ -166,7 +194,7 @@ They all report the same information; what changes is how much room it takes and
 Drag a channel from the first section — the channels you follow — and drop it into a list of the second section. Use the search field above the list to find a channel quickly instead of scrolling.
 
 <!-- <figure> -->
-[Video.webm](https://github.com/user-attachments/assets/0ddc5818-8131-472b-aacb-546bbb880ee8)
+https://github.com/user-attachments/assets/0ddc5818-8131-472b-aacb-546bbb880ee8
 <!-- <figcaption>Adding channels to a list.</figcaption> -->
 <!-- </figure> -->
 
@@ -175,7 +203,7 @@ Drag a channel from the first section — the channels you follow — and drop i
 Dragging works inside the configuration too. Grab a channel to move it from one list to another, or grab a list by its header to move the whole list, with everything inside it, somewhere else in the structure.
 
 <!-- <figure> -->
-  [Video.webm](https://github.com/user-attachments/assets/0ddc5818-8131-472b-aacb-546bbb880ee8)
+  https://github.com/user-attachments/assets/0ddc5818-8131-472b-aacb-546bbb880ee8
   <!-- <figcaption>Moving a channel and a list inside the configuration.</figcaption> -->
 <!-- </figure> -->
 
@@ -189,7 +217,7 @@ It has its own configuration, reached through its settings button rather than by
 - **Sortable header** — a clickable header appears. Clicking it switches the sort between alphabetical and viewer count for the current session only, without touching your saved configuration.
 
 <!-- <figure> -->
-  [Video.webm](https://github.com/user-attachments/assets/0ddc5818-8131-472b-aacb-546bbb880ee8)
+  https://github.com/user-attachments/assets/0ddc5818-8131-472b-aacb-546bbb880ee8
   <!-- <figcaption>Dragging the « All other channels » element and setting it up.</figcaption> -->
 <!-- </figure> -->
 
@@ -206,7 +234,7 @@ The action popup — the small panel that opens when you click the extension ico
 Switch between the dark and light theme. The change applies immediately to the sidebar, the configuration window and this help page.
 
 <!-- <figure> -->
-  [Video.webm](https://github.com/user-attachments/assets/0ddc5818-8131-472b-aacb-546bbb880ee8)
+  https://github.com/user-attachments/assets/0ddc5818-8131-472b-aacb-546bbb880ee8
   <!-- <figcaption>Switching between the dark and light theme.</figcaption> -->
 <!-- </figure> -->
 
@@ -215,7 +243,7 @@ Switch between the dark and light theme. The change applies immediately to the s
 This setting controls which side the channel title appears on when you hover a live channel in the sidebar. Switch it to the other side if the title ends up under another panel — typically when BTTV has moved the chat layout around.
 
 <!-- <figure> -->
- [Video.webm](https://github.com/user-attachments/assets/0ddc5818-8131-472b-aacb-546bbb880ee8)
+ https://github.com/user-attachments/assets/0ddc5818-8131-472b-aacb-546bbb880ee8
   <!-- <figcaption>Changing the side the channel title is displayed on.</figcaption> -->
 <!-- </figure> -->
 
@@ -224,7 +252,7 @@ This setting controls which side the channel title appears on when you hover a l
 Pick your language from the list. Every open surface — the sidebar, the configuration window, this help page — updates straight away, with no page refresh.
 
 <!-- <figure> -->
-  [Video.webm](https://github.com/user-attachments/assets/0ddc5818-8131-472b-aacb-546bbb880ee8)
+  https://github.com/user-attachments/assets/0ddc5818-8131-472b-aacb-546bbb880ee8
   <!-- <figcaption>Changing the language, applied live without a refresh.</figcaption> -->
 <!-- </figure> -->
 

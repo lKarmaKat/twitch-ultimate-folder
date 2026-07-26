@@ -54,13 +54,14 @@
     "noChannels": "No hay canales para mostrar"
   },
   "display": {
-    "needConnect": "Parece que necesitas conectarte",
     "allOtherChannels": "Todos los demás canales"
   },
   "channel": {
     "offline": "Sin conexión"
   },
   "status": {
+    "needConnect": "Parece que necesitas conectarte",
+    "needConnectHint": "Autoriza la extensión desde el icono de la barra de herramientas para mostrar los canales que sigues.",
     "noLiveChannels": "Ningún canal en directo",
     "noLiveChannelsHint": "Ninguno de los canales de tus carpetas está en línea ahora mismo.",
     "emptyConfig": "Aún no hay carpetas configuradas",

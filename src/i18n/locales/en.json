@@ -19,6 +19,16 @@
       "offline": "A channel that is not streaming never appears in the sidebar. This also applies to the lists themselves: a list whose channels are all offline disappears entirely, so the sidebar only ever shows what you can actually watch right now.",
       "offlineAlwaysShow": "If you want a list to stay visible even when nobody in it is live, turn on its « {behaviour} » behaviour. A list also stays visible when one of its sub-lists has something live in it, or when it contains the « All other channels » element."
     },
+    "connect": {
+      "title": "How to connect the first time",
+      "intro": "This extension never reads your Twitch account on its own. To build your sidebar it needs the list of channels you follow, and Twitch only hands that list over if you allow it: you have to authorise the application on your account, once. As long as this is not done, the extension has access to nothing and your sidebar stays empty.",
+      "stepsTitle": "Authorising the application",
+      "step1": "Click the extension icon in your browser toolbar. The popup opens on an activation code.",
+      "step2": "Click the code. Twitch opens on twitch.tv/activate with the code already filled in.",
+      "step3": "Authorise the application to access your account.",
+      "outro": "That is all. Go back to your Twitch tab: the sidebar fills itself in after a few seconds, and you will not be asked again — the extension keeps the authorisation alive on its own. You can revoke it at any time from your Twitch settings, under « Connections ».",
+      "caption": "Authorising the application from the extension popup."
+    },
     "createConfig": {
       "title": "How to create a configuration",
       "openTitle": "Opening the configuration window",
@@ -181,13 +191,14 @@
     "noChannels": "No channels to display"
   },
   "display": {
-    "needConnect": "Seems like you need to connect",
     "allOtherChannels": "All others channels"
   },
   "channel": {
     "offline": "Offline"
   },
   "status": {
+    "needConnect": "Seems like you need to connect",
+    "needConnectHint": "Authorise the extension from the toolbar icon to display the channels you follow.",
     "noLiveChannels": "No channels live",
     "noLiveChannelsHint": "None of the channels in your folders are online right now.",
     "emptyConfig": "No folders set up yet",

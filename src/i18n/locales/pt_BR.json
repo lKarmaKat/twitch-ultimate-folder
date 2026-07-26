@@ -54,13 +54,14 @@
     "noChannels": "Nenhum canal para exibir"
   },
   "display": {
-    "needConnect": "Parece que você precisa se conectar",
     "allOtherChannels": "Todos os outros canais"
   },
   "channel": {
     "offline": "Desconectado"
   },
   "status": {
+    "needConnect": "Parece que você precisa se conectar",
+    "needConnectHint": "Autorize a extensão pelo ícone na barra de ferramentas para exibir os canais que você segue.",
     "noLiveChannels": "Nenhum canal ao vivo",
     "noLiveChannelsHint": "Nenhum dos canais nas suas pastas está online no momento.",
     "emptyConfig": "Nenhuma pasta criada ainda",

@@ -54,13 +54,14 @@
     "noChannels": "Brak kanałów do wyświetlenia"
   },
   "display": {
-    "needConnect": "Wygląda na to, że musisz się połączyć",
     "allOtherChannels": "Wszystkie pozostałe kanały"
   },
   "channel": {
     "offline": "Niedostępny"
   },
   "status": {
+    "needConnect": "Wygląda na to, że musisz się połączyć",
+    "needConnectHint": "Autoryzuj rozszerzenie za pomocą ikony na pasku narzędzi, aby wyświetlić obserwowane kanały.",
     "noLiveChannels": "Brak kanałów na żywo",
     "noLiveChannelsHint": "Żaden z kanałów w Twoich folderach nie jest teraz online.",
     "emptyConfig": "Nie utworzono jeszcze folderów",

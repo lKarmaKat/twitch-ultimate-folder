@@ -54,13 +54,14 @@
     "noChannels": "Inga kanaler att visa"
   },
   "display": {
-    "needConnect": "Det verkar som att du behöver ansluta",
     "allOtherChannels": "Alla andra kanaler"
   },
   "channel": {
     "offline": "Frånkopplad"
   },
   "status": {
+    "needConnect": "Det verkar som att du behöver ansluta",
+    "needConnectHint": "Godkänn tillägget via ikonen i verktygsfältet för att visa kanalerna du följer.",
     "noLiveChannels": "Inga kanaler live",
     "noLiveChannelsHint": "Ingen av kanalerna i dina mappar är online just nu.",
     "emptyConfig": "Inga mappar har skapats än",

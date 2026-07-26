@@ -54,13 +54,14 @@
     "noChannels": "Nessun canale da mostrare"
   },
   "display": {
-    "needConnect": "Sembra che tu debba connetterti",
     "allOtherChannels": "Tutti gli altri canali"
   },
   "channel": {
     "offline": "Non in linea"
   },
   "status": {
+    "needConnect": "Sembra che tu debba connetterti",
+    "needConnectHint": "Autorizza l'estensione dall'icona nella barra degli strumenti per mostrare i canali che segui.",
     "noLiveChannels": "Nessun canale in diretta",
     "noLiveChannelsHint": "Nessuno dei canali nelle tue cartelle è online in questo momento.",
     "emptyConfig": "Nessuna cartella configurata",

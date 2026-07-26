@@ -54,13 +54,14 @@
     "noChannels": "Keine Kanäle anzuzeigen"
   },
   "display": {
-    "needConnect": "Es scheint, dass du dich anmelden musst",
     "allOtherChannels": "Alle anderen Kanäle"
   },
   "channel": {
     "offline": "Nicht online"
   },
   "status": {
+    "needConnect": "Es scheint, dass du dich anmelden musst",
+    "needConnectHint": "Autorisiere die Erweiterung über das Symbol in der Symbolleiste, um die Kanäle anzuzeigen, denen du folgst.",
     "noLiveChannels": "Keine Kanäle live",
     "noLiveChannelsHint": "Keiner der Kanäle in deinen Ordnern ist gerade online.",
     "emptyConfig": "Noch keine Ordner eingerichtet",

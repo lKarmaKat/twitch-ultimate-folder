@@ -114,6 +114,15 @@ class ConfigManager {
         this.bridge.send({ type: CST.OPEN_OPTIONS_PAGE });
     }
 
+    /**
+     * Ouvre la page d'aide dans un onglet, éventuellement sur une ancre
+     * (« #connect »). Passe par le service worker : chrome.tabs n'existe pas
+     * dans le content script qui porte la sidebar.
+     */
+    openHelpPage(anchor: string = '') {
+        this.bridge.send({ type: CST.OPEN_HELP_PAGE, value: anchor });
+    }
+
 
 }
 

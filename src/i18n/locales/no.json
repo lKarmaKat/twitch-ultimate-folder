@@ -54,13 +54,14 @@
     "noChannels": "Ingen kanaler å vise"
   },
   "display": {
-    "needConnect": "Det ser ut som du må koble til",
     "allOtherChannels": "Alle andre kanaler"
   },
   "channel": {
     "offline": "Frakoblet"
   },
   "status": {
+    "needConnect": "Det ser ut som du må koble til",
+    "needConnectHint": "Godkjenn utvidelsen fra ikonet på verktøylinjen for å vise kanalene du følger.",
     "noLiveChannels": "Ingen kanaler direkte",
     "noLiveChannelsHint": "Ingen av kanalene i mappene dine er tilkoblet akkurat nå.",
     "emptyConfig": "Ingen mapper opprettet ennå",

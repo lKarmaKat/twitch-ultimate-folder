@@ -68,6 +68,8 @@
     'sorting',
     'outside',
     'offline',
+    'connect',
+    'find-icon-connect',
     'create-config',
     'open-window',
     'find-icon',
@@ -158,6 +160,7 @@
             <li><a href="#offline">{$_('help.purpose.offlineTitle')}</a></li>
           </ul>
         </li>
+        <li><a href="#connect">{$_('help.connect.title')}</a></li>
         <li>
           <a href="#create-config">{$_('help.createConfig.title')}</a>
           <ul>
@@ -212,6 +215,28 @@
     <h3 id="offline">{$_('help.purpose.offlineTitle')}</h3>
     <p>{$_('help.purpose.offline')}</p>
     <p>{$_('help.purpose.offlineAlwaysShow', { values: { behaviour: $_('behaviour.showEvenIfOffline.label') } })}</p>
+
+    <h2 id="connect">{$_('help.connect.title')}</h2>
+    <p class="callout">{$_('help.connect.intro')}</p>
+
+    <h3>{$_('help.connect.stepsTitle')}</h3>
+    <ol class="defs">
+      <li>{$_('help.connect.step1')}</li>
+      <li>{$_('help.connect.step2')}</li>
+      <li>{$_('help.connect.step3')}</li>
+    </ol>
+    {@render media($_('help.connect.caption'))}
+    <p>{$_('help.connect.outro')}</p>
+
+    <!-- Volontairement duplique de #find-icon : chaque section reste lisible
+         seule, et c'est ici que l'utilisateur cherche l'icone en premier. -->
+    <details id="find-icon-connect">
+      <summary>{$_('help.createConfig.findIconTitle')}</summary>
+      <div class="details-body">
+        {@render media($_('help.createConfig.findIconCaption'))}
+        <p>{$_('help.createConfig.findIcon')}</p>
+      </div>
+    </details>
 
     <h2 id="create-config">{$_('help.createConfig.title')}</h2>
 

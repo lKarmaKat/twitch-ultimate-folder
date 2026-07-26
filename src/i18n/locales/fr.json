@@ -19,6 +19,16 @@
       "offline": "Une chaîne qui ne diffuse pas n'apparaît jamais dans la barre latérale. Cela vaut aussi pour les listes elles-mêmes : une liste dont toutes les chaînes sont hors ligne disparaît entièrement, si bien que la barre latérale ne montre que ce que vous pouvez regarder à l'instant.",
       "offlineAlwaysShow": "Pour qu'une liste reste visible même quand personne n'y est en direct, activez son comportement « {behaviour} ». Une liste reste également visible lorsqu'une de ses sous-listes a du contenu en direct, ou lorsqu'elle contient l'élément « All other channels »."
     },
+    "connect": {
+      "title": "Comment se connecter la première fois",
+      "intro": "Cette extension ne lit jamais votre compte Twitch d'elle-même. Pour construire votre barre latérale, elle a besoin de la liste des chaînes que vous suivez, et Twitch ne la transmet que si vous l'y autorisez : vous devez autoriser l'application sur votre compte, une fois. Tant que ce n'est pas fait, l'extension n'a accès à rien et votre barre latérale reste vide.",
+      "stepsTitle": "Autoriser l'application",
+      "step1": "Cliquez sur l'icône de l'extension dans la barre d'outils de votre navigateur. La popup s'ouvre sur un code d'activation.",
+      "step2": "Cliquez sur le code. Twitch s'ouvre sur twitch.tv/activate, le code déjà rempli.",
+      "step3": "Autorisez l'application à accéder à votre compte.",
+      "outro": "C'est tout. Revenez sur votre onglet Twitch : la barre latérale se remplit d'elle-même au bout de quelques secondes, et la question ne vous sera plus posée — l'extension maintient l'autorisation active toute seule. Vous pouvez la révoquer à tout moment depuis les paramètres de votre compte Twitch, section « Connexions ».",
+      "caption": "Autoriser l'application depuis la popup de l'extension."
+    },
     "createConfig": {
       "title": "Comment créer une configuration",
       "openTitle": "Ouvrir la fenêtre de configuration",
@@ -181,13 +191,14 @@
     "noChannels": "Aucune chaine à montrer"
   },
   "display": {
-    "needConnect": "Il semble que vous devez vous connecter",
     "allOtherChannels": "Toutes les autres chaines"
   },
   "channel": {
     "offline": "Hors ligne"
   },
   "status": {
+    "needConnect": "Il semble que vous devez vous connecter",
+    "needConnectHint": "Autorisez l'extension depuis l'icône de la barre d'outils pour afficher les chaines que vous suivez.",
     "noLiveChannels": "Aucune chaine en direct",
     "noLiveChannelsHint": "Aucune chaine de vos dossiers n'est en ligne pour le moment.",
     "emptyConfig": "Aucun dossier configuré",

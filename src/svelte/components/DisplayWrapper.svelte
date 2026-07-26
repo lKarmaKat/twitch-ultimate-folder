@@ -5,10 +5,10 @@
   import PortConnector from '../portConnector.svelte.js';
   import NoLiveChannels from './NoLiveChannels.svelte';
   import EmptyConfig from './EmptyConfig.svelte';
+  import NeedToConnect from './NeedToConnect.svelte';
   import { alignmentLeft, portConnected } from '../event.svelte.js';
   import { hasAnyChannel, hasVisibleContent } from '../listVisibility.js';
   import PortDisconnected from './PortDisconnected.svelte';
-  import { _ } from 'svelte-i18n';
   import { applyLocale } from '../../i18n/index.js';
 
   let { configManager = new ConfigManager(true) } = $props();
@@ -95,9 +95,7 @@ setTimeout(()=> shortLoadingLogo = false, 200);
       <PortDisconnected />
     {/if}
     {#if !isUserConnected}
-    <div id="need-connect">
-      {$_('display.needConnect')}
-    </div>
+      <NeedToConnect configManager={configManager} />
     {:else if !configManager.selectedConfig || configManager.channelsPickRefMap?.size === 0}
       <WaitingConfig />
     {:else if configEmpty}

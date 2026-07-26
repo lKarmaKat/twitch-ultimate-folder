@@ -150,6 +150,22 @@ let handlePortMessage = (message: any) => {
     // public/manifest.json et créer la page. Sans ça, l'appel rejette.
     chrome.runtime.openOptionsPage()
       .catch(err => logBackgroundError("background:openOptionsPage", err));
+  } else if (message?.type === CST.OPEN_HELP_PAGE) {
+    // La sidebar vit dans un content script : chrome.tabs y est indisponible,
+    // et help.html n'est pas dans web_accessible_resources. L'ouverture passe
+    // donc obligatoirement par ici.
+    // L'ancre vient de la page appelante : on n'accepte qu'un fragment simple.
+    const anchor = typeof message.value === 'string' && /^#[\w-]+$/.test(message.value)
+      ? message.value
+      : '';
+    const url = chrome.runtime.getURL('src/iframe/help.html') + anchor;
+    // Forme à callback plutôt que promesse : sur Firefox le namespace chrome.*
+    // est fourni pour compatibilité et ne renvoie pas de promesse.
+    chrome.tabs.create({ url }, () => {
+      if (chrome.runtime.lastError) {
+        logBackgroundError("background:openHelpPage", chrome.runtime.lastError);
+      }
+    });
   }
 };
 

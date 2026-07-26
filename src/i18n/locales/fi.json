@@ -54,13 +54,14 @@
     "noChannels": "Ei näytettäviä kanavia"
   },
   "display": {
-    "needConnect": "Näyttää siltä, että sinun täytyy kirjautua",
     "allOtherChannels": "Kaikki muut kanavat"
   },
   "channel": {
     "offline": "Poissa verkosta"
   },
   "status": {
+    "needConnect": "Näyttää siltä, että sinun täytyy kirjautua",
+    "needConnectHint": "Valtuuta laajennus työkalurivin kuvakkeesta, jotta seuraamasi kanavat näkyvät.",
     "noLiveChannels": "Ei kanavia livenä",
     "noLiveChannelsHint": "Yksikään kansioidesi kanava ei ole juuri nyt verkossa.",
     "emptyConfig": "Ei vielä luotuja kansioita",
