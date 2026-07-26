@@ -10,6 +10,7 @@
   import { hasAnyChannel, hasVisibleContent } from '../listVisibility.js';
   import PortDisconnected from './PortDisconnected.svelte';
   import { applyLocale } from '../../i18n/index.js';
+  import * as CST from '../../constantes.js';
 
   let { configManager = new ConfigManager(true) } = $props();
 
@@ -50,9 +51,11 @@
   }
   let port = new PortConnector(themeCb, "theme");
 
-  let isUserConnected = $state(null);
+  // null tant que le service worker n'a pas tranché : on affiche l'écran
+  // d'attente plutôt qu'un faux « non connecté ».
+  let authState = $state(null);
   let authCb = (msg) => {
-    isUserConnected = msg.data;
+    authState = msg.data;
   }
   let authPort = new PortConnector(authCb, 'auth');
 
@@ -81,7 +84,7 @@
   })
 
   let dataPending = $derived.by(() => {
-    if (isUserConnected === null) return true;
+    if (authState === null) return true;
     if (!configManager?.selectedConfig) return true;
     if (Object.getOwnPropertyNames(configManager.selectedConfig).length === 0) return true;
     return !(configManager.channelsPickRefMap?.size > 0);
@@ -94,8 +97,11 @@
     <PortDisconnected />
   {/if}
 
-  {#if isUserConnected === false}
+  {#if authState === CST.AUTH_NEED_AUTH}
     <NeedToConnect configManager={configManager} />
+  {:else if authState === CST.AUTH_NO_SESSION}
+    <!-- Filet de sécurité : le content script a normalement déjà rendu la
+         sidebar à Twitch en repassant le conteneur en `collapsed`. -->
   {:else if dataPending}
     {#if portConnected.current !== false}
       <WaitingConfig />

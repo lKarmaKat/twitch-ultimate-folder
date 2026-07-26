@@ -5,7 +5,6 @@ import { TokenManager } from "./token";
 import { logErrorChain, wrapError } from "./errors";
 import * as CST from '../constantes.js'
 import { DataPusher } from './dataPusher';
-import type { StreamsInfos } from './models/streamsInfos.model';
 
 const logBackgroundError = (context: string, error: unknown) => {
   logErrorChain(context, error);
@@ -15,30 +14,89 @@ console.log("####################");
 console.log("Background.js");
 console.log("####################");
 
-const tokenManager = new TokenManager(
-    (userId) => initServices(userId),
-    () => {},
-    () => {
-      portManager.sendMessageToAllTabs("", false, "auth")
-      console.log("No Token found, has yet to be implemented")
-      return true
-    }
-);
-// setTimeout(() => {
-  tokenManager.getTokenFromStorage();
-// }, 8000)
+const tokenManager = new TokenManager();
+
 let twitchApi: TwitchApi | null = null;
 let configManager: ConfigManager | null = null;
 let streamsDatasPoller: DataPusher | null = null;
+
+// Utilisateur Twitch actuellement connecté dans le navigateur, tel que rapporté
+// par le content script. Rien n'est initialisé au démarrage du service worker :
+// on ne sait pas encore QUI est connecté, et sans onglet Twitch il n'y a de
+// toute façon rien à afficher ni aucune raison d'appeler l'API.
+let currentUserId: number | null = null;
+// null = état pas encore établi ; les pages l'interprètent comme « en attente »
+// et affichent leur écran de chargement plutôt qu'un faux « déconnecté ».
+let currentAuthState: string | null = null;
+// Un changement de compte fait du réseau (validate, parfois refresh). Deux
+// bascules rapprochées peuvent se terminer dans le désordre : ce compteur
+// garantit que seule la plus récente écrit l'état final.
+let switchEpoch = 0;
+
+function broadcastAuth(state: string) {
+  currentAuthState = state;
+  portManager.sendMessageToAllTabs(CST.AUTH_STATE, state, "auth");
+}
+
+function teardown() {
+  streamsDatasPoller?.stop();
+  streamsDatasPoller = null;
+  configManager = null;
+  twitchApi = null;
+}
+
+/**
+ * Point d'entrée unique des changements de session Twitch : connexion,
+ * déconnexion, changement de compte. Tout le pipeline (tokens, config, poller,
+ * diffusion aux pages) est reconstruit ici, jamais ailleurs.
+ */
+async function onSessionUserChanged(sessionUserId: number | null) {
+  // Idempotent : chaque onglet signale la même session. Le test sur
+  // currentAuthState laisse néanmoins passer le tout premier appel, y compris
+  // « pas de session » (null === null), qui doit bien être diffusé une fois.
+  if (sessionUserId === currentUserId && currentAuthState !== null) return;
+  const epoch = ++switchEpoch;
+
+  teardown();
+  currentUserId = sessionUserId;
+
+  if (sessionUserId === null) {
+    tokenManager.clear();
+    broadcastAuth(CST.AUTH_NO_SESSION);
+    return;
+  }
+
+  const hasToken = await tokenManager.switchUser(sessionUserId);
+  if (epoch !== switchEpoch) return; // une bascule plus récente a pris la main
+
+  if (!hasToken) {
+    broadcastAuth(CST.AUTH_NEED_AUTH);
+    return;
+  }
+
+  await initServices(sessionUserId);
+  if (epoch !== switchEpoch) return;
+  broadcastAuth(CST.AUTH_READY);
+}
+
+// Token devenu irrécupérable en cours de session (révocation depuis les
+// paramètres Twitch, par exemple) : on coupe le poller et on redemande une
+// autorisation plutôt que de boucler sur des 401.
+tokenManager.onAuthLost = () => {
+  if (currentUserId === null) return;
+  teardown();
+  broadcastAuth(CST.AUTH_NEED_AUTH);
+};
 
 async function initServices(userId: number) {
     console.log("BACKGROUND initService")
     twitchApi = new TwitchApi(tokenManager);
     configManager = new ConfigManager(twitchApi);
     configManager.initConfigWithUser(userId);
-    streamsDatasPoller = new DataPusher(twitchApi, (data: StreamsInfos[]) => {
+    streamsDatasPoller = new DataPusher(twitchApi, (data) => {
         portManager.sendMessageToAllTabs(CST.GET_STREAMS_REF, data);
     });
+    streamsDatasPoller.start();
 
     // Rattrapage pour les ports connectés avant que l'auth soit prête
     try {
@@ -46,7 +104,6 @@ async function initServices(userId: number) {
             configManager.getConfigObjectForCurrentUser(),
             streamsDatasPoller.getConfig()
         ]);
-        portManager.sendMessageToAllTabs("", true, "auth")
 
         if (currentConfig) portManager.sendMessageToAllTabs(CST.GET_CURRENT_CONFIGURATION, currentConfig);
         if (streamInfo) portManager.sendMessageToAllTabs(CST.GET_STREAMS_REF, streamInfo);
@@ -55,33 +112,67 @@ async function initServices(userId: number) {
     }
 }
 
+// Formes à callback plutôt que promesses : sur Firefox le namespace chrome.*
+// est fourni pour compatibilité et ne renvoie pas de promesse.
+function queryActiveTab(): Promise<chrome.tabs.Tab | undefined> {
+  return new Promise(resolve => {
+    chrome.tabs.query({ active: true, currentWindow: true }, tabs => {
+      if (chrome.runtime.lastError) return resolve(undefined);
+      resolve(tabs[0]);
+    });
+  });
+}
 
+function askTabForSession(tabId: number): Promise<string | null> {
+  return new Promise(resolve => {
+    chrome.tabs.sendMessage(tabId, { type: CST.GET_SESSION_USER }, (response) => {
+      // Pas de content script à l'autre bout (page pas encore chargée, ou
+      // onglet Twitch ouvert avant l'installation) : lastError, pas un crash.
+      if (chrome.runtime.lastError) return resolve(null);
+      resolve(typeof response === 'string' ? response : null);
+    });
+  });
+}
 
+/**
+ * État à afficher dans l'action popup, résolu à la demande depuis l'onglet
+ * ACTIF. On ne répond pas depuis `currentUserId` : le service worker MV3 est
+ * tué après inactivité, et son réveil donnerait un faux « pas de session »
+ * tant qu'aucun content script n'a re-signalé la sienne.
+ *
+ * L'onglet actif, et non « un onglet Twitch quelconque », parce que c'est déjà
+ * la cible de « Ouvrir la configuration » : le message affiché reste donc exact.
+ */
+async function resolveActiveTabSession(): Promise<string> {
+  const tab = await queryActiveTab();
+  if (!tab?.url || !tab.url.startsWith('https://www.twitch.tv/')) return CST.AUTH_NOT_ON_TWITCH;
+  if (tab.id === undefined) return CST.AUTH_NOT_ON_TWITCH;
 
+  const sessionUserId = await askTabForSession(tab.id);
+  if (!sessionUserId) {
+    await onSessionUserChanged(null);
+    return CST.AUTH_NO_SESSION;
+  }
 
+  // Réveil du service worker, ou session apparue pendant qu'il dormait : on
+  // reconstruit le pipeline AVANT de répondre. Sinon on afficherait « Autoriser
+  // l'extension » à quelqu'un qui l'a déjà autorisée, simplement parce que
+  // currentUserId a été perdu avec le worker.
+  if (currentUserId !== Number(sessionUserId)) {
+    await onSessionUserChanged(Number(sessionUserId));
+  }
 
-
-
-// let tokenManager = new TokenManager(userDisconnected, (info) => {
-//   portManager.sendMessageToAllTabs(CST.AUTH_DEVICE_CODE, info, 'auth');
-// });
-// let twitchApi = new TwitchApi(tokenManager);
-// let configManager = new ConfigManager(twitchApi);
-// let streamsDatasPoller = new DataPoller(twitchApi, (data: StreamsInfos[]) => {
-//   portManager.sendMessageToAllTabs(CST.GET_STREAMS_REF, data);
-// });
-
-
-
-
-
+  return currentUserId !== null && tokenManager.token
+    ? CST.AUTH_READY
+    : CST.AUTH_NEED_AUTH;
+}
 
 let sendStreamInfoOnConnect = (port: chrome.runtime.Port) => {
-  if (streamsDatasPoller) {   
+  if (streamsDatasPoller) {
     streamsDatasPoller.getConfig().then((info) => {
       // console.log("updating bg");
-      port.postMessage({ 
-        "type": CST.GET_STREAMS_REF, 
+      port.postMessage({
+        "type": CST.GET_STREAMS_REF,
         "data": info
       });
     }).catch((error) => {
@@ -139,9 +230,20 @@ let sendCurrentLocaleOnConnect = (port: chrome.runtime.Port) => {
 
 let sendCurrentAuth = (port: chrome.runtime.Port) => {
   port.postMessage({
-    "type": "", // RENVOYER LE TYPE NE SERT A RIEN ICI
-    "data": tokenManager.token ? true : false
+    "type": CST.AUTH_STATE,
+    "data": currentAuthState
   });
+
+  // Le service worker a pu être tué puis relancé alors que l'onglet, lui, est
+  // resté ouvert : le content script n'a alors aucune raison de re-signaler sa
+  // session (elle n'a pas changé de son point de vue) et plus rien ne serait
+  // initialisé. La reconnexion du port est notre signal de reprise.
+  if (currentAuthState !== null) return;
+  const tabId = port.sender?.tab?.id;
+  if (tabId === undefined) return;
+  askTabForSession(tabId)
+    .then(id => onSessionUserChanged(id ? Number(id) : null))
+    .catch(err => logBackgroundError("background:sendCurrentAuth:recover", err));
 }
 // Messages entrants sur un port déjà ouvert (la sidebar en maintient un).
 let handlePortMessage = (message: any, port?: chrome.runtime.Port) => {
@@ -183,149 +285,198 @@ let portManager = new PortManager(sendCurrentConfigOnConnect,
                                 sendCurrentLocaleOnConnect,
                                 handlePortMessage);
 
-// userUpdate.subscribe((userValid: boolean) => {
-//   if (!userValid) return;
-//   configManager.getConfigObjectForCurrentUser()
-//     .then((currentConfig) => {
-//       if (currentConfig) portManager.sendMessageToAllTabs(CST.GET_CURRENT_CONFIGURATION, currentConfig);
-//     })
-//     .catch(err => logBackgroundError("background:userUpdate:sendConfig", err));
-// });
-
 self.addEventListener('beforeunload', () => {
   portManager.closeAllPorts();
 });
 
-chrome.runtime.onMessage.addListener(async (msg, sender, sendResponse) => {
+// Listener volontairement NON async : Chrome n'interprète que `return true`
+// comme « je répondrai plus tard ». Chaque branche asynchrone fait donc son
+// travail dans une IIFE et rend `true` de façon synchrone.
+chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
     void sender;
-    console.log("MESSAGE", msg.type, msg.data);    
-    if( msg.type === CST.IS_USER_LOGGED_IN) { // Sent by action popup upon openning to know what to display
-      if (tokenManager.token) {
-        sendResponse(true);
-      } else if (tokenManager.currentDeviceCodeInfo?.user_code && tokenManager.currentDeviceCodeInfo?.verification_uri) {
-        sendResponse({ 
-                user_code: tokenManager.currentDeviceCodeInfo?.user_code,
-                verification_uri: tokenManager.currentDeviceCodeInfo?.verification_uri
-        });
-      } else {
-        const info = await new Promise<any>(resolve => {
-          tokenManager.initAuthentification((info: any) => {
-            resolve(info);
-          })
-        })
-        sendResponse(info)      
-      }
-    return true;
-    } else if (msg.type === CST.SAVE_CHANNELS_LIST) {
-    console.log("saving channels list bg", msg.data);
-    configManager!.saveConfig(msg.data).then((currentConfig) => {
-      portManager.sendMessageToAllTabs(CST.GET_CURRENT_CONFIGURATION, currentConfig);
-    }).catch(err => logBackgroundError("background:saveConfig", err));
-    return false;
-  }
-  else if (msg.type === CST.RESET_CONFIG) {
-    configManager!.saveConfig(CST.createStartupConf()).then((currentConfig) => {
-      portManager.sendMessageToAllTabs(CST.GET_CURRENT_CONFIGURATION, currentConfig);
-    }).catch(err => logBackgroundError("background:resetConfig", err));
-    return false;
-  } else if (msg.type === CST.GET_CURRENT_CONFIGURATION) {
-    configManager!.getConfigObjectForCurrentUser().then((currentConfig) => {
-      sendResponse(currentConfig ?? null);
-    }).catch(err => {
-      logBackgroundError("background:getConfig", err)
-    });
-    return true;
-  } else if (msg.type === CST.DISPLAY_POPUP) {
-    chrome.tabs.query({ active: true, currentWindow: true }, tabs => {
-      chrome.tabs.sendMessage(tabs[0].id!, { type: CST.DISPLAY_POPUP });
-    });
-    return false;
-  } else if (msg.type === CST.HIDE_POPUP) {
-    chrome.tabs.query({ active: true, currentWindow: true }, tabs => {
-      chrome.tabs.sendMessage(tabs[0].id!, { type: CST.HIDE_POPUP });
-    });
-    return false;
-  } 
-  else if (msg.type === CST.CHANGE_THEME) {
-    themeSombre = !themeSombre;
-    sendResponse({
-      type: CST.CHANGE_THEME,
-      data: themeSombre
-    });
-    chrome.storage.local.set({
-      "theme": themeSombre ? 1 : 0
-    });
-    chrome.tabs.query({
-          url: ['https://www.twitch.tv/*']
-        }, tabs => {
-      console.log("UPDATE THEME " + tabs);
-      for (let tab of tabs) {
-        chrome.tabs.sendMessage(tab.id!, { type: CST.CHANGE_THEME, data: themeSombre });
-      }
-    });
-    portManager.sendMessageToAllTabs(CST.CHANGE_THEME, themeSombre, "theme");
-    return true;
-  }
-  else if (msg.type === CST.GET_THEME) {
-    sendResponse({
-      type: CST.THEME, // RENVOYER LE TYPE NE SERT A RIEN ICI
-      data: themeSombre
-    });
-    return true;
-  } else if (msg.type === CST.CHANGE_ALIGNMENT) {
-    currentAlignmentLeft = !currentAlignmentLeft;
-    sendResponse({
-      type: CST.ALIGNMENT,
-      data: currentAlignmentLeft
-    })
-    chrome.storage.local.set({
-      "alignmentLeft": currentAlignmentLeft ? 1 : 0
-    });
-    portManager.sendMessageToAllTabs(CST.CHANGE_THEME, currentAlignmentLeft, "alignment"); // JE PARIE QUE LE TYPE NE SERT A RIEN ICI NON PLUS
+    console.log("MESSAGE", msg.type, msg.data);
 
-    return true;
-  } else if (msg.type === CST.GET_ALIGNMENT) {
-    sendResponse({
-      type: CST.ALIGNMENT, // RENVOYER LE TYPE NE SERT A RIEN ICI
-      data: currentAlignmentLeft
-    })
-    return true;
-  } else if (msg.type === CST.CHANGE_LOCALE) {
-    currentLocale = msg.value;
-    sendResponse({
-      type: CST.LOCALE,
-      data: currentLocale
-    });
-    chrome.storage.local.set({ "local": currentLocale });
-    portManager.sendMessageToAllTabs(CST.CHANGE_LOCALE, currentLocale, "locale");
-    return true;
-  } else if (msg.type === CST.GET_LOCALE) {
-    sendResponse({
-      type: CST.LOCALE,
-      data: currentLocale
-    });
-    return true;
-  }
+    if (msg.type === CST.SESSION_USER_CHANGED) {
+      // Le content script rapporte le compte Twitch de sa page (null = déconnecté).
+      const sessionUserId = msg.data ? Number(msg.data) : null;
+      onSessionUserChanged(Number.isNaN(sessionUserId as number) ? null : sessionUserId)
+        .catch(err => logBackgroundError("background:onSessionUserChanged", err));
+      return false;
+    }
+
+    if (msg.type === CST.IS_USER_LOGGED_IN) { // Envoyé par l'action popup à son ouverture
+      (async () => {
+        // Un device flow déjà en cours prime : la popup a pu être fermée puis
+        // rouverte pendant que l'utilisateur saisissait le code.
+        if (tokenManager.currentDeviceCodeInfo?.user_code) {
+          sendResponse({
+            state: CST.AUTH_NEED_AUTH,
+            user_code: tokenManager.currentDeviceCodeInfo.user_code,
+            verification_uri: tokenManager.currentDeviceCodeInfo.verification_uri
+          });
+          return;
+        }
+        sendResponse({ state: await resolveActiveTabSession() });
+      })().catch(err => {
+        logBackgroundError("background:isUserLoggedIn", err);
+        sendResponse({ state: CST.AUTH_NOT_ON_TWITCH });
+      });
+      return true;
+    }
+
+    if (msg.type === CST.START_AUTH) { // Geste explicite : bouton « Autoriser »
+      (async () => {
+        if (currentUserId === null) {
+          // Service worker réveillé, ou session apparue pendant que la popup
+          // était ouverte : resolveActiveTabSession réamorce le pipeline.
+          const state = await resolveActiveTabSession();
+          if (currentUserId === null) {
+            sendResponse({ state });
+            return;
+          }
+        }
+
+        const userId = currentUserId;
+        const info = await new Promise<any>((resolve, reject) => {
+          // Le device code arrive AVANT la fin du flow : on répond dès qu'il est
+          // connu, le polling se poursuit en arrière-plan.
+          tokenManager.startAuthFor(userId, (deviceInfo) => resolve(deviceInfo))
+            .then(async () => {
+              // Surtout pas onSessionUserChanged() ici : son garde d'idempotence
+              // verrait `userId === currentUserId` et ne ferait rien. Le compte
+              // n'a pas changé, c'est son autorisation qui vient d'aboutir.
+              await initServices(userId);
+              broadcastAuth(CST.AUTH_READY);
+            })
+            .catch((err) => {
+              // Code expiré, refusé, ou onglet fermé pendant le polling.
+              logBackgroundError("background:startAuth:deviceFlow", err);
+              broadcastAuth(CST.AUTH_NEED_AUTH);
+              reject(err); // sans effet si le device code a déjà été renvoyé
+            });
+        });
+        sendResponse({ state: CST.AUTH_NEED_AUTH, ...info });
+      })().catch(err => {
+        logBackgroundError("background:startAuth", err);
+        sendResponse({ state: CST.AUTH_NEED_AUTH });
+      });
+      return true;
+    }
+
+    if (msg.type === CST.SAVE_CHANNELS_LIST) {
+      console.log("saving channels list bg", msg.data);
+      if (!configManager) return false;
+      configManager.saveConfig(msg.data).then((currentConfig) => {
+        portManager.sendMessageToAllTabs(CST.GET_CURRENT_CONFIGURATION, currentConfig);
+      }).catch(err => logBackgroundError("background:saveConfig", err));
+      return false;
+    }
+
+    if (msg.type === CST.RESET_CONFIG) {
+      if (!configManager) return false;
+      configManager.saveConfig(CST.createStartupConf()).then((currentConfig) => {
+        portManager.sendMessageToAllTabs(CST.GET_CURRENT_CONFIGURATION, currentConfig);
+      }).catch(err => logBackgroundError("background:resetConfig", err));
+      return false;
+    }
+
+    if (msg.type === CST.GET_CURRENT_CONFIGURATION) {
+      if (!configManager) {
+        sendResponse(null);
+        return false;
+      }
+      configManager.getConfigObjectForCurrentUser().then((currentConfig) => {
+        sendResponse(currentConfig ?? null);
+      }).catch(err => {
+        logBackgroundError("background:getConfig", err);
+        sendResponse(null);
+      });
+      return true;
+    }
+
+    if (msg.type === CST.DISPLAY_POPUP) {
+      chrome.tabs.query({ active: true, currentWindow: true }, tabs => {
+        chrome.tabs.sendMessage(tabs[0].id!, { type: CST.DISPLAY_POPUP });
+      });
+      return false;
+    }
+
+    if (msg.type === CST.HIDE_POPUP) {
+      chrome.tabs.query({ active: true, currentWindow: true }, tabs => {
+        chrome.tabs.sendMessage(tabs[0].id!, { type: CST.HIDE_POPUP });
+      });
+      return false;
+    }
+
+    if (msg.type === CST.CHANGE_THEME) {
+      themeSombre = !themeSombre;
+      sendResponse({
+        type: CST.CHANGE_THEME,
+        data: themeSombre
+      });
+      chrome.storage.local.set({
+        "theme": themeSombre ? 1 : 0
+      });
+      chrome.tabs.query({
+            url: ['https://www.twitch.tv/*']
+          }, tabs => {
+        console.log("UPDATE THEME " + tabs);
+        for (let tab of tabs) {
+          chrome.tabs.sendMessage(tab.id!, { type: CST.CHANGE_THEME, data: themeSombre });
+        }
+      });
+      portManager.sendMessageToAllTabs(CST.CHANGE_THEME, themeSombre, "theme");
+      return true;
+    }
+
+    if (msg.type === CST.GET_THEME) {
+      sendResponse({
+        type: CST.THEME, // RENVOYER LE TYPE NE SERT A RIEN ICI
+        data: themeSombre
+      });
+      return true;
+    }
+
+    if (msg.type === CST.CHANGE_ALIGNMENT) {
+      currentAlignmentLeft = !currentAlignmentLeft;
+      sendResponse({
+        type: CST.ALIGNMENT,
+        data: currentAlignmentLeft
+      })
+      chrome.storage.local.set({
+        "alignmentLeft": currentAlignmentLeft ? 1 : 0
+      });
+      portManager.sendMessageToAllTabs(CST.CHANGE_THEME, currentAlignmentLeft, "alignment"); // JE PARIE QUE LE TYPE NE SERT A RIEN ICI NON PLUS
+
+      return true;
+    }
+
+    if (msg.type === CST.GET_ALIGNMENT) {
+      sendResponse({
+        type: CST.ALIGNMENT, // RENVOYER LE TYPE NE SERT A RIEN ICI
+        data: currentAlignmentLeft
+      })
+      return true;
+    }
+
+    if (msg.type === CST.CHANGE_LOCALE) {
+      currentLocale = msg.value;
+      sendResponse({
+        type: CST.LOCALE,
+        data: currentLocale
+      });
+      chrome.storage.local.set({ "local": currentLocale });
+      portManager.sendMessageToAllTabs(CST.CHANGE_LOCALE, currentLocale, "locale");
+      return true;
+    }
+
+    if (msg.type === CST.GET_LOCALE) {
+      sendResponse({
+        type: CST.LOCALE,
+        data: currentLocale
+      });
+      return true;
+    }
 
   return false;
 });
-
-// dead code from the time when svelte/configManager would send a message to reset config then ask for current config
-// chrome.runtime.onMessageExternal.addListener((msg, sender, sendResponse) => {
-//   void sender;
-//   if (msg.type === CST.GET_CURRENT_CONFIGURATION) {
-//     console.log("getting current conf");
-//     (async () => {
-//         chrome.storage.local.get('currentConfig', (data) => {
-//             if (data?.currentConfig) {
-//                 sendResponse(data?.currentConfig);
-//             }
-//         });
-//     })();
-//     return true;
-//   }
-
-//   return false;
-// });
-
-

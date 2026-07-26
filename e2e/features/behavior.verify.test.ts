@@ -80,7 +80,7 @@ async function isOpen(page: Page) {
 
 async function setup(page: Page, conf: any) {
 	await popupPage.sendDefaultConf(conf, channelsRef);
-	await popupPage.sendAuth(true);
+	await popupPage.sendAuth(CST.AUTH_READY);
 	await nestedList(page).header.waitFor();
 	await page.waitForTimeout(700); // grid-template-rows transition is .5s
 }

@@ -17,6 +17,12 @@
   let userCode = $state('');
   let verificationUri = $state('');
 
+  // Ce que la premiere ligne de la carte doit proposer. Resolu depuis l'onglet
+  // ACTIF : la popup peut tres bien etre ouverte depuis une page qui n'est pas
+  // Twitch, ou aucun content script ne tourne.
+  let authState = $state(null);
+  let authorizing = $state(false);
+
   // Toggles. `theme` true = thème sombre (cohérent avec la popup de config).
   let theme = $state(false);
   let alignment = $state(true);
@@ -35,7 +41,10 @@
   });
 
   chrome.runtime.sendMessage({ type: CST.IS_USER_LOGGED_IN }, (response) => {
+    authState = response?.state ?? CST.AUTH_NOT_ON_TWITCH;
     if (response?.user_code) {
+      // Device flow deja en cours : la popup a ete fermee puis rouverte pendant
+      // que l'utilisateur saisissait son code.
       userCode = response.user_code;
       verificationUri = response.verification_uri;
       view = 'auth';
@@ -47,6 +56,22 @@
   // --- Actions ---
   function openConfigPopup() {
     chrome.runtime.sendMessage({ type: CST.DISPLAY_POPUP });
+  }
+
+  // Seule voie d'entree du device flow : il ne se declenche jamais tout seul,
+  // sinon ouvrir la popup sur un compte secondaire demanderait une autorisation
+  // que personne n'a sollicitee.
+  async function startAuth() {
+    authorizing = true;
+    const response = await chrome.runtime.sendMessage({ type: CST.START_AUTH });
+    authorizing = false;
+    if (response?.user_code) {
+      userCode = response.user_code;
+      verificationUri = response.verification_uri;
+      view = 'auth';
+    } else {
+      authState = response?.state ?? CST.AUTH_NO_SESSION;
+    }
   }
 
   // Page d'extension ouverte dans un onglet dedie.
@@ -106,9 +131,23 @@
               aria-label={$_('help.openHelp')}>?</button>
           </div>
 
+          <!-- Seule cette ligne depend du compte. Theme, alignement et langue
+               sont des preferences du profil navigateur et restent utilisables
+               meme hors de Twitch. -->
           <div class="row">
             <div class="row-info">
-              <button class="btn btn-primary" onclick={openConfigPopup}>{$_('actionPopup.openConfig')}</button>
+              {#if authState === CST.AUTH_READY}
+                <button class="btn btn-primary" onclick={openConfigPopup}>{$_('actionPopup.openConfig')}</button>
+              {:else if authState === CST.AUTH_NEED_AUTH}
+                <button
+                  class="btn btn-primary"
+                  onclick={startAuth}
+                  disabled={authorizing}>{$_('actionPopup.authorize')}</button>
+              {:else if authState === CST.AUTH_NO_SESSION}
+                <div class="row-notice">{$_('actionPopup.noSession')}</div>
+              {:else}
+                <div class="row-notice">{$_('actionPopup.notOnTwitch')}</div>
+              {/if}
             </div>
           </div>
 
@@ -257,6 +296,15 @@
     margin-top: 2px;
   }
 
+  /* Message d'attente (pas sur Twitch / pas connecte) : occupe la place du
+     bouton, sans en avoir l'apparence cliquable. */
+  .row-notice {
+    font-size: 13px;
+    line-height: 1.4;
+    color: #8e8e93;
+    text-wrap: balance;
+  }
+
   .lang-wrap {
     width: 140px;
     flex-shrink: 0;
@@ -363,6 +411,11 @@
   .btn:active {
     transform: scale(0.97);
     opacity: 0.85;
+  }
+
+  .btn:disabled {
+    opacity: 0.55;
+    cursor: default;
   }
 
   .btn-primary:hover {
@@ -490,6 +543,10 @@
   }
 
   .app.dark .row-sub {
+    color: #98989f;
+  }
+
+  .app.dark .row-notice {
     color: #98989f;
   }
 

@@ -168,7 +168,13 @@ export class PopupPage {
         }, {channelsRef, GET_STREAMS_REF: CST.GET_STREAMS_REF})
     }
 
-    async sendAuth(isConnected: boolean) {
+    /**
+     * Pousse un état d'auth sur le port `auth`. Ce n'est plus un booléen : la
+     * sidebar doit distinguer « pas de session Twitch » (ne rien afficher) de
+     * « session connue mais extension pas encore autorisée » (NeedToConnect).
+     * Valeurs attendues : CST.AUTH_NO_SESSION | AUTH_NEED_AUTH | AUTH_READY.
+     */
+    async sendAuth(authState: string) {
         let fr = this.page.frame({ name: 'inner-iframe' })
         if (!fr) throw new Error('Frame not found')
         await fr.evaluate((data) => {
@@ -176,6 +182,6 @@ export class PopupPage {
             const callback =(window as any).__portCallbackMap?.['auth'];
             if (!callback) throw new Error('Auth port callback not found in iframe');
             callback({ data });
-        }, isConnected)
+        }, authState)
     }
 }

@@ -24,6 +24,30 @@ export const CHANGE_LOCALE = 'CHANGE_LOCALE';
 export const GET_LOCALE = 'GET_LOCALE';
 export const IS_USER_LOGGED_IN = 'IS_USER_LOGGED_IN';
 export const AUTH_DEVICE_CODE = 'AUTH_DEVICE_CODE';
+/** Le content script signale l'userId lu dans le cookie de session Twitch (null = déconnecté). */
+export const SESSION_USER_CHANGED = 'SESSION_USER_CHANGED';
+/** Le service worker interroge un onglet sur sa session courante (chemin action popup). */
+export const GET_SESSION_USER = 'GET_SESSION_USER';
+/** Seule voie d'entrée du device flow : jamais déclenché automatiquement. */
+export const START_AUTH = 'START_AUTH';
+/** État d'authentification diffusé sur le port `auth`. */
+export const AUTH_STATE = 'AUTH_STATE';
+
+// États d'authentification. Ternaires côté sidebar, quaternaires côté action
+// popup : celle-ci peut être ouverte depuis un onglet qui n'est pas Twitch, où
+// aucun content script ne tourne et où la session est donc indéterminable.
+export const AUTH_NOT_ON_TWITCH = 'NOT_ON_TWITCH';
+export const AUTH_NO_SESSION = 'NO_SESSION';
+export const AUTH_NEED_AUTH = 'NEED_AUTH';
+export const AUTH_READY = 'READY';
+
+// Clés de chrome.storage.local, une par utilisateur. Tokens et configs sont
+// délibérément séparés : `saveConfig` fait un read-modify-write pendant que le
+// rafraîchissement de token écrit sur timer, et une clé commune ferait perdre
+// silencieusement l'un ou l'autre.
+export const tokenKey = (userId: string | number) => `token_${userId}`;
+export const configKey = (userId: string | number) => `config_${userId}`;
+
 export const SYSTEM_STYLE = 'SYSTEM_STYLE';
 export const CUSTOM_STYLE = 'CUSTOM_STYLE';
 export let TYPE_LIST = 'list'

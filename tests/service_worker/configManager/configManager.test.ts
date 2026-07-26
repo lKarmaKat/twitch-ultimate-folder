@@ -51,7 +51,7 @@ describe("ConfigManager", () => {
 
             const result = await manager.getConfigObjectForCurrentUser();
 
-            expect(chrome.storage.local.get).toHaveBeenCalledWith("42");
+            expect(chrome.storage.local.get).toHaveBeenCalledWith(CST.configKey(42));
             expect(result).not.toBeNull();
             expect(result!.userId).toBe(42);
         });
@@ -86,11 +86,11 @@ describe("ConfigManager", () => {
             const stored = deepClone(CST.STARTUP_USER_CONFIGS);
             stored.userId = 42;
             stored.currentConfig = "maListe";
-            mockStorageGet({ "42": stored });
+            mockStorageGet({ [CST.configKey(42)]: stored });
 
             const result = await manager.getConfigObjectForCurrentUser();
 
-            expect(chrome.storage.local.get).toHaveBeenCalledWith("42");
+            expect(chrome.storage.local.get).toHaveBeenCalledWith(CST.configKey(42));
             expect(result!.currentConfig).toBe("maListe");
             expect(result!.configsList.length).toBe(1);
             expect(manager.userConfigs).toBe(result);
@@ -102,7 +102,7 @@ describe("ConfigManager", () => {
             const stored = deepClone(CST.STARTUP_USER_CONFIGS);
             (stored as any).currentConfig = "";
             stored.configsList = [];
-            mockStorageGet({ "42": stored });
+            mockStorageGet({ [CST.configKey(42)]: stored });
 
             const result = await manager.getConfigObjectForCurrentUser();
 
@@ -117,7 +117,7 @@ describe("ConfigManager", () => {
             const stored = deepClone(CST.STARTUP_USER_CONFIGS);
             (stored as any).currentConfig = "";
             stored.configsList[0].rootList.name = "listeCustom";
-            mockStorageGet({ "42": stored });
+            mockStorageGet({ [CST.configKey(42)]: stored });
 
             const result = await manager.getConfigObjectForCurrentUser();
 
@@ -214,7 +214,7 @@ describe("ConfigManager", () => {
             manager.initConfigWithUser(42);
             const stored = deepClone(CST.STARTUP_USER_CONFIGS);
             stored.userId = 42;
-            mockStorageGet({ "42": stored });
+            mockStorageGet({ [CST.configKey(42)]: stored });
 
             const configToSave = deepClone(CST.STARTUP_CONF); // même rootList.name === 'default'
             configToSave.rootList.items = ["remplacé"] as any;
@@ -223,7 +223,7 @@ describe("ConfigManager", () => {
 
             expect(result.configsList.length).toBe(1); // remplacement, pas d'ajout
             expect(result.configsList[0].rootList.items).toEqual(["remplacé"]);
-            expect(chrome.storage.local.set).toHaveBeenCalledWith({ "42": result });
+            expect(chrome.storage.local.set).toHaveBeenCalledWith({ [CST.configKey(42)]: result });
         });
 
         test("structure existante, nouveau nom → push (length +1)", async () => {
@@ -231,7 +231,7 @@ describe("ConfigManager", () => {
             manager.initConfigWithUser(42);
             const stored = deepClone(CST.STARTUP_USER_CONFIGS);
             stored.userId = 42;
-            mockStorageGet({ "42": stored });
+            mockStorageGet({ [CST.configKey(42)]: stored });
 
             const configToSave = deepClone(CST.STARTUP_CONF);
             configToSave.rootList.name = "custom";
@@ -240,7 +240,7 @@ describe("ConfigManager", () => {
 
             expect(result.configsList.length).toBe(2);
             expect(result.configsList[1].rootList.name).toBe("custom");
-            expect(chrome.storage.local.set).toHaveBeenCalledWith({ "42": result });
+            expect(chrome.storage.local.set).toHaveBeenCalledWith({ [CST.configKey(42)]: result });
         });
 
         test("storage vide → crée une nouvelle structure (currentConfig = nom sauvegardé)", async () => {
@@ -256,7 +256,7 @@ describe("ConfigManager", () => {
             expect(result.userId).toBe(42);
             expect(result.currentConfig).toBe("custom");
             expect(result.configsList).toEqual([configToSave]);
-            expect(chrome.storage.local.set).toHaveBeenCalledWith({ "42": result });
+            expect(chrome.storage.local.set).toHaveBeenCalledWith({ [CST.configKey(42)]: result });
         });
 
         test("résout la userStructure finale et met à jour this.userConfigs", async () => {
@@ -264,7 +264,7 @@ describe("ConfigManager", () => {
             manager.initConfigWithUser(42);
             const stored = deepClone(CST.STARTUP_USER_CONFIGS);
             stored.userId = 42;
-            mockStorageGet({ "42": stored });
+            mockStorageGet({ [CST.configKey(42)]: stored });
 
             const result = await manager.saveConfig(deepClone(CST.STARTUP_CONF));
 

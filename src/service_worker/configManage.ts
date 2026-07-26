@@ -35,9 +35,10 @@ export class ConfigManager {
         if (this.userConfigsPromise) return this.userConfigsPromise;
 
         const userId = this.userId;
+        const key = CST.configKey(userId);
         this.userConfigsPromise = (async (): Promise<UserConfigs | null> => {
-            const data: { [key: string]: UserConfigs } = await chrome.storage.local.get(String(userId));
-            let userStructure: UserConfigs = data[String(userId)];
+            const data: { [key: string]: UserConfigs } = await chrome.storage.local.get(key);
+            let userStructure: UserConfigs = data[key];
             if (userStructure && Object.getOwnPropertyNames(userStructure).length > 0) {
                 if (!userStructure.currentConfig) {
                     if (userStructure.configsList.length === 0) {
@@ -76,8 +77,12 @@ export class ConfigManager {
         if (!this.userId) throw new Error("No user connected, cannot save config");
 
         const userId = this.userId;
-        const data: { [key: string]: UserConfigs } = await chrome.storage.local.get(String(userId));
-        let userStructure: UserConfigs = data[String(userId)];
+        // Clé dédiée à la config : les tokens vivent sous `token_<userId>`. Un
+        // objet partagé ferait perdre le token rafraîchi entre la lecture et
+        // l'écriture ci-dessous (read-modify-write sans transaction).
+        const key = CST.configKey(userId);
+        const data: { [key: string]: UserConfigs } = await chrome.storage.local.get(key);
+        let userStructure: UserConfigs = data[key];
 
         if (userStructure) {
             const index = userStructure.configsList.findIndex(
@@ -88,14 +93,14 @@ export class ConfigManager {
             } else {
                 userStructure.configsList.push(configToSave);
             }
-            await chrome.storage.local.set({ [String(userId)]: userStructure });
+            await chrome.storage.local.set({ [key]: userStructure });
         } else {
             userStructure = {
                 userId,
                 currentConfig: configToSave.rootList.name,
                 configsList: [configToSave]
             };
-            await chrome.storage.local.set({ [String(userId)]: userStructure });
+            await chrome.storage.local.set({ [key]: userStructure });
         }
 
         this.userConfigs = userStructure;
