@@ -208,7 +208,8 @@
     "portDisconnected": "Connection lost",
     "reconnectIn": "Retrying in {seconds} s",
     "reconnecting": "Reconnecting…",
-    "waitingConfig": "Waiting for config"
+    "waitingConfig": "Loading your folders",
+    "waitingConfigHint": "Fetching your configuration and the channels you follow."
   },
   "sortSelect": {
     "placeholder": "Select sort"

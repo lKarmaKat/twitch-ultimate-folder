@@ -71,7 +71,8 @@
     "portDisconnected": "Η σύνδεση χάθηκε",
     "reconnectIn": "Νέα προσπάθεια σε {seconds} δευτ.",
     "reconnecting": "Επανασύνδεση…",
-    "waitingConfig": "Αναμονή ρυθμίσεων"
+    "waitingConfig": "Φόρτωση των φακέλων σας",
+    "waitingConfigHint": "Ανακτούμε τις ρυθμίσεις σας και τα κανάλια που ακολουθείτε."
   },
   "sortSelect": {
     "placeholder": "Επιλογή ταξινόμησης"

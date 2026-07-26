@@ -71,7 +71,8 @@
     "portDisconnected": "Anslutningen bröts",
     "reconnectIn": "Nytt försök om {seconds} s",
     "reconnecting": "Återansluter…",
-    "waitingConfig": "Väntar på konfiguration"
+    "waitingConfig": "Laddar dina mappar",
+    "waitingConfigHint": "Vi hämtar din konfiguration och kanalerna du följer."
   },
   "sortSelect": {
     "placeholder": "Välj sortering"

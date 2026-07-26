@@ -110,6 +110,9 @@ test('popup has a loader until datas are sent through', async ({ page }) => {
 	let configChannelListCount = await popupPage.getConfigChannelListElementCount();
 	expect(configChannelListCount).toBe(4);
 
+	// Tant que le port `auth` n'a rien envoyé, la sidebar reste sur WaitingConfig :
+	// c'est ce `false` explicite qui fait apparaître NeedToConnect.
+	await popupPage.sendAuth(false);
 	await popupPage.getNeedToConnect();
 	await popupPage.sendAuth(true);
 	let displayConfigListCount = await popupPage.getDisplayConfigListElementCount();
@@ -131,6 +134,7 @@ test.describe('with config', async () => {
 		// await page.waitForFunction(() => (window as any).__onMessageCallback && typeof (window as any).__onMessageCallback === 'function');
 		
 		await popupPage.sendDefaultConf(conf, channelsRef);
+		await popupPage.sendAuth(false);
 		await popupPage.getNeedToConnect();
 		await popupPage.sendAuth(true);
 	});

@@ -71,7 +71,8 @@
     "portDisconnected": "Tilkoblingen ble brutt",
     "reconnectIn": "Nytt forsøk om {seconds} s",
     "reconnecting": "Kobler til igjen…",
-    "waitingConfig": "Venter på konfigurasjon"
+    "waitingConfig": "Laster mappene dine",
+    "waitingConfigHint": "Vi henter konfigurasjonen din og kanalene du følger."
   },
   "sortSelect": {
     "placeholder": "Velg sortering"

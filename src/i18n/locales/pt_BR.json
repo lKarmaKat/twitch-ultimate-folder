@@ -71,7 +71,8 @@
     "portDisconnected": "Conexão perdida",
     "reconnectIn": "Nova tentativa em {seconds} s",
     "reconnecting": "Reconectando…",
-    "waitingConfig": "Aguardando configuração"
+    "waitingConfig": "Carregando suas pastas",
+    "waitingConfigHint": "Estamos buscando sua configuração e os canais que você segue."
   },
   "sortSelect": {
     "placeholder": "Selecionar ordenação"

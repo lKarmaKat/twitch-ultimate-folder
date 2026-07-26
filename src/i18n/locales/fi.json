@@ -71,7 +71,8 @@
     "portDisconnected": "Yhteys katkesi",
     "reconnectIn": "Uusi yritys {seconds} s kuluttua",
     "reconnecting": "Yhdistetään uudelleen…",
-    "waitingConfig": "Odotetaan asetuksia"
+    "waitingConfig": "Ladataan kansioitasi",
+    "waitingConfigHint": "Haetaan asetuksiasi ja seuraamiasi kanavia."
   },
   "sortSelect": {
     "placeholder": "Valitse lajittelu"

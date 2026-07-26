@@ -73,8 +73,6 @@
     return !hasAnyChannel(configManager, 'rootList');
   })
 
-  // Message de repli : affiché quand, et seulement quand, Display ne rendrait
-  // rien. Une liste marquée "afficher même hors ligne" suffit donc à le masquer.
   let noLiveChannels = $derived.by(() => {
     if (configManager?.selectedConfig && configManager.channelsPickRef?.length > 0) {
       return !hasVisibleContent(configManager, 'rootList');
@@ -82,31 +80,34 @@
     return true;
   })
 
-let shortLoadingLogo = $state(true)
-setTimeout(()=> shortLoadingLogo = false, 200);
+  let dataPending = $derived.by(() => {
+    if (isUserConnected === null) return true;
+    if (!configManager?.selectedConfig) return true;
+    if (Object.getOwnPropertyNames(configManager.selectedConfig).length === 0) return true;
+    return !(configManager.channelsPickRefMap?.size > 0);
+  })
 
 </script>
 
 <div id="display-container" class="display-wrapper" class:dark={theme} class:light={!theme} class:al-left={alignmentLeft.current} class:al-right={!alignmentLeft.current}>
-  {#if shortLoadingLogo}
-    <WaitingConfig />
-  {:else}
-    {#if !portConnected.current}
-      <PortDisconnected />
-    {/if}
-    {#if !isUserConnected}
-      <NeedToConnect configManager={configManager} />
-    {:else if !configManager.selectedConfig || configManager.channelsPickRefMap?.size === 0}
+  {#if portConnected.current === false} // false in case of a real disconnect
+    <PortDisconnected />
+  {/if}
+
+  {#if isUserConnected === false}
+    <NeedToConnect configManager={configManager} />
+  {:else if dataPending}
+    {#if portConnected.current !== false}
       <WaitingConfig />
-    {:else if configEmpty}
-      <EmptyConfig configManager={configManager} />
-    {:else if noLiveChannels}
-      <NoLiveChannels />
-    {:else if configManager.selectedConfig && Object.getOwnPropertyNames(configManager.selectedConfig).length > 0 && configManager.channelsPickRefMap?.size > 0}
-      <Display 
-      listId={"rootList"}
-      configManager={configManager}/>
     {/if}
+  {:else if configEmpty}
+    <EmptyConfig configManager={configManager} />
+  {:else if noLiveChannels}
+    <NoLiveChannels />
+  {:else}
+    <Display
+    listId={"rootList"}
+    configManager={configManager}/>
   {/if}
 </div>
 

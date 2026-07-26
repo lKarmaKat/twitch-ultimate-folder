@@ -1,4 +1,10 @@
-export const portConnected = $state({ current: false });
+/**
+ * `null` = aucun port n'a encore repondu depuis le montage, `true` = connecte,
+ * `false` = connexion perdue. Le troisieme etat n'est pas cosmetique : avec un
+ * simple booleen, « pas encore connecte » et « deconnecte » sont la meme valeur,
+ * et le bandeau de reconnexion s'affichait donc a chaque chargement de page.
+ */
+export const portConnected = $state({ current: null });
 export const parentFinalizeEvent = $state({ current: false });
 export const configChangeEvent = $state({ current: null });
 export const allOthersChannelSelectedEvent = $state({ current: null });

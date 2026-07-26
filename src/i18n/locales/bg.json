@@ -71,7 +71,8 @@
     "portDisconnected": "Връзката е прекъсната",
     "reconnectIn": "Нов опит след {seconds} с",
     "reconnecting": "Повторно свързване…",
-    "waitingConfig": "Изчакване на конфигурация"
+    "waitingConfig": "Зареждане на вашите папки",
+    "waitingConfigHint": "Извличаме конфигурацията ви и каналите, които следвате."
   },
   "sortSelect": {
     "placeholder": "Избери сортиране"

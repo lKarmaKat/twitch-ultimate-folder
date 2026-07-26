@@ -71,7 +71,8 @@
     "portDisconnected": "Verbindung unterbrochen",
     "reconnectIn": "Neuer Versuch in {seconds} s",
     "reconnecting": "Verbinde erneut…",
-    "waitingConfig": "Warte auf Konfiguration"
+    "waitingConfig": "Deine Ordner werden geladen",
+    "waitingConfigHint": "Wir holen deine Konfiguration und die Kanäle, denen du folgst."
   },
   "sortSelect": {
     "placeholder": "Sortierung auswählen"

@@ -71,7 +71,8 @@
     "portDisconnected": "Utracono połączenie",
     "reconnectIn": "Ponowna próba za {seconds} s",
     "reconnecting": "Ponowne łączenie…",
-    "waitingConfig": "Oczekiwanie na konfigurację"
+    "waitingConfig": "Wczytywanie Twoich folderów",
+    "waitingConfigHint": "Pobieramy Twoją konfigurację i obserwowane kanały."
   },
   "sortSelect": {
     "placeholder": "Wybierz sortowanie"

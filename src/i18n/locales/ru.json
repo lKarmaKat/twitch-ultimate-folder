@@ -71,7 +71,8 @@
     "portDisconnected": "Соединение потеряно",
     "reconnectIn": "Повтор через {seconds} с",
     "reconnecting": "Переподключение…",
-    "waitingConfig": "Ожидание конфигурации"
+    "waitingConfig": "Загрузка ваших папок",
+    "waitingConfigHint": "Получаем вашу конфигурацию и отслеживаемые каналы."
   },
   "sortSelect": {
     "placeholder": "Выбрать сортировку"

@@ -199,7 +199,7 @@ self.addEventListener('beforeunload', () => {
 chrome.runtime.onMessage.addListener(async (msg, sender, sendResponse) => {
     void sender;
     console.log("MESSAGE", msg.type, msg.data);    
-    if( msg.type === CST.IS_USER_LOGGED_IN) {
+    if( msg.type === CST.IS_USER_LOGGED_IN) { // Sent by action popup upon openning to know what to display
       if (tokenManager.token) {
         sendResponse(true);
       } else if (tokenManager.currentDeviceCodeInfo?.user_code && tokenManager.currentDeviceCodeInfo?.verification_uri) {

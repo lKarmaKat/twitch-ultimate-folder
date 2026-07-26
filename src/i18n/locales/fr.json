@@ -208,7 +208,8 @@
     "portDisconnected": "Connexion perdue",
     "reconnectIn": "Nouvelle tentative dans {seconds} s",
     "reconnecting": "Reconnexion en cours…",
-    "waitingConfig": "En attente de la configuration"
+    "waitingConfig": "Chargement de vos dossiers",
+    "waitingConfigHint": "On récupère votre configuration et vos chaines suivies."
   },
   "sortSelect": {
     "placeholder": "Sélectionner un tri"
