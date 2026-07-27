@@ -4,9 +4,8 @@ import { mount } from 'svelte'
 
 let app;
 
-// Initialise l'i18n avant de monter le composant : la page d'aide est un
-// contexte isole (onglet dedie), les dictionnaires ne sont pas partages avec
-// l'iframe de configuration.
+// Set up i18n before mounting: the help page runs in its own tab and shares no
+// dictionary with the config iframe.
 setupI18n().then(() => {
   app = mount(HelpPage, {
     target: document.body,

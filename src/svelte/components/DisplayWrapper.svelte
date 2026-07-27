@@ -10,6 +10,7 @@
   import { hasAnyChannel, hasVisibleContent } from '../listVisibility.js';
   import PortDisconnected from './PortDisconnected.svelte';
   import { applyLocale } from '../../i18n/index.js';
+  import { readTwitchDark, watchTwitchTheme } from '../twitchTheme.js';
   import * as CST from '../../constantes.js';
 
   let { configManager = new ConfigManager(true) } = $props();
@@ -45,19 +46,17 @@
   //     console.log("#############################")
   //   }
   // })
-  let theme = $state(true);
-  let themeCb = (data) => {
-    theme = data.data;
-  }
-  let port = new PortConnector(themeCb, "theme");
+  // Follows Twitch's own theme: no user setting, no port, no service worker.
+  let theme = $state(readTwitchDark());
+  $effect(() => watchTwitchTheme((dark) => { theme = dark; }));
 
-  // null tant que le service worker n'a pas tranché : on affiche l'écran
-  // d'attente plutôt qu'un faux « non connecté ».
+  // null until the service worker decides: show the waiting screen rather than
+  // a bogus "logged out".
   let authState = $state(null);
-  // { user_code, verification_uri } pendant un device flow. Diffusé à TOUS les
-  // onglets Twitch, pas seulement à celui d'où part le clic.
+  // { user_code, verification_uri } during a device flow. Broadcast to EVERY
+  // Twitch tab, not only the one that clicked.
   let deviceCode = $state(null);
-  // Entre le clic et l'arrivée du code : un aller-retour vers /oauth2/device.
+  // Between the click and the code: one round trip to /oauth2/device.
   let authorizing = $state(false);
   let authCb = (msg) => {
     if (msg.type === CST.AUTH_DEVICE_CODE) {
@@ -65,10 +64,8 @@
       return;
     }
     authState = msg.data;
-    // Le background diffuse un état à la fin de chaque flow — READY en cas de
-    // succès, NEED_AUTH en cas d'échec ou d'expiration. C'est notre unique
-    // signal de remise à zéro : sans lui, un flow échoué laisserait un code
-    // périmé à l'écran et un bouton désactivé pour toujours.
+    // The background broadcasts a state at the end of every flow: our only
+    // reset signal, without which a failed flow would freeze the UI.
     deviceCode = null;
     authorizing = false;
   }
@@ -90,7 +87,7 @@
   let localePort = new PortConnector(localeCb, 'locale');
 
 
-  // Aucune chaine nulle part dans l'arbre : l'utilisateur n'a rien configuré.
+  // No channel anywhere in the tree: the user configured nothing.
   let configEmpty = $derived.by(() => {
     if (!configManager?.selectedConfig) return false;
     return !hasAnyChannel(configManager, 'rootList');
@@ -113,7 +110,8 @@
 </script>
 
 <div id="display-container" class="display-wrapper" class:dark={theme} class:light={!theme} class:al-left={alignmentLeft.current} class:al-right={!alignmentLeft.current}>
-  {#if portConnected.current === false} // false in case of a real disconnect
+  <!-- Strictly false: null means "not connected yet", not a real disconnect. -->
+  {#if portConnected.current === false}
     <PortDisconnected />
   {/if}
 
@@ -124,8 +122,8 @@
       authorizing={authorizing}
       onAuthorize={startAuth} />
   {:else if authState === CST.AUTH_NO_SESSION}
-    <!-- Filet de sécurité : le content script a normalement déjà rendu la
-         sidebar à Twitch en repassant le conteneur en `collapsed`. -->
+    <!-- Safety net: the content script normally already handed the sidebar
+         back to Twitch by flipping the container to `collapsed`. -->
   {:else if dataPending}
     {#if portConnected.current !== false}
       <WaitingConfig />

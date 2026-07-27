@@ -21,9 +21,8 @@ export const SUPPORTED_LOCALES = [
 export const DEFAULT_LOCALE = 'en';
 export const LOCALE_STORAGE_KEY = 'local';
 
-// Chargement statique des dictionnaires : ils sont disponibles de façon
-// synchrone, ce qui évite tout flash de chargement ($isLoading) et fonctionne
-// de manière fiable dans le shadow DOM.
+// Static dictionary loading: available synchronously, which avoids any loading
+// flash ($isLoading) and works reliably inside the shadow DOM.
 addMessages('en', en);
 addMessages('fr', fr);
 addMessages('es', es);
@@ -52,9 +51,8 @@ function normalize(lang?: string | null): string {
 }
 
 /**
- * Initialise svelte-i18n. La locale provient de chrome.storage.local (clé
- * `local`). Si elle n'existe pas, on la détecte automatiquement depuis le
- * navigateur puis on la persiste. Sinon, on suit systématiquement le storage.
+ * Initialises svelte-i18n. The locale comes from chrome.storage.local (`local`);
+ * when missing it is detected from the browser, then persisted.
  */
 export async function setupI18n(): Promise<void> {
   init({ fallbackLocale: DEFAULT_LOCALE, initialLocale: DEFAULT_LOCALE });
@@ -74,7 +72,7 @@ export async function setupI18n(): Promise<void> {
   locale.set(lang);
 }
 
-/** Applique une locale déjà connue (changement à chaud via le port `locale`). */
+/** Applies an already known locale (hot change over the `locale` port). */
 export function applyLocale(lang?: string | null): void {
   if (!lang) return;
   locale.set(normalize(lang));

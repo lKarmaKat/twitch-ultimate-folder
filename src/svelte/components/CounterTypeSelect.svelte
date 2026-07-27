@@ -5,7 +5,7 @@
 
     let { value = $bindable("") } = $props();
 
-    const LIVE_CHANNELS_IN_LIST = 16; // valeur fictive pour l'aperçu
+    const LIVE_CHANNELS_IN_LIST = 16; // dummy value for the preview
     const TOTAL_CHANNELS_IN_LIST = 42;
 
     const uid = $props.id();

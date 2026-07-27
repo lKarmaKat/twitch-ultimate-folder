@@ -1,6 +1,6 @@
 <script>
-    // Menu déroulant de langue, calqué sur BarColorSelect.svelte.
-    // value = id de langue ('en' | 'fr'), options = [{id, name, flag}], onchange = callback
+    // Language dropdown, modelled on BarColorSelect.svelte.
+    // value = language id ('en' | 'fr'), options = [{id, name, flag}], onchange = callback
     let { value = $bindable("en"), options = [], onchange, dark } = $props();
 
     const uid = $props.id();

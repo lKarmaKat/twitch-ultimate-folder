@@ -5,7 +5,7 @@ import { mount } from 'svelte'
 
 let app;
 
-// Initialise l'i18n avant de monter les composants.
+// Set up i18n before mounting the components.
 setupI18n().then(() => {
   app = mount(ConfigPopup, {
     target: document.body,

@@ -7,8 +7,8 @@
         configManager.openConfigPopup();
     }
 
-    // chrome.tabs est hors de portée d'un content script : le service worker
-    // ouvre l'onglet a notre place, sur la section « créer une configuration ».
+    // chrome.tabs is out of reach from a content script: the service worker
+    // opens the tab for us, on the "create a configuration" section.
     function openHelp() {
         configManager.openHelpPage('#create-config');
     }
@@ -38,10 +38,8 @@
 </div>
 
 <style>
-    /* Tout est en `em` : Twitch applique html{font-size:62.5%}, donc 1rem = 10px
-       et une échelle en rem sous-dimensionne le bloc. En héritant de la taille
-       de texte de la sidebar, on s'aligne sur Display.svelte, qui ne déclare
-       lui non plus aucun font-size. */
+    /* All in `em`: Twitch sets html{font-size:62.5%}, so 1rem = 10px and a rem
+       scale would undersize the block. Inherits the sidebar's text size. */
     .empty-state {
         display: flex;
         flex-direction: column;
@@ -81,8 +79,8 @@
         text-wrap: balance;
     }
 
-    /* Les deux liens forment un bloc : le `gap` du .empty-state les écarterait
-       autant que des paragraphes, alors qu'ils vont ensemble. */
+    /* The two links form one block: .empty-state's `gap` would space them like
+       paragraphs, though they belong together. */
     .links {
         display: flex;
         flex-direction: column;
@@ -123,7 +121,7 @@
         }
     }
 
-    /* Mêmes valeurs de halo que FolderIcon, textes repris de la sidebar Twitch. */
+    /* Same halo values as FolderIcon, text colours from the Twitch sidebar. */
     :global(.dark) .icon-plate {
         background: rgba(145, 71, 255, 0.2);
     }

@@ -18,12 +18,11 @@ export class DataPusher {
         this.twitchApi = twitchApi;
         this.sendCallback = sendCallback;
         this.dataFormatter = new DataFormatter(twitchApi);
-        // Le polling ne démarre pas ici : tant qu'aucun compte n'est connecté il
-        // n'y a ni token utilisable ni destinataire, et démarrer d'office ferait
-        // partir des requêtes Helix pour rien.
+        // Polling does not start here: with no account logged in there is
+        // neither a usable token nor a recipient.
     }
 
-    /** Démarre la boucle. Sans effet si déjà démarrée ou définitivement arrêtée. */
+    /** Starts the loop. No-op if already started or permanently stopped. */
     start(): void {
         if (this.started || this.stopped) return;
         this.started = true;
@@ -31,9 +30,8 @@ export class DataPusher {
     }
 
     /**
-     * Arrêt définitif : une instance stoppée ne redémarre pas. Au changement de
-     * compte on en crée une neuve, sinon les Map de DataFormatter garderaient
-     * les chaînes du compte précédent.
+     * Permanent stop: a stopped instance never restarts. Account switches build
+     * a new one, or DataFormatter's maps would keep the previous channels.
      */
     stop(): void {
         this.stopped = true;
@@ -46,15 +44,13 @@ export class DataPusher {
     private async tick(): Promise<void> {
         try {
             const data = await this.dataFormatter.updateAll();
-            // clearTimeout n'annule que le timer en attente, pas la requête déjà
-            // partie. Sans ce garde, un updateAll() lancé avec le token du compte
-            // A se résoudrait après le switch et pousserait ses chaînes aux
-            // sidebars du compte B.
+            // clearTimeout only cancels a pending timer, not an in-flight
+            // request, which would push account A's channels to account B.
             if (this.stopped) return;
             this.sendCallback(data);
         } catch (error) {
-            // Un throw ici serait une unhandled rejection : on est dans le
-            // callback d'un setTimeout, plus personne n'attend cette promesse.
+            // Throwing here would be an unhandled rejection: we run inside a
+            // setTimeout callback and nobody awaits this promise.
             if (!this.stopped) logErrorChain("DataPusher.tick", error);
         } finally {
             this.scheduleNext();
@@ -70,7 +66,7 @@ export class DataPusher {
     }
 
     private scheduleNext(): void {
-        if (this.stopped) return; // seul point de sortie de la boucle
+        if (this.stopped) return; // the loop's only exit point
         this.timer = setTimeout(() => {
             this.timer = null;
             void this.tick();
@@ -78,8 +74,8 @@ export class DataPusher {
     }
 
     async getConfig(): Promise<[number, StreamsInfos][]> {
-        // readyPromise n'est créée que par start() : sans ce garde, un appel
-        // avant démarrage attendrait une promesse qui ne se résout jamais.
+        // readyPromise is only created by start(): without this guard a call
+        // made before then would await a promise that never resolves.
         if (!this.started) return [];
         await this.readyPromise;
         return this.dataFormatter.getInfotoSend();

@@ -59,7 +59,7 @@ const observer = new MutationObserver((mut, obs) => {
   }
 });
 
-// Initialise l'i18n avant tout montage, puis lance les composants.
+// Set up i18n before any mount, then start the components.
 setupI18n().then(() => {
   mount(TitlePopup, {
     target: document.body,

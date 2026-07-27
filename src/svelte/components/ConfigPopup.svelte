@@ -26,10 +26,11 @@
     chrome.runtime.sendMessage({type: 'HIDE_POPUP'});
   }
 
-  // Page d'extension ouverte dans un onglet dedie : pas besoin de la declarer
-  // dans web_accessible_resources, l'appel part deja d'un contexte extension.
+  // Extension page opened in its own tab: no need for web_accessible_resources,
+  // the call already comes from an extension context.
   function openHelp() {
-    chrome.tabs.create({ url: chrome.runtime.getURL('src/iframe/help.html') });
+    const url = `${chrome.runtime.getURL('src/iframe/help.html')}?dark=${darkTheme ? 1 : 0}`;
+    chrome.tabs.create({ url });
   }
 
   let showResetConfirm = $state(false);
@@ -53,19 +54,16 @@
     configManager.saveConfig(configManager.selectedConfig);
   }
 
-  let darkTheme = $state(true);
-
-  let theme = (data) => {
-      darkTheme = data.data;
-  }
-  let port = new PortConnector(theme, "theme");
+  // Set by the content script when it builds the iframe: a separate document
+  // inherits nothing from Twitch, so the theme arrives in the URL.
+  let darkTheme = $state(new URLSearchParams(location.search).get('dark') !== '0');
 
   let localeCb = (msg) => {
       applyLocale(msg.data);
   }
   let localePort = new PortConnector(localeCb, "locale");
 
-  // Ca je garde au cas où
+  // Keeping this around just in case
   // function newConfig() {
   //   let newConfigName = "newConfig";
   //   let newConfigIndex = 1;
@@ -92,7 +90,7 @@
   //   console.log(configName);
   // }
   function addRootNodeFromConfigList() {
-    console.log("T'as bien cliqué");
+    console.log("Click registered");
     addRootNode();
   }
   let addRootNode = $state();
@@ -468,7 +466,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: rgba(0, 0, 0, 0.5); /* grise le popup, identique clair/sombre */
+    background-color: rgba(0, 0, 0, 0.5); /* dims the popup, same in light/dark */
   }
   .confirm-modal {
     min-width: 300px;
@@ -493,7 +491,7 @@
     gap: 0.75em;
   }
   .confirm-actions .reset-btn {
-    margin-right: 0; /* neutralise le margin-right:1em existant */
+    margin-right: 0; /* cancels the existing margin-right:1em */
   }
 
 </style>

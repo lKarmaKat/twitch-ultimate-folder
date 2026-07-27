@@ -5,20 +5,13 @@
 
     let seconds = $state(0);
 
-    // L'echeance est la dependance de l'effet : il se rejoue donc a chaque
-    // nouvelle tentative et recalcule aussitot, au lieu d'attendre le prochain
-    // tick. C'est ce qui evite d'afficher « 16 s » au lieu de « 15 s » — une
-    // horloge reactive rafraichie a son propre rythme aurait jusqu'a 250 ms de
-    // retard sur l'ecriture du store, et ces 250 ms passent au cran superieur.
-    // Le composant n'est monte que pendant une coupure : rien ne tourne le
-    // reste du temps.
+    // The deadline is the effect's dependency, so it recomputes on every new
+    // attempt instead of waiting a tick and showing "16 s" for "15 s".
     $effect(() => {
         const deadline = reconnect.nextAttemptAt;
 
-        // ceil : on affiche 3,2,1 plutot que de laisser un « 0 » une seconde
-        // entiere. max : un onglet en arriere-plan est throttle par le
-        // navigateur, la tentative peut donc partir en retard et l'ecart
-        // devenir negatif.
+        // ceil: show 3,2,1 rather than a full second of "0". max: a background
+        // tab is throttled, so the attempt can fire late and go negative.
         const tick = () => {
             seconds = deadline
                 ? Math.max(0, Math.ceil((deadline - Date.now()) / 1000))
@@ -44,21 +37,19 @@
         </p>
     </div>
 
-    <!-- Rejouee a chaque nouvelle echeance : {#key} remonte l'element, ce qui
-         relance l'animation CSS sans avoir a la piloter image par image. -->
+    <!-- Replayed on every new deadline: {#key} remounts the element, which
+         restarts the CSS animation without driving it frame by frame. -->
     {#key reconnect.nextAttemptAt}
         <span class="bar" style="--drain: {reconnect.delay}ms" aria-hidden="true"></span>
     {/key}
 </div>
 
 <style>
-    /* Tout est en `em` : Twitch applique html{font-size:62.5%}, donc 1rem = 10px
-       et une échelle en rem sous-dimensionne le bloc. */
+    /* All in `em`: Twitch sets html{font-size:62.5%}, so 1rem = 10px and a rem
+       scale would undersize the block. */
     .reconnect {
-        /* Tokens Twitch, comme NeedToConnect : ce bandeau s'affiche justement
-           quand le port `theme` est coupe, donc quand le theme de l'extension
-           n'est pas fiable. Replis = sombre ; .light prend le relais hors de
-           Twitch (apercu du popup de config). */
+        /* Twitch tokens, like NeedToConnect: this banner shows exactly when the
+           ports are down. Fallbacks = dark; .light takes over off Twitch. */
         --pd-text: var(--color-text-base, #efeff1);
         --pd-muted: var(--color-text-alt-2, #adadb8);
         --pd-surface: var(--color-background-alt, rgba(255, 255, 255, 0.08));
@@ -108,13 +99,13 @@
         margin: 0;
         font-size: 0.85em;
         line-height: 1.3;
-        /* Largeur de chiffre stable : sinon « 10 s » -> « 9 s » fait sauter la ligne. */
+        /* Stable digit width: otherwise "10 s" -> "9 s" makes the line jump. */
         font-variant-numeric: tabular-nums;
         color: var(--pd-muted);
     }
 
-    /* Barre de progression signifiante : elle se vide sur la duree exacte de
-       l'attente, la ou une animation infinie ne dirait rien du delai restant. */
+    /* Meaningful progress bar: it drains over the exact wait, where an endless
+       animation would say nothing about the time left. */
     .bar {
         position: absolute;
         left: 0;

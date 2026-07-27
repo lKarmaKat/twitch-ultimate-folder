@@ -47,12 +47,12 @@ import TheDivision2Icon from './TheDivision2Icon.svelte';
 
 export interface IconDef {
   id: number;
-  key: string; // clé i18n, ex. 'icon.folder' (résolue par $_ chez le consommateur)
+  key: string; // i18n key, e.g. 'icon.folder' (resolved with $_ by the consumer)
   component: Component;
 }
 
-// Source de vérité unique des icônes.
-// Les `id` doivent rester stables : ils sont persistés dans la config utilisateur (`type.iconType`).
+// Single source of truth for icons. The `id`s must stay stable: they are
+// persisted in the user config (`type.iconType`).
 export const ICONS: IconDef[] = [
   { id: 1, key: 'icon.folder', component: FolderIcon },
   { id: 2, key: 'icon.dot', component: DotIcon },
@@ -103,8 +103,8 @@ export const ICONS: IconDef[] = [
 
 export const ICON_BY_ID = new Map<number, IconDef>(ICONS.map((i) => [i.id, i]));
 
-// Tri alphabétique basé sur le LABEL traduit → dépend de la locale courante,
-// donc on prend la fonction de traduction ($_) en argument pour rester réactif.
+// Sorted on the translated LABEL, so it depends on the current locale: the
+// translate function ($_) is taken as an argument to stay reactive.
 export function sortIconsByLabel(translate: (key: string) => string): IconDef[] {
   return [...ICONS].sort((a, b) => translate(a.key).localeCompare(translate(b.key)));
 }

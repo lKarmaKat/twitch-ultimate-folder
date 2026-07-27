@@ -7,7 +7,7 @@ export interface DeviceCodeInfo {
     device_code: string;
 }
 
-/** Contenu de la clé `token_<userId>` dans chrome.storage.local. */
+/** Contents of the `token_<userId>` key in chrome.storage.local. */
 export interface StoredToken {
     twitchToken: string | null;
     refreshToken: string | null;
@@ -16,18 +16,8 @@ export interface StoredToken {
 }
 
 /**
- * Gère les tokens OAuth d'UN compte à la fois, mais les persiste par compte
- * (`token_<userId>`), ce qui permet de basculer d'un utilisateur à l'autre sans
- * ré-autorisation.
- *
- * L'userId est une ENTRÉE, fournie par la session Twitch du navigateur, et non
- * plus une sortie de la validation : c'est ce qui permet de savoir quel jeu de
- * tokens charger avant le moindre appel réseau.
- *
- * Cette classe n'orchestre rien : elle ne connaît ni la config, ni le poller,
- * ni les ports. Le seul signal qu'elle émet est `onAuthLost`, quand un token
- * devient irrécupérable en cours de session (révocation depuis les paramètres
- * Twitch, typiquement).
+ * Handles OAuth tokens for ONE account at a time, persisted per account under
+ * `token_<userId>`. Its only outgoing signal is `onAuthLost`.
  */
 export class TokenManager {
     TOKEN_URL = 'https://id.twitch.tv/oauth2/token';
@@ -44,12 +34,12 @@ export class TokenManager {
     authInProgressPromise: Promise<void> | null = null;
     currentDeviceCodeInfo: DeviceCodeInfo | null = null;
 
-    /** Posé par le background : le token du compte courant n'est plus récupérable. */
+    /** Set by the background: the current account's token is unrecoverable. */
     onAuthLost?: () => void;
 
     /**
-     * Repointe le manager sur `userId` et tente de rendre son token utilisable.
-     * @returns true si un token valide est disponible, false s'il faut autoriser.
+     * Repoints the manager at `userId` and tries to make its token usable.
+     * @returns true if a valid token is available, false if authorization is needed.
      */
     async switchUser(userId: number): Promise<boolean> {
         this.reset();
@@ -57,8 +47,8 @@ export class TokenManager {
 
         const key = tokenKey(userId);
         const stored = (await chrome.storage.local.get(key))[key] as StoredToken | undefined;
-        // Une bascule plus récente est passée pendant la lecture du storage :
-        // continuer écrirait l'état de cet utilisateur-ci par-dessus le sien.
+        // A more recent switch happened while reading storage: going on would
+        // overwrite its state with this user's.
         if (this.userId !== userId) return false;
         if (!stored?.refreshToken) return false;
 
@@ -84,16 +74,12 @@ export class TokenManager {
     }
 
     /**
-     * Lance le device flow POUR un compte donné. Jamais appelé automatiquement :
-     * c'est une action explicite de l'utilisateur depuis l'action popup.
-     *
-     * Fixer `userId` avant de démarrer est indispensable — `pollForDeviceToken`
-     * persiste le token dès réception, or à ce moment aucune validation n'a
-     * encore eu lieu et il n'y aurait donc aucune clé sous laquelle écrire.
+     * Starts the device flow FOR an account, only on an explicit user action.
+     * `userId` must be set first: pollForDeviceToken persists before validation.
      */
     async startAuthFor(userId: number, callback: ((info: { user_code: string; verification_uri: string }) => void) | null): Promise<string> {
         if (this.authInProgressPromise && this.userId === userId) {
-            // Popup rouverte pendant le polling : on se raccroche au flow en cours.
+            // Popup reopened during polling: hook onto the running flow.
             await this.authInProgressPromise;
             return this.token!;
         }
@@ -107,7 +93,7 @@ export class TokenManager {
         }
     }
 
-    /** Déconnexion Twitch : on oublie l'état en mémoire, jamais le storage. */
+    /** Twitch logout: drop the in-memory state, never the storage. */
     clear(): void {
         this.reset();
         this.userId = undefined;
@@ -125,9 +111,8 @@ export class TokenManager {
                 await this.validateAuthToken();
                 return this.token!;
             } catch {
-                // Pas de repli sur le device flow : une autorisation ne peut
-                // partir que d'un geste explicite de l'utilisateur. On signale
-                // la perte, le background bascule l'UI sur « à autoriser ».
+                // No fallback to the device flow: authorization only starts on
+                // an explicit user action. Report the loss instead.
                 if (!this.refreshToken) {
                     this.notifyAuthLost();
                     throw new Error("TokenManager.getToken no refresh token available");
@@ -148,9 +133,8 @@ export class TokenManager {
     }
 
     /**
-     * Remet à zéro l'état ET les promesses en vol. Ces dernières sont le point
-     * critique : sans ça, un device flow lancé pour le compte A se résoudrait
-     * dans le contexte du compte B et écrirait le token de A sous `token_<B>`.
+     * Clears state AND in-flight promises. The latter matter: otherwise a device
+     * flow started for account A would write A's token under `token_<B>`.
      */
     private reset(): void {
         this.token = null;
@@ -213,10 +197,8 @@ export class TokenManager {
             }
         })().finally(() => {
             this.authInProgressPromise = null;
-            // Un code d'activation n'existe que TANT QU'IL attend d'être saisi.
-            // Le laisser en place après coup fait afficher indéfiniment à
-            // l'action popup un code déjà consommé — y compris, et surtout,
-            // après une autorisation réussie.
+            // An activation code only exists WHILE it waits to be entered:
+            // keeping it would show a spent code forever, success included.
             this.currentDeviceCodeInfo = null;
         });
 
@@ -258,10 +240,8 @@ export class TokenManager {
             const data = await response.json();
 
             if (data.access_token) {
-                // Le polling dure des dizaines de secondes : l'utilisateur a pu
-                // changer de compte Twitch entre-temps. `reset()` a bien coupé
-                // authInProgressPromise, mais cette boucle-ci tourne toujours et
-                // persisterait le token du compte A sous la clé du compte B.
+                // Polling lasts tens of seconds, so the account may have changed.
+                // reset() drops the promise, but this loop keeps running.
                 if (this.userId !== authUserId) {
                     throw new Error(
                         `TokenManager.pollForDeviceToken user switched away from ${authUserId} during authorization`);
@@ -292,10 +272,8 @@ export class TokenManager {
         const data = await response.json();
         const validatedUserId = Number(data.user_id);
 
-        // Le bucket `token_<X>` doit contenir un token appartenant bien à X.
-        // Sans ce contrôle, un bucket corrompu servirait les chaînes d'un compte
-        // sous la config d'un autre — exactement ce que le multi-comptes doit
-        // rendre impossible.
+        // Bucket `token_<X>` must hold a token that really belongs to X, or a
+        // corrupted bucket would serve one account's channels under another's.
         if (this.userId !== undefined && validatedUserId !== this.userId) {
             this.token = null;
             throw new Error(

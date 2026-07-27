@@ -2,12 +2,11 @@
     import { _ } from 'svelte-i18n';
 </script>
 
-<!-- #waiting-config : point d'accroche des tests e2e. -->
+<!-- #waiting-config: hook for the e2e tests. -->
 <div id="waiting-config" class="empty-state" role="status" aria-live="polite">
     <span class="icon-plate" aria-hidden="true">
-        <!-- Sablier : le sable se vide, puis le verre fait un demi-tour et
-             repart. Le demi-tour porte le « ça avance encore » qu'un simple
-             vidage ne dit plus une fois la coupe vide. -->
+        <!-- Hourglass: the sand drains, then the glass flips and starts over.
+             The flip carries the "still going" an empty bulb no longer says. -->
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
              stroke-linecap="round" stroke-linejoin="round">
             <g class="glass">
@@ -16,10 +15,8 @@
                 <path d="M16 3.4v3.1c0 1-.4 1.9-1.1 2.5L12 12l2.9 3c.7.6 1.1 1.5 1.1 2.5v3.1" />
                 <polygon class="sand-top" points="8.9,5 15.1,5 12,11.4" fill="currentColor" stroke="none" />
                 <polygon class="sand-bot" points="12,12.6 15.6,19 8.4,19" fill="currentColor" stroke="none" />
-                <!-- Deux filets plutot qu'un : le demi-tour renverse le repere,
-                     et un filet unique se retrouverait a couler dans la coupe
-                     du haut sur la seconde moitie du cycle. Chacun ne s'allume
-                     que pendant le vidage ou il tombe du bon cote du col. -->
+                <!-- Two streams, not one: the flip reverses the frame, so a
+                     single stream would pour upwards for half the cycle. -->
                 <rect class="stream stream-a" x="11.72" y="11.2" width="0.56" height="7.4" rx="0.28"
                       fill="currentColor" stroke="none" opacity="0" />
                 <rect class="stream stream-b" x="11.72" y="5.4" width="0.56" height="7.4" rx="0.28"
@@ -33,15 +30,11 @@
 </div>
 
 <style>
-    /* Tout est en `em` : Twitch applique html{font-size:62.5%}, donc 1rem = 10px
-       et une échelle en rem sous-dimensionne le bloc. En héritant de la taille
-       de texte de la sidebar, on s'aligne sur Display.svelte, qui ne déclare
-       lui non plus aucun font-size. */
+    /* All in `em`: Twitch sets html{font-size:62.5%}, so 1rem = 10px and a rem
+       scale would undersize the block. Inherits the sidebar's text size. */
     .empty-state {
-        /* Tokens Twitch, comme NeedToConnect et PortDisconnected : ce bloc
-           s'affiche justement avant que le port `theme` ait répondu, donc quand
-           le theme de l'extension n'est pas encore connu. Replis = sombre ;
-           .light prend le relais hors de Twitch (apercu du popup de config). */
+        /* Twitch tokens, like NeedToConnect: this block shows before the theme
+           is known. Fallbacks = dark; .light takes over off Twitch. */
         --wc-text: var(--color-text-base, #efeff1);
         --wc-muted: var(--color-text-alt-2, #adadb8);
         --wc-accent: #bf94ff;
@@ -53,11 +46,8 @@
         padding: 1.8em 1em 1.5em;
         text-align: center;
 
-        /* Loader retarde : la plupart des attentes durent moins de 200 ms, et le
-           composant est alors demonte avant la fin du delai — l'ecran ne bouge
-           pas. Au-dela, le sablier arrive en fondu. C'est le pendant CSS du
-           `setTimeout` qui vivait dans DisplayWrapper, mais a l'envers : on
-           retarde l'etat de chargement au lieu de retarder le contenu. */
+        /* Delayed loader: most waits are under 200 ms, so the component is
+           unmounted before the delay ends and the screen never flickers. */
         opacity: 0;
         animation: appear 0.15s ease 0.25s forwards;
     }
@@ -75,10 +65,8 @@
         width: 3.4em;
         height: 3.4em;
         border-radius: 0.6em;
-        /* Violet translucide comme EmptyConfig : lisible sur les deux fonds.
-           Le gris neutre de NoLiveChannels dit « fin de course » ; ici quelque
-           chose est en train de se passer, c'est le violet du spinner de
-           PortDisconnected qui convient. */
+        /* Translucent purple like EmptyConfig: NoLiveChannels' neutral grey
+           says "end of the line", but here something is still happening. */
         background: rgba(145, 71, 255, 0.16);
         color: var(--wc-accent);
     }
@@ -105,8 +93,8 @@
         color: var(--wc-muted);
     }
 
-    /* transform-box: fill-box — sans lui, transform-origin se calcule sur le
-       viewBox entier et les triangles de sable partent de travers. */
+    /* transform-box: fill-box — without it transform-origin is computed on the
+       whole viewBox and the sand triangles skew off. */
     .glass {
         transform-box: fill-box;
         transform-origin: 50% 50%;
@@ -124,23 +112,16 @@
     .stream-a { animation: stream-a 5s linear infinite; }
     .stream-b { animation: stream-b 5s linear infinite; }
 
-    /* Un cycle = deux vidages separes par un demi-tour, et le tour est boucle a
-       360deg pour que la fin de cycle rejoigne le debut sans a-coup. Le sable
-       repart a l'endroit apres chaque demi-tour : la coupe locale « haut » est
-       alors affichee en bas, donc les keyframes s'inversent d'elles-memes sur la
-       seconde moitie. */
+    /* One cycle = two drains separated by a flip, closed at 360deg so the end
+       rejoins the start seamlessly. Keyframes self-invert on the second half. */
     @keyframes flip {
         0%, 44%   { transform: rotate(0deg); }
         52%, 94%  { transform: rotate(180deg); }
         100%      { transform: rotate(360deg); }
     }
 
-    /* Le sable coule toujours *vers le col*, jamais l'inverse : chaque tas se
-       retracte du cote du col et grossit depuis sa base. Apres le demi-tour ces
-       deux points s'echangent, d'ou l'origine qui bascule d'un bord a l'autre en
-       cours de cycle. La bascule se joue entre 42% et 54%, quand le transform
-       vaut identite (scaleY(1)) ou ne rend rien (scaleY(0)) : elle est donc
-       strictement invisible. */
+    /* Sand always flows *towards the neck*, so the origin swaps sides after the
+       flip — done between 42% and 54%, where scaleY makes it invisible. */
     @keyframes drain-top {
         0%   { transform-origin: 50% 100%; transform: scaleY(1); }
         42%  { transform-origin: 50% 100%; transform: scaleY(0); }
@@ -157,7 +138,7 @@
         100% { transform-origin: 50% 0%;   transform: scaleY(0); }
     }
 
-    /* Le filet ne coule que pendant les vidages, jamais pendant le demi-tour. */
+    /* The stream only flows during the drains, never during the flip. */
     @keyframes stream-a {
         0%, 3%    { opacity: 0; }
         6%, 39%   { opacity: 0.8; }
@@ -175,10 +156,8 @@
     }
 
     @media (prefers-reduced-motion: reduce) {
-        /* Le sablier se fige a mi-course : l'icone reste lisible comme telle,
-           la ou un verre plein ou vide ressemble a un pictogramme quelconque.
-           Le fondu devient une apparition seche, mais garde son delai — c'est
-           lui qui evite le clignotement, pas l'animation. */
+        /* Frozen mid-drain, where the icon still reads as an hourglass. The
+           fade becomes a hard cut but keeps its delay, which is what matters. */
         .empty-state {
             animation: appear 0s linear 0.25s forwards;
         }

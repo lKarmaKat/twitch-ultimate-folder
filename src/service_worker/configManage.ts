@@ -77,9 +77,8 @@ export class ConfigManager {
         if (!this.userId) throw new Error("No user connected, cannot save config");
 
         const userId = this.userId;
-        // Clé dédiée à la config : les tokens vivent sous `token_<userId>`. Un
-        // objet partagé ferait perdre le token rafraîchi entre la lecture et
-        // l'écriture ci-dessous (read-modify-write sans transaction).
+        // Dedicated config key; tokens live under `token_<userId>`. A shared
+        // object would lose the refreshed token in the read-modify-write below.
         const key = CST.configKey(userId);
         const data: { [key: string]: UserConfigs } = await chrome.storage.local.get(key);
         let userStructure: UserConfigs = data[key];
@@ -110,31 +109,6 @@ export class ConfigManager {
 
 
 /**
- * Si pas d'utilisateur connecté, on récupère une config par défaut.
- *
- * Si aucun objet userConfig n'est trouvé, il est créé mais pas tout de suite sauvegardé
- * quand un utilisateur se connecte la config global est récupérée et gardée.
- *      Si l'utilisateur change, la popup se ferme et les configs en cours de modifications ne sont pas sauvegardées.
- *
- *
- *
- * l'utilisateur peut créer plusieurs configurations avec un nom.
- * si aucune configuration n'existe, une config par défaut nommée 'défaut' est renvoyée (mais pas encore sauvegardée)
- *      une fois sauvegardée la config par défaut devient la currentConfig (si aucune autre config).
- * si la config n'existe pas en mémoire au moment de la sauvegarde, elle est créée
- * l'utilisateur peut sauvegarder une config spécifique
- * si une config currentConfig est supprimée, la première config de la liste devient la currentConfig
- * le nom de la config actuellement utilisée est stocké dans currentConfig pour être affichée dans la sidebar et par défaut dans la config popup
- *
- * la liste des configs est affichée dans la popup de config
- * un utilisateur peut sélectionner une config comme currentConfig
- *
- *
- *
- * quand un utilisateur modifie une config dans la popup de config, une étoile apparait dans le bloc de la config
- * l'utilisateur peut renommer une config
- *
- *
- *
- *
+ * Users can hold several named configs; a missing one yields a 'default' that
+ * is only persisted on save, and `currentConfig` names the one in use.
  */

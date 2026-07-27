@@ -209,7 +209,7 @@
     }
     .pannel-header input {
         flex: 1 1 auto;
-        /* Sans ça l'input garde sa largeur intrinseque (size=20) et deborde */
+        /* Without this the input keeps its intrinsic width (size=20) and overflows */
         min-width: 0;
         /* width: 100%; */
         width: auto;
@@ -249,7 +249,7 @@
         flex-wrap: wrap;
     }
 
-/* La pastille "?" */
+/* The "?" badge */
 /* .help-badge {
     position: relative;
     display: inline-flex;
@@ -289,7 +289,7 @@
     z-index: 10;
 } */
 
-/* Petite flèche */
+/* Small arrow */
 /* .help-badge::before {
     content: "";
     position: absolute;

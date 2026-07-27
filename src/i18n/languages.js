@@ -1,6 +1,5 @@
-// Liste des langues proposees par le selecteur (LanguageSelect.svelte).
-// Partagee entre l'action popup et la page d'aide : les ids doivent rester
-// alignes sur SUPPORTED_LOCALES dans ./index.ts.
+// Languages offered by LanguageSelect.svelte, shared by the action popup and
+// the help page. Ids must stay aligned with SUPPORTED_LOCALES in ./index.ts.
 import enFlag from '../assets/flags/en.svg';
 import frFlag from '../assets/flags/fr.svg';
 import esFlag from '../assets/flags/es.svg';

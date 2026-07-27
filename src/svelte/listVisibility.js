@@ -1,23 +1,8 @@
 import * as CST from '../constantes.js';
 
 /**
- * Une liste a du contenu à afficher si :
- *  - elle est marquée "afficher même si aucune chaîne en ligne", ou
- *  - elle contient "All other channels", ou
- *  - elle contient une chaîne live, ou
- *  - une de ses sous-listes a du contenu à afficher.
- *
- * Le test du flag est placé avant la boucle : une liste marquée mais vide
- * s'affiche aussi (header + corps vide), ce qui est ce que Display rendrait.
- *
- * Partagé entre Display (visibilité d'une liste) et DisplayWrapper (afficher
- * l'arbre ou le message de repli) : les deux doivent répondre à la même
- * question, sinon le wrapper masque des listes que Display aurait affichées.
- */
-/**
- * La configuration contient-elle au moins une chaine, quelque part dans l'arbre ?
- * Sert à distinguer « rien de configuré » (l'utilisateur doit être guidé) de
- * « configuré, mais personne en ligne » (il n'y a rien à faire).
+ * Does the config hold at least one channel anywhere in the tree? Tells
+ * "nothing configured" from "configured, but nobody live".
  */
 export function hasAnyChannel(configManager, listId) {
 	const list = configManager?.selectedConfig?.[listId];
@@ -33,6 +18,10 @@ export function hasAnyChannel(configManager, listId) {
 	return false;
 }
 
+/**
+ * A list shows content if it is flagged "show even if offline", holds a live
+ * channel or "all others", or has a sub-list that does. Shared with Display.
+ */
 export function hasVisibleContent(configManager, listId) {
 	const list = configManager?.selectedConfig?.[listId];
 	if (!list) return false;

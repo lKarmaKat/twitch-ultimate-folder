@@ -10,12 +10,9 @@ export const SAVE_CHANNELS_LIST = 'SAVE_CHANNELS_LIST';
 export const RESET_CONFIG = 'RESET_CONFIG';
 export const DISPLAY_POPUP = 'DISPLAY_POPUP';
 export const OPEN_HELP_PAGE = 'OPEN_HELP_PAGE';
-/** Poignée de main postée par le service worker à chaque connexion de port. */
+/** Handshake posted by the service worker on every port connection. */
 export const PORT_READY = 'PORT_READY';
 export const HIDE_POPUP = 'HIDE_POPUP';
-export const THEME = 'THEME';
-export const CHANGE_THEME = 'CHANGE_THEME';
-export const GET_THEME = 'GET_THEME';
 export const ALIGNMENT = 'ALIGNMENT';
 export const CHANGE_ALIGNMENT = 'CHANGE_ALIGNMENT';
 export const GET_ALIGNMENT = 'GET_ALIGNMENT';
@@ -24,27 +21,24 @@ export const CHANGE_LOCALE = 'CHANGE_LOCALE';
 export const GET_LOCALE = 'GET_LOCALE';
 export const IS_USER_LOGGED_IN = 'IS_USER_LOGGED_IN';
 export const AUTH_DEVICE_CODE = 'AUTH_DEVICE_CODE';
-/** Le content script signale l'userId lu dans le cookie de session Twitch (null = déconnecté). */
+/** Content script reports the userId read from the Twitch session cookie (null = logged out). */
 export const SESSION_USER_CHANGED = 'SESSION_USER_CHANGED';
-/** Le service worker interroge un onglet sur sa session courante (chemin action popup). */
+/** Service worker asks a tab about its current session (action popup path). */
 export const GET_SESSION_USER = 'GET_SESSION_USER';
-/** Seule voie d'entrée du device flow : jamais déclenché automatiquement. */
+/** Only entry point of the device flow: never triggered automatically. */
 export const START_AUTH = 'START_AUTH';
-/** État d'authentification diffusé sur le port `auth`. */
+/** Authentication state broadcast on the `auth` port. */
 export const AUTH_STATE = 'AUTH_STATE';
 
-// États d'authentification. Ternaires côté sidebar, quaternaires côté action
-// popup : celle-ci peut être ouverte depuis un onglet qui n'est pas Twitch, où
-// aucun content script ne tourne et où la session est donc indéterminable.
+// Auth states: three for the sidebar, four for the action popup, which can be
+// opened from a non-Twitch tab where the session is unknowable.
 export const AUTH_NOT_ON_TWITCH = 'NOT_ON_TWITCH';
 export const AUTH_NO_SESSION = 'NO_SESSION';
 export const AUTH_NEED_AUTH = 'NEED_AUTH';
 export const AUTH_READY = 'READY';
 
-// Clés de chrome.storage.local, une par utilisateur. Tokens et configs sont
-// délibérément séparés : `saveConfig` fait un read-modify-write pendant que le
-// rafraîchissement de token écrit sur timer, et une clé commune ferait perdre
-// silencieusement l'un ou l'autre.
+// chrome.storage.local keys, one per user. Tokens and configs stay separate:
+// saveConfig read-modify-writes while token refresh writes on a timer.
 export const tokenKey = (userId: string | number) => `token_${userId}`;
 export const configKey = (userId: string | number) => `config_${userId}`;
 
@@ -78,8 +72,8 @@ export const HEADER_TYPE_HEIGHT = [ // Not currently used
 ]
   
 
-// Les `label`/`tooltip`/`name` ci-dessous sont des clés i18n résolues avec $_()
-// dans les composants (on ne peut pas utiliser $_ dans un .ts).
+// The `label`/`tooltip`/`name` below are i18n keys resolved with $_() in the
+// components ($_ cannot be used from a .ts file).
 export const BEHAVIOUR = [
 {id: EXTENDED_ON_STARTUP, label: 'behaviour.extendedOnStartup.label', tooltip: 'behaviour.extendedOnStartup.tooltip'},
 {id: EXTENDEDS_ON_HOVER, label: 'behaviour.extendsOnHover.label', tooltip: 'behaviour.extendsOnHover.tooltip'},
@@ -130,10 +124,8 @@ export const COUNTER_TYPE = [
 ]
 
 
-// Les objets ci-dessous doivent être créés frais à chaque usage : les affecter
-// directement partagerait la référence du template, et toute mutation de
-// l'appelant (renommage, ajout d'items, cases de comportement) corromprait
-// silencieusement le défaut de toutes les listes créées ensuite.
+// Built fresh on every use: assigning them directly would share the template
+// reference, so any caller mutation would corrupt every list created later.
 export function createNewList(): t.I_NEW_LIST {
   return {
     id: 'node1',
@@ -176,8 +168,8 @@ export function createStartupConf(): t.I_CONFIG {
   return { rootList: createNewList() };
 }
 
-// Gèle récursivement : les modules ES étant en mode strict, un site de mutation
-// oublié lève une TypeError au lieu de corrompre le template en silence.
+// Recursive freeze: ES modules are strict mode, so a forgotten mutation throws
+// a TypeError instead of silently corrupting the template.
 function deepFreeze<T>(o: T): T {
   Object.values(o as any).forEach(v => {
     if (v && typeof v === 'object') deepFreeze(v);
@@ -185,10 +177,10 @@ function deepFreeze<T>(o: T): T {
   return Object.freeze(o);
 }
 
-/** Lecture seule. Pour un objet modifiable, utiliser createNewList(). */
+/** Read-only. Use createNewList() for a mutable object. */
 export const NEW_LIST: t.I_NEW_LIST = deepFreeze(createNewList());
 
-/** Lecture seule. Pour un objet modifiable, utiliser createStartupConf(). */
+/** Read-only. Use createStartupConf() for a mutable object. */
 export const STARTUP_CONF: t.I_CONFIG = deepFreeze(createStartupConf());
 // export let NAMED_CONFIG: t.NamedConfig = {
 //       configName: 'default',
@@ -204,7 +196,7 @@ export function createStartupUserConfigs(userId = 0): t.UserConfigs {
   };
 }
 
-/** Lecture seule. Pour un objet modifiable, utiliser createStartupUserConfigs(). */
+/** Read-only. Use createStartupUserConfigs() for a mutable object. */
 export const STARTUP_USER_CONFIGS: t.UserConfigs = deepFreeze(createStartupUserConfigs());
 
 export const currentConfig = 'currentConfig';

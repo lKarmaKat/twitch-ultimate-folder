@@ -102,7 +102,7 @@
         text-align: left;
         color: inherit;
     }
-    .item:hover { background: rgba(145, 71, 255, 0.25); }   /* violet Twitch */
+    .item:hover { background: rgba(145, 71, 255, 0.25); }   /* Twitch purple */
     .item.active { background: rgba(145, 71, 255, 0.45); }
 
     .icon-slot {

@@ -1,6 +1,7 @@
 import PortConnector from './portConnector.svelte.js';
 import type { StreamsInfos } from '@src/service_worker/models/streamsInfos.model';
 import * as CST from '../constantes.js'
+import { readTwitchDark } from './twitchTheme.js';
 import type { UserConfigs, I_CONFIG } from '../service_worker/models/userStructure.js';
 import { SvelteMap } from 'svelte/reactivity';
 
@@ -110,22 +111,20 @@ class ConfigManager {
     }
 
     /**
-     * Demande au service worker d'afficher l'iframe de configuration dans
-     * l'onglet courant, via le port déjà ouvert. Même chemin que le bouton de
-     * l'action popup, mais le service worker cible l'onglet du port plutôt que
-     * l'onglet actif.
+     * Asks the worker to show the config iframe in the current tab, over the
+     * open port — so it targets the port's tab, not the active one.
      */
     openConfigPopup() {
         this.bridge.send({ type: CST.DISPLAY_POPUP });
     }
 
     /**
-     * Ouvre la page d'aide dans un onglet, éventuellement sur une ancre
-     * (« #connect »). Passe par le service worker : chrome.tabs n'existe pas
-     * dans le content script qui porte la sidebar.
+     * Opens the help page in a tab, optionally at an anchor ('#connect'). Goes
+     * through the worker: chrome.tabs does not exist in the content script.
      */
     openHelpPage(anchor: string = '') {
-        this.bridge.send({ type: CST.OPEN_HELP_PAGE, value: anchor });
+        // Called from the sidebar only, where Twitch's own theme is readable.
+        this.bridge.send({ type: CST.OPEN_HELP_PAGE, value: anchor, dark: readTwitchDark() });
     }
 
 

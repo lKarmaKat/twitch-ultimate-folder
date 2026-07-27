@@ -1,7 +1,7 @@
 <script>
     import { _ } from 'svelte-i18n';
 
-    // value = id de la stratégie de tri, options = [{id, type, name}], onchange = callback
+    // value = sort strategy id, options = [{id, type, name}], onchange = callback
     let { value = $bindable(), options = [], onchange } = $props();
 
     const uid = $props.id();

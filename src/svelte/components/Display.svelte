@@ -126,9 +126,8 @@
 	let liveChannelsCounter = $derived(channelsCounters.live);
 	let totalChannelsCount = $derived(channelsCounters.total);
 
-	// Tri "live" du bloc all-others : état de session, initialisé depuis la valeur
-	// `sort` configurée et réinitialisé au (re)chargement de la config. Un clic sur le
-	// header le change sans modifier la config persistée.
+	// "Live" sort of the all-others block: session state, seeded from the stored
+	// `sort`. Clicking the header changes it without touching the saved config.
 	let otherLiveSort = $state();
 	$effect(() => {
 		configManager.selectedConfig;
@@ -464,8 +463,8 @@
 	.list-header.clickable {
 		cursor: pointer;
 	}
-	/* Header du bloc "all others" : couleurs (fond/texte) héritées de .list-header
-	   via dark_channel.css ; couleur du svg via .icon-container. */
+	/* "All others" block header: background and text inherited from .list-header
+	   via dark_channel.css; svg colour from .icon-container. */
 	.all-other-header {
 		padding: 0.4em 0 0.4em 0.4em;
 		user-select: none;

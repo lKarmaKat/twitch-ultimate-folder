@@ -3,15 +3,13 @@ import * as CST from '../constantes.js';
 class PortManager {
     ports = [];
     externalPorts = [];
-    constructor(sendCurrentConfigOnConnect, sendStreamInfoOnConnect, sendCurrentThemeOnConnect, sendCurrentAlignmentOnConnect, sendCurrentAuth, sendCurrentLocaleOnConnect, onPortMessage = (_message, _port) => {}) {
+    constructor(sendCurrentConfigOnConnect, sendStreamInfoOnConnect, sendCurrentAlignmentOnConnect, sendCurrentAuth, sendCurrentLocaleOnConnect, onPortMessage = (_message, _port) => {}) {
         console.log("##### Port manager constr");
         chrome.runtime.onConnect.addListener((port) => {
             this.ports.push(port);
             console.log("+ new connection", port);
-            // Seul message garanti quel que soit le nom du port : c'est lui qui
-            // atteste au client que le service worker est réveillé. Sans ça il
-            // ne peut pas distinguer un port vivant d'un port mort-né, car
-            // chrome.runtime.connect() réussit dans les deux cas.
+            // Only message guaranteed whatever the port name: it proves the
+            // worker is awake, which connect() alone never does.
             port.postMessage({ type: CST.PORT_READY });
             port.onMessage.addListener((message, port) => {
                 console.log("+ received :", message, "from ", port);
@@ -29,8 +27,6 @@ class PortManager {
             if (port.name === 'eventbus') {
                 sendCurrentConfigOnConnect(port);
                 sendStreamInfoOnConnect(port);
-            } else if (port.name === 'theme') {
-                sendCurrentThemeOnConnect(port);
             } else if (port.name === 'alignment') {
                 sendCurrentAlignmentOnConnect(port)
             } else if (port.name === 'auth') {
@@ -43,8 +39,8 @@ class PortManager {
         chrome.runtime.onConnectExternal.addListener((port) => {
                 this.externalPorts.push(port);
                 console.log("+ external new connection  port", port);
-                // Même poignée de main que pour les ports internes : la sidebar
-                // passe par ici (script du monde principal de la page Twitch).
+                // Same handshake as internal ports: the sidebar comes through
+                // here, being a main-world script on the Twitch page.
                 port.postMessage({ type: CST.PORT_READY });
                 port.onMessage.addListener((message, port) => {
                     console.log("+ received :", message, "from ", port);
@@ -65,8 +61,6 @@ class PortManager {
                     sendCurrentConfigOnConnect(port);
                     sendStreamInfoOnConnect(port);
                 // }, 1200)
-            } else if (port.name === 'theme') {
-                sendCurrentThemeOnConnect(port);
             }  else if (port.name === 'alignment') {
                 sendCurrentAlignmentOnConnect(port)
             } else if (port.name === 'auth') {

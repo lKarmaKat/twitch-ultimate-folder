@@ -18,31 +18,27 @@ class PortConnector {
     // extensionId = "pdfjeponpmleiodlfbmlhgbicfpbaoek";
     cb;
     nm;
-    /** Seul le port `eventbus` pilote le bandeau de reconnexion. */
+    /** Only the `eventbus` port drives the reconnect banner. */
     drivesUi;
     constructor(msgCallback, name = "eventbus", ) {
         this.cb = msgCallback;
         this.nm = name;
-        // Un onglet ouvre cinq ports. Sans ce filtre ils écrivent tous le même
-        // booléen et la même échéance : le premier reconnecté masque le bandeau
-        // alors que les autres sont encore coupés. `eventbus` est le port qui
-        // porte la config et les streams, c'est lui qui fait foi.
+        // A tab opens five ports; without this filter the first one to
+        // reconnect would hide the banner while the others are still down.
         this.drivesUi = name === "eventbus";
         this.launchPort(msgCallback, name)
     }
 
     launchPort(msgCallback, name) {
-        // connect() est synchrone et ne prouve rien : elle rend un Port même si
-        // personne n'écoute à l'autre bout, et c'est onDisconnect qui détrompe
-        // un tick plus tard. L'état « connecté » est donc établi par le premier
-        // message reçu (markConnected), jamais ici.
+        // connect() is synchronous and proves nothing: it returns a Port even
+        // with nobody listening. Only the first message means "connected".
         this.port = chrome.runtime.connect(this.extensionId, {
           name: name
         });
 
         this.port.onMessage.addListener((msg) => {
             this.markConnected();
-            // Poignée de main du service worker : rien à traiter en aval.
+            // Service worker handshake: nothing to handle downstream.
             if (msg?.type === CST.PORT_READY) return;
             msgCallback(msg);
         });
@@ -56,17 +52,17 @@ class PortConnector {
         });
     }
 
-    /** Preuve de vie : le service worker a répondu, la connexion tient. */
+    /** Proof of life: the service worker answered, the connection holds. */
     markConnected() {
         if (this.reconnectTimer !== null) {
             clearTimeout(this.reconnectTimer);
             this.reconnectTimer = null;
         }
-        // Le prochain incident repartira du délai le plus court.
+        // The next outage restarts from the shortest delay.
         this.attempt = 0;
 
-        // Appelé à chaque message, pas seulement au premier : sans ce garde-fou
-        // le ping serait détruit et recréé au rythme des pushes de streams.
+        // Called on every message, not just the first: without this guard the
+        // ping would be torn down and rebuilt at the rate of stream pushes.
         if (this.connected) return;
         this.connected = true;
 
@@ -78,9 +74,8 @@ class PortConnector {
     }
 
     /**
-     * Backoff exponentiel plafonné : 2, 4, 8 puis 15 s. Un onglet en
-     * arrière-plan peut rester déconnecté plusieurs minutes, inutile de sonder
-     * le service worker toutes les 2 s pendant tout ce temps.
+     * Capped exponential backoff: 2, 4, 8 then 15 s. A background tab can stay
+     * disconnected for minutes; no point polling every 2 s throughout.
      */
     scheduleReconnect() {
         if (this.reconnectTimer !== null) return;
@@ -98,22 +93,22 @@ class PortConnector {
             try {
                 this.launchPort(this.cb, this.nm);
             } catch (e) {
-                // Contexte d'extension invalidé, par exemple : on retentera plus
-                // tard, avec un délai plus long.
+                // Invalidated extension context, for one: retry later with a
+                // longer delay.
                 console.log(this.nm, "RECONNECT FAILED", e.message);
                 this.scheduleReconnect();
             }
         }, delay);
     }
 
-    /** Envoie un message au service worker sur le port déjà ouvert. */
+    /** Sends a message to the service worker over the already open port. */
     send(msg) {
         this.port?.postMessage(msg);
     }
 
     startPing() {
-        // Sans ce clear, chaque reconnexion laissait un ping orphelin de plus
-        // qui continuait d'appeler le service worker toutes les 5 s.
+        // Without this clear, every reconnect left one more orphan ping still
+        // calling the service worker every 5 s.
         this.stopPing();
         let pingCallBack = () => {
             chrome.runtime.sendMessage(this.extensionId, { type: 'KEEP_ALIVE_PING' });

@@ -105,8 +105,6 @@
     "actionPopup": {
       "title": "En savoir plus sur le popup de l'extension",
       "intro": "Le popup de l'extension — le petit panneau qui s'ouvre quand vous cliquez sur l'icône — porte les réglages qui s'appliquent à l'extension entière, et non à une liste en particulier.",
-      "theme": "Basculez entre le thème sombre et le thème clair. Le changement s'applique immédiatement à la barre latérale, à la fenêtre de configuration et à cette page d'aide.",
-      "themeCaption": "Bascule entre le thème sombre et le thème clair.",
       "alignment": "Ce réglage détermine de quel côté apparaît le titre de la chaîne quand vous survolez une chaîne en direct dans la barre latérale. Basculez-le de l'autre côté si le titre se retrouve sous un autre panneau — typiquement quand BTTV a déplacé la disposition du chat.",
       "alignmentCaption": "Changement du côté d'affichage du titre de la chaîne.",
       "language": "Choisissez votre langue dans la liste. Toutes les surfaces ouvertes — la barre latérale, la fenêtre de configuration, cette page d'aide — se mettent à jour immédiatement, sans rechargement.",
@@ -144,9 +142,6 @@
     "noSession": "Connectez-vous à votre compte Twitch",
     "seeSidebar": "Suivez les instructions affichées dans la barre latérale de Twitch",
     "expandSideNav": "Dépliez la barre latérale de Twitch pour autoriser l'extension",
-    "theme": "Thème",
-    "dark": "Sombre",
-    "light": "Clair",
     "alignment": "Alignement des chaines",
     "alignmentSub": "Si vous utilisez BTTV pour changer la disposition du chat",
     "right": "Droite",

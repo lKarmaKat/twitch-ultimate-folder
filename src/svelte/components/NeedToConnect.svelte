@@ -1,19 +1,18 @@
 <script>
     import { _ } from 'svelte-i18n';
 
-    // deviceCode : { user_code, verification_uri } une fois le flow lancé. Il
-    // arrive par diffusion, donc aussi dans les onglets d'où personne n'a
-    // cliqué — c'est voulu, on saisit le code depuis n'importe lequel.
+    // deviceCode: { user_code, verification_uri } once the flow started. It is
+    // broadcast, so it also reaches tabs where nobody clicked — by design.
     let { configManager, deviceCode = null, authorizing = false, onAuthorize } = $props();
 
-    // chrome.tabs est hors de portée d'un content script : le service worker
-    // ouvre l'onglet a notre place, sur la section « How to connect » de l'aide.
+    // chrome.tabs is out of reach from a content script: the service worker
+    // opens the tab for us, on the help page's "How to connect" section.
     function openHelp() {
         configManager.openHelpPage('#connect');
     }
 </script>
 
-<!-- #need-connect : point d'accroche des tests e2e (popup.page.ts). -->
+<!-- #need-connect: hook for the e2e tests (popup.page.ts). -->
 <div id="need-connect" class="empty-state">
     <button
         type="button"
@@ -35,8 +34,8 @@
             <strong>twitch.tv/activate</strong>
             {$_('status.authInstructionAfter')}
         </p>
-        <!-- Le lien porte le code : cliquer ouvre twitch.tv/activate, code
-             déjà rempli, ce qui évite de le recopier à la main. -->
+        <!-- The link carries the code: clicking opens twitch.tv/activate with
+             it prefilled, so nobody has to retype it. -->
         <a
             id="device-code"
             class="code"
@@ -47,8 +46,8 @@
     {:else}
         <p class="message" data-testid="status">{$_('status.needConnect')}</p>
         <p class="hint">{$_('status.needConnectHint')}</p>
-        <!-- Geste explicite : le device flow ne part jamais tout seul, sinon
-             chaque navigation Twitch brûlerait un code d'activation. -->
+        <!-- Explicit action: the device flow never starts on its own, or every
+             Twitch navigation would burn an activation code. -->
         <button
             id="authorize-btn"
             type="button"
@@ -59,18 +58,12 @@
 </div>
 
 <style>
-    /* Tout est en `em` : Twitch applique html{font-size:62.5%}, donc 1rem = 10px
-       et une échelle en rem sous-dimensionne le bloc. En héritant de la taille
-       de texte de la sidebar, on s'aligne sur Display.svelte, qui ne déclare
-       lui non plus aucun font-size. */
+    /* All in `em`: Twitch sets html{font-size:62.5%}, so 1rem = 10px and a rem
+       scale would undersize the block. Inherits the sidebar's text size. */
     .empty-state {
-        /* Twitch publie ses tokens de theme sur :root, et les custom properties
-           traversent le shadow DOM : ces trois variables suivent donc le theme
-           *de Twitch*, pas celui de l'extension. C'est ce qu'on veut ici — tant
-           que l'utilisateur n'est pas connecte, l'action popup n'affiche que la
-           vue d'autorisation et ne permet pas de choisir le theme.
-           Les replis servent hors de Twitch (apercu du popup de config), ou la
-           classe .light ci-dessous prend le relais. Par defaut : sombre. */
+        /* Twitch publishes its theme tokens on :root and custom properties
+           cross the shadow DOM, so these follow Twitch's theme. Fallbacks are
+           for use off Twitch, where .light below takes over. Default: dark. */
         --ntc-text: var(--color-text-base, #efeff1);
         --ntc-muted: var(--color-text-alt-2, #adadb8);
         --ntc-accent: var(--color-text-link, #bf94ff);
@@ -84,15 +77,15 @@
         text-align: center;
     }
 
-    /* Hors de Twitch, aucun token n'est defini : on retombe sur les valeurs de
-       la sidebar Twitch, choisies d'apres le theme de l'extension. */
+    /* Off Twitch no token is defined: fall back to the Twitch sidebar values,
+       picked from the extension's theme. */
     :global(.light) .empty-state {
         --ntc-text: var(--color-text-base, #0e0e10);
         --ntc-muted: var(--color-text-alt-2, #53535f);
         --ntc-accent: var(--color-text-link, #9147ff);
     }
 
-    /* Hors du flux : la colonne reste centrée sur l'icône et le texte. */
+    /* Out of the flow: the column stays centred on the icon and the text. */
     .help-btn {
         position: absolute;
         top: 0.6em;
@@ -128,8 +121,8 @@
         width: 3.4em;
         height: 3.4em;
         border-radius: 0.6em;
-        /* Violet translucide : lisible sur les deux fonds, inutile de le faire
-           varier avec le theme. */
+        /* Translucent purple: readable on both backgrounds, no need to vary it
+           with the theme. */
         background: rgba(145, 71, 255, 0.16);
         color: var(--ntc-accent);
     }
@@ -184,8 +177,8 @@
         outline-offset: 0.15em;
     }
 
-    /* Violet translucide, comme .icon-plate : lisible sur les deux fonds, donc
-       rien à faire varier avec le theme. */
+    /* Translucent purple like .icon-plate: readable on both backgrounds, so
+       nothing to vary with the theme. */
     .code {
         margin-top: 0.1em;
         padding: 0.35em 0.8em;

@@ -13,7 +13,7 @@
     } */
 
     html {
-      font-size: 62.5%; /* 1rem = 10px, comme Twitch */
+      font-size: 62.5%; /* 1rem = 10px, like Twitch */
     }
 
     body {
@@ -25,11 +25,11 @@
       justify-content: center;
       overflow: hidden;
       background-color: transparent;
-      font-size: 1.4rem; /* = 14px, --font-size-base de Twitch */
-      line-height: 2rem; /* = 20px, comme Twitch */
+      font-size: 1.4rem; /* = 14px, Twitch's --font-size-base */
+      line-height: 2rem; /* = 20px, like Twitch */
     }
 
-    /* Overlay cliquable pour fermer */
+    /* Clickable overlay to close */
     .overlay-backdrop {
       position: absolute;
       top: 0;
@@ -41,7 +41,7 @@
       z-index: 1;
     }
 
-    /* Conteneur principal de la popup */
+    /* Main popup container */
     .popup-container {
       position: relative;
       z-index: 2;

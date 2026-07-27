@@ -20,17 +20,14 @@ let twitchApi: TwitchApi | null = null;
 let configManager: ConfigManager | null = null;
 let streamsDatasPoller: DataPusher | null = null;
 
-// Utilisateur Twitch actuellement connecté dans le navigateur, tel que rapporté
-// par le content script. Rien n'est initialisé au démarrage du service worker :
-// on ne sait pas encore QUI est connecté, et sans onglet Twitch il n'y a de
-// toute façon rien à afficher ni aucune raison d'appeler l'API.
+// Twitch account logged into the browser, as reported by the content script.
+// Nothing is set at worker startup: we don't know yet WHO is logged in.
 let currentUserId: number | null = null;
-// null = état pas encore établi ; les pages l'interprètent comme « en attente »
-// et affichent leur écran de chargement plutôt qu'un faux « déconnecté ».
+// null = state not established yet; pages read it as "pending" and show their
+// loading screen instead of a bogus "logged out".
 let currentAuthState: string | null = null;
-// Un changement de compte fait du réseau (validate, parfois refresh). Deux
-// bascules rapprochées peuvent se terminer dans le désordre : ce compteur
-// garantit que seule la plus récente écrit l'état final.
+// An account switch hits the network, so two close switches can finish out of
+// order: this counter lets only the latest one write the final state.
 let switchEpoch = 0;
 
 function broadcastAuth(state: string) {
@@ -39,13 +36,8 @@ function broadcastAuth(state: string) {
 }
 
 /**
- * Diffuse le code d'activation à TOUTES les sidebars ouvertes, et pas seulement
- * à celle d'où part le clic : l'utilisateur qui a plusieurs onglets Twitch doit
- * pouvoir saisir le code depuis n'importe lequel.
- *
- * Il n'existe pas de diffusion « code effacé » : les sidebars jettent leur code
- * dès qu'un AUTH_STATE arrive, et le background en émet un à la fin de chaque
- * flow, succès (READY) comme échec (NEED_AUTH).
+ * Broadcasts the activation code to EVERY open sidebar, not just the clicked
+ * one: with several Twitch tabs, the code must be enterable from any of them.
  */
 function broadcastDeviceCode(info: { user_code: string; verification_uri: string }) {
   portManager.sendMessageToAllTabs(CST.AUTH_DEVICE_CODE, {
@@ -62,14 +54,12 @@ function teardown() {
 }
 
 /**
- * Point d'entrée unique des changements de session Twitch : connexion,
- * déconnexion, changement de compte. Tout le pipeline (tokens, config, poller,
- * diffusion aux pages) est reconstruit ici, jamais ailleurs.
+ * Single entry point for Twitch session changes (login, logout, switch). The
+ * whole pipeline is rebuilt here, never anywhere else.
  */
 async function onSessionUserChanged(sessionUserId: number | null) {
-  // Idempotent : chaque onglet signale la même session. Le test sur
-  // currentAuthState laisse néanmoins passer le tout premier appel, y compris
-  // « pas de session » (null === null), qui doit bien être diffusé une fois.
+  // Idempotent: every tab reports the same session. The currentAuthState test
+  // still lets the very first call through, "no session" (null) included.
   if (sessionUserId === currentUserId && currentAuthState !== null) return;
   const epoch = ++switchEpoch;
 
@@ -83,25 +73,21 @@ async function onSessionUserChanged(sessionUserId: number | null) {
   }
 
   const hasToken = await tokenManager.switchUser(sessionUserId);
-  if (epoch !== switchEpoch) return; // une bascule plus récente a pris la main
+  if (epoch !== switchEpoch) return; // a more recent switch took over
 
   if (!hasToken) {
     broadcastAuth(CST.AUTH_NEED_AUTH);
     return;
   }
 
-  // READY dès que le token est utilisable, SANS attendre initServices : celui-ci
-  // déclenche le premier chargement Helix complet (chaînes suivies + lives +
-  // photos de profil, tous paginés), soit plusieurs secondes sur un gros compte.
-  // Les pages savent afficher « en attente de données » ; leur laisser « à
-  // autoriser » pendant ce temps serait faux, l'autorisation est acquise.
+  // READY as soon as the token works, WITHOUT waiting for initServices: its
+  // first full Helix load takes seconds, and pages already show "pending data".
   broadcastAuth(CST.AUTH_READY);
   await initServices(sessionUserId);
 }
 
-// Token devenu irrécupérable en cours de session (révocation depuis les
-// paramètres Twitch, par exemple) : on coupe le poller et on redemande une
-// autorisation plutôt que de boucler sur des 401.
+// Token became unrecoverable mid-session (revoked from Twitch settings, say):
+// stop the poller and ask for authorization instead of looping on 401s.
 tokenManager.onAuthLost = () => {
   if (currentUserId === null) return;
   teardown();
@@ -118,7 +104,7 @@ async function initServices(userId: number) {
     });
     streamsDatasPoller.start();
 
-    // Rattrapage pour les ports connectés avant que l'auth soit prête
+    // Catch-up for ports that connected before auth was ready
     try {
         const [currentConfig, streamInfo] = await Promise.all([
             configManager.getConfigObjectForCurrentUser(),
@@ -132,8 +118,8 @@ async function initServices(userId: number) {
     }
 }
 
-// Formes à callback plutôt que promesses : sur Firefox le namespace chrome.*
-// est fourni pour compatibilité et ne renvoie pas de promesse.
+// Callback form rather than promise: on Firefox the chrome.* namespace is a
+// compatibility shim and returns no promise.
 function queryActiveTab(): Promise<chrome.tabs.Tab | undefined> {
   return new Promise(resolve => {
     chrome.tabs.query({ active: true, currentWindow: true }, tabs => {
@@ -145,64 +131,64 @@ function queryActiveTab(): Promise<chrome.tabs.Tab | undefined> {
 
 interface TabSession {
   userId: string | null;
-  /** Sidebar Twitch repliée : le panneau d'autorisation y est invisible. */
+  /** Twitch sidebar collapsed: the authorization panel is invisible there. */
   sideNavCollapsed: boolean;
+  /** Twitch's own theme, read from the page. null when no tab answered. */
+  twitchDark: boolean | null;
 }
 
 function askTabForSession(tabId: number): Promise<TabSession> {
   return new Promise(resolve => {
     chrome.tabs.sendMessage(tabId, { type: CST.GET_SESSION_USER }, (response) => {
-      // Pas de content script à l'autre bout (page pas encore chargée, ou
-      // onglet Twitch ouvert avant l'installation) : lastError, pas un crash.
+      // No content script on the other end (page not loaded yet, or tab opened
+      // before install): lastError, not a crash.
       if (chrome.runtime.lastError || !response) {
-        return resolve({ userId: null, sideNavCollapsed: false });
+        return resolve({ userId: null, sideNavCollapsed: false, twitchDark: null });
       }
       resolve({
         userId: typeof response.userId === 'string' ? response.userId : null,
-        sideNavCollapsed: response.sideNavCollapsed === true
+        sideNavCollapsed: response.sideNavCollapsed === true,
+        twitchDark: typeof response.twitchDark === 'boolean' ? response.twitchDark : null
       });
     });
   });
 }
 
 /**
- * Réamorce le pipeline depuis un onglet précis. Utilisé quand le service worker
- * a été tué : `currentUserId` est alors perdu alors que l'onglet, lui, n'a
- * aucune raison de re-signaler une session qui n'a pas changé de son point de vue.
+ * Restarts the pipeline from a given tab. Used when the worker was killed:
+ * `currentUserId` is lost, but the tab sees no session change to report.
  */
 async function resolveSessionForTab(tabId: number): Promise<TabSession> {
   const session = await askTabForSession(tabId);
-  // Appel inconditionnel : la garde d'idempotence d'onSessionUserChanged sait
-  // déjà distinguer « rien n'a changé » de « état jamais établi ».
+  // Unconditional call: onSessionUserChanged's idempotence guard already tells
+  // "nothing changed" apart from "state never established".
   await onSessionUserChanged(session.userId ? Number(session.userId) : null);
   return session;
 }
 
 /**
- * État à afficher dans l'action popup, résolu à la demande depuis l'onglet
- * ACTIF. On ne répond pas depuis `currentUserId` : le service worker MV3 est
- * tué après inactivité, et son réveil donnerait un faux « pas de session »
- * tant qu'aucun content script n'a re-signalé la sienne.
- *
- * L'onglet actif, et non « un onglet Twitch quelconque », parce que c'est déjà
- * la cible de « Ouvrir la configuration » : le message affiché reste donc exact.
+ * State to show in the action popup, resolved on demand from the ACTIVE tab —
+ * not from `currentUserId`, which an MV3 worker loses when it is killed.
  */
-async function resolveActiveTabSession(): Promise<{ state: string; sideNavCollapsed: boolean }> {
+async function resolveActiveTabSession(): Promise<{ state: string; sideNavCollapsed: boolean; twitchDark: boolean | null }> {
   const tab = await queryActiveTab();
   if (!tab?.url || !tab.url.startsWith('https://www.twitch.tv/') || tab.id === undefined) {
-    return { state: CST.AUTH_NOT_ON_TWITCH, sideNavCollapsed: false };
+    // Only case with nothing to report: the popup falls back to the OS theme.
+    return { state: CST.AUTH_NOT_ON_TWITCH, sideNavCollapsed: false, twitchDark: null };
   }
 
-  // Réveil du service worker, ou session apparue pendant qu'il dormait : on
-  // reconstruit le pipeline AVANT de répondre. Sinon on afficherait « autorisez
-  // l'extension » à quelqu'un qui l'a déjà autorisée, simplement parce que
-  // currentUserId a été perdu avec le worker.
+  // Worker just woke up, or a session appeared while it slept: rebuild the
+  // pipeline BEFORE answering, or we'd re-prompt an already-authorized user.
   const session = await resolveSessionForTab(tab.id);
-  if (!session.userId) return { state: CST.AUTH_NO_SESSION, sideNavCollapsed: false };
+  // No Twitch session, but the tab did answer: its theme still holds.
+  if (!session.userId) {
+    return { state: CST.AUTH_NO_SESSION, sideNavCollapsed: false, twitchDark: session.twitchDark };
+  }
 
   return {
     state: currentUserId !== null && tokenManager.token ? CST.AUTH_READY : CST.AUTH_NEED_AUTH,
-    sideNavCollapsed: session.sideNavCollapsed
+    sideNavCollapsed: session.sideNavCollapsed,
+    twitchDark: session.twitchDark
   };
 }
 
@@ -234,23 +220,16 @@ let sendCurrentConfigOnConnect = (port: chrome.runtime.Port) => {
   }
 }
 
-let themeSombre = false;
-chrome.storage.local.get("theme").then((data) => {
-  themeSombre = data.theme === 1 ? true : false;
-});
-let sendCurrentThemeOnConnect = (port: chrome.runtime.Port) => {
-  port.postMessage({
-    "type": CST.THEME, // RENVOYER LE TYPE NE SERT A RIEN ICI
-    "data": themeSombre
-  });
-}
+// The theme is no longer a preference: drop the key older versions stored.
+chrome.storage.local.remove("theme");
+
 let currentAlignmentLeft = true;
 chrome.storage.local.get("alignmentLeft").then((data) => {
   currentAlignmentLeft = data.alignmentLeft === 0 ? false : true ;
 })
 let sendCurrentAlignmentOnConnect = (port: chrome.runtime.Port) => {
   port.postMessage({
-    "type": CST.THEME, // RENVOYER LE TYPE NE SERT A RIEN ICI
+    "type": CST.ALIGNMENT,
     "data": currentAlignmentLeft
   });
 }
@@ -273,13 +252,8 @@ let sendCurrentAuth = (port: chrome.runtime.Port) => {
     "data": currentAuthState
   });
 
-  // Onglet ouvert (ou rechargé) PENDANT un device flow lancé depuis un autre :
-  // il a manqué la diffusion, son port n'existait pas encore. Sans ce rattrapage
-  // il afficherait le bouton « Autoriser », dont le clic retomberait sur la
-  // branche `authInProgressPromise` de TokenManager — laquelle n'appelle pas le
-  // callback : l'onglet resterait bloqué sans jamais voir de code.
-  // Après le AUTH_STATE ci-dessus, jamais avant : la sidebar efface son code à
-  // chaque état reçu, l'ordre inverse effacerait ce qu'on vient d'envoyer.
+  // Tab opened (or reloaded) DURING a device flow started elsewhere: it missed
+  // the broadcast. Must come after AUTH_STATE, which clears the sidebar's code.
   const pending = tokenManager.currentDeviceCodeInfo;
   if (pending?.user_code) {
     port.postMessage({
@@ -288,10 +262,8 @@ let sendCurrentAuth = (port: chrome.runtime.Port) => {
     });
   }
 
-  // Le service worker a pu être tué puis relancé alors que l'onglet, lui, est
-  // resté ouvert : le content script n'a alors aucune raison de re-signaler sa
-  // session (elle n'a pas changé de son point de vue) et plus rien ne serait
-  // initialisé. La reconnexion du port est notre signal de reprise.
+  // The worker may have been killed and restarted while the tab stayed open, so
+  // the content script has no session change to report: the port is our signal.
   if (currentAuthState !== null) return;
   const tabId = port.sender?.tab?.id;
   if (tabId === undefined) return;
@@ -300,9 +272,8 @@ let sendCurrentAuth = (port: chrome.runtime.Port) => {
 }
 
 /**
- * Device flow déclenché depuis la sidebar. Seule voie d'entrée : l'action popup
- * ne fait plus qu'y renvoyer. Rien ne repart en réponse — le code d'activation
- * est diffusé à tous les onglets, y compris celui qui a cliqué.
+ * Device flow started from the sidebar, the only entry point. Nothing is
+ * returned: the activation code is broadcast to every tab, clicker included.
  */
 function startAuthFromPort(port: chrome.runtime.Port) {
   (async () => {
@@ -311,7 +282,7 @@ function startAuthFromPort(port: chrome.runtime.Port) {
       await resolveSessionForTab(tabId);
     }
     if (currentUserId === null) {
-      // Déconnecté de Twitch entre l'affichage du bouton et le clic.
+      // Logged out of Twitch between the button showing up and the click.
       broadcastAuth(CST.AUTH_NO_SESSION);
       return;
     }
@@ -319,37 +290,30 @@ function startAuthFromPort(port: chrome.runtime.Port) {
     const userId = currentUserId;
     try {
       await tokenManager.startAuthFor(userId, broadcastDeviceCode);
-      // Le polling dure des dizaines de secondes : l'utilisateur a pu changer de
-      // compte entre-temps, auquel cas onSessionUserChanged a déjà diffusé
-      // l'état du nouveau. Parler ici le contredirait.
+      // Polling lasts tens of seconds: the user may have switched account, in
+      // which case onSessionUserChanged already broadcast the new state.
       if (currentUserId !== userId) return;
-      // Surtout pas onSessionUserChanged() ici : sa garde d'idempotence verrait
-      // `userId === currentUserId` et ne ferait rien. Le compte n'a pas changé,
-      // c'est son autorisation qui vient d'aboutir.
-      // READY d'abord : inutile de faire patienter l'utilisateur derrière le
-      // premier chargement Helix.
+      // Not onSessionUserChanged() here: its idempotence guard would see
+      // `userId === currentUserId` and do nothing. Only the authorization moved.
       broadcastAuth(CST.AUTH_READY);
       await initServices(userId);
     } catch (err) {
-      // Code expiré, refusé, ou bascule de compte pendant le polling. Rediffuser
-      // NEED_AUTH efface au passage le code périmé dans toutes les sidebars —
-      // mais seulement si le compte courant est toujours celui qu'on autorisait.
+      // Code expired, denied, or account switched mid-polling. Re-broadcasting
+      // NEED_AUTH also clears the stale code in every sidebar.
       logBackgroundError("background:startAuth:deviceFlow", err);
       if (currentUserId === userId) broadcastAuth(CST.AUTH_NEED_AUTH);
     }
   })().catch(err => logBackgroundError("background:startAuth", err));
 }
-// Messages entrants sur un port déjà ouvert (la sidebar en maintient un).
+// Messages arriving on an already open port (the sidebar keeps one).
 let handlePortMessage = (message: any, port?: chrome.runtime.Port) => {
   if (message?.type === CST.START_AUTH) {
-    // Passe par le port et non par chrome.runtime.onMessage : `port.sender.tab`
-    // identifie l'onglet demandeur, on résout donc la session depuis CET onglet
-    // plutôt que depuis l'onglet actif, qui peut être un autre.
+    // Via the port, not chrome.runtime.onMessage: `port.sender.tab` identifies
+    // the requesting tab, which may not be the active one.
     if (port) startAuthFromPort(port);
   } else if (message?.type === CST.DISPLAY_POPUP) {
-    // La sidebar sait dans quel onglet elle vit : on cible l'onglet du port
-    // plutôt que le "currentWindow actif" utilisé par le chemin action popup,
-    // qui viserait le mauvais onglet si l'utilisateur en a changé.
+    // The sidebar knows which tab it lives in, so target the port's tab rather
+    // than the active one used by the action popup path.
     const tabId = port?.sender?.tab?.id;
     if (tabId === undefined) return;
     chrome.tabs.sendMessage(tabId, { type: CST.DISPLAY_POPUP }, () => {
@@ -358,16 +322,17 @@ let handlePortMessage = (message: any, port?: chrome.runtime.Port) => {
       }
     });
   } else if (message?.type === CST.OPEN_HELP_PAGE) {
-    // La sidebar vit dans un content script : chrome.tabs y est indisponible,
-    // et help.html n'est pas dans web_accessible_resources. L'ouverture passe
-    // donc obligatoirement par ici.
-    // L'ancre vient de la page appelante : on n'accepte qu'un fragment simple.
+    // The sidebar lives in a content script: no chrome.tabs there, and
+    // help.html is not web-accessible, so opening it must go through here.
+    // The anchor comes from the caller: only a plain fragment is accepted.
     const anchor = typeof message.value === 'string' && /^#[\w-]+$/.test(message.value)
       ? message.value
       : '';
-    const url = chrome.runtime.getURL('src/iframe/help.html') + anchor;
-    // Forme à callback plutôt que promesse : sur Firefox le namespace chrome.*
-    // est fourni pour compatibilité et ne renvoie pas de promesse.
+    // Query before fragment, or the param lands inside the anchor.
+    const dark = message.dark === true ? 1 : 0;
+    const url = `${chrome.runtime.getURL('src/iframe/help.html')}?dark=${dark}${anchor}`;
+    // Callback form rather than promise: on Firefox the chrome.* namespace is
+    // a compatibility shim and returns no promise.
     chrome.tabs.create({ url }, () => {
       if (chrome.runtime.lastError) {
         logBackgroundError("background:openHelpPage", chrome.runtime.lastError);
@@ -378,7 +343,6 @@ let handlePortMessage = (message: any, port?: chrome.runtime.Port) => {
 
 let portManager = new PortManager(sendCurrentConfigOnConnect,
                                   sendStreamInfoOnConnect,
-                                  sendCurrentThemeOnConnect,
                                   sendCurrentAlignmentOnConnect,
                                 sendCurrentAuth,
                                 sendCurrentLocaleOnConnect,
@@ -394,23 +358,21 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
     console.log("MESSAGE", msg.type, msg.data);
 
     if (msg.type === CST.SESSION_USER_CHANGED) {
-      // Le content script rapporte le compte Twitch de sa page (null = déconnecté).
+      // The content script reports its page's Twitch account (null = logged out).
       const sessionUserId = msg.data ? Number(msg.data) : null;
       onSessionUserChanged(Number.isNaN(sessionUserId as number) ? null : sessionUserId)
         .catch(err => logBackgroundError("background:onSessionUserChanged", err));
       return false;
     }
 
-    if (msg.type === CST.IS_USER_LOGGED_IN) { // Envoyé par l'action popup à son ouverture
-      // La popup ne déclenche plus le device flow et n'affiche plus de code :
-      // elle n'a besoin que de savoir quoi dire. `sideNavCollapsed` distingue
-      // « suivez les instructions dans la sidebar » de « dépliez d'abord la
-      // sidebar », faute de quoi on renverrait vers un panneau invisible.
+    if (msg.type === CST.IS_USER_LOGGED_IN) { // Sent by the action popup on open
+      // The popup no longer runs the device flow, it only needs to know what to
+      // say. `sideNavCollapsed` tells "see the sidebar" from "expand it first".
       resolveActiveTabSession()
-        .then(({ state, sideNavCollapsed }) => sendResponse({ state, sideNavCollapsed }))
+        .then(({ state, sideNavCollapsed, twitchDark }) => sendResponse({ state, sideNavCollapsed, twitchDark }))
         .catch(err => {
           logBackgroundError("background:isUserLoggedIn", err);
-          sendResponse({ state: CST.AUTH_NOT_ON_TWITCH, sideNavCollapsed: false });
+          sendResponse({ state: CST.AUTH_NOT_ON_TWITCH, sideNavCollapsed: false, twitchDark: null });
         });
       return true;
     }
@@ -460,35 +422,6 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
       return false;
     }
 
-    if (msg.type === CST.CHANGE_THEME) {
-      themeSombre = !themeSombre;
-      sendResponse({
-        type: CST.CHANGE_THEME,
-        data: themeSombre
-      });
-      chrome.storage.local.set({
-        "theme": themeSombre ? 1 : 0
-      });
-      chrome.tabs.query({
-            url: ['https://www.twitch.tv/*']
-          }, tabs => {
-        console.log("UPDATE THEME " + tabs);
-        for (let tab of tabs) {
-          chrome.tabs.sendMessage(tab.id!, { type: CST.CHANGE_THEME, data: themeSombre });
-        }
-      });
-      portManager.sendMessageToAllTabs(CST.CHANGE_THEME, themeSombre, "theme");
-      return true;
-    }
-
-    if (msg.type === CST.GET_THEME) {
-      sendResponse({
-        type: CST.THEME, // RENVOYER LE TYPE NE SERT A RIEN ICI
-        data: themeSombre
-      });
-      return true;
-    }
-
     if (msg.type === CST.CHANGE_ALIGNMENT) {
       currentAlignmentLeft = !currentAlignmentLeft;
       sendResponse({
@@ -498,14 +431,14 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
       chrome.storage.local.set({
         "alignmentLeft": currentAlignmentLeft ? 1 : 0
       });
-      portManager.sendMessageToAllTabs(CST.CHANGE_THEME, currentAlignmentLeft, "alignment"); // JE PARIE QUE LE TYPE NE SERT A RIEN ICI NON PLUS
+      portManager.sendMessageToAllTabs(CST.ALIGNMENT, currentAlignmentLeft, "alignment");
 
       return true;
     }
 
     if (msg.type === CST.GET_ALIGNMENT) {
       sendResponse({
-        type: CST.ALIGNMENT, // RENVOYER LE TYPE NE SERT A RIEN ICI
+        type: CST.ALIGNMENT, // SENDING THE TYPE BACK IS POINTLESS HERE
         data: currentAlignmentLeft
       })
       return true;

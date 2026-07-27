@@ -206,7 +206,7 @@
 	.channel {
 		position: relative;
 	}
-	/* menus flottants à droite d'une chaîne, par-dessus la carte DraggableChannel */
+	/* floating menus right of a channel, over the DraggableChannel card */
 	.channel-side-menu,
 	.other-channels-side-menu {
 		position: absolute;
@@ -244,15 +244,15 @@
 		align-items: stretch;
 		align-self: stretch;
 		gap: 0.2em;
-		margin-left: auto;	/* colle le menu à droite du header */
+		margin-left: auto;	/* pins the menu to the right of the header */
 		flex: 0 0 auto;
-		width: auto;		/* annule le div { width: 100% } ci-dessus */
+		width: auto;		/* cancels the div { width: 100% } above */
 		padding: 0;
 		max-height: 100%;
 		opacity: 0;
 		transition: opacity 0.2s linear;
 	}
-	/* les enfants (dont le <div> racine de CogBtn) restent des items de la row */
+	/* children (CogBtn's root <div> included) stay items of the row */
 	.list-side-menu > :global(*),
 	.other-channels-side-menu > :global(*),
 	.channel-side-menu > :global(*) {

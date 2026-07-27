@@ -8,13 +8,16 @@
   import LanguageSelect from './LanguageSelect.svelte';
   import PortConnector from '../portConnector.svelte';
 
-  // Thème : le service worker pousse l'état courant des la connexion du port
-  // (sendCurrentThemeOnConnect), puis rediffuse chaque bascule a chaud.
-  let darkTheme = $state(true);
-  let themePort = new PortConnector((msg) => { darkTheme = msg.data; }, "theme");
+  // Snapshot taken by whoever opened the tab, so the page matches the surface
+  // it was opened from. No live sync: a standalone tab cannot read Twitch.
+  // Falls back to the OS theme when the param is missing (restored session).
+  const darkParam = new URLSearchParams(location.search).get('dark');
+  let darkTheme = $state(
+    darkParam === null ? matchMedia('(prefers-color-scheme: dark)').matches : darkParam !== '0'
+  );
 
-  // Langue : meme mecanisme. On resynchronise aussi `lang` pour que le select
-  // suive un changement venu d'ailleurs (action popup).
+  // Language: same mechanism. `lang` is resynced too, so the select follows a
+  // change coming from elsewhere (action popup).
   let lang = $state(get(locale) ?? 'en');
   let localePort = new PortConnector((msg) => {
     applyLocale(msg.data);
@@ -22,21 +25,21 @@
   }, "locale");
 
   function onLocaleChange() {
-    // Persistance + diffusion en direct aux autres pages via le background.
+    // Persist, plus live broadcast to the other pages through the background.
     chrome.runtime.sendMessage({ type: CST.CHANGE_LOCALE, value: lang });
     applyLocale(lang);
   }
 
-  // TODO placeholder : un seul clip sert pour toutes les demos. Remplacer par
-  // un fichier par section (cf. README) quand les captures seront faites.
+  // TODO placeholder: one clip stands in for every demo. Replace with one file
+  // per section (see README) once the captures exist.
   const DEMO = '/assets/webm/Video.webm';
 
   const ISSUES_URL = 'https://github.com/lKarmaKat/twitch-ultimate-folder/issues/new';
-  // TODO : remplacer par le vrai compte Ko-fi.
+  // TODO: replace with the real Ko-fi account.
   const KOFI_URL = 'https://ko-fi.com/YOUR_KOFI_HANDLE';
 
-  // Lightbox : `lightbox` porte la legende de la video ouverte, ou null.
-  // La vignette reste figee sur sa premiere image ; seule la copie agrandie joue.
+  // Lightbox: `lightbox` holds the open video's caption, or null. The thumbnail
+  // stays frozen on its first frame; only the enlarged copy plays.
   let lightbox = $state(null);
   let lightboxVideo = $state(null);
 
@@ -48,8 +51,8 @@
     lightbox = null;
   }
 
-  // Rembobinage explicite : `currentTime = 0` suffit sur un <video>, la ou un
-  // GIF imposerait de reassigner son src.
+  // Explicit rewind: `currentTime = 0` is enough on a <video>, where a GIF
+  // would need its src reassigned.
   function replay() {
     if (!lightboxVideo) return;
     lightboxVideo.currentTime = 0;
@@ -60,9 +63,8 @@
     if (lightbox && e.key === 'Escape') closeLightbox();
   }
 
-  // Sommaire ecrit a la main : ces ids doivent correspondre aux ancres posees
-  // sur les titres du contenu. Le tableau ne sert qu'au controle des ancres
-  // orphelines en dev.
+  // Hand-written table of contents: these ids must match the anchors on the
+  // headings. The array only feeds the orphan-anchor check in dev.
   const IDS = [
     'purpose',
     'hierarchy',
@@ -94,18 +96,15 @@
     'support',
   ];
 
-  // Une ancre qui pointe dans un <details> replie ne mene nulle part sur les
-  // navigateurs qui ne le deplient pas d'eux-memes : on l'ouvre a la main.
+  // An anchor pointing into a collapsed <details> leads nowhere on browsers
+  // that do not expand it themselves, so open it by hand.
   function openTargetDetails() {
     const el = document.getElementById(location.hash.slice(1));
     if (el?.tagName === 'DETAILS') el.open = true;
   }
 
-  // Le navigateur traite le fragment d'URL au parsing du document, or
-  // help_inject.js ne monte cette page qu'apres setupI18n() : a cet instant la
-  // cible n'existe pas encore et le saut natif tombe dans le vide. `onhashchange`
-  // ne rattrape rien non plus, il ne se declenche pas au chargement initial.
-  // On rejoue donc le saut nous-memes.
+  // The browser handles the URL fragment at parse time, before help_inject.js
+  // mounts this page, so the native jump falls into the void. Replay it here.
   function scrollToHash() {
     if (!location.hash) return;
     const el = document.getElementById(location.hash.slice(1));
@@ -116,23 +115,21 @@
 
   onMount(() => {
     if (!location.hash) return;
-    // Un frame d'attente : le DOM vient d'etre insere, la mise en page ne l'est
-    // pas encore.
+    // One frame of wait: the DOM was just inserted, the layout was not.
     requestAnimationFrame(scrollToHash);
-    // Les vignettes sont en `height: auto` avec preload="metadata" : leur
-    // hauteur reelle n'arrive qu'apres coup et decale tout ce qui les suit.
-    // On repositionne une fois les medias mesures.
+    // Thumbnails are `height: auto` with preload="metadata": their real height
+    // lands later and shifts everything below, so reposition once measured.
     if (document.readyState === 'complete') return;
     window.addEventListener('load', scrollToHash, { once: true });
     return () => window.removeEventListener('load', scrollToHash);
   });
 
-  // Garde-fou du sommaire manuel : une ancre sans cible ne provoque aucune
-  // erreur au runtime, on la signale donc au moins en dev.
+  // Guard rail for the manual TOC: a dangling anchor throws nothing at runtime,
+  // so report it at least in dev.
   $effect(() => {
     if (!import.meta.env.DEV) return;
     for (const id of IDS) {
-      if (!document.getElementById(id)) console.warn('[help] ancre orpheline :', id);
+      if (!document.getElementById(id)) console.warn('[help] orphan anchor:', id);
     }
   });
 </script>
@@ -148,8 +145,8 @@
   {/if}
 </svelte:head>
 
-<!-- Une seule definition de la vignette video : elle se repete une douzaine
-     de fois, et la lightbox doit rester identique partout. -->
+<!-- One single definition of the video thumbnail: it repeats a dozen times and
+     the lightbox must stay identical everywhere. -->
 {#snippet media(caption)}
   <figure class="help-media">
     <button class="shot" type="button" onclick={() => openLightbox(caption)}>
@@ -160,8 +157,8 @@
   </figure>
 {/snippet}
 
-<!-- TODO : remplacer par <img src="/assets/screenshots/…"> quand les captures
-     existeront. Le bloc garde la place et le ratio en attendant. -->
+<!-- TODO: replace with <img src="/assets/screenshots/…"> once the captures
+     exist. The block holds the space and the ratio meanwhile. -->
 {#snippet screenshot(alt, caption)}
   <figure class="help-media">
     <div class="shot-todo" role="img" aria-label={alt}>{alt}</div>
@@ -255,8 +252,8 @@
     {@render media($_('help.connect.caption'))}
     <p>{$_('help.connect.outro')}</p>
 
-    <!-- Volontairement duplique de #find-icon : chaque section reste lisible
-         seule, et c'est ici que l'utilisateur cherche l'icone en premier. -->
+    <!-- Deliberately duplicated from #find-icon: each section must read on its
+         own, and this is where users look for the icon first. -->
     <details id="find-icon-connect">
       <summary>{$_('help.createConfig.findIconTitle')}</summary>
       <div class="details-body">
@@ -388,10 +385,6 @@
     <h2 id="action-popup">{$_('help.actionPopup.title')}</h2>
     <p>{$_('help.actionPopup.intro')}</p>
 
-    <h3>{$_('actionPopup.theme')}</h3>
-    <p>{$_('help.actionPopup.theme')}</p>
-    {@render media($_('help.actionPopup.themeCaption'))}
-
     <h3>{$_('actionPopup.alignment')}</h3>
     <p>{$_('help.actionPopup.alignment')}</p>
     {@render media($_('help.actionPopup.alignmentCaption'))}
@@ -429,7 +422,7 @@
 
 {#if lightbox}
   <div class="lb">
-    <!-- Le fond est un bouton : il ferme au clic et reste atteignable au clavier. -->
+    <!-- The backdrop is a button: closes on click, reachable from a keyboard. -->
     <button class="lb-backdrop" type="button" aria-label={$_('help.media.close')} onclick={closeLightbox}></button>
     <div class="lb-panel" role="dialog" aria-modal="true" aria-label={lightbox.caption}>
       <button class="lb-close" type="button" aria-label={$_('help.media.close')} onclick={closeLightbox}>✕</button>
@@ -449,7 +442,7 @@
   }
 
   .help-layout {
-    /* Palette claire par defaut, surchargee par .dark ci-dessous. */
+    /* Light palette by default, overridden by .dark below. */
     --help-bg: #ffffff;
     --help-fg: rgb(14, 14, 16);
     --help-muted: rgb(83, 83, 95);
@@ -461,7 +454,7 @@
     display: grid;
     grid-template-columns: minmax(200px, 280px) 1fr;
     height: 100vh;
-    /* Le parent ne scrolle jamais : chaque colonne gere son propre debordement. */
+    /* The parent never scrolls: each column handles its own overflow. */
     overflow: hidden;
     background-color: var(--help-bg);
     color: var(--help-fg);
@@ -477,7 +470,7 @@
     --help-hover: rgba(145, 71, 255, 0.22);
   }
 
-  /* ---- Colonne de gauche ---- */
+  /* ---- Left column ---- */
   .sidebar {
     overflow-y: auto;
     height: 100vh;
@@ -490,7 +483,7 @@
     margin-bottom: 1.5em;
   }
 
-  /* ---- Sommaire ---- */
+  /* ---- Table of contents ---- */
   .toc-title {
     margin: 0 0 0.8em 0;
     font-size: 0.8em;
@@ -504,7 +497,7 @@
     margin: 0;
     padding: 0;
   }
-  /* Une seule regle couvre toute la profondeur d'imbrication. */
+  /* A single rule covers every nesting depth. */
   .toc ul ul {
     padding-left: 1.2em;
   }
@@ -521,7 +514,7 @@
     background-color: var(--help-hover);
   }
 
-  /* ---- Contenu ---- */
+  /* ---- Content ---- */
   .content {
     overflow-y: auto;
     height: 100vh;
@@ -554,7 +547,7 @@
     margin: 1.2em 0 0.3em 0;
     font-size: 0.95em;
   }
-  /* Evite que le titre vise se colle au bord haut lors d'un saut d'ancre. */
+  /* Keeps the targeted heading off the top edge after an anchor jump. */
   .content h2,
   .content h3,
   .content h4,
@@ -602,7 +595,7 @@
     background-color: var(--help-hover);
   }
 
-  /* ---- Sections repliables ---- */
+  /* ---- Collapsible sections ---- */
   .content details {
     margin: 1em 0 1.5em 0;
     max-width: 70ch;
@@ -626,7 +619,7 @@
     margin-top: 0;
   }
 
-  /* ---- Medias (webm) ---- */
+  /* ---- Media (webm) ---- */
   .help-media {
     margin: 1em 0 1.5em 0;
     max-width: 70ch;
@@ -651,7 +644,7 @@
     width: 100%;
     height: auto;
   }
-  /* Bandeau bas : n'occulte jamais le contenu du clip. */
+  /* Bottom strip: never hides the clip's content. */
   .shot-hint {
     position: absolute;
     left: 0;
@@ -674,7 +667,7 @@
     font-size: 0.85em;
     color: var(--help-muted);
   }
-  /* Emplacement d'une capture pas encore realisee. */
+  /* Placeholder for a screenshot not taken yet. */
   .shot-todo {
     display: grid;
     place-items: center;

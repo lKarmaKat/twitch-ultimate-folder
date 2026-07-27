@@ -6,33 +6,26 @@
   import LanguageSelect from '../svelte/components/LanguageSelect.svelte';
   import { LANGUAGES } from '../i18n/languages.js';
 
-  // 'loading' | 'config'  (remplace le jonglage de l'attribut `hidden`)
+  // 'loading' | 'config'  (replaces the juggling of the `hidden` attribute)
   let view = $state('loading');
 
-  // Langue courante (initialisée depuis svelte-i18n, déjà configuré par setupI18n).
+  // Current language, seeded from svelte-i18n (already set up by setupI18n).
   let lang = $state(get(locale) ?? 'en');
   const languages = LANGUAGES;
 
-  // Ce que la premiere ligne de la carte doit proposer. Resolu depuis l'onglet
-  // ACTIF : la popup peut tres bien etre ouverte depuis une page qui n'est pas
-  // Twitch, ou aucun content script ne tourne.
+  // What the card's first row offers, resolved from the ACTIVE tab: the popup
+  // can be opened from a non-Twitch page, where no content script runs.
   let authState = $state(null);
-  // Le device flow vit dans la sidebar, que `:host([collapsed])` masque quand
-  // la barre laterale de Twitch est repliee. Y renvoyer sans le dire serait un
-  // cul-de-sac : aucune surface visible ne permettrait d'autoriser l'extension.
+  // The device flow lives in the sidebar, hidden by `:host([collapsed])`. Not
+  // saying so would be a dead end: no visible surface left to authorize from.
   let sideNavCollapsed = $state(false);
 
-  // Toggles. `theme` true = thème sombre (cohérent avec la popup de config).
-  let theme = $state(false);
+  // No theme setting anymore: the popup follows Twitch, resolved from the
+  // active tab. Read the OS theme now so the first paint is already right.
+  let theme = $state(matchMedia('(prefers-color-scheme: dark)').matches);
   let alignment = $state(true);
 
-  // --- Initialisation (équivalent du corps de l'ancien popup.js) ---
-  chrome.runtime.sendMessage({ type: CST.GET_THEME }, (response) => {
-    if (response?.type === CST.THEME) {
-      theme = response.data;
-    }
-  });
-
+  // --- Init (the body of the old popup.js) ---
   chrome.runtime.sendMessage({ type: CST.GET_ALIGNMENT }, (response) => {
     if (response?.type === CST.ALIGNMENT) {
       alignment = !response.data;
@@ -42,6 +35,8 @@
   chrome.runtime.sendMessage({ type: CST.IS_USER_LOGGED_IN }, (response) => {
     authState = response?.state ?? CST.AUTH_NOT_ON_TWITCH;
     sideNavCollapsed = response?.sideNavCollapsed === true;
+    // null off Twitch: keep the OS theme.
+    if (typeof response?.twitchDark === 'boolean') theme = response.twitchDark;
     view = 'config';
   });
 
@@ -50,26 +45,21 @@
     chrome.runtime.sendMessage({ type: CST.DISPLAY_POPUP });
   }
 
-  // Page d'extension ouverte dans un onglet dedie.
+  // Extension page opened in its own tab.
   function openHelp() {
-    chrome.tabs.create({ url: chrome.runtime.getURL('src/iframe/help.html') });
-  }
-
-  async function onThemeChange() {
-    const response = await chrome.runtime.sendMessage({ type: CST.CHANGE_THEME, value: theme });
-    // !response => refus du background : on retombe sur le thème clair
-    theme = response ? response.data : false;
+    const url = `${chrome.runtime.getURL('src/iframe/help.html')}?dark=${theme ? 1 : 0}`;
+    chrome.tabs.create({ url });
   }
 
   async function onAlignmentChange() {
-    // case cochée => alignement à droite (value:false) ; décochée => gauche (value:true)
+    // checked => align right (value:false); unchecked => left (value:true)
     const value = !alignment;
     const response = await chrome.runtime.sendMessage({ type: CST.CHANGE_ALIGNMENT, value });
     alignment = response ? !response.data : false;
   }
 
   function onLocaleChange() {
-    // Persistance + diffusion en direct aux onglets via le background.
+    // Persist, plus live broadcast to the tabs through the background.
     chrome.runtime.sendMessage({ type: CST.CHANGE_LOCALE, value: lang });
     applyLocale(lang);
   }
@@ -87,11 +77,9 @@
       <div class="popup">
         <div class="card">
           {#if authState === CST.AUTH_NEED_AUTH}
-            <!-- L'autorisation se donne desormais depuis la sidebar. Plutot que
-                 de loger ce renvoi dans une ligne de reglage, l'en-tete porte
-                 l'etat : c'est le sujet de la popup tant qu'elle n'a rien
-                 d'autre a proposer. Meme bouclier et meme composition que
-                 NeedToConnect, pour que les deux surfaces se repondent. -->
+            <!-- Authorization now happens in the sidebar, so the header carries
+                 the state instead of a settings row. Same shield and layout as
+                 NeedToConnect, so both surfaces echo each other. -->
             <div class="state-header">
               <button
                 class="help-btn"
@@ -105,8 +93,8 @@
                 </svg>
               </span>
 
-              <!-- Cle partagee avec la sidebar : meme etat, memes mots, une
-                   seule verite a traduire. -->
+              <!-- Key shared with the sidebar: same state, same words, one
+                   single string to translate. -->
               <p class="state-title">{$_('status.needConnect')}</p>
               <p class="state-message">
                 {sideNavCollapsed ? $_('actionPopup.expandSideNav') : $_('actionPopup.seeSidebar')}
@@ -122,9 +110,8 @@
                 aria-label={$_('help.openHelp')}>?</button>
             </div>
 
-            <!-- Seule cette ligne depend du compte. Theme, alignement et langue
-                 sont des preferences du profil navigateur et restent utilisables
-                 meme hors de Twitch. -->
+            <!-- Only this row depends on the account. Theme, alignment and
+                 language are browser-profile preferences, usable off Twitch. -->
             <div class="row">
               <div class="row-info">
                 {#if authState === CST.AUTH_READY}
@@ -137,19 +124,6 @@
               </div>
             </div>
           {/if}
-
-          <label class="row" for="theme">
-            <div class="row-info">
-              <div class="row-label">{$_('actionPopup.theme')}</div>
-            </div>
-            <input type="checkbox" class="tgl" id="theme" bind:checked={theme} onchange={onThemeChange}>
-            <span class="sw">
-              <span class="track"></span>
-              <span class="lbl-on">{$_('actionPopup.dark')}</span>
-              <span class="lbl-off">{$_('actionPopup.light')}</span>
-              <span class="thumb"></span>
-            </span>
-          </label>
 
           <label class="row" for="alignment">
             <div class="row-info">
@@ -199,7 +173,7 @@
     background: #f2f2f7;
   }
 
-  /* ——— Popup config ——— */
+  /* ——— Config popup ——— */
   .popup {
     width: 320px;
     background: #f2f2f7;
@@ -249,10 +223,9 @@
     letter-spacing: -0.01em;
   }
 
-  /* ——— En-tête d'état (autorisation requise) ———
-     Remplace .card-header : le message est le titre de la popup, pas une ligne
-     dedans. Le bouton d'aide sort du flux pour que la colonne reste centrée
-     sur l'icône et le texte. */
+  /* ——— State header (authorization required) ———
+     Replaces .card-header: the message is the popup's title, not a row in it.
+     The help button leaves the flow so the column stays centred. */
   .state-header {
     position: relative;
     display: flex;
@@ -277,7 +250,7 @@
     width: 40px;
     height: 40px;
     border-radius: 10px;
-    /* Violet translucide : lisible sur les deux fonds, rien à faire varier. */
+    /* Translucent purple: readable on both backgrounds, nothing to vary. */
     background: rgba(145, 71, 255, 0.16);
   }
 
@@ -338,8 +311,8 @@
     margin-top: 2px;
   }
 
-  /* Message d'attente (pas sur Twitch / pas connecte) : occupe la place du
-     bouton, sans en avoir l'apparence cliquable. */
+  /* Waiting message (off Twitch / logged out): takes the button's place
+     without looking clickable. */
   .row-notice {
     font-size: 13px;
     line-height: 1.4;
@@ -497,7 +470,7 @@
     }
   }
 
-  /* ——— Thème sombre (activé par le toggle, cohérent avec la popup de config) ——— */
+  /* ——— Dark theme (follows Twitch, matching the config popup) ——— */
   :global(body):has(.app.dark),
   .app.dark {
     background: #1c1c1e;

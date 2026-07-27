@@ -4,7 +4,7 @@
 
 <div class="empty-state">
     <span class="icon-plate" aria-hidden="true">
-        <!-- Le point "live" de Twitch, éteint. -->
+        <!-- Twitch's "live" dot, switched off. -->
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
             <circle cx="12" cy="12" r="4.5" />
             <path d="M5.6 5.6a9 9 0 0 0 0 12.8M18.4 5.6a9 9 0 0 1 0 12.8" opacity="0.45" stroke-linecap="round" />
@@ -16,10 +16,8 @@
 </div>
 
 <style>
-    /* Tout est en `em` : Twitch applique html{font-size:62.5%}, donc 1rem = 10px
-       et une échelle en rem sous-dimensionne le bloc. En héritant de la taille
-       de texte de la sidebar, on s'aligne sur Display.svelte, qui ne déclare
-       lui non plus aucun font-size. */
+    /* All in `em`: Twitch sets html{font-size:62.5%}, so 1rem = 10px and a rem
+       scale would undersize the block. Inherits the sidebar's text size. */
     .empty-state {
         display: flex;
         flex-direction: column;
@@ -29,8 +27,8 @@
         text-align: center;
     }
 
-    /* Registre neutre : cet état n'appelle aucune action, il ne doit donc pas
-       porter le violet réservé à ce qui est cliquable. */
+    /* Neutral register: this state calls for no action, so it must not carry
+       the purple reserved for clickable things. */
     .icon-plate {
         display: flex;
         align-items: center;

@@ -4,24 +4,23 @@ console.log("CONTENT SCRIPT")
 console.log("################")
 console.log("################")
 
-// Types de message dupliqués en littéraux plutôt qu'importés de
-// src/constantes.ts : le content script est chargé comme script classique (pas
-// de "type": "module" dans le manifest), or un import partagé avec le service
-// worker ferait sortir un chunk commun que Rollup référencerait par une
-// instruction `import` — impossible à charger ici. Toute modification doit
-// rester alignée sur src/constantes.ts.
+// Message types duplicated as literals instead of imported from
+// src/constantes.ts: this file loads as a classic script, so no `import`.
 const SESSION_USER_CHANGED = 'SESSION_USER_CHANGED';
 const GET_SESSION_USER = 'GET_SESSION_USER';
 
 const TWILIGHT_USER = 'twilight-user=';
+// Kept in sync with src/svelte/twitchTheme.js, which this file cannot import.
+const TWITCH_LIGHT_CLASS = 'tw-root--theme-light';
+
+/** True when Twitch renders in dark mode. Defaults to dark. */
+function readTwitchDark() {
+  return !document.documentElement.classList.contains(TWITCH_LIGHT_CLASS);
+}
 
 /**
- * Identifiant du compte Twitch connecté dans CE navigateur, lu dans le cookie
- * de session. C'est la seule source de vérité : le token OAuth de l'extension
- * survit à une déconnexion du site et ne peut donc rien nous en dire.
- *
- * L'objet contient aussi un `authToken` : on ne lit que `id`, jamais le reste,
- * et rien de tout ça n'est stocké ni journalisé.
+ * Twitch account logged into THIS browser, read from the session cookie — the
+ * only source of truth. Only `id` is read; the cookie's rest is never touched.
  */
 function getSessionUserId() {
   const raw = document.cookie.split('; ').find(c => c.startsWith(TWILIGHT_USER));
@@ -35,11 +34,8 @@ function getSessionUserId() {
 }
 
 /**
- * État replié de la barre latérale de Twitch, que l'extension ne fait
- * qu'observer. Il compte désormais au-delà de l'affichage : le panneau
- * d'autorisation vit dans la sidebar, or `:host([collapsed])` le masque
- * entièrement. Repliée, il n'existe donc plus aucune surface visible pour
- * autoriser l'extension, et l'action popup doit le dire.
+ * Collapsed state of Twitch's own sidebar. It matters beyond layout: collapsed,
+ * `:host([collapsed])` hides the authorization panel entirely.
  */
 function isSideNavCollapsed() {
   return !!document.querySelector('.side-nav--collapsed');
@@ -47,8 +43,8 @@ function isSideNavCollapsed() {
 
 let sessionUserId = getSessionUserId();
 let sidebarDiv = null;
-// Remplacée par injectScript(). Tant que rien n'est injecté, il n'y a rien à
-// masquer ni à restituer.
+// Replaced by injectScript(). Until something is injected there is nothing to
+// hide nor to hand back.
 let applyVisibility = () => {};
 
 function createDivWithIframeInShwadowDom(mainDivId, iframeSrcUrl, cssUrl = '', allowTransparency = false) {
@@ -71,20 +67,33 @@ function createDivWithIframeInShwadowDom(mainDivId, iframeSrcUrl, cssUrl = '', a
   return maindiv;
 }
 
-const maindiv = createDivWithIframeInShwadowDom('iframe-rem', chrome.runtime.getURL('src/iframe/config-popup.html'),  chrome.runtime.getURL('assets/iframe.css'), true)
+/**
+ * Built on demand: the iframe is a separate document, so the theme travels as a
+ * URL param and the URL is only known when the popup actually opens.
+ */
+function openConfigIframe() {
+  if (document.querySelector('#iframe-rem')) return;
+  const url = `${chrome.runtime.getURL('src/iframe/config-popup.html')}?dark=${readTwitchDark() ? 1 : 0}`;
+  document.body.appendChild(
+    createDivWithIframeInShwadowDom('iframe-rem', url, chrome.runtime.getURL('assets/iframe.css'), true)
+  );
+}
+
 chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
   if (msg.type === "DISPLAY_POPUP") {
-    if (!document.querySelector("#iframe-rem")) {
-      document.body.appendChild(maindiv);
-    }
+    openConfigIframe();
   }
   else if (msg.type === "HIDE_POPUP") {
     document.querySelector("#iframe-rem")?.remove();
   }
   else if (msg.type === GET_SESSION_USER) {
-    // Chemin action popup : elle peut être ouverte alors que le service worker
-    // vient de se réveiller et n'a plus l'état en mémoire.
-    sendResponse({ userId: getSessionUserId(), sideNavCollapsed: isSideNavCollapsed() });
+    // Action popup path: it may open just as the service worker wakes up with
+    // no state left in memory.
+    sendResponse({
+      userId: getSessionUserId(),
+      sideNavCollapsed: isSideNavCollapsed(),
+      twitchDark: readTwitchDark()
+    });
     return true;
   }
 
@@ -134,10 +143,8 @@ function injectScript() {
 
   applyVisibility = () => {
     const collapsed = isSideNavCollapsed();
-    // Déconnexion Twitch : on rend la sidebar au site plutôt que de retirer le
-    // noeud du DOM. Retirer #sidebar_shadow n'annulerait ni les ports ni le
-    // ping périodique de PortConnector (le module a déjà été évalué), et une
-    // reconnexion réinjecterait un second script, donc un second jeu de ports.
+    // On logout, hand the sidebar back rather than removing our node: removing
+    // it cancels neither the ports nor PortConnector's ping.
     if (collapsed || !sessionUserId) {
       sidebarDiv.setAttribute('collapsed', "true");
       sections().forEach(el => el.style.removeProperty('display'));
@@ -166,10 +173,8 @@ const injectObs = (obs, m) => {
 }
 
 /**
- * Met en place la détection de la sidebar Twitch, puis l'injection. N'est
- * appelée QUE lorsqu'un compte est connecté : sans compte, l'extension n'a rien
- * à afficher, et injecter masquerait les sections natives de Twitch pour les
- * remplacer par du vide.
+ * Sets up Twitch sidebar detection, then injection. Called ONLY when an account
+ * is logged in, or we would hide Twitch's own sections and show nothing.
  */
 function startObservers() {
   const observer = new MutationObserver((mut, obs) => {
@@ -195,7 +200,7 @@ function startObservers() {
   injectObs(observer);
 }
 
-/** Réinjecte si Twitch a détruit notre noeud entre-temps (re-render du menu). */
+/** Re-injects if Twitch destroyed our node meanwhile (menu re-render). */
 function ensureInjected() {
   if (sidebarDiv?.isConnected) return;
   startObservers();
@@ -210,12 +215,12 @@ function reportSession() {
   applyVisibility();
 }
 
-// Une déconnexion faite dans un AUTRE onglet n'est vue qu'au retour sur
-// celui-ci — ce qui suffit, l'UI n'existe que dans l'onglet regardé.
+// A logout done in ANOTHER tab is only seen on returning to this one — enough,
+// since the UI only exists in the tab being looked at.
 document.addEventListener('visibilitychange', () => { if (!document.hidden) reportSession(); });
 window.addEventListener('focus', reportSession);
 
-// Premier signalement, inconditionnel : le service worker ne sait pas encore
-// qui est connecté, et c'est ce message qui amorce tout le pipeline.
+// First report, unconditional: the worker does not know who is logged in yet,
+// and this message bootstraps the whole pipeline.
 chrome.runtime.sendMessage({ type: SESSION_USER_CHANGED, data: sessionUserId });
 if (sessionUserId) startObservers();
