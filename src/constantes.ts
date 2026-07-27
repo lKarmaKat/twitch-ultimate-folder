@@ -16,6 +16,9 @@ export const HIDE_POPUP = 'HIDE_POPUP';
 export const ALIGNMENT = 'ALIGNMENT';
 export const CHANGE_ALIGNMENT = 'CHANGE_ALIGNMENT';
 export const GET_ALIGNMENT = 'GET_ALIGNMENT';
+export const TITLE_SIDE = 'TITLE_SIDE';
+export const CHANGE_TITLE_SIDE = 'CHANGE_TITLE_SIDE';
+export const GET_TITLE_SIDE = 'GET_TITLE_SIDE';
 export const LOCALE = 'LOCALE';
 export const CHANGE_LOCALE = 'CHANGE_LOCALE';
 export const GET_LOCALE = 'GET_LOCALE';
@@ -64,6 +67,8 @@ export const ALL_OTHER_HEADER_TYPE = [
 ];
 
 export const PARAM_ALIGNMENT_LEFT = 'alignmentLeft';
+/** chrome.storage.local key, 1/0: 1 = channel title shown on the left. */
+export const PARAM_TITLE_SIDE_LEFT = 'titleSideLeft';
 
 export const HEADER_TYPE_HEIGHT = [ // Not currently used
   { id: 1, name: 'small' },

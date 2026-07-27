@@ -1,5 +1,4 @@
-import PortConnector from './portConnector.svelte.js';
-import { alignmentLeft } from './event.svelte.js';
+import { titleSideLeft } from './event.svelte.js';
 
 export function maybeTooltip(node, title) {
     if (!title) return;
@@ -7,10 +6,6 @@ export function maybeTooltip(node, title) {
   }
 export function tooltip(node, params) {
     let tt = document.querySelector("#custom-tooltip");
-	// let alignmentCb = (data) => {
-    // 	alignedLeft = data.data
-  	// }
-	// let port = new PortConnector(alignmentCb, "alignment", "tooltip from svelte component")
     if (tt)
 	    tt.classList.add('tooltip');
     
@@ -31,10 +26,12 @@ export function tooltip(node, params) {
         let {x, y, height, width} = node.getBoundingClientRect();
         let pos = tt.querySelector('.pos');
         let y2 = child.getBoundingClientRect();
-		if (alignmentLeft.current) {
-			pos.style.transform = "translate(" + (x + width + y2.width) +"px, " + (y + height/2 - y2.height/2) + "px)";
-		} else {
+		// #tooltip carries translate(-100%): the offset below is its RIGHT edge,
+		// so x alone puts the title left of the row, x + width + its own width right of it.
+		if (titleSideLeft.current) {
 			pos.style.transform = "translate(" + x +"px, " + (y + height/2 - y2.height/2) + "px)";
+		} else {
+			pos.style.transform = "translate(" + (x + width + y2.width) +"px, " + (y + height/2 - y2.height/2) + "px)";
 		}
         // console.log(pos, "translate(" + x +"px, " + (y + height/2 - y2/2) + "px)")
         tt.setAttribute('tabindex', 0);

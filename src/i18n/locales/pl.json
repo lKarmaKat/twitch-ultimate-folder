@@ -10,7 +10,9 @@
     "seeSidebar": "Postępuj zgodnie z instrukcjami na pasku bocznym Twitcha",
     "expandSideNav": "Rozwiń pasek boczny Twitcha, aby autoryzować rozszerzenie",
     "alignment": "Wyrównanie kanałów",
-    "alignmentSub": "Jeśli używasz BTTV do zmiany układu czatu",
+    "alignmentSub": "Strona, po której znajduje się pasek boczny Twitcha",
+    "titleSide": "Strona tytułu",
+    "titleSideSub": "Po której stronie pojawia się tytuł kanału",
     "right": "Prawo",
     "left": "Lewo",
     "language": "Język"

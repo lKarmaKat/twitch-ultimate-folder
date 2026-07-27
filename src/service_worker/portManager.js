@@ -3,6 +3,8 @@ import * as CST from '../constantes.js';
 class PortManager {
     ports = [];
     externalPorts = [];
+    /** Per-port-name on-connect senders, keyed by port name. */
+    onConnectHandlers = {};
     constructor(sendCurrentConfigOnConnect, sendStreamInfoOnConnect, sendCurrentAlignmentOnConnect, sendCurrentAuth, sendCurrentLocaleOnConnect, onPortMessage = (_message, _port) => {}) {
         console.log("##### Port manager constr");
         chrome.runtime.onConnect.addListener((port) => {
@@ -34,6 +36,7 @@ class PortManager {
             } else if (port.name === 'locale') {
                 sendCurrentLocaleOnConnect(port)
             }
+            this.onConnectHandlers[port.name]?.(port);
         });
 
         chrome.runtime.onConnectExternal.addListener((port) => {
@@ -68,6 +71,7 @@ class PortManager {
             } else if (port.name === 'locale') {
                 sendCurrentLocaleOnConnect(port)
             }
+            this.onConnectHandlers[port.name]?.(port);
             // setTimeout(() => {
             //     let index = this.externalPorts.findIndex(po => po === port);
             //     port.disconnect()
@@ -75,6 +79,14 @@ class PortManager {
             //     console.log("disconnected", this.externalPorts)
             // }, 2000)
         });
+    }
+
+    /**
+     * Must be called synchronously after construction: no onConnect event can
+     * be dispatched before the current script turn ends.
+     */
+    registerOnConnect(name, handler) {
+        this.onConnectHandlers[name] = handler;
     }
 
     sendMessageToTabs(type, message, name = "eventbus", ports = this.ports) {

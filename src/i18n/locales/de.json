@@ -10,7 +10,9 @@
     "seeSidebar": "Folge den Anweisungen in der Twitch-Seitenleiste",
     "expandSideNav": "Klappe die Twitch-Seitenleiste aus, um die Erweiterung zu autorisieren",
     "alignment": "Kanalausrichtung",
-    "alignmentSub": "Falls du BTTV verwendest, um das Chat-Layout zu ändern",
+    "alignmentSub": "Die Seite, auf der deine Twitch-Seitenleiste liegt",
+    "titleSide": "Seite des Titels",
+    "titleSideSub": "Auf welcher Seite der Kanaltitel erscheint",
     "right": "Rechts",
     "left": "Links",
     "language": "Sprache"

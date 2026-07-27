@@ -24,11 +24,20 @@
   // active tab. Read the OS theme now so the first paint is already right.
   let theme = $state(matchMedia('(prefers-color-scheme: dark)').matches);
   let alignment = $state(true);
+  // Side the hover title pops up on: true = left. Bound straight to the toggle,
+  // unlike `alignment`, whose label reads the other way round.
+  let titleSideLeft = $state(false);
 
   // --- Init (the body of the old popup.js) ---
   chrome.runtime.sendMessage({ type: CST.GET_ALIGNMENT }, (response) => {
     if (response?.type === CST.ALIGNMENT) {
       alignment = !response.data;
+    }
+  });
+
+  chrome.runtime.sendMessage({ type: CST.GET_TITLE_SIDE }, (response) => {
+    if (response?.type === CST.TITLE_SIDE) {
+      titleSideLeft = response.data;
     }
   });
 
@@ -56,6 +65,11 @@
     const value = !alignment;
     const response = await chrome.runtime.sendMessage({ type: CST.CHANGE_ALIGNMENT, value });
     alignment = response ? !response.data : false;
+  }
+
+  async function onTitleSideChange() {
+    const response = await chrome.runtime.sendMessage({ type: CST.CHANGE_TITLE_SIDE, value: titleSideLeft });
+    if (response?.type === CST.TITLE_SIDE) titleSideLeft = response.data;
   }
 
   function onLocaleChange() {
@@ -135,6 +149,20 @@
               <span class="track"></span>
               <span class="lbl-on">{$_('actionPopup.right')}</span>
               <span class="lbl-off">{$_('actionPopup.left')}</span>
+              <span class="thumb"></span>
+            </span>
+          </label>
+
+          <label class="row" for="titleSide">
+            <div class="row-info">
+              <div class="row-label">{$_('actionPopup.titleSide')}</div>
+              <div class="row-sub">{$_('actionPopup.titleSideSub')}</div>
+            </div>
+            <input type="checkbox" class="tgl" id="titleSide" bind:checked={titleSideLeft} onchange={onTitleSideChange}>
+            <span class="sw">
+              <span class="track"></span>
+              <span class="lbl-on">{$_('actionPopup.left')}</span>
+              <span class="lbl-off">{$_('actionPopup.right')}</span>
               <span class="thumb"></span>
             </span>
           </label>

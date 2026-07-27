@@ -389,6 +389,10 @@
     <p>{$_('help.actionPopup.alignment')}</p>
     {@render media($_('help.actionPopup.alignmentCaption'))}
 
+    <h3>{$_('actionPopup.titleSide')}</h3>
+    <p>{$_('help.actionPopup.titleSide')}</p>
+    {@render media($_('help.actionPopup.titleSideCaption'))}
+
     <h3>{$_('actionPopup.language')}</h3>
     <p>{$_('help.actionPopup.language')}</p>
     {@render media($_('help.actionPopup.languageCaption'))}

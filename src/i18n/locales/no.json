@@ -10,7 +10,9 @@
     "seeSidebar": "Følg instruksjonene i Twitch-sidepanelet",
     "expandSideNav": "Utvid Twitch-sidepanelet for å autorisere utvidelsen",
     "alignment": "Kanaljustering",
-    "alignmentSub": "Hvis du bruker BTTV til å endre chattlayouten",
+    "alignmentSub": "Siden der Twitch-sidepanelet ligger",
+    "titleSide": "Tittelens side",
+    "titleSideSub": "Hvilken side kanaltittelen vises på",
     "right": "Høyre",
     "left": "Venstre",
     "language": "Språk"

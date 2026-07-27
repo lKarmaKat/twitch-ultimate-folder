@@ -10,7 +10,9 @@
     "seeSidebar": "Följ instruktionerna i Twitchs sidofält",
     "expandSideNav": "Fäll ut Twitchs sidofält för att auktorisera tillägget",
     "alignment": "Kanaljustering",
-    "alignmentSub": "Om du använder BTTV för att ändra chattlayouten",
+    "alignmentSub": "Sidan där din Twitch-sidopanel sitter",
+    "titleSide": "Titelns sida",
+    "titleSideSub": "Vilken sida kanaltiteln visas på",
     "right": "Höger",
     "left": "Vänster",
     "language": "Språk"

@@ -10,7 +10,9 @@
     "seeSidebar": "Slijedite upute prikazane u Twitch bočnoj traci",
     "expandSideNav": "Proširite Twitch bočnu traku kako biste autorizirali proširenje",
     "alignment": "Poravnanje kanala",
-    "alignmentSub": "Ako koristite BTTV za promjenu izgleda chata",
+    "alignmentSub": "Strana na kojoj se nalazi vaša Twitch bočna traka",
+    "titleSide": "Strana naslova",
+    "titleSideSub": "Na kojoj se strani prikazuje naslov kanala",
     "right": "Desno",
     "left": "Lijevo",
     "language": "Jezik"

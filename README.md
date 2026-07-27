@@ -240,6 +240,15 @@ Switch between the dark and light theme. The change applies immediately to the s
 
 **Channel alignment**
 
+This setting aligns the extension's lists with the side your Twitch sidebar sits on: it decides whether nested lists and their channels are indented from the left or from the right.
+
+<!-- <figure> -->
+ https://github.com/user-attachments/assets/0ddc5818-8131-472b-aacb-546bbb880ee8
+  <!-- <figcaption>Switching the side the lists are aligned to.</figcaption> -->
+<!-- </figure> -->
+
+**Title side**
+
 This setting controls which side the channel title appears on when you hover a live channel in the sidebar. Switch it to the other side if the title ends up under another panel — typically when BTTV has moved the chat layout around.
 
 <!-- <figure> -->

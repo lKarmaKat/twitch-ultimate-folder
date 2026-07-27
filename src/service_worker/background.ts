@@ -234,6 +234,22 @@ let sendCurrentAlignmentOnConnect = (port: chrome.runtime.Port) => {
   });
 }
 
+// Side the channel title pops up on, independent of the list alignment above.
+let currentTitleSideLeft = false;
+const titleSideReady = chrome.storage.local.get(CST.PARAM_TITLE_SIDE_LEFT).then((data) => {
+  currentTitleSideLeft = data[CST.PARAM_TITLE_SIDE_LEFT] === 1;
+}).catch(err => logBackgroundError("background:readTitleSide", err));
+let sendCurrentTitleSideOnConnect = (port: chrome.runtime.Port) => {
+  // The storage read is async: a port connecting while the worker wakes up
+  // would otherwise be told the default instead of the stored value.
+  titleSideReady.then(() => {
+    port.postMessage({
+      "type": CST.TITLE_SIDE,
+      "data": currentTitleSideLeft
+    });
+  }).catch(err => logBackgroundError("background:sendCurrentTitleSideOnConnect", err));
+}
+
 let currentLocale: string | undefined;
 chrome.storage.local.get("local").then((data) => {
   currentLocale = data.local as string | undefined;
@@ -347,6 +363,7 @@ let portManager = new PortManager(sendCurrentConfigOnConnect,
                                 sendCurrentAuth,
                                 sendCurrentLocaleOnConnect,
                                 handlePortMessage);
+portManager.registerOnConnect('titleSide', sendCurrentTitleSideOnConnect);
 
 self.addEventListener('beforeunload', () => {
   portManager.closeAllPorts();
@@ -441,6 +458,32 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
         type: CST.ALIGNMENT, // SENDING THE TYPE BACK IS POINTLESS HERE
         data: currentAlignmentLeft
       })
+      return true;
+    }
+
+    if (msg.type === CST.CHANGE_TITLE_SIDE) {
+      // Explicit value rather than a blind toggle: two popups, or a restarted
+      // worker, would otherwise drift out of sync.
+      currentTitleSideLeft = msg.value === true;
+      sendResponse({
+        type: CST.TITLE_SIDE,
+        data: currentTitleSideLeft
+      });
+      chrome.storage.local.set({
+        [CST.PARAM_TITLE_SIDE_LEFT]: currentTitleSideLeft ? 1 : 0
+      });
+      portManager.sendMessageToAllTabs(CST.TITLE_SIDE, currentTitleSideLeft, "titleSide");
+
+      return true;
+    }
+
+    if (msg.type === CST.GET_TITLE_SIDE) {
+      titleSideReady.then(() => {
+        sendResponse({
+          type: CST.TITLE_SIDE,
+          data: currentTitleSideLeft
+        });
+      });
       return true;
     }
 

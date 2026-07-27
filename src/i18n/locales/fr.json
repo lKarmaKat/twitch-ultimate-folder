@@ -105,8 +105,10 @@
     "actionPopup": {
       "title": "En savoir plus sur le popup de l'extension",
       "intro": "Le popup de l'extension — le petit panneau qui s'ouvre quand vous cliquez sur l'icône — porte les réglages qui s'appliquent à l'extension entière, et non à une liste en particulier.",
-      "alignment": "Ce réglage détermine de quel côté apparaît le titre de la chaîne quand vous survolez une chaîne en direct dans la barre latérale. Basculez-le de l'autre côté si le titre se retrouve sous un autre panneau — typiquement quand BTTV a déplacé la disposition du chat.",
-      "alignmentCaption": "Changement du côté d'affichage du titre de la chaîne.",
+      "alignment": "Ce réglage aligne les listes de l'extension sur le côté où se trouve votre barre latérale Twitch : il détermine si les listes imbriquées et leurs chaînes sont décalées depuis la gauche ou depuis la droite.",
+      "alignmentCaption": "Changement du côté sur lequel les listes sont alignées.",
+      "titleSide": "Ce réglage détermine de quel côté apparaît le titre de la chaîne quand vous survolez une chaîne en direct dans la barre latérale. Basculez-le de l'autre côté si le titre se retrouve sous un autre panneau — typiquement quand BTTV a déplacé la disposition du chat.",
+      "titleSideCaption": "Changement du côté d'affichage du titre de la chaîne.",
       "language": "Choisissez votre langue dans la liste. Toutes les surfaces ouvertes — la barre latérale, la fenêtre de configuration, cette page d'aide — se mettent à jour immédiatement, sans rechargement.",
       "languageCaption": "Changement de langue, appliqué en direct sans rechargement."
     },
@@ -143,7 +145,9 @@
     "seeSidebar": "Suivez les instructions affichées dans la barre latérale de Twitch",
     "expandSideNav": "Dépliez la barre latérale de Twitch pour autoriser l'extension",
     "alignment": "Alignement des chaines",
-    "alignmentSub": "Si vous utilisez BTTV pour changer la disposition du chat",
+    "alignmentSub": "Le côté où se trouve votre barre latérale Twitch",
+    "titleSide": "Côté du titre",
+    "titleSideSub": "De quel côté apparaît le titre de la chaîne",
     "right": "Droite",
     "left": "Gauche",
     "language": "Langue"

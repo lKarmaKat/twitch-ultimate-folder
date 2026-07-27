@@ -10,7 +10,9 @@
     "seeSidebar": "Seuraa Twitchin sivupalkissa näkyviä ohjeita",
     "expandSideNav": "Laajenna Twitchin sivupalkki valtuuttaaksesi laajennuksen",
     "alignment": "Kanavien tasaus",
-    "alignmentSub": "Jos käytät BTTV:tä chatin asettelun muuttamiseen",
+    "alignmentSub": "Puoli, jolla Twitchin sivupalkki on",
+    "titleSide": "Otsikon puoli",
+    "titleSideSub": "Kummalla puolella kanavan otsikko näkyy",
     "right": "Oikea",
     "left": "Vasen",
     "language": "Kieli"

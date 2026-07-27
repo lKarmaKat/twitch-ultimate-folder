@@ -10,7 +10,9 @@
     "seeSidebar": "Sigue las instrucciones que aparecen en la barra lateral de Twitch",
     "expandSideNav": "Despliega la barra lateral de Twitch para autorizar la extensión",
     "alignment": "Alineación de canales",
-    "alignmentSub": "Si usas BTTV para cambiar el diseño del chat",
+    "alignmentSub": "El lado en el que está tu barra lateral de Twitch",
+    "titleSide": "Lado del título",
+    "titleSideSub": "En qué lado aparece el título del canal",
     "right": "Derecha",
     "left": "Izquierda",
     "language": "Idioma"
