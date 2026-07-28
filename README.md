@@ -29,26 +29,13 @@ If you want a list to stay visible even when nobody in it is live, turn on its *
 
 **Authorising the application**
 
-1. Click the extension icon in your browser toolbar. The popup opens on an activation code.
+1. In the Twitch sidebar, where the extension would normally show your folders, click **Authorise the extension**. An activation code appears.
 2. Click the code. Twitch opens on **twitch.tv/activate** with the code already filled in.
 3. Authorise the application to access your account.
 <!-- Links stay this way for github compatibility -->
 https://github.com/user-attachments/assets/0ddc5818-8131-472b-aacb-546bbb880ee8
 
-That is all. Go back to your Twitch tab: the sidebar fills itself in after a few seconds, and you will not be asked again — the extension keeps the authorisation alive on its own. You can revoke it at any time from your Twitch settings, under **Connections**.
-
-<details>
-<summary><b>How to find the extension icon</b></summary>
-
-<!-- <figure> -->
-https://github.com/user-attachments/assets/0ddc5818-8131-472b-aacb-546bbb880ee8
-
-  <!-- <figcaption>How to find the extension icon.</figcaption> -->
-<!-- </figure> -->
-
-Depending on your browser, the icon may be hidden behind the extensions puzzle piece. Pin it once and it stays in the toolbar.
-
-</details>
+That is all. The sidebar fills itself in after a few seconds, and you will not be asked again — the extension keeps the authorisation alive on its own. You can revoke it at any time from your Twitch settings, under **Connections**.
 
 ## How to create a configuration
 
@@ -68,6 +55,7 @@ Depending on your browser, the icon may be hidden behind the extensions puzzle p
 </details>
 
 <!-- <figure> -->
+
 https://github.com/user-attachments/assets/0ddc5818-8131-472b-aacb-546bbb880ee8
 <!-- <figcaption>Opening the configuration window from the action popup.</figcaption> -->
 <!-- </figure> -->
@@ -228,15 +216,6 @@ Do not forget to save your configuration before closing the window: any change t
 ## More details about the action popup
 
 The action popup — the small panel that opens when you click the extension icon — carries the settings that apply to the extension as a whole, rather than to one list.
-
-**Theme**
-
-Switch between the dark and light theme. The change applies immediately to the sidebar, the configuration window and this help page.
-
-<!-- <figure> -->
-  https://github.com/user-attachments/assets/0ddc5818-8131-472b-aacb-546bbb880ee8
-  <!-- <figcaption>Switching between the dark and light theme.</figcaption> -->
-<!-- </figure> -->
 
 **Channel alignment**
 

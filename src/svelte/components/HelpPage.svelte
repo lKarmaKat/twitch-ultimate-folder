@@ -72,7 +72,6 @@
     'outside',
     'offline',
     'connect',
-    'find-icon-connect',
     'create-config',
     'open-window',
     'find-icon',
@@ -251,16 +250,6 @@
     </ol>
     {@render media($_('help.connect.caption'))}
     <p>{$_('help.connect.outro')}</p>
-
-    <!-- Deliberately duplicated from #find-icon: each section must read on its
-         own, and this is where users look for the icon first. -->
-    <details id="find-icon-connect">
-      <summary>{$_('help.createConfig.findIconTitle')}</summary>
-      <div class="details-body">
-        {@render media($_('help.createConfig.findIconCaption'))}
-        <p>{$_('help.createConfig.findIcon')}</p>
-      </div>
-    </details>
 
     <h2 id="create-config">{$_('help.createConfig.title')}</h2>
 
