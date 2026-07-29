@@ -408,7 +408,9 @@
     <h2 id="support">{$_('help.support.title')}</h2>
     <p>{$_('help.support.text')}</p>
     <p>
-      <a class="kofi" href={KOFI_URL} target="_blank" rel="noopener noreferrer">☕ {$_('help.support.link')}</a>
+      <a class="kofi" href={KOFI_URL} target="_blank" rel="noopener noreferrer">
+        <span class="kofi-ico" aria-hidden="true">☕</span>{$_('help.support.link')}
+      </a>
     </p>
   </main>
 </div>
@@ -578,11 +580,19 @@
     color: var(--help-accent);
   }
   .kofi {
-    display: inline-block;
+    /* Flex, not inline-block: the cup is its own bigger box now, and it has to
+       stay centred against the label instead of sitting on the text baseline. */
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5em;
     padding: 0.5em 1em;
     border: 1px solid var(--help-border);
     border-radius: 0.4em;
     text-decoration: none;
+  }
+  .kofi-ico {
+    font-size: 1.5em;
+    line-height: 1;
   }
   .kofi:hover {
     background-color: var(--help-hover);

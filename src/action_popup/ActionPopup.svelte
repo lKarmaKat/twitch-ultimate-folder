@@ -28,6 +28,9 @@
   // unlike `alignment`, whose label reads the other way round.
   let titleSideLeft = $state(false);
 
+  // TODO: replace with the real Ko-fi account (same placeholder as HelpPage).
+  const KOFI_URL = 'https://ko-fi.com/YOUR_KOFI_HANDLE';
+
   // --- Init (the body of the old popup.js) ---
   chrome.runtime.sendMessage({ type: CST.GET_ALIGNMENT }, (response) => {
     if (response?.type === CST.ALIGNMENT) {
@@ -176,6 +179,13 @@
             </div>
           </div>
         </div>
+
+        <!-- Outside the card, so it shows in the authorization state too. Same
+             string as the help page's support link: one translation, two
+             surfaces. -->
+        <a class="kofi" href={KOFI_URL} target="_blank" rel="noopener noreferrer">
+          <span class="kofi-ico" aria-hidden="true">☕</span>{$_('help.support.link')}
+        </a>
       </div>
     </div>
   {/if}
@@ -465,6 +475,32 @@
     opacity: 0.88;
   }
 
+  /* ——— Ko-fi (echoes the help page's support link) ——— */
+  .kofi {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin: 0 12px 12px;
+    padding: 9px 12px;
+    border-radius: 12px;
+    background: #ffffff;
+    color: #7b3fc9;
+    font-size: 13px;
+    font-weight: 500;
+    text-decoration: none;
+    transition: background 0.15s;
+  }
+
+  .kofi:hover {
+    background: #e9e9ef;
+  }
+
+  .kofi-ico {
+    font-size: 20px;
+    line-height: 1;
+  }
+
   /* ——— Loader ——— */
   .loading-wrapper {
     width: 100%;
@@ -558,5 +594,14 @@
 
   .app.dark .sw .track {
     background: #39393d;
+  }
+
+  .app.dark .kofi {
+    background: #2c2c2e;
+    color: #a970ff;
+  }
+
+  .app.dark .kofi:hover {
+    background: #3a3a3c;
   }
 </style>
