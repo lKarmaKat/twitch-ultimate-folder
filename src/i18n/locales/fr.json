@@ -161,7 +161,22 @@
     "display": "Prévisualisation",
     "reset": "Réinitialiser la configuration",
     "cancel": "Annuler",
-    "addNewListToRoot": "Ajouter une nouvelle liste à la liste racine"
+    "addNewListToRoot": "Ajouter une nouvelle liste à la liste racine",
+    "close": "Fermer",
+    "export": "Exporter",
+    "exportTooltip": "Exporter la configuration",
+    "exportPrompt": "Copiez le texte suivant et collez-le dans la popup d'import, puis validez.",
+    "exportError": "La configuration n'a pas pu être exportée.",
+    "copy": "Copier",
+    "copied": "Copié !",
+    "copyFailed": "Copie impossible — sélectionnez le texte et copiez-le manuellement.",
+    "import": "Importer",
+    "importTooltip": "Importer une configuration",
+    "importPrompt": "Collez la configuration ici.",
+    "importWarning": "La configuration actuelle sera remplacée jusqu'à ce que vous l'enregistriez.",
+    "importPlaceholder": "Collez ici la configuration exportée…",
+    "importError": "Configuration invalide ou illisible.",
+    "importErrorEmpty": "Collez d'abord une configuration."
   },
   "configPannel": {
     "listName": "Nom de la liste",

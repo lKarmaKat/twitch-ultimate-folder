@@ -52,6 +52,9 @@ function createDivWithIframeInShwadowDom(mainDivId, iframeSrcUrl, cssUrl = '', a
   iframe.src = iframeSrcUrl;
   iframe.id = "inner-iframe";
   iframe.allowTransparency = allowTransparency ? "true" : "false";
+  // Cross-origin chrome-extension:// iframe: without this delegation the
+  // Permissions-Policy keeps clipboard-write to the top document.
+  iframe.allow = "clipboard-write";
 
   const maindiv = document.createElement('div')
   maindiv.id = mainDivId;

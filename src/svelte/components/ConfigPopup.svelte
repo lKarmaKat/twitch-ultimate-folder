@@ -5,6 +5,7 @@
   import Display from './Display.svelte';
   import DraggableChannel from './DraggableChannel.svelte';
   import DisplayWrapper from './DisplayWrapper.svelte';
+  import ConfigTransfer from './ConfigTransfer.svelte';
   import ConfigManager from '../configManager.svelte';
   import PortConnector from '../portConnector.svelte';
   import {  STARTUP_CONF } from '../../constantes.js'
@@ -225,6 +226,8 @@
           </div>
           {#if configManager.channelsPickRef.length}
           <div class="footer-bar">
+            <ConfigTransfer configManager={configManager} darkTheme={darkTheme} />
+            <div class="footer-right">
             <button id="reset-btn" class="reset-btn bottom-btn" onclick={() => promptResetConfig()}>
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                 <path d="M3 6h18"/>
@@ -242,6 +245,7 @@
               </svg>
               {$_('configPopup.save')}
             </button>
+            </div>
           </div>
           {/if}
         </div>
@@ -387,9 +391,14 @@
   }
   .footer-bar {
     display: flex;
-    justify-content: flex-end;
+    /* import/export on the left, reset/save on the right */
+    justify-content: space-between;
+    align-items: center;
     flex: 0 0 auto;
     padding: 1em 1.5em 1.2em 0;
+  }
+  .footer-right {
+    display: flex;
   }
   .flex-config {
     display: flex;

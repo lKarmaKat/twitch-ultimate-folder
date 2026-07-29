@@ -161,7 +161,22 @@
     "display": "Preview",
     "reset": "Reset config",
     "cancel": "Cancel",
-    "addNewListToRoot": "Add new list to root element"
+    "addNewListToRoot": "Add new list to root element",
+    "close": "Close",
+    "export": "Export",
+    "exportTooltip": "Export the configuration",
+    "exportPrompt": "Copy the text below and paste it into the import popup, then confirm.",
+    "exportError": "The configuration could not be exported.",
+    "copy": "Copy",
+    "copied": "Copied!",
+    "copyFailed": "Copy failed — select the text and copy it manually.",
+    "import": "Import",
+    "importTooltip": "Import a configuration",
+    "importPrompt": "Paste the configuration here.",
+    "importWarning": "The current configuration will be replaced until you save it.",
+    "importPlaceholder": "Paste the exported configuration here…",
+    "importError": "Invalid or unreadable configuration.",
+    "importErrorEmpty": "Paste a configuration first."
   },
   "configPannel": {
     "listName": "List name",
