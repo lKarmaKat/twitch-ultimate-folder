@@ -367,6 +367,16 @@
     overflow-y: auto;
     overflow-x: hidden;
   }
+  /* One lighter surface per column, the section title stays outside of it */
+  div.channels-container,
+  .pannel-scroll,
+  div.display-container {
+    background-color: var(--panel-surface);
+    border: 1px solid var(--panel-border);
+    border-radius: 0.75em;
+    box-shadow: var(--panel-shadow);
+    padding: 0.75em;
+  }
   .main {
     display: flex;
     flex-direction: column;
@@ -387,7 +397,8 @@
     flex-direction: row;
     flex: 1 1 auto;
     min-height: 0;
-    
+    /* keeps the last column's surface off the popup edge */
+    padding-right: 1em;
   }
   .footer-bar {
     display: flex;

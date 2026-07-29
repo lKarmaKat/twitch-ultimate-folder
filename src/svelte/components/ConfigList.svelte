@@ -59,7 +59,7 @@
 			draggedEl.innerHTML = `<strong>${chName.name}</strong>`;
 			// draggedEl.style.width = '200px';
 			draggedEl.style.height = '2.1em';
-			console.log(draggedEl.innerHTML)
+			// console.log(draggedEl.innerHTML)
 			// draggedEl.style.transform = 'scale(0.8)'; // ou via transform
 		}
 	}
@@ -146,7 +146,8 @@
 		<section class="dnd-zone-r"
 		use:dndzone={{items:configManager.selectedConfig[listId].items, flipDurationMs, centreDraggedOnCursor: false, transformDraggedElement,
 			dropTargetClasses: ['increased-drop-margin']
-		, morphDisabled: true, useCursorForDetection: true}} 
+		, morphDisabled: true, useCursorForDetection: true,
+		dropTargetStyle: {outline: 'var(--dnd-outline, rgb(191, 148, 255)) solid 2px'}}} 
 		onconsider={handleDndConsider} 
 		onfinalize ={handleDndFinalize}>
 		<!-- style="background-color: {contentColor};">		 -->

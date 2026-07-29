@@ -1,3 +1,10 @@
+:root {
+    --panel-surface: #1f1f23;
+    --panel-border: #2d2d31;
+    --panel-shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
+    --dnd-outline: rgb(191, 148, 255);
+}
+
 .popup .header {
     background-color: #0e0e10;
 }
