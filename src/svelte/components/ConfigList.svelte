@@ -126,7 +126,7 @@
 </script>
 
 
-<div id="list-{listId}" class="list-container">
+<div id="list-{listId}" class="list-container" class:is-root={listId === 'rootList'}>
 	<!-- svelte-ignore a11y-click-events-have-key-events -->
 	<!-- svelte-ignore a11y-no-static-element-interactions -->
 	<!-- svelte-ignore a11y_click_events_have_key_events -->
@@ -278,6 +278,8 @@
 		justify-content: space-between;
 		align-items: stretch;
 		position: relative;
+		border-radius: 5px;
+		transition: background-color 0.15s ease;
 		/* background-color: rgb(191, 148, 255); */
 		width: 100%;
 		margin: 0;
@@ -290,11 +292,11 @@
 		padding: 0.3em 0 0.3em 0.4em !important;
 	}
 	.list-container {
-		/* padding: 0 0 0 .1em; */
-		border: 1px solid rgba(128, 128, 128, 0.295);
+		border: none;
+		border-radius: 8px;
 	}
 	.nested-list {
-		padding: 0.3em 0 0.3em 0.3em;
+		padding: 0.15em 0;
 	}
 	.delete {
 		border: 1px solid rgba(216, 57, 57, 0.685);
@@ -325,9 +327,33 @@
 		margin: 0;
 		padding: 0.3em 0.5em;
 	}
+	/* the indent guide replaces the nested borders: one rail per depth level,
+	   drawn in the left gutter of the list body (root list has no rail) */
 	.list-body {
+		box-sizing: border-box;
+		position: relative;
 		margin: 0;
-		padding: 0;
+		padding: 0 0 0 0.75em;
+	}
+	.list-body::before {
+		content: '';
+		position: absolute;
+		left: 0.25em;
+		top: 2px;
+		bottom: 2px;
+		width: 2px;
+		border-radius: 2px;
+		background: var(--list-rail, rgba(128, 128, 128, 0.25));
+		transition: background-color 0.15s ease;
+	}
+	.list-container:hover > .list-body::before {
+		background: var(--list-rail-active, rgba(128, 128, 128, 0.5));
+	}
+	.list-container.is-root > .list-body {
+		padding-left: 0;
+	}
+	.list-container.is-root > .list-body::before {
+		content: none;
 	}
 	:global(div.list-container section.increased-drop-margin) {
 		padding-bottom: 1.5em;

@@ -126,7 +126,7 @@ function show() {
               gameName={item.game_name}
               isLive={item.isLive}
               greyIfOffline={false}
-              showOffline={true}/>
+              showOffline={false}/>
               {/each}
   </section>
 </div>

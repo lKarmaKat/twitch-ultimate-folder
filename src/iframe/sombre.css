@@ -3,6 +3,8 @@
     --panel-border: #2d2d31;
     --panel-shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
     --dnd-outline: rgb(191, 148, 255);
+    --list-rail: rgba(191, 148, 255, 0.18);
+    --list-rail-active: rgba(191, 148, 255, 0.45);
 }
 
 .popup .header {
@@ -123,11 +125,19 @@ input[type=checkbox]:focus-visible {
     left: 0%;
 }
 
-#config-list .list-header,
-.nested-list strong {
-    background-color: rgb(57, 57, 65);
+#config-list .list-header {
     color: #bf94ff;
     /* color: rgb(239, 239, 241); */
+}
+
+#config-list .list-header:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+/* drag ghost of a list (see transformDraggedElement) keeps the solid header look */
+.nested-list > strong {
+    background-color: rgb(57, 57, 65);
+    color: #bf94ff;
 }
 
 .custom-select .label {
