@@ -111,13 +111,39 @@ window.addEventListener("message", (event) => {
 });
 
 
+// Le hash de classe (--csO9S) change a chaque build de Twitch : on ne peut
+// s'accrocher qu'au prefixe.
+const STORIES_SEL = ':scope > [class*="storiesLeftNavSection"]';
+
+/**
+ * Place (ou replace) notre div juste apres la section Stories. Twitch la rend
+ * de facon asynchrone : si elle arrive apres notre injection, React l'insere
+ * en se referant a la premiere .side-nav-section, donc entre notre div et
+ * elle — et on se retrouve au-dessus. D'ou le repositionnement plutot qu'un
+ * simple ancrage au moment de l'injection.
+ *
+ * Les tests `!== sidebarDiv` sont ce qui evite la boucle infinie : l'observer
+ * ci-dessous se declenche sur notre propre insertion et doit alors ne rien
+ * faire. Deplacer sidebarDiv une fois monte est sans danger, un move DOM
+ * preserve le shadow root et l'etat Svelte.
+ */
+function placeSidebar(parent) {
+  const stories = parent.querySelector(STORIES_SEL);
+  if (stories) {
+    if (stories.nextElementSibling !== sidebarDiv) stories.after(sidebarDiv);
+    return;
+  }
+  const section = parent.querySelector(':scope > .side-nav-section');
+  if (section && section.previousElementSibling !== sidebarDiv) section.before(sidebarDiv);
+}
+
 function injectScript() {
   let t = document.querySelector("#side-nav .side-nav-section")
   sidebarDiv = document.createElement('div')
   sidebarDiv.id = "sidebar_shadow";
-  t.parentElement.insertBefore(sidebarDiv, t);
-  // t.parentElement.insertBefore(maindiv, t.parentElement.lastElementChild)
-  // t.insertBefore(maindiv, t.firstElementChild);
+  const navParent = t.parentElement;
+  placeSidebar(navParent);
+  new MutationObserver(() => placeSidebar(navParent)).observe(navParent, { childList: true });
 
   let shadowParent = sidebarDiv.attachShadow({mode:'open'})
   // Montage direct : la sidebar fait partie de ce bundle et tourne donc dans le
