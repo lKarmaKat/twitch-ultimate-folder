@@ -9,6 +9,7 @@
   import ConfigManager from '../configManager.svelte';
   import PortConnector from '../portConnector.svelte';
   import {  STARTUP_CONF } from '../../constantes.js'
+import { api } from '../../browserApi.js';
   import { _ } from 'svelte-i18n';
   import { applyLocale } from '../../i18n/index.js';
   import { writable, derived, get } from 'svelte/store';
@@ -24,14 +25,14 @@
     console.log("display", configManager.channelsConfigList);
   }
   function closePopup() {
-    chrome.runtime.sendMessage({type: 'HIDE_POPUP'});
+    api.runtime.sendMessage({type: 'HIDE_POPUP'});
   }
 
   // Extension page opened in its own tab: no need for web_accessible_resources,
   // the call already comes from an extension context.
   function openHelp() {
-    const url = `${chrome.runtime.getURL('src/iframe/help.html')}?dark=${darkTheme ? 1 : 0}`;
-    chrome.tabs.create({ url });
+    const url = `${api.runtime.getURL('src/iframe/help.html')}?dark=${darkTheme ? 1 : 0}`;
+    api.tabs.create({ url });
   }
 
   let showResetConfirm = $state(false);

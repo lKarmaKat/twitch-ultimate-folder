@@ -1,5 +1,6 @@
 import { logErrorChain, wrapError } from "./errors";
 import { CLIENT_ID, tokenKey } from "../constantes";
+import { api } from "../browserApi";
 
 export interface DeviceCodeInfo {
     user_code: string;
@@ -7,7 +8,7 @@ export interface DeviceCodeInfo {
     device_code: string;
 }
 
-/** Contents of the `token_<userId>` key in chrome.storage.local. */
+/** Contents of the `token_<userId>` key in storage.local. */
 export interface StoredToken {
     twitchToken: string | null;
     refreshToken: string | null;
@@ -46,7 +47,7 @@ export class TokenManager {
         this.userId = userId;
 
         const key = tokenKey(userId);
-        const stored = (await chrome.storage.local.get(key))[key] as StoredToken | undefined;
+        const stored = (await api.storage.local.get(key))[key] as StoredToken | undefined;
         // A more recent switch happened while reading storage: going on would
         // overwrite its state with this user's.
         if (this.userId !== userId) return false;
@@ -159,7 +160,7 @@ export class TokenManager {
             tokenExpirationDate: this.tokenExpirationDate,
             nextValidationDate: this.nextValidationDate,
         };
-        await chrome.storage.local.set({ [tokenKey(this.userId)]: stored });
+        await api.storage.local.set({ [tokenKey(this.userId)]: stored });
     }
 
     private isTokenValid(): boolean {

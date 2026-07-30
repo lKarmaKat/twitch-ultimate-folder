@@ -4,19 +4,16 @@ console.log("CONTENT SCRIPT")
 console.log("################")
 console.log("################")
 
-// Message types duplicated as literals instead of imported from
-// src/constantes.ts: this file loads as a classic script, so no `import`.
-const SESSION_USER_CHANGED = 'SESSION_USER_CHANGED';
-const GET_SESSION_USER = 'GET_SESSION_USER';
+// Ce fichier est bundle en IIFE (voir la passe `content` de vite.config.ts) :
+// il peut donc importer, contrairement a un module ES qu'un content script ne
+// sait pas charger. C'est aussi lui qui embarque desormais la sidebar Svelte,
+// qui tournait avant dans le monde principal de la page.
+import { api } from '../browserApi.js';
+import { SESSION_USER_CHANGED, GET_SESSION_USER, DISPLAY_POPUP, HIDE_POPUP } from '../constantes.js';
+import { readTwitchDark } from '../svelte/twitchTheme.js';
+import { mountSidebar, mountTitlePopup, whenI18nReady } from '../svelte/injects/sidebar_inject.js';
 
 const TWILIGHT_USER = 'twilight-user=';
-// Kept in sync with src/svelte/twitchTheme.js, which this file cannot import.
-const TWITCH_LIGHT_CLASS = 'tw-root--theme-light';
-
-/** True when Twitch renders in dark mode. Defaults to dark. */
-function readTwitchDark() {
-  return !document.documentElement.classList.contains(TWITCH_LIGHT_CLASS);
-}
 
 /**
  * Twitch account logged into THIS browser, read from the session cookie — the
@@ -76,17 +73,17 @@ function createDivWithIframeInShwadowDom(mainDivId, iframeSrcUrl, cssUrl = '', a
  */
 function openConfigIframe() {
   if (document.querySelector('#iframe-rem')) return;
-  const url = `${chrome.runtime.getURL('src/iframe/config-popup.html')}?dark=${readTwitchDark() ? 1 : 0}`;
+  const url = `${api.runtime.getURL('src/iframe/config-popup.html')}?dark=${readTwitchDark() ? 1 : 0}`;
   document.body.appendChild(
-    createDivWithIframeInShwadowDom('iframe-rem', url, chrome.runtime.getURL('assets/iframe.css'), true)
+    createDivWithIframeInShwadowDom('iframe-rem', url, api.runtime.getURL('assets/iframe.css'), true)
   );
 }
 
-chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
-  if (msg.type === "DISPLAY_POPUP") {
+api.runtime.onMessage.addListener((msg, sender, sendResponse) => {
+  if (msg.type === DISPLAY_POPUP) {
     openConfigIframe();
   }
-  else if (msg.type === "HIDE_POPUP") {
+  else if (msg.type === HIDE_POPUP) {
     document.querySelector("#iframe-rem")?.remove();
   }
   else if (msg.type === GET_SESSION_USER) {
@@ -123,19 +120,16 @@ function injectScript() {
   // t.insertBefore(maindiv, t.firstElementChild);
 
   let shadowParent = sidebarDiv.attachShadow({mode:'open'})
-  const script2 = document.createElement('script');
-  script2.src = chrome.runtime.getURL("sidebar_inject.js");
-  script2.id = 'sidebar_inject';
-  script2.type = 'module';
-  shadowParent.appendChild(script2);
+  // Montage direct : la sidebar fait partie de ce bundle et tourne donc dans le
+  // monde isole, ou api.runtime.connect() et api.storage sont disponibles.
+  whenI18nReady().then(() => mountSidebar(shadowParent));
   const link = document.createElement('link');
   link.rel = 'stylesheet';
-  link.href = chrome.runtime.getURL('assets/sidebar.css');
+  link.href = api.runtime.getURL('assets/sidebar.css');
   shadowParent.appendChild(link);
   const link2 = document.createElement('link');
   link2.rel = 'stylesheet';
-  link2.classList.add('injected-sidebar-css')
-  link2.href = chrome.runtime.getURL('assets/dark_channel.css');
+  link2.href = api.runtime.getURL('assets/dark_channel.css');
   shadowParent.appendChild(link2);
 
 
@@ -162,11 +156,19 @@ function injectScript() {
 
 }
 
+/**
+ * `obs` peut etre reveille apres coup : le second observateur de
+ * startObservers() le rebranche sur la section de la side-nav une fois
+ * celle-ci apparue, meme s'il s'est deja deconnecte ici. Le garde-fou doit
+ * donc tenir a chaque appel — il cherchait auparavant .injected-sidebar-css,
+ * qui vit DANS le shadow root et reste donc invisible a document.querySelector.
+ * Le double appel etait masque par le cache de modules ES tant que la sidebar
+ * etait chargee par <script type="module"> ; elle est desormais montee par
+ * appel direct, et se dedoublait.
+ */
 const injectObs = (obs, m) => {
   let t = document.querySelector("#side-nav .side-nav-section")
-  let side = document.querySelector('.injected-sidebar-css');
-  // console.log("observed changes")
-  if (t && !side) {
+  if (t && !sidebarDiv?.isConnected) {
     injectScript();
     if (m) { // always true ?
       console.log("Injected by mutation observer")
@@ -213,7 +215,7 @@ function reportSession() {
   const id = getSessionUserId();
   if (id === sessionUserId) return;
   sessionUserId = id;
-  chrome.runtime.sendMessage({ type: SESSION_USER_CHANGED, data: id });
+  api.runtime.sendMessage({ type: SESSION_USER_CHANGED, data: id });
   if (id) ensureInjected();
   applyVisibility();
 }
@@ -225,5 +227,9 @@ window.addEventListener('focus', reportSession);
 
 // First report, unconditional: the worker does not know who is logged in yet,
 // and this message bootstraps the whole pipeline.
-chrome.runtime.sendMessage({ type: SESSION_USER_CHANGED, data: sessionUserId });
+api.runtime.sendMessage({ type: SESSION_USER_CHANGED, data: sessionUserId });
 if (sessionUserId) startObservers();
+
+// TitlePopup vit sur document.body, hors du shadow root de la sidebar : son
+// montage ne depend donc pas de l'apparition de la sidebar de Twitch.
+whenI18nReady().then(mountTitlePopup);

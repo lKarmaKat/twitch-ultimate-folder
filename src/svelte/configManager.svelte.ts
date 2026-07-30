@@ -1,12 +1,12 @@
 import PortConnector from './portConnector.svelte.js';
 import type { StreamsInfos } from '@src/service_worker/models/streamsInfos.model';
 import * as CST from '../constantes.js'
+import { api } from '../browserApi'
 import { readTwitchDark } from './twitchTheme.js';
 import type { UserConfigs, I_CONFIG } from '../service_worker/models/userStructure.js';
 import { SvelteMap } from 'svelte/reactivity';
 
 class ConfigManager {
-    extensionId: string = "ijodiaomnnnjljemidchdifmpnnmcnlg";
     initComplete: boolean = false;
     channelsPickRefMap = new SvelteMap<string, StreamsInfos>();
     channelsPickRef = $derived.by(() => {
@@ -79,7 +79,7 @@ class ConfigManager {
 
     saveConfig(toSaveChannels: I_CONFIG) {
         let copy = this.cleanRecursively('rootList', JSON.parse(JSON.stringify(toSaveChannels)));
-        chrome.runtime.sendMessage(this.extensionId, { type: CST.SAVE_CHANNELS_LIST, data: copy });
+        api.runtime.sendMessage({ type: CST.SAVE_CHANNELS_LIST, data: copy });
     }
 
     cleanRecursively(listId: string, toSaveChannels: I_CONFIG) {

@@ -1,5 +1,6 @@
 <script>
   import * as CST from '../../constantes.js';
+import { api } from '../../browserApi.js';
   import { _, locale } from 'svelte-i18n';
   import { get } from 'svelte/store';
   import { onMount } from 'svelte';
@@ -26,7 +27,7 @@
 
   function onLocaleChange() {
     // Persist, plus live broadcast to the other pages through the background.
-    chrome.runtime.sendMessage({ type: CST.CHANGE_LOCALE, value: lang });
+    api.runtime.sendMessage({ type: CST.CHANGE_LOCALE, value: lang });
     applyLocale(lang);
   }
 

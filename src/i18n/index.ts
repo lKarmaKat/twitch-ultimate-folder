@@ -1,4 +1,5 @@
 import { addMessages, init, getLocaleFromNavigator, locale } from 'svelte-i18n';
+import { api } from '../browserApi';
 import en from './locales/en.json';
 import fr from './locales/fr.json';
 import es from './locales/es.json';
@@ -51,7 +52,7 @@ function normalize(lang?: string | null): string {
 }
 
 /**
- * Initialises svelte-i18n. The locale comes from chrome.storage.local (`local`);
+ * Initialises svelte-i18n. The locale comes from api.storage.local (`local`);
  * when missing it is detected from the browser, then persisted.
  */
 export async function setupI18n(): Promise<void> {
@@ -59,11 +60,11 @@ export async function setupI18n(): Promise<void> {
 
   let lang: string;
   try {
-    const stored = await chrome.storage.local.get(LOCALE_STORAGE_KEY);
+    const stored = await api.storage.local.get(LOCALE_STORAGE_KEY);
     lang = stored?.[LOCALE_STORAGE_KEY] as string;
     if (!lang) {
       lang = normalize(getLocaleFromNavigator());
-      await chrome.storage.local.set({ [LOCALE_STORAGE_KEY]: lang });
+      await api.storage.local.set({ [LOCALE_STORAGE_KEY]: lang });
     }
   } catch {
     lang = DEFAULT_LOCALE;

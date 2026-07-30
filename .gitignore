@@ -29,4 +29,7 @@ coverage/
 playwright-report/
 dist.crx
 
+# Cles de signature : ne doivent jamais etre versionnees
+*.pem
+
 .claude/*

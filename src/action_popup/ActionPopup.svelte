@@ -1,5 +1,6 @@
 <script>
   import * as CST from '../constantes.js';
+import { api } from '../browserApi.js';
   import { _, locale } from 'svelte-i18n';
   import { get } from 'svelte/store';
   import { applyLocale } from '../i18n/index.js';
@@ -32,19 +33,19 @@
   const KOFI_URL = 'https://ko-fi.com/YOUR_KOFI_HANDLE';
 
   // --- Init (the body of the old popup.js) ---
-  chrome.runtime.sendMessage({ type: CST.GET_ALIGNMENT }, (response) => {
+  api.runtime.sendMessage({ type: CST.GET_ALIGNMENT }, (response) => {
     if (response?.type === CST.ALIGNMENT) {
       alignment = !response.data;
     }
   });
 
-  chrome.runtime.sendMessage({ type: CST.GET_TITLE_SIDE }, (response) => {
+  api.runtime.sendMessage({ type: CST.GET_TITLE_SIDE }, (response) => {
     if (response?.type === CST.TITLE_SIDE) {
       titleSideLeft = response.data;
     }
   });
 
-  chrome.runtime.sendMessage({ type: CST.IS_USER_LOGGED_IN }, (response) => {
+  api.runtime.sendMessage({ type: CST.IS_USER_LOGGED_IN }, (response) => {
     authState = response?.state ?? CST.AUTH_NOT_ON_TWITCH;
     sideNavCollapsed = response?.sideNavCollapsed === true;
     // null off Twitch: keep the OS theme.
@@ -54,30 +55,30 @@
 
   // --- Actions ---
   function openConfigPopup() {
-    chrome.runtime.sendMessage({ type: CST.DISPLAY_POPUP });
+    api.runtime.sendMessage({ type: CST.DISPLAY_POPUP });
   }
 
   // Extension page opened in its own tab.
   function openHelp() {
-    const url = `${chrome.runtime.getURL('src/iframe/help.html')}?dark=${theme ? 1 : 0}`;
-    chrome.tabs.create({ url });
+    const url = `${api.runtime.getURL('src/iframe/help.html')}?dark=${theme ? 1 : 0}`;
+    api.tabs.create({ url });
   }
 
   async function onAlignmentChange() {
     // checked => align right (value:false); unchecked => left (value:true)
     const value = !alignment;
-    const response = await chrome.runtime.sendMessage({ type: CST.CHANGE_ALIGNMENT, value });
+    const response = await api.runtime.sendMessage({ type: CST.CHANGE_ALIGNMENT, value });
     alignment = response ? !response.data : false;
   }
 
   async function onTitleSideChange() {
-    const response = await chrome.runtime.sendMessage({ type: CST.CHANGE_TITLE_SIDE, value: titleSideLeft });
+    const response = await api.runtime.sendMessage({ type: CST.CHANGE_TITLE_SIDE, value: titleSideLeft });
     if (response?.type === CST.TITLE_SIDE) titleSideLeft = response.data;
   }
 
   function onLocaleChange() {
     // Persist, plus live broadcast to the tabs through the background.
-    chrome.runtime.sendMessage({ type: CST.CHANGE_LOCALE, value: lang });
+    api.runtime.sendMessage({ type: CST.CHANGE_LOCALE, value: lang });
     applyLocale(lang);
   }
 </script>

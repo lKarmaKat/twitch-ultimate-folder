@@ -5,6 +5,7 @@ import { TokenManager } from "./token";
 import { logErrorChain, wrapError } from "./errors";
 import * as CST from '../constantes.js'
 import { DataPusher } from './dataPusher';
+import { api } from '../browserApi';
 
 const logBackgroundError = (context: string, error: unknown) => {
   logErrorChain(context, error);
@@ -118,15 +119,13 @@ async function initServices(userId: number) {
     }
 }
 
-// Callback form rather than promise: on Firefox the chrome.* namespace is a
-// compatibility shim and returns no promise.
-function queryActiveTab(): Promise<chrome.tabs.Tab | undefined> {
-  return new Promise(resolve => {
-    chrome.tabs.query({ active: true, currentWindow: true }, tabs => {
-      if (chrome.runtime.lastError) return resolve(undefined);
-      resolve(tabs[0]);
-    });
-  });
+async function queryActiveTab(): Promise<chrome.tabs.Tab | undefined> {
+  try {
+    const tabs = await api.tabs.query({ active: true, currentWindow: true });
+    return tabs[0];
+  } catch {
+    return undefined;
+  }
 }
 
 interface TabSession {
@@ -137,21 +136,22 @@ interface TabSession {
   twitchDark: boolean | null;
 }
 
-function askTabForSession(tabId: number): Promise<TabSession> {
-  return new Promise(resolve => {
-    chrome.tabs.sendMessage(tabId, { type: CST.GET_SESSION_USER }, (response) => {
-      // No content script on the other end (page not loaded yet, or tab opened
-      // before install): lastError, not a crash.
-      if (chrome.runtime.lastError || !response) {
-        return resolve({ userId: null, sideNavCollapsed: false, twitchDark: null });
-      }
-      resolve({
-        userId: typeof response.userId === 'string' ? response.userId : null,
-        sideNavCollapsed: response.sideNavCollapsed === true,
-        twitchDark: typeof response.twitchDark === 'boolean' ? response.twitchDark : null
-      });
-    });
-  });
+async function askTabForSession(tabId: number): Promise<TabSession> {
+  const unknown: TabSession = { userId: null, sideNavCollapsed: false, twitchDark: null };
+  let response: any;
+  try {
+    response = await api.tabs.sendMessage(tabId, { type: CST.GET_SESSION_USER });
+  } catch {
+    // No content script on the other end (page not loaded yet, or tab opened
+    // before install): the promise rejects, it is not a crash.
+    return unknown;
+  }
+  if (!response) return unknown;
+  return {
+    userId: typeof response.userId === 'string' ? response.userId : null,
+    sideNavCollapsed: response.sideNavCollapsed === true,
+    twitchDark: typeof response.twitchDark === 'boolean' ? response.twitchDark : null
+  };
 }
 
 /**
@@ -221,10 +221,10 @@ let sendCurrentConfigOnConnect = (port: chrome.runtime.Port) => {
 }
 
 // The theme is no longer a preference: drop the key older versions stored.
-chrome.storage.local.remove("theme");
+api.storage.local.remove("theme");
 
 let currentAlignmentLeft = true;
-chrome.storage.local.get("alignmentLeft").then((data) => {
+api.storage.local.get("alignmentLeft").then((data) => {
   currentAlignmentLeft = data.alignmentLeft === 0 ? false : true ;
 })
 let sendCurrentAlignmentOnConnect = (port: chrome.runtime.Port) => {
@@ -236,7 +236,7 @@ let sendCurrentAlignmentOnConnect = (port: chrome.runtime.Port) => {
 
 // Side the channel title pops up on, independent of the list alignment above.
 let currentTitleSideLeft = false;
-const titleSideReady = chrome.storage.local.get(CST.PARAM_TITLE_SIDE_LEFT).then((data) => {
+const titleSideReady = api.storage.local.get(CST.PARAM_TITLE_SIDE_LEFT).then((data) => {
   currentTitleSideLeft = data[CST.PARAM_TITLE_SIDE_LEFT] === 1;
 }).catch(err => logBackgroundError("background:readTitleSide", err));
 let sendCurrentTitleSideOnConnect = (port: chrome.runtime.Port) => {
@@ -251,7 +251,7 @@ let sendCurrentTitleSideOnConnect = (port: chrome.runtime.Port) => {
 }
 
 let currentLocale: string | undefined;
-chrome.storage.local.get("local").then((data) => {
+api.storage.local.get("local").then((data) => {
   currentLocale = data.local as string | undefined;
 });
 let sendCurrentLocaleOnConnect = (port: chrome.runtime.Port) => {
@@ -332,11 +332,8 @@ let handlePortMessage = (message: any, port?: chrome.runtime.Port) => {
     // than the active one used by the action popup path.
     const tabId = port?.sender?.tab?.id;
     if (tabId === undefined) return;
-    chrome.tabs.sendMessage(tabId, { type: CST.DISPLAY_POPUP }, () => {
-      if (chrome.runtime.lastError) {
-        logBackgroundError("background:displayPopup", chrome.runtime.lastError);
-      }
-    });
+    api.tabs.sendMessage(tabId, { type: CST.DISPLAY_POPUP })
+      .catch(err => logBackgroundError("background:displayPopup", err));
   } else if (message?.type === CST.OPEN_HELP_PAGE) {
     // The sidebar lives in a content script: no chrome.tabs there, and
     // help.html is not web-accessible, so opening it must go through here.
@@ -346,14 +343,9 @@ let handlePortMessage = (message: any, port?: chrome.runtime.Port) => {
       : '';
     // Query before fragment, or the param lands inside the anchor.
     const dark = message.dark === true ? 1 : 0;
-    const url = `${chrome.runtime.getURL('src/iframe/help.html')}?dark=${dark}${anchor}`;
-    // Callback form rather than promise: on Firefox the chrome.* namespace is
-    // a compatibility shim and returns no promise.
-    chrome.tabs.create({ url }, () => {
-      if (chrome.runtime.lastError) {
-        logBackgroundError("background:openHelpPage", chrome.runtime.lastError);
-      }
-    });
+    const url = `${api.runtime.getURL('src/iframe/help.html')}?dark=${dark}${anchor}`;
+    api.tabs.create({ url })
+      .catch(err => logBackgroundError("background:openHelpPage", err));
   }
 };
 
@@ -365,12 +357,11 @@ let portManager = new PortManager(sendCurrentConfigOnConnect,
                                 handlePortMessage);
 portManager.registerOnConnect('titleSide', sendCurrentTitleSideOnConnect);
 
-self.addEventListener('beforeunload', () => {
-  portManager.closeAllPorts();
-});
+// Pas de teardown sur `beforeunload` : ni le service worker MV3 de Chrome ni
+// l'event page de Firefox ne le declenchent. Les ports meurent de toute facon
+// avec le contexte, et les pages se reconnectent d'elles-memes (PortConnector).
 
-
-chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
+api.runtime.onMessage.addListener((msg, sender, sendResponse) => {
     void sender;
     console.log("MESSAGE", msg.type, msg.data);
 
@@ -425,17 +416,14 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
       return true;
     }
 
-    if (msg.type === CST.DISPLAY_POPUP) {
-      chrome.tabs.query({ active: true, currentWindow: true }, tabs => {
-        chrome.tabs.sendMessage(tabs[0].id!, { type: CST.DISPLAY_POPUP });
-      });
-      return false;
-    }
-
-    if (msg.type === CST.HIDE_POPUP) {
-      chrome.tabs.query({ active: true, currentWindow: true }, tabs => {
-        chrome.tabs.sendMessage(tabs[0].id!, { type: CST.HIDE_POPUP });
-      });
+    if (msg.type === CST.DISPLAY_POPUP || msg.type === CST.HIDE_POPUP) {
+      // Chemin de la popup d'action, qui ne connait que l'onglet actif. La
+      // sidebar passe par son port (handlePortMessage), qui cible son onglet.
+      const type = msg.type;
+      queryActiveTab().then(tab => {
+        if (tab?.id === undefined) return;
+        return api.tabs.sendMessage(tab.id, { type });
+      }).catch(err => logBackgroundError(`background:${type}`, err));
       return false;
     }
 
@@ -445,7 +433,7 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
         type: CST.ALIGNMENT,
         data: currentAlignmentLeft
       })
-      chrome.storage.local.set({
+      api.storage.local.set({
         "alignmentLeft": currentAlignmentLeft ? 1 : 0
       });
       portManager.sendMessageToAllTabs(CST.ALIGNMENT, currentAlignmentLeft, "alignment");
@@ -469,7 +457,7 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
         type: CST.TITLE_SIDE,
         data: currentTitleSideLeft
       });
-      chrome.storage.local.set({
+      api.storage.local.set({
         [CST.PARAM_TITLE_SIDE_LEFT]: currentTitleSideLeft ? 1 : 0
       });
       portManager.sendMessageToAllTabs(CST.TITLE_SIDE, currentTitleSideLeft, "titleSide");
@@ -493,7 +481,7 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
         type: CST.LOCALE,
         data: currentLocale
       });
-      chrome.storage.local.set({ "local": currentLocale });
+      api.storage.local.set({ "local": currentLocale });
       portManager.sendMessageToAllTabs(CST.CHANGE_LOCALE, currentLocale, "locale");
       return true;
     }

@@ -2,6 +2,7 @@ import { TwitchApi } from './twitch';
 import type { UserConfigs, I_NEW_LIST, I_CONFIG } from './models/userStructure'
 // import type { Writable } from "svelte/store";
 import * as CST from '../constantes'
+import { api } from '../browserApi'
 
 export class ConfigManager {
     twitchApi: TwitchApi;
@@ -37,7 +38,7 @@ export class ConfigManager {
         const userId = this.userId;
         const key = CST.configKey(userId);
         this.userConfigsPromise = (async (): Promise<UserConfigs | null> => {
-            const data: { [key: string]: UserConfigs } = await chrome.storage.local.get(key);
+            const data: { [key: string]: UserConfigs } = await api.storage.local.get(key);
             let userStructure: UserConfigs = data[key];
             if (userStructure && Object.getOwnPropertyNames(userStructure).length > 0) {
                 if (!userStructure.currentConfig) {
@@ -80,7 +81,7 @@ export class ConfigManager {
         // Dedicated config key; tokens live under `token_<userId>`. A shared
         // object would lose the refreshed token in the read-modify-write below.
         const key = CST.configKey(userId);
-        const data: { [key: string]: UserConfigs } = await chrome.storage.local.get(key);
+        const data: { [key: string]: UserConfigs } = await api.storage.local.get(key);
         let userStructure: UserConfigs = data[key];
 
         if (userStructure) {
@@ -92,14 +93,14 @@ export class ConfigManager {
             } else {
                 userStructure.configsList.push(configToSave);
             }
-            await chrome.storage.local.set({ [key]: userStructure });
+            await api.storage.local.set({ [key]: userStructure });
         } else {
             userStructure = {
                 userId,
                 currentConfig: configToSave.rootList.name,
                 configsList: [configToSave]
             };
-            await chrome.storage.local.set({ [key]: userStructure });
+            await api.storage.local.set({ [key]: userStructure });
         }
 
         this.userConfigs = userStructure;

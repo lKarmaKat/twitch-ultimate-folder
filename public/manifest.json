@@ -7,15 +7,16 @@
         "default_popup": "src/action_popup/popup.html"
     },
     "permissions": ["storage", "tabs"],
-    "host_permissions": ["https://api.twitch.tv/*"],
+    "host_permissions": [
+        "https://api.twitch.tv/*",
+        "https://id.twitch.tv/*",
+        "https://www.twitch.tv/*"
+    ],
     "web_accessible_resources": [
         {
             "resources": [
-                "sidebar_inject.js",
-                "title_inject.js",
                 "src/iframe/config-popup.html",
-                "assets/*",
-                "popup_inject.js"
+                "assets/*"
         ],
             "matches": ["*://*.twitch.tv/*"]
         }

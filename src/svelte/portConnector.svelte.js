@@ -5,6 +5,7 @@ import {
     RECONNECT_MAX_DELAY
 } from './event.svelte.js';
 import * as CST from '../constantes.js';
+import { api } from '../browserApi.js';
 
 
 class PortConnector {
@@ -14,8 +15,6 @@ class PortConnector {
     reconnectTimer = null;
     attempt = 0;
     connected = false;
-    extensionId = "ijodiaomnnnjljemidchdifmpnnmcnlg";
-    // extensionId = "pdfjeponpmleiodlfbmlhgbicfpbaoek";
     cb;
     nm;
     /** Only the `eventbus` port drives the reconnect banner. */
@@ -32,9 +31,11 @@ class PortConnector {
     launchPort(msgCallback, name) {
         // connect() is synchronous and proves nothing: it returns a Port even
         // with nobody listening. Only the first message means "connected".
-        this.port = chrome.runtime.connect(this.extensionId, {
-          name: name
-        });
+        // Pas d'ID d'extension : tous les appelants (content script, iframe de
+        // config, page d'aide) sont internes, donc onConnect suffit. Passer un
+        // ID passerait par onConnectExternal, qui exige externally_connectable
+        // — non supporte par Firefox.
+        this.port = api.runtime.connect({ name: name });
 
         this.port.onMessage.addListener((msg) => {
             this.markConnected();
@@ -111,7 +112,7 @@ class PortConnector {
         // calling the service worker every 5 s.
         this.stopPing();
         let pingCallBack = () => {
-            chrome.runtime.sendMessage(this.extensionId, { type: 'KEEP_ALIVE_PING' });
+            api.runtime.sendMessage({ type: 'KEEP_ALIVE_PING' });
         }
         this.interval = setInterval(pingCallBack, this.PING_INTERVAL);
     }
