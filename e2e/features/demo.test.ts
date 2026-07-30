@@ -48,13 +48,17 @@ test.beforeEach(async ({ page }) => {
 						getRules: () => Promise.resolve([]),
 					},
 					sendMessage: () => Promise.resolve(),
-					connect: (extId: any, type: any) => {
-						console.log("TEST PORT MOCK NEW CONNECTION", type)
+					// connect() est appelé sans id d'extension (connect({name}))
+					// depuis le fix Firefox : externally_connectable n'existe pas
+					// là-bas. On accepte les deux formes pour rester tolérant.
+					connect: (...args: any[]) => {
+						const info = args.length > 1 ? args[1] : args[0];
+						console.log("TEST PORT MOCK NEW CONNECTION", info)
 						const port = {
 							onMessage: {
 								addListener: (callback: (msg: any) => void) => {
 									(window as any).__portCallbackMap ??= {};
-									(window as any).__portCallbackMap[type.name] = callback;
+									(window as any).__portCallbackMap[info.name] = callback;
 									// if (type.name === 'eventbus')
 									// (window as any).__onPortCallback = callback;
 								}
@@ -230,7 +234,7 @@ test.describe('with config', async () => {
 				deepClone(newConf)
 			]
 		}
-		popupPage.sendDefaultConf(conf, channelsRef2)
+		await popupPage.sendDefaultConf(conf, channelsRef2)
 		expect(await popupPage.getDisplayConfigListElementCount()).toBe(5)
 		expect(await popupPage.countNumberDirectElementInList('list-rootList')).toBe(4)
 		let channelsDisplay = await (await popupPage.getDisplayConfigListElements()).nth(4).getByText('12K');
@@ -238,15 +242,15 @@ test.describe('with config', async () => {
 		
 		let updatedRef = deepClone(channelsRef2);
 		updatedRef[4][1].viewer_count = 6
-		popupPage.updateRef(updatedRef)
-		
+		await popupPage.updateRef(updatedRef)
+
 		expect(await popupPage.getDisplayConfigListElementCount()).toBe(5)
 		channelsDisplay = await (await popupPage.getDisplayConfigListElements()).nth(4).getByText('6');
 		expect(await channelsDisplay.textContent()).toBe('6');
 
 		let ur = deepClone(updatedRef)
 		ur[4][1].isLive = false;
-		popupPage.updateRef(ur)
+		await popupPage.updateRef(ur)
 		expect(await popupPage.getDisplayConfigListElementCount()).toBe(4)
 	})
 

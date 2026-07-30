@@ -36,12 +36,16 @@ test.beforeEach(async ({ page }) => {
 					getRules: () => Promise.resolve([])
 				},
 				sendMessage: () => Promise.resolve(),
-				connect: (extId: any, type: any) => {
+				// connect() est appelé sans id d'extension (connect({name}))
+				// depuis le fix Firefox : externally_connectable n'existe pas
+				// là-bas. On accepte les deux formes pour rester tolérant.
+				connect: (...args: any[]) => {
+					const info = args.length > 1 ? args[1] : args[0];
 					const port = {
 						onMessage: {
 							addListener: (callback: (msg: any) => void) => {
 								(window as any).__portCallbackMap ??= {};
-								(window as any).__portCallbackMap[type.name] = callback;
+								(window as any).__portCallbackMap[info.name] = callback;
 							}
 						},
 						onDisconnect: { addListener: () => {} },

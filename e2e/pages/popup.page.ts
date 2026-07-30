@@ -1,4 +1,4 @@
-import { FrameLocator, Locator, Page } from '@playwright/test'
+import { Frame, FrameLocator, Locator, Page } from '@playwright/test'
 import { PopupHelper } from '../helpers/popup.helper'
 import * as CST from '../../src/constantes'
 
@@ -35,7 +35,9 @@ export class PopupPage {
     }
 
     async getNeedToConnect() {
-        return await this.popupFrame.locator('#need-connect').waitFor({ timeout: 500 });
+        // 500 ms suffisaient sur Chromium mais pas sur WebKit, ou le rendu de
+        // l'iframe part apres coup.
+        return await this.popupFrame.locator('#need-connect').waitFor({ timeout: 5000 });
     }
 
     async getAuthorizeButton() {
@@ -139,9 +141,32 @@ export class PopupPage {
         // console.log(await dragEl.innerText())
     }
 
-    async sendDefaultConf(conf: any, channelsRef: any) {
-        let fr = this.page.frame({name: 'inner-iframe'})
+    /**
+     * L'iframe existe dès que le content script l'insère, mais son bundle Svelte
+     * n'a pas encore ouvert ses ports : attendre le callback du mock plutôt que
+     * de tirer dessus tout de suite, sinon la course se solde par un
+     * `__portCallbackMap` undefined selon la vitesse du navigateur.
+     */
+    private async frameWithPort(portName: string) {
+        // La balise <iframe> est dans le DOM avant que son frame ne soit
+        // rattaché : page.frame() peut donc encore renvoyer null juste après le
+        // waitForSelector('#inner-iframe') du beforeEach.
+        let fr: Frame | null = null;
+        const deadline = Date.now() + 10_000;
+        while (!fr && Date.now() < deadline) {
+            fr = this.page.frame({ name: 'inner-iframe' })
+            if (!fr) await this.page.waitForTimeout(50)
+        }
         if (!fr) throw new Error('Frame not found')
+        await fr.waitForFunction(
+            (name) => typeof (window as any).__portCallbackMap?.[name] === 'function',
+            portName
+        )
+        return fr;
+    }
+
+    async sendDefaultConf(conf: any, channelsRef: any) {
+        let fr = await this.frameWithPort('eventbus')
         await fr.evaluate(({conf, channelsRef, GET_STREAMS_REF, GET_CURRENT_CONFIGURATION}) => {
             // const iframe = (document.querySelector('#iframe-rem') as any).shadowRoot.querySelector('#iframe') as any;
             const callback = (window as any).__portCallbackMap['eventbus'];
@@ -161,8 +186,7 @@ export class PopupPage {
     }
 
     async updateRef(channelsRef: any) {
-        let fr = this.page.frame({name: 'inner-iframe'})
-        if (!fr) throw new Error('Frame not found')
+        let fr = await this.frameWithPort('eventbus')
         await fr.evaluate(({channelsRef, GET_STREAMS_REF}) => {
             // const iframe = (document.querySelector('#iframe-rem') as any).shadowRoot.querySelector('#iframe') as any;
             const callback = (window as any).__portCallbackMap['eventbus'];
@@ -199,8 +223,7 @@ export class PopupPage {
     }
 
     private async sendOnAuthPort(type: string, data: any) {
-        let fr = this.page.frame({ name: 'inner-iframe' })
-        if (!fr) throw new Error('Frame not found')
+        let fr = await this.frameWithPort('auth')
         await fr.evaluate(({ type, data }) => {
             const callback = (window as any).__portCallbackMap?.['auth'];
             if (!callback) throw new Error('Auth port callback not found in iframe');
