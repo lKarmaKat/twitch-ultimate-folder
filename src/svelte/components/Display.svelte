@@ -300,6 +300,9 @@
 								<!-- svelte-ignore a11y_click_events_have_key_events -->
 								<!-- svelte-ignore a11y_no_static_element_interactions -->
 								<div class="list-header all-other-header clickable" onclick={toggleOtherSort}>
+									<span class="display-icon-container" class:no-icon={(item.iconType ?? ICON_NONE) === ICON_NONE}>
+										<IconPicker iconType={item.iconType ?? ICON_NONE} />
+									</span>
 									<p class="list-title">{$_('display.allOtherChannels')}</p>
 									<span class="all-other-sort-icon"><SortIndicatorIcon sort={otherLiveSort} /></span>
 								</div>
@@ -519,7 +522,8 @@
 	/* "All others" block header: background and text inherited from .list-header
 	   via dark_channel.css; svg colour from .icon-container. */
 	.all-other-header {
-		padding: 0.4em 0 0.4em 0.4em;
+		padding: 0.4em 0 0.4em 0;
+		justify-content: flex-start;
 		user-select: none;
 	}
 	.all-other-header .list-title {
@@ -531,6 +535,7 @@
 		justify-content: center;
 		width: 1.2em;
 		height: 1.2em;
+		margin-left: auto;
 		margin-right: 0.4em;
 	}
 	.channel-overlay {

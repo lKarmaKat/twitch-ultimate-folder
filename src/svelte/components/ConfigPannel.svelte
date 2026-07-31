@@ -8,6 +8,7 @@
     import BarColorSelect from "./BarColorSelect.svelte";
     import CounterTypeSelect from "./CounterTypeSelect.svelte";
     import SortSelect from "./SortSelect.svelte";
+    import { ICON_NONE } from './icons/index.js';
 
     let { configManager } = $props();
     let listeId;
@@ -27,6 +28,7 @@
             let item = listConfig?.items?.find(i => i.channel_id === CST.ALL_OTHER_CHANNELS);
             if (item && item.sort === undefined) item.sort = CST.ALPHA_SORT;
             if (item && item.type === undefined) item.type = CST.ALL_OTHER_HEADER_NONE;
+            if (item && item.iconType === undefined) item.iconType = ICON_NONE;
             allOtherItem = item;
         } else {
             listConfig = null;
@@ -56,6 +58,14 @@
                             bind:value={allOtherItem.type}
                             options={headerOptions}/>
                     </div>
+                    {#if allOtherItem.type === CST.ALL_OTHER_HEADER_SORTABLE}
+                        <div class="row">
+                            <p>{$_('configPannel.listHeaderIcon')}</p>
+                            <span class="help-badge" data-tooltip={$_('configPannel.listIconHelp')}>?</span>
+                            <IconSelect
+                                bind:value={allOtherItem.iconType}/>
+                        </div>
+                    {/if}
                     <div class="row">
                         <p>{$_('configPannel.sortMode')}</p>
                         <span class="help-badge" data-tooltip={$_('configPannel.sortStrategy')}>?</span>

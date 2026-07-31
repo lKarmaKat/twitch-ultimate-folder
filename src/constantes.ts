@@ -230,6 +230,7 @@ export const ALL_OTHER_CHANNELS_ELEMENT = {
         "channel_name": "All others channels",
         "sort": ALPHA_SORT,
         "type": ALL_OTHER_HEADER_NONE,
+        "iconType": 0,
         "isLive": false,
         "profile_image_url": "../../assets/all_other_channels.png",
         "viewer_count": 0, 
