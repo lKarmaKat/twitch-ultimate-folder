@@ -279,6 +279,16 @@
       "tooltip": "La liste s'affiche même si aucune chaine n'est en ligne"
     }
   },
+  "styleOptions": {
+    "pillHeader": {
+      "label": "Header arrondi",
+      "tooltip": "Header de liste aux coins arrondis, mis en valeur au survol. La barre latérale suit les coins, et n'apparait que si une couleur de barre est sélectionnée."
+    },
+    "indentRail": {
+      "label": "Rail d'indentation",
+      "tooltip": "Indente le contenu de la liste et trace une ligne verticale dans la marge. La ligne prend la couleur de barre sélectionnée, et reste invisible sans."
+    }
+  },
   "sort": {
     "custom": "Tri personnalisé",
     "viewer": "Tri par nombre de viewers",

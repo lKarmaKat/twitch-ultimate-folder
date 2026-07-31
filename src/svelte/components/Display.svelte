@@ -35,6 +35,9 @@
 		return configManager.selectedConfig[listId]?.style.content;
 	});
 
+	let pillHeader = $derived(header?.[CST.STYLE_PILL_HEADER] ?? false);
+	let indentRail = $derived(content?.[CST.STYLE_INDENT_RAIL] ?? false);
+
 	// Session state: reset to the startup value whenever the config is reloaded
 	// (save / reset / init) or the startup checkbox is edited live in the popup.
 	let openState = $state(false);
@@ -259,11 +262,11 @@
 	<!-- svelte-ignore a11y-no-static-element-interactions -->
 	<!-- svelte-ignore a11y-click-events-have-key-events -->
 	 {#if visible}
-	<div id="display-component" class="list-container" class:hover-enabled={hoverEnabled}>
+	<div id="display-component" class="list-container" class:hover-enabled={hoverEnabled} style={barTypeColor ? `--theme-color:${barTypeColor}` : ''}>
 		{#if listId !== 'rootList'}
 		<!-- svelte-ignore a11y_click_events_have_key_events -->
 		<!-- svelte-ignore a11y_no_static_element_interactions -->
-		<div class="list-header" style="--header-color:{header?.headerColor};--theme-color:{barTypeColor}" class:border={barTypeColor} class:clickable={clickEnabled} onclick={toggleAutoCollapse}>
+		<div class="list-header" style="--header-color:{header?.headerColor};" class:border={barTypeColor} class:pill={pillHeader} class:clickable={clickEnabled} onclick={toggleAutoCollapse}>
 			<div class="left">
 				<div class="flex-row">
 					<span class="display-icon-container" class:extended>
@@ -282,7 +285,7 @@
 		</div>
 		{/if}
 		{#if configManager.selectedConfig[listId]?.hasOwnProperty("items")}
-			<div class="list-body" class:extended style="--content-color:{content?.contentColor};">
+			<div class="list-body" class:extended class:rail={indentRail} style="--content-color:{content?.contentColor};">
 				<div>
 					<!-- {#each configManager.selectedConfig[listId].items as item(item.id)} -->
 					{#each getListChannelsSortedByStrategy(configManager.selectedConfig[listId].items) as item(item.id)}
@@ -365,12 +368,6 @@
 	:global(.al-left  .list-container  .list-container .list-container) {
 		margin-right: 0.5em;
 	}
-	:global(.al-left .list-container .list-container .channel-overlay) {
-		margin-right: 0.6em
-	}
-	:global(.al-right .list-container .list-container .channel-overlay) {
-		margin-left: 0.6em
-	}
     :host([collapsed]) * {
         padding: 0 !important;
         margin: 0 !important;
@@ -425,8 +422,25 @@
 		user-select: none;
 		/* border-radius: 7%; */
 	}
-	.list-header.border {
+	/* Side mirrored like the nested list margins above */
+	:global(.al-right) .list-header.border {
 		border-left: 3px solid var(--theme-color);
+	}
+	:global(.al-left) .list-header.border {
+		border-right: 3px solid var(--theme-color);
+	}
+	.list-header.pill {
+		border-radius: 6px;
+		transition: background-color 0.15s ease;
+	}
+	/* inset shadow instead of a border: it follows the rounded corners */
+	:global(.al-right) .list-header.pill.border {
+		border-left: none;
+		box-shadow: inset 3px 0 0 var(--theme-color);
+	}
+	:global(.al-left) .list-header.pill.border {
+		border-right: none;
+		box-shadow: inset -3px 0 0 var(--theme-color);
 	}
 	.right {
 		width: auto;
@@ -454,6 +468,33 @@
 	}
 	.list-body div {
 		overflow: hidden;
+	}
+	/* The gutter is kept without a barType so the checkbox still indents the
+	   list, the rail itself just stays invisible. */
+	.list-body.rail {
+		position: relative;
+	}
+	.list-body.rail::before {
+		content: '';
+		position: absolute;
+		top: 2px;
+		bottom: 2px;
+		width: 2px;
+		border-radius: 2px;
+		background: var(--theme-color, transparent);
+	}
+	/* Side mirrored like the nested list margins above */
+	:global(.al-right .list-body.rail) {
+		padding-left: 0.75em;
+	}
+	:global(.al-right .list-body.rail::before) {
+		left: 0.25em;
+	}
+	:global(.al-left .list-body.rail) {
+		padding-right: 0.75em;
+	}
+	:global(.al-left .list-body.rail::before) {
+		right: 0.25em;
 	}
 	/* Direct child combinator: Display is recursive, so every nesting level shares
 	   the same scope class — a descendant selector would leak the parent's hover

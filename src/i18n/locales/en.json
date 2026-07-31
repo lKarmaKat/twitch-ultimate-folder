@@ -279,6 +279,16 @@
       "tooltip": "The list is displayed even when none of its channels are live."
     }
   },
+  "styleOptions": {
+    "pillHeader": {
+      "label": "Rounded header",
+      "tooltip": "Rounded list header, highlighted on mouse hover. The side bar follows the corners, and is only drawn when a bar color is selected."
+    },
+    "indentRail": {
+      "label": "Indent rail",
+      "tooltip": "Indents the list content and draws a vertical line in the gutter. The line takes the selected bar color, and stays invisible without one."
+    }
+  },
   "sort": {
     "custom": "Custom sort",
     "viewer": "Viewer count sort",

@@ -7,6 +7,10 @@
     /* background-color: #18181b; */
 }
 
+#display-container.dark .list-header.pill:hover {
+    background-color: #46464f;
+}
+
 #display-container.dark .list-header .badge {
     background: rgba(145, 71, 255, 0.22);
     color: #bf94ff;
@@ -57,6 +61,10 @@
     color: rgb(14, 14, 16);
 }
 
+
+#display-container.light .list-header.pill:hover {
+    background-color: rgba(201, 201, 202, 0.5);
+}
 
 #display-container.light .list-header .badge {
     background: rgba(145, 71, 255, 0.13);

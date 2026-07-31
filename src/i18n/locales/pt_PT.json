@@ -123,6 +123,16 @@
       "tooltip": "A lista expande/recolhe ao clicar no cabeçalho."
     }
   },
+  "styleOptions": {
+    "pillHeader": {
+      "label": "Cabeçalho arredondado",
+      "tooltip": "Cabeçalho da lista arredondado, destacado ao passar o rato. A barra lateral acompanha os cantos e só é desenhada quando estiver selecionada uma cor de barra."
+    },
+    "indentRail": {
+      "label": "Guia de indentação",
+      "tooltip": "Indenta o conteúdo da lista e desenha uma linha vertical na margem. A linha assume a cor de barra selecionada e permanece invisível sem ela."
+    }
+  },
   "sort": {
     "custom": "Ordenação personalizada",
     "viewer": "Ordenação por número de espectadores",

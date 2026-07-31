@@ -123,6 +123,16 @@
       "tooltip": "La lista se despliega/repliega al hacer clic en el encabezado."
     }
   },
+  "styleOptions": {
+    "pillHeader": {
+      "label": "Encabezado redondeado",
+      "tooltip": "Encabezado de lista redondeado, resaltado al pasar el ratón por encima. La barra lateral sigue las esquinas y solo se dibuja si hay un color de barra seleccionado."
+    },
+    "indentRail": {
+      "label": "Guía de sangría",
+      "tooltip": "Sangra el contenido de la lista y dibuja una línea vertical en el margen. La línea toma el color de barra seleccionado y permanece invisible sin él."
+    }
+  },
   "sort": {
     "custom": "Orden personalizado",
     "viewer": "Orden por número de espectadores",

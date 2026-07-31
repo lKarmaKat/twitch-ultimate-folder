@@ -123,6 +123,16 @@
       "tooltip": "La lista si espande/richiude al clic sull'intestazione."
     }
   },
+  "styleOptions": {
+    "pillHeader": {
+      "label": "Intestazione arrotondata",
+      "tooltip": "Intestazione della lista arrotondata, evidenziata al passaggio del mouse. La barra laterale segue gli angoli e viene disegnata solo se è selezionato un colore per la barra."
+    },
+    "indentRail": {
+      "label": "Guida di rientro",
+      "tooltip": "Applica un rientro al contenuto della lista e disegna una linea verticale nel margine. La linea assume il colore della barra selezionato e resta invisibile senza di esso."
+    }
+  },
   "sort": {
     "custom": "Ordinamento personalizzato",
     "viewer": "Ordinamento per numero di spettatori",

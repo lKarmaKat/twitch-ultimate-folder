@@ -123,6 +123,16 @@
       "tooltip": "Lista rozwija/zwija się po kliknięciu nagłówka."
     }
   },
+  "styleOptions": {
+    "pillHeader": {
+      "label": "Zaokrąglony nagłówek",
+      "tooltip": "Zaokrąglony nagłówek listy, podświetlany po najechaniu myszą. Pasek boczny podąża za zaokrągleniami i jest rysowany tylko wtedy, gdy wybrano kolor paska."
+    },
+    "indentRail": {
+      "label": "Linia wcięcia",
+      "tooltip": "Wcina zawartość listy i rysuje pionową linię na marginesie. Linia przyjmuje wybrany kolor paska, a bez niego pozostaje niewidoczna."
+    }
+  },
   "sort": {
     "custom": "Sortowanie niestandardowe",
     "viewer": "Sortowanie według liczby widzów",

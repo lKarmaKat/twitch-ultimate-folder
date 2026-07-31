@@ -123,6 +123,16 @@
       "tooltip": "Listan fälls ut/ihop när du klickar på rubriken."
     }
   },
+  "styleOptions": {
+    "pillHeader": {
+      "label": "Rundat listhuvud",
+      "tooltip": "Rundat listhuvud som markeras när muspekaren förs över det. Sidofältet följer hörnen och ritas bara ut när en färg på sidofältet är vald."
+    },
+    "indentRail": {
+      "label": "Indragslinje",
+      "tooltip": "Drar in listans innehåll och ritar en lodrät linje i marginalen. Linjen får den valda färgen på sidofältet och förblir osynlig utan den."
+    }
+  },
   "sort": {
     "custom": "Anpassad sortering",
     "viewer": "Sortering efter antal tittare",

@@ -93,6 +93,15 @@ export const BEHAVIOUR = [
 {id: SHOW_EVEN_IF_NO_LIVE, label: 'behaviour.showEvenIfOffline.label', tooltip: 'behaviour.showEvenIfOffline.tooltip'},
 ];
 
+export const STYLE_PILL_HEADER = 'pillHeader';
+export const STYLE_INDENT_RAIL = 'indentRail';
+
+// `group` is the `style` sub-object the flag is stored in.
+export const STYLE_OPTIONS = [
+{key: STYLE_PILL_HEADER, group: 'header', label: 'styleOptions.pillHeader.label', tooltip: 'styleOptions.pillHeader.tooltip'},
+{key: STYLE_INDENT_RAIL, group: 'content', label: 'styleOptions.indentRail.label', tooltip: 'styleOptions.indentRail.tooltip'},
+];
+
 export const SORT_STRATEGY = [
   {id: CUSTOM_SORT, type: 'CUSTOM_SORT', name: 'sort.custom'},
   {id: VIEWER_SORT, type: 'VIEWER_SORT', name: 'sort.viewer'},
@@ -156,7 +165,8 @@ export function createNewList(): t.I_NEW_LIST {
         headerColor: "#808080",
         borderColor: "#808080",
         borderWidth: null,
-        borderRadius: null
+        borderRadius: null,
+        [STYLE_PILL_HEADER]: false
       },
       content: {
         contentColor: "#808080",
@@ -164,7 +174,8 @@ export function createNewList(): t.I_NEW_LIST {
         contentRadius: null,
         borderColor: "#808080",
         borderWidth: null,
-        borderRadius: null
+        borderRadius: null,
+        [STYLE_INDENT_RAIL]: false
       }
     },
     type: {

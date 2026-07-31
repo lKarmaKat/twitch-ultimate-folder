@@ -123,6 +123,16 @@
       "tooltip": "Popis se proširuje/skuplja klikom na zaglavlje."
     }
   },
+  "styleOptions": {
+    "pillHeader": {
+      "label": "Zaobljeno zaglavlje",
+      "tooltip": "Zaobljeno zaglavlje popisa, istaknuto prelaskom miša. Bočna traka prati zaobljene rubove i iscrtava se samo kada je odabrana boja trake."
+    },
+    "indentRail": {
+      "label": "Crta uvlake",
+      "tooltip": "Uvlači sadržaj popisa i iscrtava okomitu crtu uz rub. Crta preuzima odabranu boju trake, a bez nje ostaje nevidljiva."
+    }
+  },
   "sort": {
     "custom": "Prilagođeno razvrstavanje",
     "viewer": "Razvrstavanje po broju gledatelja",

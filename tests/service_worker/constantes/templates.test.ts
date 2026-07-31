@@ -62,6 +62,15 @@ describe("templates de configuration", () => {
         expect(b.userId).toBe(2);
     });
 
+    // Les configs déjà en storage n'ont pas ces clés : le défaut doit rester
+    // désactivé pour qu'elles gardent leur rendu actuel.
+    test("les options de style sont désactivées par défaut", () => {
+        const list = CST.createNewList();
+
+        expect((list.style as any).header[CST.STYLE_PILL_HEADER]).toBe(false);
+        expect((list.style as any).content[CST.STYLE_INDENT_RAIL]).toBe(false);
+    });
+
     test("les constants exportés sont gelés en profondeur", () => {
         expect(Object.isFrozen(CST.NEW_LIST)).toBe(true);
         expect(Object.isFrozen(CST.NEW_LIST.items)).toBe(true);

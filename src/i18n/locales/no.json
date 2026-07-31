@@ -123,6 +123,16 @@
       "tooltip": "Listen utvides/kollapser når du klikker på overskriften."
     }
   },
+  "styleOptions": {
+    "pillHeader": {
+      "label": "Avrundet overskrift",
+      "tooltip": "Avrundet listeoverskrift som utheves når musepekeren er over den. Sidefeltet følger hjørnene og tegnes bare når en farge på sidefeltet er valgt."
+    },
+    "indentRail": {
+      "label": "Innrykkslinje",
+      "tooltip": "Rykker inn innholdet i listen og tegner en loddrett linje i margen. Linjen får den valgte fargen på sidefeltet og forblir usynlig uten den."
+    }
+  },
   "sort": {
     "custom": "Egendefinert sortering",
     "viewer": "Sortering etter antall seere",

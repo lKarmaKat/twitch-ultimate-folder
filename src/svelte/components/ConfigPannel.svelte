@@ -19,6 +19,11 @@
         listeId = configChangeEvent.current;
         if (listeId) {
             listConfig = configManager.selectedConfig[listeId];
+            // Configs saved before these options existed have no key to bind on
+            for (const opt of CST.STYLE_OPTIONS) {
+                let group = listConfig?.style?.[opt.group];
+                if (group && group[opt.key] === undefined) group[opt.key] = false;
+            }
             let item = listConfig?.items?.find(i => i.channel_id === CST.ALL_OTHER_CHANNELS);
             if (item && item.sort === undefined) item.sort = CST.ALPHA_SORT;
             if (item && item.type === undefined) item.type = CST.ALL_OTHER_HEADER_NONE;
@@ -98,6 +103,20 @@
                 </div>
                 <div class="bloc">
                     <p>{$_('configPannel.style')}</p>
+                    <div class="grid">
+                        {#each CST.STYLE_OPTIONS as item}
+                            <div class="behavior-item">
+                                <input
+                                    type="checkbox"
+                                    id={item.key}
+                                    bind:checked={listConfig.style[item.group][item.key]}/>
+                                <label for={item.key}>{$_(item.label)}</label>
+                                <span
+                                    class="help-badge"
+                                    data-tooltip={$_(item.tooltip)}>?</span>
+                            </div>
+                        {/each}
+                    </div>
                     <!-- <div class="row">
                         <select name="header-size" id="header-size" bind:value={config.type.height} onchange={updateConfig}>
                             {#each CST.HEADER_TYPE_HEIGHT as headerHeight}

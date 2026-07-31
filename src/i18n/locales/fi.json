@@ -123,6 +123,16 @@
       "tooltip": "Lista laajenee/supistuu, kun otsikkoa napsautetaan."
     }
   },
+  "styleOptions": {
+    "pillHeader": {
+      "label": "Pyöristetty otsikko",
+      "tooltip": "Pyöristetty listan otsikko, joka korostuu hiiren osoittimen alla. Sivupalkki seuraa pyöristettyjä kulmia ja piirretään vain, kun sivupalkin väri on valittu."
+    },
+    "indentRail": {
+      "label": "Sisennysviiva",
+      "tooltip": "Sisentää listan sisällön ja piirtää pystysuoran viivan marginaaliin. Viiva saa valitun sivupalkin värin ja pysyy näkymättömänä ilman sitä."
+    }
+  },
   "sort": {
     "custom": "Mukautettu lajittelu",
     "viewer": "Lajittelu katsojamäärän mukaan",

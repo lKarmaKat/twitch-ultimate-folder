@@ -123,6 +123,16 @@
       "tooltip": "Die Liste klappt beim Klicken auf die Kopfzeile aus/ein."
     }
   },
+  "styleOptions": {
+    "pillHeader": {
+      "label": "Abgerundete Kopfzeile",
+      "tooltip": "Abgerundete Listenkopfzeile, die beim Überfahren mit der Maus hervorgehoben wird. Die Seitenleiste folgt den Rundungen und wird nur gezeichnet, wenn eine Farbe für die Seitenleiste ausgewählt ist."
+    },
+    "indentRail": {
+      "label": "Einzugslinie",
+      "tooltip": "Rückt den Listeninhalt ein und zeichnet eine senkrechte Linie in den Rand. Die Linie übernimmt die gewählte Farbe der Seitenleiste und bleibt ohne diese unsichtbar."
+    }
+  },
   "sort": {
     "custom": "Benutzerdefinierte Sortierung",
     "viewer": "Sortierung nach Zuschauerzahl",
