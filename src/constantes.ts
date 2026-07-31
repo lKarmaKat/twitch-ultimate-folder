@@ -180,7 +180,7 @@ export function createNewList(): t.I_NEW_LIST {
     },
     type: {
       height: 0,
-      iconType: 0,
+      iconType: 0, // ICON_NONE (see svelte/components/icons/index.ts): no icon, no reserved space
       barType: 0,
       viewerCountType: 2
     }

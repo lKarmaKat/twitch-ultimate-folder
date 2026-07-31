@@ -151,6 +151,8 @@
     "withLiveIcon": "Med totalt antal kanaler och live/offline-ikon"
   },
   "icon": {
+    "noIcon": "Ingen ikon",
+    "emptyPlaceholder": "Tom platshållare (tar plats så att listnamnet justeras med listor som har en ikon)",
     "folder": "mapp",
     "dot": "punkt",
     "angle": "pil",

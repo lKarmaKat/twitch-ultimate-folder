@@ -151,6 +151,8 @@
     "withLiveIcon": "Z łączną liczbą kanałów oraz ikoną na żywo/offline"
   },
   "icon": {
+    "noIcon": "Bez ikony",
+    "emptyPlaceholder": "Puste miejsce (zajmuje miejsce, aby wyrównać nazwę listy z listami z ikoną)",
     "folder": "folder",
     "dot": "kropka",
     "angle": "strzałka",

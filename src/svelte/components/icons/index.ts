@@ -45,6 +45,12 @@ import BrawlhallaIcon from './BrawlhallaIcon.svelte';
 import ForHonorIcon from './ForHonorIcon.svelte';
 import TheDivision2Icon from './TheDivision2Icon.svelte';
 
+// Sentinel values stored in `type.iconType`. They have no component: NONE
+// renders nothing at all, EMPTY_PLACEHOLDER keeps the icon slot so the list
+// name stays aligned with the lists that do have an icon.
+export const ICON_NONE = 0;
+export const ICON_EMPTY_PLACEHOLDER = -1;
+
 export interface IconDef {
   id: number;
   key: string; // i18n key, e.g. 'icon.folder' (resolved with $_ by the consumer)

@@ -151,6 +151,8 @@
     "withLiveIcon": "Kanavien kokonaismäärällä sekä live/offline-kuvakkeella"
   },
   "icon": {
+    "noIcon": "Ei kuvaketta",
+    "emptyPlaceholder": "Tyhjä paikanvaraaja (vie tilaa, jotta listan nimi tasautuu kuvakkeellisten listojen kanssa)",
     "folder": "kansio",
     "dot": "piste",
     "angle": "nuoli",

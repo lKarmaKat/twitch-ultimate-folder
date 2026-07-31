@@ -311,6 +311,8 @@
     "withLiveIcon": "Avec compteur total de chaines et icon live/non live"
   },
   "icon": {
+    "noIcon": "Aucune icône",
+    "emptyPlaceholder": "Espace vide (occupe la place pour aligner le nom de la liste avec les listes qui ont une icône)",
     "folder": "dossier",
     "dot": "point",
     "angle": "chevron",

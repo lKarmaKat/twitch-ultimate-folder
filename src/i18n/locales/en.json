@@ -311,6 +311,8 @@
     "withLiveIcon": "With total channel count and live/offline icon"
   },
   "icon": {
+    "noIcon": "No icon",
+    "emptyPlaceholder": "Empty placeholder (takes space to align list name with other lists with an icon)",
     "folder": "folder",
     "dot": "dot",
     "angle": "angle",

@@ -6,6 +6,7 @@
 	import { _ } from 'svelte-i18n';
 	import Self from './Display.svelte'
     import IconPicker from './icons/IconPicker.svelte';
+    import { ICON_NONE } from './icons/index';
     import SortIndicatorIcon from './icons/SortIndicatorIcon.svelte';
     import CounterType from './CounterType.svelte';
 	import { hasVisibleContent } from '../listVisibility.js';
@@ -269,7 +270,7 @@
 		<div class="list-header" style="--header-color:{header?.headerColor};" class:border={barTypeColor} class:pill={pillHeader} class:clickable={clickEnabled} onclick={toggleAutoCollapse}>
 			<div class="left">
 				<div class="flex-row">
-					<span class="display-icon-container" class:extended>
+					<span class="display-icon-container" class:extended class:no-icon={type.iconType === ICON_NONE}>
 						<IconPicker iconType={type.iconType} />
 					</span>
 					<!-- <span class="display-icon-container title" class:extended use:maybeTooltip={configManager.selectedConfig[listId]?.name}>
@@ -347,6 +348,13 @@
 		height: 1.5em;
 		margin-right: .28em;
 		margin-left: 0.2em;
+	}
+	/* ICON_NONE: no icon slot, just a small inset so the title is not flush
+	   against the header edge (ICON_EMPTY_PLACEHOLDER keeps the full slot). */
+	.display-icon-container.no-icon {
+		width: 0;
+		margin-right: 0;
+		margin-left: 0.4em;
 	}
 	.display-icon-container,
 	.flex-row {

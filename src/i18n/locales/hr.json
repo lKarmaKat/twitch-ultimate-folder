@@ -151,6 +151,8 @@
     "withLiveIcon": "S ukupnim brojem kanala i ikonom uživo/izvan mreže"
   },
   "icon": {
+    "noIcon": "Bez ikone",
+    "emptyPlaceholder": "Prazno mjesto (zauzima prostor kako bi se naziv liste poravnao s listama koje imaju ikonu)",
     "folder": "mapa",
     "dot": "točka",
     "angle": "strelica",

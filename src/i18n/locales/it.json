@@ -151,6 +151,8 @@
     "withLiveIcon": "Con conteggio totale dei canali e icona live/offline"
   },
   "icon": {
+    "noIcon": "Nessuna icona",
+    "emptyPlaceholder": "Segnaposto vuoto (occupa spazio per allineare il nome della lista con le liste che hanno un'icona)",
     "folder": "cartella",
     "dot": "punto",
     "angle": "freccia",

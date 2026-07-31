@@ -1,13 +1,18 @@
 <script>
     import IconPicker from './icons/IconPicker.svelte';
-    import { sortIconsByLabel, ICON_BY_ID } from './icons/index';
+    import { sortIconsByLabel, ICON_BY_ID, ICON_NONE, ICON_EMPTY_PLACEHOLDER } from './icons/index';
     import { _ } from 'svelte-i18n';
 
-    let { value = $bindable("") } = $props();
+    let { value = $bindable(ICON_NONE) } = $props();
 
     const uid = $props.id();
     let sortedOptions = $derived(sortIconsByLabel($_));
     let selected = $derived(ICON_BY_ID.get(value));
+    let triggerLabel = $derived(
+        selected ? $_(selected.key)
+        : value === ICON_EMPTY_PLACEHOLDER ? $_('icon.emptyPlaceholder')
+        : $_('icon.noIcon')
+    );
 
     let triggerEl = $state();
     let menuStyle = $state("");
@@ -22,19 +27,27 @@
 <div class="custom-select icon-select">
     <button type="button" class="trigger" bind:this={triggerEl} popovertarget="menu-{uid}">
         <span class="icon-slot">
-            {#if value !== ""}<IconPicker iconType={value} />{/if}
+            {#if selected}<IconPicker iconType={value} />{/if}
         </span>
-        <span class="label">{selected ? $_(selected.key) : $_('common.none')}</span>
+        <span class="label" title={triggerLabel}>{triggerLabel}</span>
         <span class="caret">▲</span>
     </button>
 
     <ul class="menu" popover id="menu-{uid}" style={menuStyle} onbeforetoggle={positionMenu}>
         <li>
-            <button type="button" class="item" class:active={value === ""}
+            <button type="button" class="item" class:active={value === ICON_NONE}
                 popovertarget="menu-{uid}" popovertargetaction="hide"
-                onclick={() => value = ""}>
+                onclick={() => value = ICON_NONE}>
                 <span class="icon-slot"></span>
-                <span class="label">{$_('common.none')}</span>
+                <span class="label">{$_('icon.noIcon')}</span>
+            </button>
+        </li>
+        <li>
+            <button type="button" class="item" class:active={value === ICON_EMPTY_PLACEHOLDER}
+                popovertarget="menu-{uid}" popovertargetaction="hide"
+                onclick={() => value = ICON_EMPTY_PLACEHOLDER}>
+                <span class="icon-slot"></span>
+                <span class="label">{$_('icon.emptyPlaceholder')}</span>
             </button>
         </li>
         {#each sortedOptions as opt}
@@ -118,5 +131,18 @@
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
+    }
+    /* The "empty placeholder" entry carries an explanation, so let it wrap
+       instead of being cut off inside the menu. */
+    .menu .label {
+        white-space: normal;
+        overflow: visible;
+    }
+    .menu .item {
+        align-items: flex-start;
+    }
+    .menu .icon-slot {
+        /* keep the slot lined up with the first line of a wrapped label */
+        height: 1.4em;
     }
 </style>

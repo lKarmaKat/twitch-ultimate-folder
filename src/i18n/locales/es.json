@@ -151,6 +151,8 @@
     "withLiveIcon": "Con el total de canales e icono de en directo/desconectado"
   },
   "icon": {
+    "noIcon": "Sin icono",
+    "emptyPlaceholder": "Espacio vacío (ocupa espacio para alinear el nombre de la lista con las listas que tienen icono)",
     "folder": "carpeta",
     "dot": "punto",
     "angle": "flecha",

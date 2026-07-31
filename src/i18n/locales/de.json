@@ -151,6 +151,8 @@
     "withLiveIcon": "Mit Gesamtzahl der Kanäle und Live/Offline-Symbol"
   },
   "icon": {
+    "noIcon": "Kein Symbol",
+    "emptyPlaceholder": "Leerer Platzhalter (nimmt Platz ein, um den Listennamen an Listen mit Symbol auszurichten)",
     "folder": "Ordner",
     "dot": "Punkt",
     "angle": "Chevron",

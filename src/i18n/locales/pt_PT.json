@@ -151,6 +151,8 @@
     "withLiveIcon": "Com contagem total de canais e ícone em direto/offline"
   },
   "icon": {
+    "noIcon": "Sem ícone",
+    "emptyPlaceholder": "Marcador vazio (ocupa espaço para alinhar o nome da lista com as listas que têm ícone)",
     "folder": "pasta",
     "dot": "ponto",
     "angle": "seta",
