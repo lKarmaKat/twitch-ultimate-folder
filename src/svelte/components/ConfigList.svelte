@@ -216,6 +216,9 @@
 	/* floating menus right of a channel, over the DraggableChannel card */
 	.channel-side-menu,
 	.other-channels-side-menu {
+		/* natural width of the .delete button (a UA-font "x" plus its padding),
+		   inherited by CogBtn so its plate matches instead of hugging its svg */
+		--side-menu-btn-width: 22px;
 		position: absolute;
 		top: 0;
 		right: 0;
@@ -246,6 +249,7 @@
 		margin: 0em 0;
 	}
 	.list-side-menu {
+		--side-menu-btn-width: 22px;
 		display: flex;
 		flex-direction: row;
 		align-items: stretch;
@@ -267,6 +271,13 @@
 		align-items: center;
 		flex: 0 0 auto;
 		width: auto;
+	}
+	/* CogBtn's plate keeps the button width, not its svg's: this beats the
+	   width: auto above on specificity, whatever order the sheets land in */
+	.list-side-menu > :global(.svg-container),
+	.other-channels-side-menu > :global(.svg-container),
+	.channel-side-menu > :global(.svg-container) {
+		width: var(--side-menu-btn-width);
 	}
 	.list-header:hover .list-side-menu,
 	.list-side-menu:hover,
@@ -308,6 +319,7 @@
 		border: 1px solid rgba(216, 57, 57, 0.685);
 		color: white;
 		background-color: rgba(216, 57, 57, 0.685);
+		min-width: var(--side-menu-btn-width);
 	}
 	.add-list {
 		display: inline-flex;

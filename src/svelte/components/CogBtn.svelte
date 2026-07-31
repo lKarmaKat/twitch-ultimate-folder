@@ -23,16 +23,30 @@
 </div>
 
 <style>
+    /* Same box as the neighbouring .delete button: the width comes from
+       --side-menu-btn-width, set by whichever side menu hosts this button, and
+       the height from that menu's align-items: stretch. */
     .svg-container {
+        box-sizing: border-box;
         display: flex;
         align-items: center;
         justify-content: center;
+        width: var(--side-menu-btn-width, 22px);
+        height: 100%;
+        margin: 0;
+        padding: 0.3em 0.2em;
+        border: 1px solid var(--cog-btn-bg, rgb(239, 239, 241));
+        border-radius: 2px;
+        background-color: var(--cog-btn-bg, rgb(239, 239, 241));
         cursor: pointer;
     }
+    /* The <path> only declares fill-rule/fill-opacity, so it inherits these. */
     svg {
-        width: 1.2em;
-        height: 1.2em;
-        stroke: white;
-        fill: white;
+        display: block;
+        flex: 0 0 auto;
+        width: 1em;
+        height: 1em;
+        stroke: var(--cog-btn-fg, rgb(83, 83, 95));
+        fill: var(--cog-btn-fg, rgb(83, 83, 95));
     }
 </style>

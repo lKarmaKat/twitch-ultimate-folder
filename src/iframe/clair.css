@@ -7,6 +7,9 @@
     --dnd-outline: #7b3fc9;
     --list-rail: rgba(123, 63, 201, 0.20);
     --list-rail-active: rgba(123, 63, 201, 0.5);
+    /* cog button of the "all other channels" row: white glyph on a grey plate */
+    --cog-btn-bg: rgb(173, 173, 184);
+    --cog-btn-fg: #ffffff;
 }
 
 .popup .header {
