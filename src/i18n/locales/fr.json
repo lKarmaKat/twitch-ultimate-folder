@@ -161,6 +161,8 @@
     "display": "Prévisualisation",
     "reset": "Réinitialiser la configuration",
     "cancel": "Annuler",
+    "cleanConfig": "Nettoyer la configuration",
+    "cleanConfigTooltip": "{count, plural, one {# chaîne de cette configuration n'est plus suivie. La retirer de la liste} other {# chaînes de cette configuration ne sont plus suivies. Les retirer de la liste}} (pensez ensuite à enregistrer).",
     "addNewListToRoot": "Ajouter une nouvelle liste à la liste racine",
     "close": "Fermer",
     "export": "Exporter",
@@ -208,7 +210,8 @@
     "allOtherChannels": "Toutes les autres chaines"
   },
   "channel": {
-    "offline": "Hors ligne"
+    "offline": "Hors ligne",
+    "unfollowed": "Cette chaîne n'est plus suivie"
   },
   "status": {
     "needConnect": "Autorisation requise",

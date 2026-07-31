@@ -56,6 +56,14 @@ import { api } from '../../browserApi.js';
     configManager.saveConfig(configManager.selectedConfig);
   }
 
+  // Les chaines unfollow ne figurent plus dans aucune reponse Twitch : leur nom
+  // vient du worker. L'effet vit ici et non dans ConfigManager, dont le
+  // constructeur peut tourner hors contexte de composant (effect_orphan).
+  let unfollowedCount = $derived(configManager.unfollowedIds.length);
+  $effect(() => {
+    if (unfollowedCount > 0) configManager.resolveUnfollowed();
+  });
+
   // Set by the content script when it builds the iframe: a separate document
   // inherits nothing from Twitch, so the theme arrives in the URL.
   let darkTheme = $state(new URLSearchParams(location.search).get('dark') !== '0');
@@ -229,6 +237,19 @@ import { api } from '../../browserApi.js';
           <div class="footer-bar">
             <ConfigTransfer configManager={configManager} darkTheme={darkTheme} />
             <div class="footer-right">
+            {#if unfollowedCount > 0}
+            <button
+              id="clean-config-btn"
+              class="clean-btn bottom-btn"
+              onclick={() => configManager.cleanUnfollowedFromConfig()}
+              title={$_('configPopup.cleanConfigTooltip', { values: { count: unfollowedCount } })}>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M3 21h6l11-11a2.83 2.83 0 0 0-4-4L5 17v4z"/>
+                <line x1="14" y1="6" x2="18" y2="10"/>
+              </svg>
+              {$_('configPopup.cleanConfig')}
+            </button>
+            {/if}
             <button id="reset-btn" class="reset-btn bottom-btn" onclick={() => promptResetConfig()}>
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                 <path d="M3 6h18"/>
@@ -452,11 +473,22 @@ import { api } from '../../browserApi.js';
     /* background: linear-gradient(135deg, #6d013c, #ee4242); */
     margin-right: 1em;
   }
+  /* Ambre : c'est un correctif, pas la suppression definitive qu'annonce Reset */
+  .clean-btn {
+    background: linear-gradient(135deg, #8a5a13, #e0a53a);
+    margin-right: 1em;
+  }
+  .clean-btn svg {
+    width: 1.05em;
+    height: 1.05em;
+  }
+  .clean-btn:hover,
   .reset-btn:hover,
   .save-btn:hover {
     /* box-shadow: 0 5px 18px rgba(122, 61, 255, 0.6); */
     transform: translateY(-1px);
   }
+  .clean-btn:active,
   .reset-btn:active,
   .save-btn:active {
     transform: translateY(1px);

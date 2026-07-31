@@ -161,6 +161,8 @@
     "display": "Preview",
     "reset": "Reset config",
     "cancel": "Cancel",
+    "cleanConfig": "Clean up configuration",
+    "cleanConfigTooltip": "{count, plural, one {# channel in this configuration is no longer followed. Remove it from the list} other {# channels in this configuration are no longer followed. Remove them from the list}} (remember to save afterwards).",
     "addNewListToRoot": "Add new list to root element",
     "close": "Close",
     "export": "Export",
@@ -208,7 +210,8 @@
     "allOtherChannels": "All others channels"
   },
   "channel": {
-    "offline": "Offline"
+    "offline": "Offline",
+    "unfollowed": "This channel has been unfollowed"
   },
   "status": {
     "needConnect": "Authorisation required",

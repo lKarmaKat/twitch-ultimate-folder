@@ -402,6 +402,22 @@ api.runtime.onMessage.addListener((msg, sender, sendResponse) => {
       return false;
     }
 
+    if (msg.type === CST.RESOLVE_UNFOLLOWED) {
+      // La page de config n'a pas de token : seul le worker peut nommer une
+      // chaine absente des suivis (cache storage, puis /users en dernier recours).
+      if (!streamsDatasPoller || !Array.isArray(msg.data)) {
+        sendResponse([]);
+        return false;
+      }
+      streamsDatasPoller.dataFormatter.resolveChannels(msg.data)
+        .then(sendResponse)
+        .catch(err => {
+          logBackgroundError("background:resolveUnfollowed", err);
+          sendResponse([]);
+        });
+      return true;
+    }
+
     if (msg.type === CST.GET_CURRENT_CONFIGURATION) {
       if (!configManager) {
         sendResponse(null);

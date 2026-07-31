@@ -117,10 +117,14 @@
 			s.forEach(e => set.add(e.channel_id));
 		}
 		let live = 0;
+		let total = 0;
 		set.forEach(e => {
+			// Une chaine unfollow reste dans la config mais ne s'affiche jamais :
+			// la compter gonflerait le total pour rien.
+			if (e < 0 || configManager.getChannel(e)) total++;
 			if (configManager.getLiveChannel(e)) live++;
 		});
-		return { live, total: set.size };
+		return { live, total };
 	});
 
 	let liveChannelsCounter = $derived(channelsCounters.live);

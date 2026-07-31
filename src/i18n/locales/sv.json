@@ -26,6 +26,8 @@
     "display": "Förhandsgranskning",
     "reset": "Återställ konfiguration",
     "cancel": "Avbryt",
+    "cleanConfig": "Rensa konfigurationen",
+    "cleanConfigTooltip": "{count, plural, one {# kanal i den här konfigurationen följs inte längre. Ta bort den från listan} other {# kanaler i den här konfigurationen följs inte längre. Ta bort dem från listan}} (kom ihåg att spara).",
     "addNewListToRoot": "Lägg till ny lista i rotelementet"
   },
   "configPannel": {
@@ -56,7 +58,8 @@
     "allOtherChannels": "Alla andra kanaler"
   },
   "channel": {
-    "offline": "Frånkopplad"
+    "offline": "Frånkopplad",
+    "unfollowed": "Du följer inte längre den här kanalen"
   },
   "status": {
     "needConnect": "Auktorisering krävs",

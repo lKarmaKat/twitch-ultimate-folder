@@ -26,6 +26,8 @@
     "display": "Esikatselu",
     "reset": "Nollaa asetukset",
     "cancel": "Peruuta",
+    "cleanConfig": "Siivoa määritykset",
+    "cleanConfigTooltip": "{count, plural, one {# kanavaa näissä määrityksissä ei enää seurata. Poista se luettelosta} other {# kanavaa näissä määrityksissä ei enää seurata. Poista ne luettelosta}} (muista tallentaa).",
     "addNewListToRoot": "Lisää uusi lista juurielementtiin"
   },
   "configPannel": {
@@ -56,7 +58,8 @@
     "allOtherChannels": "Kaikki muut kanavat"
   },
   "channel": {
-    "offline": "Poissa verkosta"
+    "offline": "Poissa verkosta",
+    "unfollowed": "Et seuraa enää tätä kanavaa"
   },
   "status": {
     "needConnect": "Valtuutus vaaditaan",

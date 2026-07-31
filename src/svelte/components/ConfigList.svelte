@@ -177,24 +177,28 @@
 				</div>
 			{:else}
 			{@const i = getNode(item)}
-				<!-- {#if i} -->
+			{@const info = i ?? configManager.getUnfollowedInfo(item.channel_id)}
+				<!-- Pas de garde sur `i` ici : svelte-dnd-action exige un enfant
+				     DOM par item, sinon les index sautent au drop. Une chaine
+				     unfollow s'affiche donc en clair, avec son bouton de
+				     suppression, au lieu de disparaitre sans pouvoir etre retiree. -->
 					<div class="channel">
 						<div class="channel-side-menu">
-							<button class="delete" id="remove-{i?.channel_id}" onclick={()=>{removeChannel(i?.channel_id)}}>x</button>
+							<button class="delete" id="remove-{item.channel_id}" onclick={()=>{removeChannel(item.channel_id)}}>x</button>
 						</div>
-						<DraggableChannel 
-							channelId={i?.channel_id} 
-							channelName={i?.channel_name} 
-							channelProfilePic={i?.profile_image_url} 
+						<DraggableChannel
+							channelId={item.channel_id}
+							channelName={info?.channel_name ?? item.channel_id}
+							channelProfilePic={info?.profile_image_url}
 							viewerCount={i?.viewer_count}
 							gameName={i?.game_name}
-							isLive={i?.isLive}
-							greyIfOffline={true}
-							showOffline={true}/>
+							isLive={i?.isLive ?? false}
+							unfollowed={!i}
+							greyIfOffline={!!i}
+							showOffline={!!i}/>
 							<!-- <div>chaine</div> -->
 							<!-- color={contentColor}/> -->
 					</div>
-				<!-- {/if} -->
 			{/if}
 			{/each}
 		</section>

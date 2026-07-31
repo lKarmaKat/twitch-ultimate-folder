@@ -26,6 +26,8 @@
     "display": "Pregled",
     "reset": "Poništi konfiguraciju",
     "cancel": "Odustani",
+    "cleanConfig": "Očisti konfiguraciju",
+    "cleanConfigTooltip": "{count, plural, one {# kanal u ovoj konfiguraciji više se ne prati. Ukloni ga s popisa} few {# kanala u ovoj konfiguraciji više se ne prate. Ukloni ih s popisa} other {# kanala u ovoj konfiguraciji više se ne prati. Ukloni ih s popisa}} (ne zaboravite spremiti).",
     "addNewListToRoot": "Dodaj novi popis u korijenski element"
   },
   "configPannel": {
@@ -56,7 +58,8 @@
     "allOtherChannels": "Svi ostali kanali"
   },
   "channel": {
-    "offline": "Izvan mreže"
+    "offline": "Izvan mreže",
+    "unfollowed": "Više ne pratite ovaj kanal"
   },
   "status": {
     "needConnect": "Potrebna je autorizacija",

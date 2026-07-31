@@ -26,6 +26,8 @@
     "display": "Podgląd",
     "reset": "Zresetuj konfigurację",
     "cancel": "Anuluj",
+    "cleanConfig": "Wyczyść konfigurację",
+    "cleanConfigTooltip": "{count, plural, one {Nie obserwujesz już # kanału z tej konfiguracji. Usuń go z listy} few {Nie obserwujesz już # kanałów z tej konfiguracji. Usuń je z listy} many {Nie obserwujesz już # kanałów z tej konfiguracji. Usuń je z listy} other {Nie obserwujesz już # kanałów z tej konfiguracji. Usuń je z listy}} (pamiętaj, aby zapisać).",
     "addNewListToRoot": "Dodaj nową listę do elementu głównego"
   },
   "configPannel": {
@@ -56,7 +58,8 @@
     "allOtherChannels": "Wszystkie pozostałe kanały"
   },
   "channel": {
-    "offline": "Niedostępny"
+    "offline": "Niedostępny",
+    "unfollowed": "Nie obserwujesz już tego kanału"
   },
   "status": {
     "needConnect": "Wymagana autoryzacja",

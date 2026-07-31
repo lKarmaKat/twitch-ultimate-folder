@@ -26,6 +26,8 @@
     "display": "Vorschau",
     "reset": "Konfiguration zurücksetzen",
     "cancel": "Abbrechen",
+    "cleanConfig": "Konfiguration bereinigen",
+    "cleanConfigTooltip": "{count, plural, one {# Kanal in dieser Konfiguration wird nicht mehr gefolgt. Aus der Liste entfernen} other {# Kanälen in dieser Konfiguration wird nicht mehr gefolgt. Aus der Liste entfernen}} (danach nicht vergessen zu speichern).",
     "addNewListToRoot": "Neue Liste zum Stammelement hinzufügen"
   },
   "configPannel": {
@@ -56,7 +58,8 @@
     "allOtherChannels": "Alle anderen Kanäle"
   },
   "channel": {
-    "offline": "Nicht online"
+    "offline": "Nicht online",
+    "unfollowed": "Diesem Kanal folgst du nicht mehr"
   },
   "status": {
     "needConnect": "Autorisierung erforderlich",

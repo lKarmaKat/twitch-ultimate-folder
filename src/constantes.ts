@@ -8,6 +8,8 @@ export const GET_STREAMS_REF = 'GET_STREAMS_REF';
 export const GET_CURRENT_CONFIGURATION = 'GET_CURRENT_CONFIGURATION';
 export const SAVE_CHANNELS_LIST = 'SAVE_CHANNELS_LIST';
 export const RESET_CONFIG = 'RESET_CONFIG';
+/** Config page asks the worker for the infos of channels it no longer follows. */
+export const RESOLVE_UNFOLLOWED = 'RESOLVE_UNFOLLOWED';
 export const DISPLAY_POPUP = 'DISPLAY_POPUP';
 export const OPEN_HELP_PAGE = 'OPEN_HELP_PAGE';
 /** Handshake posted by the service worker on every port connection. */
@@ -44,6 +46,11 @@ export const AUTH_READY = 'READY';
 // saveConfig read-modify-writes while token refresh writes on a timer.
 export const tokenKey = (userId: string | number) => `token_${userId}`;
 export const configKey = (userId: string | number) => `config_${userId}`;
+// Channel infos (name, avatar) kept across worker restarts: a config holds only
+// ids, and an unfollowed channel is no longer in any Twitch answer. Not per
+// user, a channel's name does not depend on who follows it.
+export const CHANNELS_CACHE_KEY = 'channels_cache';
+export const CHANNELS_CACHE_MAX = 2000;
 
 export const SYSTEM_STYLE = 'SYSTEM_STYLE';
 export const CUSTOM_STYLE = 'CUSTOM_STYLE';
@@ -216,9 +223,12 @@ export const ALL_OTHER_CHANNELS_ELEMENT = {
         "profile_image_url": "../../assets/all_other_channels.png",
         "viewer_count": 0, 
         "language": "", 
-        "game_name": "", 
+        "game_name": "",
         "title": ""
     }
+
+/** Avatar shown for a config entry whose channel is no longer followed. */
+export const UNFOLLOWED_CHANNEL_IMAGE = "../../assets/unfollowed.png";
 // export let UPDATE_STREAM_INFO = 'UPDATE_STREAM_INFO';
 // export let UPDATE_STREAM_INFO = 'UPDATE_STREAM_INFO';
 // export let UPDATE_STREAM_INFO = 'UPDATE_STREAM_INFO';

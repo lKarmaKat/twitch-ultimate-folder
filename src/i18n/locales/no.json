@@ -26,6 +26,8 @@
     "display": "Forhåndsvisning",
     "reset": "Tilbakestill konfigurasjon",
     "cancel": "Avbryt",
+    "cleanConfig": "Rydd opp i konfigurasjonen",
+    "cleanConfigTooltip": "{count, plural, one {# kanal i denne konfigurasjonen følges ikke lenger. Fjern den fra listen} other {# kanaler i denne konfigurasjonen følges ikke lenger. Fjern dem fra listen}} (husk å lagre etterpå).",
     "addNewListToRoot": "Legg til ny liste i rotelementet"
   },
   "configPannel": {
@@ -56,7 +58,8 @@
     "allOtherChannels": "Alle andre kanaler"
   },
   "channel": {
-    "offline": "Frakoblet"
+    "offline": "Frakoblet",
+    "unfollowed": "Du følger ikke lenger denne kanalen"
   },
   "status": {
     "needConnect": "Autorisasjon kreves",
