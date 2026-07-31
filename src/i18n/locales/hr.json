@@ -75,6 +75,8 @@
     "portDisconnected": "Veza je prekinuta",
     "reconnectIn": "Novi pokušaj za {seconds} s",
     "reconnecting": "Ponovno povezivanje…",
+    "contextLost": "Proširenje je ažurirano",
+    "contextLostHint": "Osvježite stranicu kako biste vratili svoje mape.",
     "waitingConfig": "Učitavanje vaših mapa",
     "waitingConfigHint": "Dohvaćamo vašu konfiguraciju i kanale koje pratite."
   },

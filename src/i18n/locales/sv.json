@@ -75,6 +75,8 @@
     "portDisconnected": "Anslutningen bröts",
     "reconnectIn": "Nytt försök om {seconds} s",
     "reconnecting": "Återansluter…",
+    "contextLost": "Tillägget uppdaterades",
+    "contextLostHint": "Ladda om sidan för att få tillbaka dina mappar.",
     "waitingConfig": "Laddar dina mappar",
     "waitingConfigHint": "Vi hämtar din konfiguration och kanalerna du följer."
   },

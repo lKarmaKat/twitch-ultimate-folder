@@ -75,6 +75,8 @@
     "portDisconnected": "Utracono połączenie",
     "reconnectIn": "Ponowna próba za {seconds} s",
     "reconnecting": "Ponowne łączenie…",
+    "contextLost": "Rozszerzenie zaktualizowane",
+    "contextLostHint": "Odśwież stronę, aby odzyskać swoje foldery.",
     "waitingConfig": "Wczytywanie Twoich folderów",
     "waitingConfigHint": "Pobieramy Twoją konfigurację i obserwowane kanały."
   },

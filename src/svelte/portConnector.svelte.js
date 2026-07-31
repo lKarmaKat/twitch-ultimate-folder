@@ -1,11 +1,28 @@
 import {
     portConnected,
+    contextLost,
     reconnect,
     RECONNECT_BASE_DELAY,
     RECONNECT_MAX_DELAY
 } from './event.svelte.js';
 import * as CST from '../constantes.js';
 import { api } from '../browserApi.js';
+
+/**
+ * `runtime.id` passe a undefined des que le contexte d'extension du content
+ * script est invalide (extension rechargee, mise a jour ou desactivee). Ce
+ * n'est PAS lie a la veille du service worker : l'objet runtime injecte reste
+ * intact tant que l'extension vit, donc pas de faux positif sur une simple
+ * mise en veille.
+ */
+function contextAlive() {
+    try {
+        return !!api.runtime?.id;
+    } catch {
+        // Firefox jette a l'acces plutot que de renvoyer undefined.
+        return false;
+    }
+}
 
 
 class PortConnector {
@@ -80,6 +97,9 @@ class PortConnector {
      */
     scheduleReconnect() {
         if (this.reconnectTimer !== null) return;
+        // Rien a attendre : un contexte invalide ne revient jamais, et le
+        // backoff tournerait a vide toutes les 15 s pour l'eternite.
+        if (!contextAlive()) return this.giveUp();
 
         const delay = Math.min(RECONNECT_BASE_DELAY * 2 ** this.attempt, RECONNECT_MAX_DELAY);
         if (this.drivesUi) {
@@ -94,17 +114,42 @@ class PortConnector {
             try {
                 this.launchPort(this.cb, this.nm);
             } catch (e) {
-                // Invalidated extension context, for one: retry later with a
-                // longer delay.
                 console.log(this.nm, "RECONNECT FAILED", e.message);
+                // Second filet : le contexte peut mourir entre la planification
+                // et le tir du timer.
+                if (!contextAlive()) return this.giveUp();
+                // Panne passagere : on retente, avec un delai plus long.
                 this.scheduleReconnect();
             }
         }, delay);
     }
 
+    /**
+     * Fin de partie : plus de ping, plus de timer, et l'UI bascule sur "recharge
+     * la page" — la seule chose qui repare un contexte invalide.
+     */
+    giveUp() {
+        this.stopPing();
+        if (this.reconnectTimer !== null) {
+            clearTimeout(this.reconnectTimer);
+            this.reconnectTimer = null;
+        }
+        console.log(this.nm, "CONTEXT LOST, giving up");
+        if (this.drivesUi) {
+            contextLost.current = true;
+            reconnect.nextAttemptAt = 0;
+        }
+    }
+
     /** Sends a message to the service worker over the already open port. */
     send(msg) {
-        this.port?.postMessage(msg);
+        try {
+            this.port?.postMessage(msg);
+        } catch (e) {
+            // Port mort : le clic sur l'engrenage ne doit pas remonter une
+            // exception, la banniere dit deja quoi faire.
+            console.log(this.nm, "SEND FAILED", e.message);
+        }
     }
 
     startPing() {

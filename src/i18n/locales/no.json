@@ -75,6 +75,8 @@
     "portDisconnected": "Tilkoblingen ble brutt",
     "reconnectIn": "Nytt forsøk om {seconds} s",
     "reconnecting": "Kobler til igjen…",
+    "contextLost": "Utvidelsen ble oppdatert",
+    "contextLostHint": "Last inn siden på nytt for å få tilbake mappene dine.",
     "waitingConfig": "Laster mappene dine",
     "waitingConfigHint": "Vi henter konfigurasjonen din og kanalene du følger."
   },

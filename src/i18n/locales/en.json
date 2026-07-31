@@ -227,6 +227,8 @@
     "portDisconnected": "Connection lost",
     "reconnectIn": "Retrying in {seconds} s",
     "reconnecting": "Reconnecting…",
+    "contextLost": "Extension updated",
+    "contextLostHint": "Refresh the page to bring your folders back.",
     "waitingConfig": "Loading your folders",
     "waitingConfigHint": "Fetching your configuration and the channels you follow."
   },
@@ -289,9 +291,9 @@
     "orange": "orange"
   },
   "counterType": {
-    "bareCounter": "bare counter",
-    "badge": "badge",
-    "nakedBadge": "naked badge",
+    "bareCounter": "Bare counter",
+    "badge": "Badge",
+    "nakedBadge": "Naked badge",
     "withTotalCount": "With total channel count",
     "withLiveIcon": "With total channel count and live/offline icon"
   },

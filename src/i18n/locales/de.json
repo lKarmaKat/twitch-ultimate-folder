@@ -75,6 +75,8 @@
     "portDisconnected": "Verbindung unterbrochen",
     "reconnectIn": "Neuer Versuch in {seconds} s",
     "reconnecting": "Verbinde erneut…",
+    "contextLost": "Erweiterung aktualisiert",
+    "contextLostHint": "Lade die Seite neu, um deine Ordner zurückzubekommen.",
     "waitingConfig": "Deine Ordner werden geladen",
     "waitingConfigHint": "Wir holen deine Konfiguration und die Kanäle, denen du folgst."
   },

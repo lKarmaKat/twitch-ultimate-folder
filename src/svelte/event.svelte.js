@@ -3,6 +3,12 @@
  * Without the third state, every page load would show the reconnect banner.
  */
 export const portConnected = $state({ current: null });
+/**
+ * Extension rechargee, mise a jour ou desactivee : le contexte de ce content
+ * script est mort et ne reviendra pas. Distinct de `portConnected`, qui decrit
+ * une coupure dont on se remet tout seul.
+ */
+export const contextLost = $state({ current: false });
 export const parentFinalizeEvent = $state({ current: false });
 export const configChangeEvent = $state({ current: null });
 export const allOthersChannelSelectedEvent = $state({ current: null });

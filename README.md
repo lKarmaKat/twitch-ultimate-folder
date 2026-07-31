@@ -1,6 +1,6 @@
 # Ultimate Twitch Folders
 
-## What is this extension for ?
+## What is this extension for?
 
 This extension lets you reorganise the channels you follow on Twitch according to a configuration you build yourself. Instead of the single flat list Twitch gives you, your sidebar shows the structure you defined.
 
@@ -33,13 +33,20 @@ If you want a list to stay visible even when nobody in it is live, turn on its *
 2. Click the code. Twitch opens on **twitch.tv/activate** with the code already filled in.
 3. Authorise the application to access your account.
 <!-- Links stay this way for github compatibility -->
+<!-- <figure> -->
 https://github.com/user-attachments/assets/0ddc5818-8131-472b-aacb-546bbb880ee8
+<!-- <figcaption>Authorising the application from the Twitch sidebar.</figcaption> -->
+<!-- </figure> -->
 
 That is all. The sidebar fills itself in after a few seconds, and you will not be asked again — the extension keeps the authorisation alive on its own. You can revoke it at any time from your Twitch settings, under **Connections**.
 
 ## How to create a configuration
 
-Open the action popup by clicking the extension icon in your browser toolbar, then click **Open config popup**. The configuration window opens on top of Twitch.
+### Opening the configuration window
+
+Click the extension icon in your browser toolbar.
+
+Then click the **Open config popup** button. The configuration window opens on top of Twitch.
 
 <details>
 <summary><b>How to find the extension icon</b></summary>
@@ -123,7 +130,7 @@ A list has four independent behaviour switches. They control when the list opens
 
 **Sort mode**
 
-Three sort modes are available: **Custom**, **Viewer count** and **Alphabetical**.
+Three sort modes are available: **Custom sort**, **Viewer count sort** and **Alpha sort**.
 
 ⚠️ **Use viewer count and alphabetical sorting only on lists that contain channels and nothing else.** A sub-list has no viewer count and no channel name to compare, so when a list mixes channels and sub-lists these two modes cannot order it in a way that makes sense — the position of the sub-lists becomes unpredictable.
 
@@ -264,7 +271,7 @@ A short screen recording is often worth more than a long description, especially
 
 ## Support me
 
+This extension is free, has no ads and collects nothing. If it earned a place in your sidebar and you would like to give something back, a coffee is always welcome — and entirely optional. Starring the repository or reporting a bug helps just as much.
+
 <!-- TODO: replace with the real Ko-fi link -->
 [☕ Support me on Ko-fi](https://ko-fi.com/YOUR_KOFI_HANDLE)
-
-This extension is free, has no ads and collects nothing. If it earned a place in your sidebar and you would like to give something back, a coffee is always welcome — and entirely optional. Starring the repository or reporting a bug helps just as much.

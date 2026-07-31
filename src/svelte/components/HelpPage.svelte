@@ -31,8 +31,9 @@ import { api } from '../../browserApi.js';
     applyLocale(lang);
   }
 
-  // TODO placeholder: one clip stands in for every demo. Replace with one file
-  // per section (see README) once the captures exist.
+  // Fallback clip, used by every `media()` call that has no `video_url` yet.
+  // TODO: pass the real per-section file at each call site (see README) once
+  // the captures exist, then drop this.
   const DEMO = '/assets/webm/Video.webm';
 
   const ISSUES_URL = 'https://github.com/lKarmaKat/twitch-ultimate-folder/issues/new';
@@ -44,8 +45,8 @@ import { api } from '../../browserApi.js';
   let lightbox = $state(null);
   let lightboxVideo = $state(null);
 
-  function openLightbox(caption) {
-    lightbox = { caption };
+  function openLightbox(caption, src) {
+    lightbox = { caption, src };
   }
 
   function closeLightbox() {
@@ -147,10 +148,11 @@ import { api } from '../../browserApi.js';
 
 <!-- One single definition of the video thumbnail: it repeats a dozen times and
      the lightbox must stay identical everywhere. -->
-{#snippet media(caption)}
+{#snippet media(caption, video_url)}
+  {@const src = video_url ?? DEMO}
   <figure class="help-media">
-    <button class="shot" type="button" onclick={() => openLightbox(caption)}>
-      <video src={DEMO} preload="metadata" muted playsinline></video>
+    <button class="shot" type="button" onclick={() => openLightbox(caption, src)}>
+      <video {src} preload="metadata" muted playsinline></video>
       <span class="shot-hint">{$_('help.media.hint')} ⤢</span>
     </button>
     <figcaption>{caption}</figcaption>
@@ -422,7 +424,7 @@ import { api } from '../../browserApi.js';
     <button class="lb-backdrop" type="button" aria-label={$_('help.media.close')} onclick={closeLightbox}></button>
     <div class="lb-panel" role="dialog" aria-modal="true" aria-label={lightbox.caption}>
       <button class="lb-close" type="button" aria-label={$_('help.media.close')} onclick={closeLightbox}>✕</button>
-      <video bind:this={lightboxVideo} src={DEMO} autoplay muted playsinline controls></video>
+      <video bind:this={lightboxVideo} src={lightbox.src} autoplay muted playsinline controls></video>
       <div class="lb-bar">
         <button class="lb-replay" type="button" onclick={replay}>↺ {$_('help.media.replay')}</button>
         <p class="lb-caption">{lightbox.caption}</p>

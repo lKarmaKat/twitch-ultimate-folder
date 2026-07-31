@@ -227,6 +227,8 @@
     "portDisconnected": "Connexion perdue",
     "reconnectIn": "Nouvelle tentative dans {seconds} s",
     "reconnecting": "Reconnexion en cours…",
+    "contextLost": "Extension mise à jour",
+    "contextLostHint": "Rafraîchissez la page pour retrouver vos dossiers.",
     "waitingConfig": "Chargement de vos dossiers",
     "waitingConfigHint": "On récupère votre configuration et vos chaines suivies."
   },
@@ -289,9 +291,9 @@
     "orange": "orange"
   },
   "counterType": {
-    "bareCounter": "compteur simple",
-    "badge": "badge",
-    "nakedBadge": "badge nu",
+    "bareCounter": "Compteur simple",
+    "badge": "Badge",
+    "nakedBadge": "Badge nu",
     "withTotalCount": "Avec compteur total de chaines",
     "withLiveIcon": "Avec compteur total de chaines et icon live/non live"
   },

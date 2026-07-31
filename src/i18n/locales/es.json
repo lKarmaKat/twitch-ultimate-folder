@@ -75,6 +75,8 @@
     "portDisconnected": "Conexión perdida",
     "reconnectIn": "Nuevo intento en {seconds} s",
     "reconnecting": "Reconectando…",
+    "contextLost": "Extensión actualizada",
+    "contextLostHint": "Actualiza la página para recuperar tus carpetas.",
     "waitingConfig": "Cargando tus carpetas",
     "waitingConfigHint": "Estamos obteniendo tu configuración y los canales que sigues."
   },

@@ -75,6 +75,8 @@
     "portDisconnected": "Yhteys katkesi",
     "reconnectIn": "Uusi yritys {seconds} s kuluttua",
     "reconnecting": "Yhdistetään uudelleen…",
+    "contextLost": "Laajennus päivitettiin",
+    "contextLostHint": "Päivitä sivu saadaksesi kansiosi takaisin.",
     "waitingConfig": "Ladataan kansioitasi",
     "waitingConfigHint": "Haetaan asetuksiasi ja seuraamiasi kanavia."
   },

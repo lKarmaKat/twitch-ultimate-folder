@@ -1,6 +1,6 @@
 <script>
     import { _ } from 'svelte-i18n';
-    import { reconnect } from '../event.svelte.js';
+    import { reconnect, contextLost } from '../event.svelte.js';
 
 
     let seconds = $state(0);
@@ -8,6 +8,9 @@
     // The deadline is the effect's dependency, so it recomputes on every new
     // attempt instead of waiting a tick and showing "16 s" for "15 s".
     $effect(() => {
+        // Contexte perdu : plus aucune tentative n'est planifiee, un compte a
+        // rebours annoncerait une reconnexion qui n'arrivera pas.
+        if (contextLost.current) return;
         const deadline = reconnect.nextAttemptAt;
 
         // ceil: show 3,2,1 rather than a full second of "0". max: a background
@@ -26,22 +29,37 @@
 </script>
 
 <div class="reconnect" role="status" aria-live="polite">
-    <span class="spinner" aria-hidden="true"></span>
+    {#if contextLost.current}
+        <!-- Pas de spinner : rien ne tourne, l'attente ne mene nulle part. -->
+        <span class="glyph" aria-hidden="true">↻</span>
+    {:else}
+        <span class="spinner" aria-hidden="true"></span>
+    {/if}
 
     <div class="text">
-        <p class="title" data-testid="status">{$_('status.portDisconnected')}</p>
-        <p class="countdown">
-            {seconds > 0
-                ? $_('status.reconnectIn', { values: { seconds } })
-                : $_('status.reconnecting')}
+        <p class="title" data-testid="status">
+            {contextLost.current
+                ? $_('status.contextLost')
+                : $_('status.portDisconnected')}
         </p>
+        {#if contextLost.current}
+            <p class="hint">{$_('status.contextLostHint')}</p>
+        {:else}
+            <p class="countdown">
+                {seconds > 0
+                    ? $_('status.reconnectIn', { values: { seconds } })
+                    : $_('status.reconnecting')}
+            </p>
+        {/if}
     </div>
 
     <!-- Replayed on every new deadline: {#key} remounts the element, which
          restarts the CSS animation without driving it frame by frame. -->
-    {#key reconnect.nextAttemptAt}
-        <span class="bar" style="--drain: {reconnect.delay}ms" aria-hidden="true"></span>
-    {/key}
+    {#if !contextLost.current}
+        {#key reconnect.nextAttemptAt}
+            <span class="bar" style="--drain: {reconnect.delay}ms" aria-hidden="true"></span>
+        {/key}
+    {/if}
 </div>
 
 <style>
@@ -83,6 +101,20 @@
         animation: spin 0.9s linear infinite;
     }
 
+    /* Meme gabarit que le spinner, pour que le bloc ne bouge pas d'un etat a
+       l'autre. */
+    .glyph {
+        flex-shrink: 0;
+        width: 1.1em;
+        height: 1.1em;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.1em;
+        line-height: 1;
+        color: var(--pd-accent);
+    }
+
     .text {
         min-width: 0;
     }
@@ -101,6 +133,14 @@
         line-height: 1.3;
         /* Stable digit width: otherwise "10 s" -> "9 s" makes the line jump. */
         font-variant-numeric: tabular-nums;
+        color: var(--pd-muted);
+    }
+
+    /* Pas de tabular-nums ici : c'est une phrase, pas un compteur. */
+    .hint {
+        margin: 0;
+        font-size: 0.85em;
+        line-height: 1.3;
         color: var(--pd-muted);
     }
 

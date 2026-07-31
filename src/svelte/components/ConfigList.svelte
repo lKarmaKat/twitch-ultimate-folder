@@ -177,24 +177,26 @@
 				</div>
 			{:else}
 			{@const i = getNode(item)}
-				<div class="channel">
-					<div class="channel-side-menu">
-						<button class="delete" id="remove-{i?.channel_id}" onclick={()=>{removeChannel(i?.channel_id)}}>x</button>
+				<!-- {#if i} -->
+					<div class="channel">
+						<div class="channel-side-menu">
+							<button class="delete" id="remove-{i?.channel_id}" onclick={()=>{removeChannel(i?.channel_id)}}>x</button>
+						</div>
+						<DraggableChannel 
+							channelId={i?.channel_id} 
+							channelName={i?.channel_name} 
+							channelProfilePic={i?.profile_image_url} 
+							viewerCount={i?.viewer_count}
+							gameName={i?.game_name}
+							isLive={i?.isLive}
+							greyIfOffline={true}
+							showOffline={true}/>
+							<!-- <div>chaine</div> -->
+							<!-- color={contentColor}/> -->
 					</div>
-					<DraggableChannel 
-						channelId={i?.channel_id} 
-						channelName={i?.channel_name} 
-						channelProfilePic={i?.profile_image_url} 
-						viewerCount={i?.viewer_count}
-						gameName={i?.game_name}
-						isLive={i?.isLive}
-						greyIfOffline={true}
-						showOffline={true}/>
-						<!-- <div>chaine</div> -->
-						<!-- color={contentColor}/> -->
-				</div>
-				{/if}
-				{/each}
+				<!-- {/if} -->
+			{/if}
+			{/each}
 		</section>
 	</div>
 	{/if}

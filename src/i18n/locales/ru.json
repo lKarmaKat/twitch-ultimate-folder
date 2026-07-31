@@ -75,6 +75,8 @@
     "portDisconnected": "Соединение потеряно",
     "reconnectIn": "Повтор через {seconds} с",
     "reconnecting": "Переподключение…",
+    "contextLost": "Расширение обновлено",
+    "contextLostHint": "Обновите страницу, чтобы вернуть свои папки.",
     "waitingConfig": "Загрузка ваших папок",
     "waitingConfigHint": "Получаем вашу конфигурацию и отслеживаемые каналы."
   },
