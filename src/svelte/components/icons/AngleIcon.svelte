@@ -17,15 +17,11 @@
         margin: 0 0.2em;
     }
 
-    :global(.list-header:hover) div.icon-container,
-    :global(.display-icon-container.extended) div.icon-container {
-        transform: rotate(180deg);
+    /* --icon-open is set by Display.svelte: 1 when the list is open (chevron
+       down, the SVG's natural orientation), 0 when collapsed. */
+    div.icon-container {
+        transform: rotate(calc((1 - var(--icon-open, 1)) * 180deg));
     }
-
-
-    /* :global(.icon-container) div.icon-container{
-        transform: rotate(0deg);
-    } */
 
 </style>
 

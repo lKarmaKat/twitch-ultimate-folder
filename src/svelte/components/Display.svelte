@@ -300,7 +300,7 @@
 								<!-- svelte-ignore a11y_click_events_have_key_events -->
 								<!-- svelte-ignore a11y_no_static_element_interactions -->
 								<div class="list-header all-other-header clickable" onclick={toggleOtherSort}>
-									<span class="display-icon-container" class:no-icon={(item.iconType ?? ICON_NONE) === ICON_NONE}>
+									<span class="display-icon-container extended" class:no-icon={(item.iconType ?? ICON_NONE) === ICON_NONE}>
 										<IconPicker iconType={item.iconType ?? ICON_NONE} />
 									</span>
 									<p class="list-title">{$_('display.allOtherChannels')}</p>
@@ -351,6 +351,14 @@
 		height: 1.5em;
 		margin-right: .28em;
 		margin-left: 0.2em;
+		--icon-open: 0;
+	}
+	/* Open state as rendered, consumed by AngleIcon / CrossIcon: click state
+	   (.extended) or hover expansion — mirrors the .list-body rules below. */
+	.display-icon-container.extended,
+	.list-container.hover-enabled:has(> .list-header:hover) > .list-header .display-icon-container,
+	.list-container.hover-enabled:has(> .list-body:hover) > .list-header .display-icon-container {
+		--icon-open: 1;
 	}
 	/* ICON_NONE: no icon slot, just a small inset so the title is not flush
 	   against the header edge (ICON_EMPTY_PLACEHOLDER keeps the full slot). */

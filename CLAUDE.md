@@ -89,6 +89,13 @@ The content script uses `MutationObserver` to detect when Twitch's sidebar rende
 
 `dist/` contains the unpacked extension. Load it via `chrome://extensions` → "Load unpacked". The Vite config injects CSS into JS bundles and copies `manifest.json`, icons, and CSS assets into `dist/`.
 
+## Code conventions
+
+- All code in English: identifiers, function names, strings, and comments. No French anywhere in the codebase.
+- Minimal comments. Prefer self-explanatory naming over explanation.
+- Only comment non-obvious logic (workarounds, Twitch DOM quirks, algorithmic tricks) — 2 lines maximum, and only for the most complex cases.
+- Never write comments that restate what the code already says.
+
 ## Default mode
 
 You are in consultation mode (Ask). Strict rules:

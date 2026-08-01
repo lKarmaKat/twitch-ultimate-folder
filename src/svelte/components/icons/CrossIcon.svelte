@@ -21,14 +21,8 @@
 
 
 
-    :global(.list-header:hover) div.icon-container,
-    :global(.display-icon-container.extended) div.icon-container{
-        transform: rotate(45deg);
-    }
-
-
-    :global(.display-icon-container) div.icon-container{
-        transform: rotate(0deg);
+    div.icon-container {
+        transform: rotate(calc(var(--icon-open, 0) * 45deg));
     }
 
 </style>
