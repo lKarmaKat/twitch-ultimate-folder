@@ -72,6 +72,15 @@
 #display-container.dark .icon-container .cross {
     stroke: var(--bar-icon);
 }
+
+#display-container.dark .separator-label {
+    color: rgb(173, 173, 184);
+}
+
+/* Falls back to a neutral line when the list has no bar colour. */
+#display-container.dark .list-separator .separator-line {
+    background: var(--theme-color, rgb(173, 173, 184));
+}
 /* ************* */
 
 #display-container.light .list-container {
@@ -141,4 +150,12 @@
 
 #display-container.light .icon-container .cross {
     stroke: var(--bar-icon);
+}
+
+#display-container.light .separator-label {
+    color: rgb(61, 61, 71);
+}
+
+#display-container.light .list-separator .separator-line {
+    background: var(--theme-color, rgb(83, 83, 95));
 }

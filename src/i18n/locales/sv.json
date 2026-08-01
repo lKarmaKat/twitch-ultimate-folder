@@ -28,7 +28,8 @@
     "cancel": "Avbryt",
     "cleanConfig": "Rensa konfigurationen",
     "cleanConfigTooltip": "{count, plural, one {# kanal i den här konfigurationen följs inte längre. Ta bort den från listan} other {# kanaler i den här konfigurationen följs inte längre. Ta bort dem från listan}} (kom ihåg att spara).",
-    "addNewListToRoot": "Lägg till ny lista i rotelementet"
+    "addNewListToRoot": "Lägg till ny lista i rotelementet",
+    "addSeparatorToRoot": "Lägg till en avdelare i rotelementet"
   },
   "configPannel": {
     "listName": "Listnamn",
@@ -50,7 +51,9 @@
   },
   "configList": {
     "alreadyInList": "Objektet finns redan i listan",
-    "addList": "Lägg till ny lista i {listId}"
+    "addList": "Lägg till ny lista i {listId}",
+    "addSeparator": "Lägg till en avdelare",
+    "separatorPlaceholder": "Avdelarens etikett (valfritt)"
   },
   "mainList": {
     "searchPlaceholder": "Sök bland kanaler",
@@ -133,6 +136,16 @@
     "indentRail": {
       "label": "Indragslinje",
       "tooltip": "Drar in listans innehåll och ritar en lodrät linje i marginalen. Linjen får den valda färgen på sidofältet och förblir osynlig utan den."
+    }
+  },
+  "typeOptions": {
+    "chevron": {
+      "label": "Pil",
+      "tooltip": "Visar en pil före listans ikon, riktad mot innehållet och nedvänd när listan är öppen. Ignoreras av ikonerna vinkel och kryss, som redan gör det."
+    },
+    "exclusive": {
+      "label": "Endast en underlista öppen",
+      "tooltip": "Att öppna en underlista stänger de andra. Håller ett fullt sidofält till en enda öppen lista."
     }
   },
   "sort": {

@@ -28,7 +28,8 @@
     "cancel": "Cancelar",
     "cleanConfig": "Limpar a configuração",
     "cleanConfigTooltip": "{count, plural, one {Já não segue # canal desta configuração. Remova-o da lista} other {Já não segue # canais desta configuração. Remova-os da lista}} (não se esqueça de guardar).",
-    "addNewListToRoot": "Adicionar nova lista ao elemento raiz"
+    "addNewListToRoot": "Adicionar nova lista ao elemento raiz",
+    "addSeparatorToRoot": "Adicionar um separador ao elemento raiz"
   },
   "configPannel": {
     "listName": "Nome da lista",
@@ -50,7 +51,9 @@
   },
   "configList": {
     "alreadyInList": "O elemento já está na lista",
-    "addList": "Adicionar nova lista em {listId}"
+    "addList": "Adicionar nova lista em {listId}",
+    "addSeparator": "Adicionar um separador",
+    "separatorPlaceholder": "Etiqueta do separador (opcional)"
   },
   "mainList": {
     "searchPlaceholder": "Pesquisar nos canais",
@@ -133,6 +136,16 @@
     "indentRail": {
       "label": "Guia de indentação",
       "tooltip": "Indenta o conteúdo da lista e desenha uma linha vertical na margem. A linha assume a cor de barra selecionada e permanece invisível sem ela."
+    }
+  },
+  "typeOptions": {
+    "chevron": {
+      "label": "Seta",
+      "tooltip": "Mostra uma seta antes do ícone da lista, apontando para o conteúdo e a rodar para baixo ao abrir. Ignorada pelos ícones de ângulo e cruz, que já o fazem."
+    },
+    "exclusive": {
+      "label": "Uma sublista aberta de cada vez",
+      "tooltip": "Abrir uma das sublistas fecha as outras. Mantém uma barra lateral cheia numa única lista aberta."
     }
   },
   "sort": {

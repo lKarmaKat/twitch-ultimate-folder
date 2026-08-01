@@ -28,7 +28,8 @@
     "cancel": "Annulla",
     "cleanConfig": "Pulisci la configurazione",
     "cleanConfigTooltip": "{count, plural, one {# canale di questa configurazione non è più seguito. Rimuovilo dall'elenco} other {# canali di questa configurazione non sono più seguiti. Rimuovili dall'elenco}} (ricordati di salvare).",
-    "addNewListToRoot": "Aggiungi nuova lista all'elemento radice"
+    "addNewListToRoot": "Aggiungi nuova lista all'elemento radice",
+    "addSeparatorToRoot": "Aggiungi un separatore all'elemento radice"
   },
   "configPannel": {
     "listName": "Nome della lista",
@@ -50,7 +51,9 @@
   },
   "configList": {
     "alreadyInList": "L'elemento è già nella lista",
-    "addList": "Aggiungi nuova lista in {listId}"
+    "addList": "Aggiungi nuova lista in {listId}",
+    "addSeparator": "Aggiungi un separatore",
+    "separatorPlaceholder": "Etichetta del separatore (facoltativa)"
   },
   "mainList": {
     "searchPlaceholder": "Cerca tra i canali",
@@ -133,6 +136,16 @@
     "indentRail": {
       "label": "Guida di rientro",
       "tooltip": "Applica un rientro al contenuto della lista e disegna una linea verticale nel margine. La linea assume il colore della barra selezionato e resta invisibile senza di esso."
+    }
+  },
+  "typeOptions": {
+    "chevron": {
+      "label": "Freccia",
+      "tooltip": "Mostra una freccia prima dell'icona della lista, rivolta verso il contenuto e ruotata verso il basso all'apertura. Ignorata dalle icone angolo e croce, che lo fanno già."
+    },
+    "exclusive": {
+      "label": "Una sola sottolista aperta",
+      "tooltip": "Aprire una delle sue sottoliste chiude le altre. Riporta una barra laterale carica a una sola lista aperta."
     }
   },
   "sort": {

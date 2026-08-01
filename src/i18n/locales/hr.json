@@ -28,7 +28,8 @@
     "cancel": "Odustani",
     "cleanConfig": "Očisti konfiguraciju",
     "cleanConfigTooltip": "{count, plural, one {# kanal u ovoj konfiguraciji više se ne prati. Ukloni ga s popisa} few {# kanala u ovoj konfiguraciji više se ne prate. Ukloni ih s popisa} other {# kanala u ovoj konfiguraciji više se ne prati. Ukloni ih s popisa}} (ne zaboravite spremiti).",
-    "addNewListToRoot": "Dodaj novi popis u korijenski element"
+    "addNewListToRoot": "Dodaj novi popis u korijenski element",
+    "addSeparatorToRoot": "Dodaj razdjelnik u korijenski element"
   },
   "configPannel": {
     "listName": "Naziv popisa",
@@ -50,7 +51,9 @@
   },
   "configList": {
     "alreadyInList": "Stavka je već na popisu",
-    "addList": "Dodaj novi popis u {listId}"
+    "addList": "Dodaj novi popis u {listId}",
+    "addSeparator": "Dodaj razdjelnik",
+    "separatorPlaceholder": "Oznaka razdjelnika (neobavezno)"
   },
   "mainList": {
     "searchPlaceholder": "Pretraži kanale",
@@ -133,6 +136,16 @@
     "indentRail": {
       "label": "Crta uvlake",
       "tooltip": "Uvlači sadržaj popisa i iscrtava okomitu crtu uz rub. Crta preuzima odabranu boju trake, a bez nje ostaje nevidljiva."
+    }
+  },
+  "typeOptions": {
+    "chevron": {
+      "label": "Strelica",
+      "tooltip": "Prikazuje strelicu ispred ikone popisa, okrenutu prema sadržaju i zakrenutu prema dolje kada je popis otvoren. Ikone kuta i križa je zanemaruju jer to već rade."
+    },
+    "exclusive": {
+      "label": "Samo jedan podpopis otvoren",
+      "tooltip": "Otvaranje jednog podpopisa zatvara ostale. Zadržava punu bočnu traku na jednom otvorenom popisu."
     }
   },
   "sort": {

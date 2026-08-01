@@ -30,6 +30,26 @@
 		width: max-content;
 	}
 
+	/* Two lines built by tooltip.svelte.js. The category is styled here rather
+	   than inline so it stays editable without touching the JS. */
+	/* .tooltip carries white-space: nowrap, so a long title needs the ellipsis
+	   to stop the bubble from growing past the viewport. */
+	:global(#tooltip .tt-title) {
+		display: block;
+		max-width: 24rem;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+
+	:global(#tooltip .tt-game) {
+		display: block;
+		margin-top: 0.1rem;
+		font-size: 0.85em;
+		font-weight: 600;
+		letter-spacing: 0.02em;
+		color: hsl(264, 100%, 82%);
+	}
+
 </style>
 
 

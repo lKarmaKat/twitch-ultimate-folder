@@ -178,7 +178,8 @@
     "importWarning": "La configuration actuelle sera remplacée jusqu'à ce que vous l'enregistriez.",
     "importPlaceholder": "Collez ici la configuration exportée…",
     "importError": "Configuration invalide ou illisible.",
-    "importErrorEmpty": "Collez d'abord une configuration."
+    "importErrorEmpty": "Collez d'abord une configuration.",
+    "addSeparatorToRoot": "Ajouter un séparateur à l'élément racine"
   },
   "configPannel": {
     "listName": "Nom de la liste",
@@ -202,7 +203,9 @@
   },
   "configList": {
     "alreadyInList": "L'élément est déjà dans la liste",
-    "addList": "Ajouter une nouvelle liste dans {listId}"
+    "addList": "Ajouter une nouvelle liste dans {listId}",
+    "addSeparator": "Ajouter un séparateur",
+    "separatorPlaceholder": "Libellé du séparateur (facultatif)"
   },
   "mainList": {
     "searchPlaceholder": "Rechercher parmi les chaines",
@@ -289,6 +292,16 @@
     "indentRail": {
       "label": "Rail d'indentation",
       "tooltip": "Indente le contenu de la liste et trace une ligne verticale dans la marge. La ligne prend la couleur de barre sélectionnée, et reste invisible sans."
+    }
+  },
+  "typeOptions": {
+    "chevron": {
+      "label": "Chevron",
+      "tooltip": "Affiche un chevron avant l'icône de la liste, pointant vers le contenu et pivotant vers le bas à l'ouverture. Ignoré par les icônes chevron et croix, qui le font déjà."
+    },
+    "exclusive": {
+      "label": "Une seule sous-liste ouverte",
+      "tooltip": "Ouvrir une de ses sous-listes referme les autres. Ramène une barre latérale chargée à une seule liste ouverte."
     }
   },
   "sort": {

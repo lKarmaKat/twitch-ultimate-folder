@@ -28,7 +28,8 @@
     "cancel": "Anuluj",
     "cleanConfig": "Wyczyść konfigurację",
     "cleanConfigTooltip": "{count, plural, one {Nie obserwujesz już # kanału z tej konfiguracji. Usuń go z listy} few {Nie obserwujesz już # kanałów z tej konfiguracji. Usuń je z listy} many {Nie obserwujesz już # kanałów z tej konfiguracji. Usuń je z listy} other {Nie obserwujesz już # kanałów z tej konfiguracji. Usuń je z listy}} (pamiętaj, aby zapisać).",
-    "addNewListToRoot": "Dodaj nową listę do elementu głównego"
+    "addNewListToRoot": "Dodaj nową listę do elementu głównego",
+    "addSeparatorToRoot": "Dodaj separator do elementu głównego"
   },
   "configPannel": {
     "listName": "Nazwa listy",
@@ -50,7 +51,9 @@
   },
   "configList": {
     "alreadyInList": "Ten element jest już na liście",
-    "addList": "Dodaj nową listę w {listId}"
+    "addList": "Dodaj nową listę w {listId}",
+    "addSeparator": "Dodaj separator",
+    "separatorPlaceholder": "Etykieta separatora (opcjonalnie)"
   },
   "mainList": {
     "searchPlaceholder": "Szukaj wśród kanałów",
@@ -133,6 +136,16 @@
     "indentRail": {
       "label": "Linia wcięcia",
       "tooltip": "Wcina zawartość listy i rysuje pionową linię na marginesie. Linia przyjmuje wybrany kolor paska, a bez niego pozostaje niewidoczna."
+    }
+  },
+  "typeOptions": {
+    "chevron": {
+      "label": "Strzałka",
+      "tooltip": "Pokazuje strzałkę przed ikoną listy, skierowaną na zawartość i obracającą się w dół po otwarciu. Ikony kąta i krzyżyka ją pomijają, bo już to robią."
+    },
+    "exclusive": {
+      "label": "Tylko jedna podlista otwarta",
+      "tooltip": "Otwarcie jednej podlisty zamyka pozostałe. Sprowadza zatłoczony pasek boczny do jednej otwartej listy."
     }
   },
   "sort": {

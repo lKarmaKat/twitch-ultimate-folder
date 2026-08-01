@@ -178,7 +178,8 @@
     "importWarning": "The current configuration will be replaced until you save it.",
     "importPlaceholder": "Paste the exported configuration here…",
     "importError": "Invalid or unreadable configuration.",
-    "importErrorEmpty": "Paste a configuration first."
+    "importErrorEmpty": "Paste a configuration first.",
+    "addSeparatorToRoot": "Add a separator to root element"
   },
   "configPannel": {
     "listName": "List name",
@@ -202,7 +203,9 @@
   },
   "configList": {
     "alreadyInList": "The item is already in the list",
-    "addList": "Add new list in {listId}"
+    "addList": "Add new list in {listId}",
+    "addSeparator": "Add a separator",
+    "separatorPlaceholder": "Separator label (optional)"
   },
   "mainList": {
     "searchPlaceholder": "Search through channels",
@@ -289,6 +292,16 @@
     "indentRail": {
       "label": "Indent rail",
       "tooltip": "Indents the list content and draws a vertical line in the gutter. The line takes the selected bar color, and stays invisible without one."
+    }
+  },
+  "typeOptions": {
+    "chevron": {
+      "label": "Chevron",
+      "tooltip": "Shows a chevron before the list icon, pointing at the content and turning down once the list is open. Ignored by the angle and cross icons, which already do it."
+    },
+    "exclusive": {
+      "label": "One sub-list at a time",
+      "tooltip": "Opening one of its sub-lists closes the others. Keeps a sidebar with many folders down to a single open list."
     }
   },
   "sort": {

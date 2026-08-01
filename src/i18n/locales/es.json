@@ -28,7 +28,8 @@
     "cancel": "Cancelar",
     "cleanConfig": "Limpiar la configuración",
     "cleanConfigTooltip": "{count, plural, one {Ya no sigues # canal de esta configuración. Quítalo de la lista} other {Ya no sigues # canales de esta configuración. Quítalos de la lista}} (recuerda guardar después).",
-    "addNewListToRoot": "Añadir nueva lista al elemento raíz"
+    "addNewListToRoot": "Añadir nueva lista al elemento raíz",
+    "addSeparatorToRoot": "Añadir un separador al elemento raíz"
   },
   "configPannel": {
     "listName": "Nombre de la lista",
@@ -50,7 +51,9 @@
   },
   "configList": {
     "alreadyInList": "El elemento ya está en la lista",
-    "addList": "Añadir nueva lista en {listId}"
+    "addList": "Añadir nueva lista en {listId}",
+    "addSeparator": "Añadir un separador",
+    "separatorPlaceholder": "Etiqueta del separador (opcional)"
   },
   "mainList": {
     "searchPlaceholder": "Buscar entre los canales",
@@ -133,6 +136,16 @@
     "indentRail": {
       "label": "Guía de sangría",
       "tooltip": "Sangra el contenido de la lista y dibuja una línea vertical en el margen. La línea toma el color de barra seleccionado y permanece invisible sin él."
+    }
+  },
+  "typeOptions": {
+    "chevron": {
+      "label": "Flecha",
+      "tooltip": "Muestra una flecha antes del icono de la lista, apuntando al contenido y girando hacia abajo al abrirse. Los iconos de ángulo y cruz la ignoran, porque ya lo hacen."
+    },
+    "exclusive": {
+      "label": "Una sola sublista abierta",
+      "tooltip": "Abrir una de sus sublistas cierra las demás. Reduce una barra lateral cargada a una sola lista abierta."
     }
   },
   "sort": {

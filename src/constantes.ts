@@ -55,6 +55,8 @@ export const CHANNELS_CACHE_MAX = 2000;
 export const SYSTEM_STYLE = 'SYSTEM_STYLE';
 export const CUSTOM_STYLE = 'CUSTOM_STYLE';
 export let TYPE_LIST = 'list'
+/** Item carrying only a label: no channel, no body, no open state. */
+export const TYPE_SEPARATOR = 'separator'
 
 
 export const EXTENDED_ON_STARTUP = 0;
@@ -103,6 +105,17 @@ export const STYLE_INDENT_RAIL = 'indentRail';
 export const STYLE_OPTIONS = [
 {key: STYLE_PILL_HEADER, group: 'header', label: 'styleOptions.pillHeader.label', tooltip: 'styleOptions.pillHeader.tooltip'},
 {key: STYLE_INDENT_RAIL, group: 'content', label: 'styleOptions.indentRail.label', tooltip: 'styleOptions.indentRail.tooltip'},
+];
+
+export const TYPE_CHEVRON = 'chevron';
+export const TYPE_EXCLUSIVE = 'exclusive';
+
+// Booleans stored in the list `type` object, all false by default so a config
+// saved before they existed keeps rendering exactly as it did. `group` is the
+// panel section the checkbox belongs to.
+export const TYPE_OPTIONS = [
+{key: TYPE_CHEVRON, group: 'style', label: 'typeOptions.chevron.label', tooltip: 'typeOptions.chevron.tooltip'},
+{key: TYPE_EXCLUSIVE, group: 'behavior', label: 'typeOptions.exclusive.label', tooltip: 'typeOptions.exclusive.tooltip'},
 ];
 
 export const SORT_STRATEGY = [
@@ -227,7 +240,9 @@ export function createNewList(): t.I_NEW_LIST {
       height: 0,
       iconType: 0, // ICON_NONE (see svelte/components/icons/index.ts): no icon, no reserved space
       barType: 0,
-      viewerCountType: 2
+      viewerCountType: 2,
+      [TYPE_CHEVRON]: false,
+      [TYPE_EXCLUSIVE]: false
     }
   };
 }

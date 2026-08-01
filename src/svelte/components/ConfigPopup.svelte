@@ -104,6 +104,7 @@ import { api } from '../../browserApi.js';
     addRootNode();
   }
   let addRootNode = $state();
+  let addRootSeparator = $state();
 </script>
 
 <svelte:head>
@@ -208,12 +209,18 @@ import { api } from '../../browserApi.js';
                   class="root-list-btn help-badge"
                   onclick={addRootNodeFromConfigList}
                   data-tooltip={$_('configPopup.addNewListToRoot')}><strong>+</strong></button>
+                <button
+                  id="add-root-separator"
+                  class="root-list-btn help-badge"
+                  onclick={() => addRootSeparator()}
+                  data-tooltip={$_('configPopup.addSeparatorToRoot')}><strong>—</strong></button>
               </div>
               <div id="config-list" class="channels-container">
                 <ConfigList listId="rootList"
                 configManager={configManager}
-                requestDeleteToParent={promptResetConfig} 
-                bind:addRootNode={addRootNode}/>
+                requestDeleteToParent={promptResetConfig}
+                bind:addRootNode={addRootNode}
+                bind:addRootSeparator={addRootSeparator}/>
               </div>
             </div>
             {/if}

@@ -28,7 +28,8 @@
     "cancel": "Peruuta",
     "cleanConfig": "Siivoa määritykset",
     "cleanConfigTooltip": "{count, plural, one {# kanavaa näissä määrityksissä ei enää seurata. Poista se luettelosta} other {# kanavaa näissä määrityksissä ei enää seurata. Poista ne luettelosta}} (muista tallentaa).",
-    "addNewListToRoot": "Lisää uusi lista juurielementtiin"
+    "addNewListToRoot": "Lisää uusi lista juurielementtiin",
+    "addSeparatorToRoot": "Lisää erotin juurielementtiin"
   },
   "configPannel": {
     "listName": "Listan nimi",
@@ -50,7 +51,9 @@
   },
   "configList": {
     "alreadyInList": "Kohde on jo listalla",
-    "addList": "Lisää uusi lista kohteeseen {listId}"
+    "addList": "Lisää uusi lista kohteeseen {listId}",
+    "addSeparator": "Lisää erotin",
+    "separatorPlaceholder": "Erottimen nimi (valinnainen)"
   },
   "mainList": {
     "searchPlaceholder": "Hae kanavista",
@@ -133,6 +136,16 @@
     "indentRail": {
       "label": "Sisennysviiva",
       "tooltip": "Sisentää listan sisällön ja piirtää pystysuoran viivan marginaaliin. Viiva saa valitun sivupalkin värin ja pysyy näkymättömänä ilman sitä."
+    }
+  },
+  "typeOptions": {
+    "chevron": {
+      "label": "Nuoli",
+      "tooltip": "Näyttää nuolen listan kuvakkeen edessä. Se osoittaa sisältöön ja kääntyy alas, kun lista on auki. Kulma- ja ristikuvakkeet ohittavat sen, koska ne tekevät jo saman."
+    },
+    "exclusive": {
+      "label": "Vain yksi alilista auki",
+      "tooltip": "Yhden alilistan avaaminen sulkee muut. Pitää täyden sivupalkin yhdessä avoimessa listassa."
     }
   },
   "sort": {

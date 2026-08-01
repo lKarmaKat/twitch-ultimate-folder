@@ -6,12 +6,19 @@
 	import { _ } from 'svelte-i18n';
 	import Self from './Display.svelte'
     import IconPicker from './icons/IconPicker.svelte';
-    import { ICON_NONE } from './icons/index';
+    import ChevronIcon from './icons/ChevronIcon.svelte';
+    import { ICON_NONE, ICON_ANGLE, ICON_CROSS } from './icons/index';
     import SortIndicatorIcon from './icons/SortIndicatorIcon.svelte';
     import CounterType from './CounterType.svelte';
 	import { hasVisibleContent } from '../listVisibility.js';
 
-    let { listId = "rootList", configManager }  = $props();
+    let {
+		listId = "rootList",
+		configManager,
+		/** Set by an exclusive parent: the id of the only child allowed open. */
+		exclusiveOpenId = null,
+		onExclusiveToggle = null
+	} = $props();
 	
 	let type = $derived.by(() => {
 		return configManager.selectedConfig[listId]?.type
@@ -28,6 +35,15 @@
 	// switching back to medium restores the icon.
 	let smallHeader = $derived(type?.height === CST.HEADER_HEIGHT_SMALL);
 	let headerIconType = $derived(smallHeader ? ICON_NONE : type?.iconType);
+
+	// Angle and cross already rotate on --icon-open: adding a chevron next to
+	// them would show two open indicators for the same list.
+	let chevronEnabled = $derived(
+		(type?.[CST.TYPE_CHEVRON] ?? false)
+		&& headerIconType !== ICON_ANGLE
+		&& headerIconType !== ICON_CROSS
+	);
+	let exclusive = $derived(type?.[CST.TYPE_EXCLUSIVE] ?? false);
 
 	let behavior = $derived(configManager.selectedConfig[listId]?.behavior ?? {});
 	let startupExtended = $derived(behavior[CST.EXTENDED_ON_STARTUP] ?? false);
@@ -52,7 +68,29 @@
 		openState = startupExtended;
 	});
 
-	let extended = $derived(openState);
+	// Inside an exclusive parent the open state belongs to the parent, which
+	// only ever names one child: keeping it local would let two be open.
+	let ruledByParent = $derived(typeof onExclusiveToggle === 'function');
+	let extended = $derived(ruledByParent ? exclusiveOpenId === listId : openState);
+
+	// Exclusive parent side: the single child allowed open, seeded with the
+	// first one flagged "extended on startup".
+	let openChildId = $state(null);
+	$effect(() => {
+		configManager.selectedConfig;
+		if (!exclusive) {
+			openChildId = null;
+			return;
+		}
+		const first = configManager.selectedConfig[listId]?.items?.find(i =>
+			i.type === CST.TYPE_LIST
+			&& configManager.selectedConfig[i.id]?.behavior?.[CST.EXTENDED_ON_STARTUP]);
+		openChildId = first ? first.id : null;
+	});
+
+	function toggleExclusiveChild(childId) {
+		openChildId = openChildId === childId ? null : childId;
+	}
 
 	let displayList = $derived.by(() => {
 		let channelsId = configManager.selectedConfig[listId].items.filter(e => e.channel_id);
@@ -77,7 +115,8 @@
     function toggleAutoCollapse(e) {
         e.stopPropagation();
         if (!clickEnabled) return;
-		openState = !openState;
+		if (ruledByParent) onExclusiveToggle(listId);
+		else openState = !openState;
     }
 
 	function getSetAllChannelsInConfig() {
@@ -255,11 +294,36 @@
 		}
 		else if (configManager.selectedConfig[listId].sort === CST.VIEWER_SORT) {
 			// console.log("viwer for", listId)
-			
+
 			sortedList.sort(viewerCountSortCallback);
 		}
 		return sortedList;
 	}
+
+	let customSort = $derived((configManager.selectedConfig[listId]?.sort ?? CST.CUSTOM_SORT) === CST.CUSTOM_SORT);
+
+	/** Anything displayable between a separator and the next one. */
+	function hasContentAfter(list, index) {
+		for (let i = index + 1; i < list.length; i++) {
+			const item = list[i];
+			if (item.type === CST.TYPE_SEPARATOR) return false;
+			if (item.type === CST.TYPE_LIST) {
+				if (hasVisibleContent(configManager, item.id)) return true;
+			} else if (item.channel_id < 0 || configManager.getLiveChannel(item.channel_id)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	// A separator label is only true if something follows it, and it only keeps
+	// its meaning under a custom sort — any other strategy scatters the items
+	// it was placed between.
+	let renderedItems = $derived.by(() => {
+		const list = getListChannelsSortedByStrategy(configManager.selectedConfig[listId].items);
+		return list.filter((item, index) =>
+			item.type !== CST.TYPE_SEPARATOR || (customSort && hasContentAfter(list, index)));
+	});
 
 </script>
 	<!-- <div class="width-test">
@@ -275,6 +339,11 @@
 		<div class="list-header" style="--header-color:{header?.headerColor};" class:border={barTypeColor} class:pill={pillHeader} class:small={smallHeader} class:clickable={clickEnabled} onclick={toggleAutoCollapse}>
 			<div class="left">
 				<div class="flex-row">
+					{#if chevronEnabled}
+						<span class="header-chevron" class:extended>
+							<ChevronIcon />
+						</span>
+					{/if}
 					<span class="display-icon-container" class:extended class:no-icon={headerIconType === ICON_NONE}>
 						<IconPicker iconType={headerIconType} />
 					</span>
@@ -294,10 +363,19 @@
 			<div class="list-body" class:extended class:rail={indentRail} style="--content-color:{content?.contentColor};">
 				<div>
 					<!-- {#each configManager.selectedConfig[listId].items as item(item.id)} -->
-					{#each getListChannelsSortedByStrategy(configManager.selectedConfig[listId].items) as item(item.id)}
+					{#each renderedItems as item(item.id)}
 						{#if item.type === CST.TYPE_LIST}
 							<div class="nested-list">
-								<Self  listId={item.id} configManager={configManager} />
+								<Self
+									listId={item.id}
+									configManager={configManager}
+									exclusiveOpenId={exclusive ? openChildId : null}
+									onExclusiveToggle={exclusive ? toggleExclusiveChild : null} />
+							</div>
+						{:else if item.type === CST.TYPE_SEPARATOR}
+							<div class="list-separator">
+								{#if item.name}<span class="separator-label">{item.name}</span>{/if}
+								<span class="separator-line"></span>
 							</div>
 						<!-- {:else if item.channel_id === CST.ALL_OTHER_CHANNELS} -->
 						{:else if item.channel_id < 0 }
@@ -317,16 +395,17 @@
 							{#each getAllOtherChannels(configManager.channelsPickRef, item, otherLiveSort) as other(`${other.channel_id}`)}
 								{@const i = getNode(other)}
 								<div class="channel-overlay li{listId}">
-									<DraggableChannel 
+									<DraggableChannel
 									blockNavigation={false}
-									channelId={i?.channel_id} 
-									channelName={i?.channel_name} 
-									channelProfilePic={i?.profile_image_url} 
+									channelId={i?.channel_id}
+									channelName={i?.channel_name}
+									channelProfilePic={i?.profile_image_url}
 									viewerCount={i?.viewer_count}
 									gameName={i?.game_name}
 									isLive={i?.isLive}
 									idbidon={i?.idbidon}
 									title={i?.title}
+									showGameInTooltip={true}
 									showOffline={true}
 									greyIfOffline={true}/>
 								</div>
@@ -335,15 +414,16 @@
 							{@const i = getNodeIfLive(item)}
 							{#if i}
 							<div class="channel-overlay li{listId}">
-									<DraggableChannel 
+									<DraggableChannel
 									blockNavigation={false}
-									channelId={i?.channel_id} 
-									channelName={i?.channel_name} 
-									channelProfilePic={i?.profile_image_url} 
+									channelId={i?.channel_id}
+									channelName={i?.channel_name}
+									channelProfilePic={i?.profile_image_url}
 									viewerCount={i?.viewer_count}
 									gameName={i?.game_name}
 									isLive={i?.isLive}
 									title={i?.title}
+									showGameInTooltip={true}
 									showOffline={true}
 									greyIfOffline={true}/>
 								</div>
@@ -379,12 +459,30 @@
 		margin-left: 0.4em;
 	}
 	.display-icon-container,
+	.header-chevron,
 	.flex-row {
 		display: flex;
 		flex-direction: row;
 		justify-content: center;
 		align-items: center;
 
+	}
+	/* Closed points right, open points down — same --icon-open contract as the
+	   angle and cross icons, which is why those two never get a chevron. Not
+	   mirrored on .al-left: only the margins and the rail switch sides there,
+	   the header keeps its children in the same order. */
+	.header-chevron {
+		width: 0.9em;
+		height: 0.9em;
+		flex: none;
+		margin-left: 0.3em;
+		transform: rotate(calc(var(--icon-open, 0) * 90deg));
+		transition: transform 300ms ease;
+	}
+	.header-chevron.extended,
+	.list-container.hover-enabled:has(> .list-header:hover) > .list-header .header-chevron,
+	.list-container.hover-enabled:has(> .list-body:hover) > .list-header .header-chevron {
+		--icon-open: 1;
 	}
 	/* :global(.al-right) > .list-container {
 		margin-left: 0em !important;
@@ -565,6 +663,36 @@
 	}
 	.channel-overlay {
 		cursor: pointer;
+	}
+	/* Marks the end of a list when loose channels follow it at the same depth:
+	   without it both blocks read as one run. */
+	.list-separator {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		gap: 0.5em;
+		padding: 0.5em 0.7em 0.25em 0.7em;
+		user-select: none;
+	}
+	:global(.al-left) .list-separator {
+		flex-direction: row-reverse;
+	}
+	.separator-label {
+		flex: none;
+		font-size: 0.72em;
+		font-weight: 600;
+		text-transform: uppercase;
+		letter-spacing: 0.12em;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+	.separator-line {
+		flex: 1 1 auto;
+		height: 1px;
+		border-radius: 1px;
+		background: var(--theme-color, currentColor);
+		opacity: 0.45;
 	}
 </style>
 

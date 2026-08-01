@@ -1,26 +1,49 @@
 import { titleSideLeft } from './event.svelte.js';
 
-export function maybeTooltip(node, title) {
-    if (!title) return;
-    return tooltip(node, title);
+/** Accepts a plain title, or {title, game} to add the category on a second line. */
+function normalize(params) {
+	if (typeof params === 'string') return { title: params, game: null };
+	return { title: params?.title ?? null, game: params?.game ?? null };
+}
+
+function hasContent(params) {
+	const { title, game } = normalize(params);
+	return !!(title || game);
+}
+
+export function maybeTooltip(node, params) {
+    if (!hasContent(params)) return;
+    return tooltip(node, params);
   }
 export function tooltip(node, params) {
     let tt = document.querySelector("#custom-tooltip");
     if (tt)
 	    tt.classList.add('tooltip');
-    
+
+	let current = params;
+	let child = null;
+
+	function build() {
+		const wrapper = document.createElement('span');
+		wrapper.setAttribute('id', 'tooltip');
+		const { title, game } = normalize(current);
+		if (title) {
+			const line = document.createElement('span');
+			line.className = 'tt-title';
+			line.textContent = title;
+			wrapper.appendChild(line);
+		}
+		if (game) {
+			const line = document.createElement('span');
+			line.className = 'tt-game';
+			line.textContent = game;
+			wrapper.appendChild(line);
+		}
+		return wrapper;
+	}
+
 	function handleFocus() {
-        
-        //     function callback(entries, observer) {
-        //         for (const entry of entries) {
-        //             console.log(entry);
-        //         }
-        //     }
-        // const resizeObserver = new ResizeObserver(callback);
-        // resizeObserver.observe(node);
-		const child = document.createElement('span');
-		child.textContent = params;
-		child.setAttribute('id', 'tooltip');
+		child = build();
         let c = tt.querySelector('.content');
 		c.appendChild(child);
         let {x, y, height, width} = node.getBoundingClientRect();
@@ -33,9 +56,8 @@ export function tooltip(node, params) {
 		} else {
 			pos.style.transform = "translate(" + (x + width + y2.width) +"px, " + (y + height/2 - y2.height/2) + "px)";
 		}
-        // console.log(pos, "translate(" + x +"px, " + (y + height/2 - y2/2) + "px)")
         tt.setAttribute('tabindex', 0);
-		
+
 		node.addEventListener('mouseleave', handleBlur)
 		node.addEventListener('blur', handleBlur)
 		node.removeEventListener('mouseenter', handleFocus)
@@ -44,23 +66,34 @@ export function tooltip(node, params) {
 
 	function handleBlur() {
         let c = tt.querySelector('.content');
-		c.removeChild(c.querySelector('#tooltip'));
-		
+		let shown = c.querySelector('#tooltip');
+		if (shown) c.removeChild(shown);
+		child = null;
+
 		node.removeEventListener('mouseleave', handleBlur)
 		node.removeEventListener('blur', handleBlur)
 		node.addEventListener('mouseenter', handleFocus)
 		node.addEventListener('focus', handleFocus)
 	}
-	
+
 	node.addEventListener('mouseenter', handleFocus)
 	node.addEventListener('focus', handleFocus)
-	
+
 	return {
-		onDestroy() {
-            let c = tt.querySelector('.content');
-			tt.classList.remove('tooltip');
-			c.removeEventListener('mouseenter', handleFocus)
-			c.removeEventListener('focus', handleFocus)
+		// The poller rewrites titles and categories every few seconds: without
+		// this the bubble would keep the values it was built with.
+		update(newParams) {
+			current = newParams;
+			if (child && child.parentNode) {
+				const next = build();
+				child.parentNode.replaceChild(next, child);
+				child = next;
+			}
+		},
+		destroy() {
+			handleBlur();
+			node.removeEventListener('mouseenter', handleFocus)
+			node.removeEventListener('focus', handleFocus)
 		}
 	}
 };

@@ -164,6 +164,9 @@ class ConfigManager {
             for (let currentId in toSaveChannels[listId].items) {
                 if ((toSaveChannels[listId].items[currentId] as any).type === CST.TYPE_LIST) {
                     this.cleanRecursively((toSaveChannels[listId].items[currentId] as any).id, toSaveChannels);
+                } else if ((toSaveChannels[listId].items[currentId] as any).type === CST.TYPE_SEPARATOR) {
+                    const it = toSaveChannels[listId].items[currentId] as any;
+                    toSaveChannels[listId].items[currentId] = {id: it.id, type: it.type, name: it.name ?? ''};
                 } else {
                     const it = toSaveChannels[listId].items[currentId];
                     toSaveChannels[listId].items[currentId] = (it as any).channel_id < 0

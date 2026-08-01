@@ -16,6 +16,8 @@
     let allOtherItem = $state();
     const sortOptions = CST.SORT_STRATEGY.filter(s => s.id !== CST.CUSTOM_SORT);
     const headerOptions = CST.ALL_OTHER_HEADER_TYPE;
+    const behaviorTypeOptions = CST.TYPE_OPTIONS.filter(o => o.group === 'behavior');
+    const styleTypeOptions = CST.TYPE_OPTIONS.filter(o => o.group === 'style');
     $effect(() => {
         listeId = configChangeEvent.current;
         if (listeId) {
@@ -26,6 +28,9 @@
                 if (group && group[opt.key] === undefined) group[opt.key] = false;
             }
             if (listConfig?.type && listConfig.type.height === undefined) listConfig.type.height = CST.HEADER_HEIGHT_MEDIUM;
+            for (const opt of CST.TYPE_OPTIONS) {
+                if (listConfig?.type && listConfig.type[opt.key] === undefined) listConfig.type[opt.key] = false;
+            }
             let item = listConfig?.items?.find(i => i.channel_id === CST.ALL_OTHER_CHANNELS);
             if (item && item.sort === undefined) item.sort = CST.ALPHA_SORT;
             if (item && item.type === undefined) item.type = CST.ALL_OTHER_HEADER_NONE;
@@ -113,6 +118,18 @@
                                     data-tooltip={$_(item.tooltip)}>?</span>
                             </div>
                         {/each}
+                        {#each behaviorTypeOptions as item}
+                            <div class="behavior-item">
+                                <input
+                                    type="checkbox"
+                                    id={item.key}
+                                    bind:checked={listConfig.type[item.key]}/>
+                                <label for={item.key}>{$_(item.label)}</label>
+                                <span
+                                    class="help-badge"
+                                    data-tooltip={$_(item.tooltip)}>?</span>
+                            </div>
+                        {/each}
                     </div>
                     <div class="row">
                         <p>{$_('configPannel.sortMode')}</p>
@@ -131,6 +148,18 @@
                                     type="checkbox"
                                     id={item.key}
                                     bind:checked={listConfig.style[item.group][item.key]}/>
+                                <label for={item.key}>{$_(item.label)}</label>
+                                <span
+                                    class="help-badge"
+                                    data-tooltip={$_(item.tooltip)}>?</span>
+                            </div>
+                        {/each}
+                        {#each styleTypeOptions as item}
+                            <div class="behavior-item">
+                                <input
+                                    type="checkbox"
+                                    id={item.key}
+                                    bind:checked={listConfig.type[item.key]}/>
                                 <label for={item.key}>{$_(item.label)}</label>
                                 <span
                                     class="help-badge"

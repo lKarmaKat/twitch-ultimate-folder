@@ -28,7 +28,8 @@
     "cancel": "Abbrechen",
     "cleanConfig": "Konfiguration bereinigen",
     "cleanConfigTooltip": "{count, plural, one {# Kanal in dieser Konfiguration wird nicht mehr gefolgt. Aus der Liste entfernen} other {# Kanälen in dieser Konfiguration wird nicht mehr gefolgt. Aus der Liste entfernen}} (danach nicht vergessen zu speichern).",
-    "addNewListToRoot": "Neue Liste zum Stammelement hinzufügen"
+    "addNewListToRoot": "Neue Liste zum Stammelement hinzufügen",
+    "addSeparatorToRoot": "Trenner zum Wurzelelement hinzufügen"
   },
   "configPannel": {
     "listName": "Listenname",
@@ -50,7 +51,9 @@
   },
   "configList": {
     "alreadyInList": "Das Element befindet sich bereits in der Liste",
-    "addList": "Neue Liste in {listId} hinzufügen"
+    "addList": "Neue Liste in {listId} hinzufügen",
+    "addSeparator": "Trenner hinzufügen",
+    "separatorPlaceholder": "Beschriftung des Trenners (optional)"
   },
   "mainList": {
     "searchPlaceholder": "Kanäle durchsuchen",
@@ -133,6 +136,16 @@
     "indentRail": {
       "label": "Einzugslinie",
       "tooltip": "Rückt den Listeninhalt ein und zeichnet eine senkrechte Linie in den Rand. Die Linie übernimmt die gewählte Farbe der Seitenleiste und bleibt ohne diese unsichtbar."
+    }
+  },
+  "typeOptions": {
+    "chevron": {
+      "label": "Pfeil",
+      "tooltip": "Zeigt einen Pfeil vor dem Listensymbol, der auf den Inhalt zeigt und sich beim Öffnen nach unten dreht. Wird von den Symbolen Winkel und Kreuz ignoriert, die das bereits tun."
+    },
+    "exclusive": {
+      "label": "Nur eine Unterliste offen",
+      "tooltip": "Das Öffnen einer Unterliste schließt die anderen. Hält eine volle Seitenleiste auf einer einzigen offenen Liste."
     }
   },
   "sort": {

@@ -28,7 +28,8 @@
     "cancel": "Avbryt",
     "cleanConfig": "Rydd opp i konfigurasjonen",
     "cleanConfigTooltip": "{count, plural, one {# kanal i denne konfigurasjonen følges ikke lenger. Fjern den fra listen} other {# kanaler i denne konfigurasjonen følges ikke lenger. Fjern dem fra listen}} (husk å lagre etterpå).",
-    "addNewListToRoot": "Legg til ny liste i rotelementet"
+    "addNewListToRoot": "Legg til ny liste i rotelementet",
+    "addSeparatorToRoot": "Legg til et skille i rotelementet"
   },
   "configPannel": {
     "listName": "Listenavn",
@@ -50,7 +51,9 @@
   },
   "configList": {
     "alreadyInList": "Elementet finnes allerede i listen",
-    "addList": "Legg til ny liste i {listId}"
+    "addList": "Legg til ny liste i {listId}",
+    "addSeparator": "Legg til et skille",
+    "separatorPlaceholder": "Merkelapp for skillet (valgfritt)"
   },
   "mainList": {
     "searchPlaceholder": "Søk blant kanaler",
@@ -133,6 +136,16 @@
     "indentRail": {
       "label": "Innrykkslinje",
       "tooltip": "Rykker inn innholdet i listen og tegner en loddrett linje i margen. Linjen får den valgte fargen på sidefeltet og forblir usynlig uten den."
+    }
+  },
+  "typeOptions": {
+    "chevron": {
+      "label": "Pil",
+      "tooltip": "Viser en pil foran listeikonet, rettet mot innholdet og vendt ned når listen er åpen. Ignoreres av ikonene vinkel og kryss, som allerede gjør det."
+    },
+    "exclusive": {
+      "label": "Bare én underliste åpen",
+      "tooltip": "Å åpne en underliste lukker de andre. Holder et fullt sidefelt til én åpen liste."
     }
   },
   "sort": {

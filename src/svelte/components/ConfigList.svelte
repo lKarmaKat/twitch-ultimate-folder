@@ -11,7 +11,7 @@
 
 	  
 
-	let { configManager, listId, requestDeleteToParent, addRootNode = $bindable() } = $props()
+	let { configManager, listId, requestDeleteToParent, addRootNode = $bindable(), addRootSeparator = $bindable() } = $props()
 
 
 	// let duplicatedElementError = $derived(!)
@@ -89,6 +89,31 @@
 
 	addRootNode = addNode;
 
+	// A separator is an item of its parent, not an entry of the flat map: it
+	// holds no channel and no children. Its id only has to stay unique among
+	// the items, hence the scan over the whole config.
+	function addSeparator() {
+		let taken = new Set();
+		for (const list of Object.values(configManager.selectedConfig)) {
+			for (const item of list?.items ?? []) taken.add(item.id);
+		}
+		let index = 1;
+		while (taken.has('sep' + index)) index++;
+		configManager.selectedConfig[listId].items.push({
+			id: 'sep' + index,
+			type: CST.TYPE_SEPARATOR,
+			name: ''
+		});
+	}
+
+	addRootSeparator = addSeparator;
+
+	// svelte-dnd-action starts a drag on mousedown over an item: without this
+	// the separator input would be grabbed instead of focused.
+	function keepFocus(e) {
+		e.stopPropagation();
+	}
+
 	function removeChild(param) {
 		let indexToRemove = configManager.selectedConfig[listId].items.findIndex(e => e?.id === param)
 		if (indexToRemove >= 0) {
@@ -137,6 +162,7 @@
 		<p class="list-title"><strong>{configManager.selectedConfig[listId]?.name}</strong></p>
 		<div class="list-side-menu">
 			<button id="add-list-{listId}" class="add-list" onclick={() => addNode()} title={$_('configList.addList', { values: { listId } })}>+</button>
+			<button id="add-separator-{listId}" class="add-separator" onclick={(e)=>{ e.stopPropagation(); addSeparator()}} title={$_('configList.addSeparator')}>—</button>
 			<button class="delete delete-list" onclick={(e)=>{  e.stopPropagation(); requestDeleteToParent(listId)}}>x</button>
 		</div>
 	</div>
@@ -160,6 +186,22 @@
 					requestDeleteToParent={removeChild}
 					configManager={configManager} />
 			</div>
+			{:else if item.type === CST.TYPE_SEPARATOR}
+				<div class="channel separator-item">
+					<div class="channel-side-menu">
+						<button class="delete" id="remove-{item.id}" onclick={()=>{removeChild(item.id)}}>x</button>
+					</div>
+					<div class="separator-row">
+						<span class="separator-dash" aria-hidden="true"></span>
+						<input
+							type="text"
+							class="separator-name"
+							bind:value={item.name}
+							onmousedown={keepFocus}
+							ontouchstart={keepFocus}
+							placeholder={$_('configList.separatorPlaceholder')} />
+					</div>
+				</div>
 			{:else if item.channel_id === CST.ALL_OTHER_CHANNELS}
 				<div class="channel">
 					<div class="other-channels-side-menu">
@@ -321,7 +363,8 @@
 		background-color: rgba(216, 57, 57, 0.685);
 		min-width: var(--side-menu-btn-width);
 	}
-	.add-list {
+	.add-list,
+	.add-separator {
 		display: inline-flex;
 		align-items: center;
 		gap: 0.5em;
@@ -334,6 +377,41 @@
 		cursor: pointer;
 		transition: box-shadow 0.15s ease, transform 0.1s ease;
 		background: linear-gradient(135deg, #a970ff, #7a3dff);
+	}
+	.add-separator {
+		padding: 0.6em 1em;
+		background: linear-gradient(135deg, #8a8a99, #5c5c6b);
+	}
+	/* Same footprint as a channel row so the drop targets stay even. */
+	.separator-item .separator-row {
+		display: flex;
+		align-items: center;
+		gap: 0.5em;
+		padding: 0.5em 0.6em;
+		min-height: 2.1em;
+	}
+	.separator-dash {
+		flex: none;
+		width: 1.4em;
+		height: 2px;
+		border-radius: 1px;
+		background: currentColor;
+		opacity: 0.5;
+	}
+	.separator-name {
+		flex: 1 1 auto;
+		min-width: 0;
+		width: auto;
+		font-size: 0.9em;
+		font-style: italic;
+		background: transparent;
+		border: none;
+		border-bottom: 1px dashed currentColor;
+		color: inherit;
+	}
+	.separator-name:focus {
+		outline: none;
+		font-style: normal;
 	}
 	.delete-list {
 		height: 100%;

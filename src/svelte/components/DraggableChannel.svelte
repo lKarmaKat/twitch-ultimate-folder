@@ -14,11 +14,18 @@
         blockNavigation = true,
         showOffline = false,
         greyIfOffline = false,
+        /** Adds the category under the title in the hover bubble. */
+        showGameInTooltip = false,
         /** Config entry whose channel is no longer followed: named, but dead. */
         unfollowed = false
     } = $props();
 
     let profilePic = $derived(unfollowed ? UNFOLLOWED_CHANNEL_IMAGE : channelProfilePic);
+
+    let tooltipContent = $derived({
+        title,
+        game: showGameInTooltip && isLive ? gameName : null
+    });
 
 	function navigate(event) {
         event.preventDefault();
@@ -212,7 +219,7 @@
 		background: inherit;
 		/* clip-path: polygon(0% 0%, 100% 0%, 50% 100%); */
 		clip-path: polygon(0 0, 0 100%, 100% 50%); -->
-<a class="card" id="draggable-channel" class:unfollowed use:maybeTooltip={title} href={ !blockNavigation && !unfollowed ? "https://www.twitch.tv/" + channelName : null } onclick={navigate}>
+<a class="card" id="draggable-channel" class:unfollowed use:maybeTooltip={tooltipContent} href={ !blockNavigation && !unfollowed ? "https://www.twitch.tv/" + channelName : null } onclick={navigate}>
     <!-- <div class="layout-container" style="background-color: {color};"> -->
         <div class="flex-profile-picture">
             <div class="profile-picture">
