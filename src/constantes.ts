@@ -21,6 +21,9 @@ export const GET_ALIGNMENT = 'GET_ALIGNMENT';
 export const TITLE_SIDE = 'TITLE_SIDE';
 export const CHANGE_TITLE_SIDE = 'CHANGE_TITLE_SIDE';
 export const GET_TITLE_SIDE = 'GET_TITLE_SIDE';
+export const SKIN = 'SKIN';
+export const CHANGE_SKIN = 'CHANGE_SKIN';
+export const GET_SKIN = 'GET_SKIN';
 export const LOCALE = 'LOCALE';
 export const CHANGE_LOCALE = 'CHANGE_LOCALE';
 export const GET_LOCALE = 'GET_LOCALE';
@@ -78,6 +81,8 @@ export const ALL_OTHER_HEADER_TYPE = [
 export const PARAM_ALIGNMENT_LEFT = 'alignmentLeft';
 /** chrome.storage.local key, 1/0: 1 = channel title shown on the left. */
 export const PARAM_TITLE_SIDE_LEFT = 'titleSideLeft';
+/** chrome.storage.local key, 1/0: 1 = channel rows highlight on hover. Default off keeps today's look. */
+export const PARAM_SKIN_MODERN = 'skinModern';
 
 // Medium is 0: every config saved before the option existed already holds
 // `height: 0`, so they stay on the current dimensions without a migration.
@@ -110,9 +115,8 @@ export const STYLE_OPTIONS = [
 export const TYPE_CHEVRON = 'chevron';
 export const TYPE_EXCLUSIVE = 'exclusive';
 
-// Booleans stored in the list `type` object, all false by default so a config
-// saved before they existed keeps rendering exactly as it did. `group` is the
-// panel section the checkbox belongs to.
+// All false by default: a config saved before they existed keeps rendering as
+// it did. `group` is the panel section the checkbox belongs to.
 export const TYPE_OPTIONS = [
 {key: TYPE_CHEVRON, group: 'style', label: 'typeOptions.chevron.label', tooltip: 'typeOptions.chevron.tooltip'},
 {key: TYPE_EXCLUSIVE, group: 'behavior', label: 'typeOptions.exclusive.label', tooltip: 'typeOptions.exclusive.tooltip'},

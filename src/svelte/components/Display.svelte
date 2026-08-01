@@ -68,13 +68,9 @@
 		openState = startupExtended;
 	});
 
-	// Inside an exclusive parent the open state belongs to the parent, which
-	// only ever names one child: keeping it local would let two be open.
 	let ruledByParent = $derived(typeof onExclusiveToggle === 'function');
 	let extended = $derived(ruledByParent ? exclusiveOpenId === listId : openState);
 
-	// Exclusive parent side: the single child allowed open, seeded with the
-	// first one flagged "extended on startup".
 	let openChildId = $state(null);
 	$effect(() => {
 		configManager.selectedConfig;
@@ -302,7 +298,6 @@
 
 	let customSort = $derived((configManager.selectedConfig[listId]?.sort ?? CST.CUSTOM_SORT) === CST.CUSTOM_SORT);
 
-	/** Anything displayable between a separator and the next one. */
 	function hasContentAfter(list, index) {
 		for (let i = index + 1; i < list.length; i++) {
 			const item = list[i];
@@ -316,9 +311,7 @@
 		return false;
 	}
 
-	// A separator label is only true if something follows it, and it only keeps
-	// its meaning under a custom sort — any other strategy scatters the items
-	// it was placed between.
+	// Any sort but the custom one scatters the items a separator was placed between.
 	let renderedItems = $derived.by(() => {
 		const list = getListChannelsSortedByStrategy(configManager.selectedConfig[listId].items);
 		return list.filter((item, index) =>
@@ -467,10 +460,8 @@
 		align-items: center;
 
 	}
-	/* Closed points right, open points down — same --icon-open contract as the
-	   angle and cross icons, which is why those two never get a chevron. Not
-	   mirrored on .al-left: only the margins and the rail switch sides there,
-	   the header keeps its children in the same order. */
+	/* Not mirrored on .al-left: only the margins and the rail switch sides
+	   there, the header keeps its children in the same order. */
 	.header-chevron {
 		width: 0.9em;
 		height: 0.9em;
@@ -664,8 +655,6 @@
 	.channel-overlay {
 		cursor: pointer;
 	}
-	/* Marks the end of a list when loose channels follow it at the same depth:
-	   without it both blocks read as one run. */
 	.list-separator {
 		display: flex;
 		flex-direction: row;

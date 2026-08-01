@@ -250,6 +250,19 @@ let sendCurrentTitleSideOnConnect = (port: chrome.runtime.Port) => {
   }).catch(err => logBackgroundError("background:sendCurrentTitleSideOnConnect", err));
 }
 
+let currentSkinModern = false;
+const skinReady = api.storage.local.get(CST.PARAM_SKIN_MODERN).then((data) => {
+  currentSkinModern = data[CST.PARAM_SKIN_MODERN] === 1;
+}).catch(err => logBackgroundError("background:readSkin", err));
+let sendCurrentSkinOnConnect = (port: chrome.runtime.Port) => {
+  skinReady.then(() => {
+    port.postMessage({
+      "type": CST.SKIN,
+      "data": currentSkinModern
+    });
+  }).catch(err => logBackgroundError("background:sendCurrentSkinOnConnect", err));
+}
+
 let currentLocale: string | undefined;
 api.storage.local.get("local").then((data) => {
   currentLocale = data.local as string | undefined;
@@ -356,6 +369,7 @@ let portManager = new PortManager(sendCurrentConfigOnConnect,
                                 sendCurrentLocaleOnConnect,
                                 handlePortMessage);
 portManager.registerOnConnect('titleSide', sendCurrentTitleSideOnConnect);
+portManager.registerOnConnect('skin', sendCurrentSkinOnConnect);
 
 // Pas de teardown sur `beforeunload` : ni le service worker MV3 de Chrome ni
 // l'event page de Firefox ne le declenchent. Les ports meurent de toute facon
@@ -486,6 +500,30 @@ api.runtime.onMessage.addListener((msg, sender, sendResponse) => {
         sendResponse({
           type: CST.TITLE_SIDE,
           data: currentTitleSideLeft
+        });
+      });
+      return true;
+    }
+
+    if (msg.type === CST.CHANGE_SKIN) {
+      currentSkinModern = msg.value === true;
+      sendResponse({
+        type: CST.SKIN,
+        data: currentSkinModern
+      });
+      api.storage.local.set({
+        [CST.PARAM_SKIN_MODERN]: currentSkinModern ? 1 : 0
+      });
+      portManager.sendMessageToAllTabs(CST.SKIN, currentSkinModern, "skin");
+
+      return true;
+    }
+
+    if (msg.type === CST.GET_SKIN) {
+      skinReady.then(() => {
+        sendResponse({
+          type: CST.SKIN,
+          data: currentSkinModern
         });
       });
       return true;

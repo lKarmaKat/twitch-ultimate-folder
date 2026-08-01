@@ -15,7 +15,11 @@
     "titleSideSub": "Po której stronie pojawia się tytuł kanału",
     "right": "Prawo",
     "left": "Lewo",
-    "language": "Język"
+    "language": "Język",
+    "skin": "Podświetlenie po najechaniu",
+    "skinSub": "Czy wiersz kanału podświetla się po najechaniu na niego myszą",
+    "skinModern": "Nowoczesny",
+    "skinNative": "Twitch"
   },
   "configPopup": {
     "title": "Zorganizuj swoje ulubione",

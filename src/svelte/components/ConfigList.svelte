@@ -89,9 +89,6 @@
 
 	addRootNode = addNode;
 
-	// A separator is an item of its parent, not an entry of the flat map: it
-	// holds no channel and no children. Its id only has to stay unique among
-	// the items, hence the scan over the whole config.
 	function addSeparator() {
 		let taken = new Set();
 		for (const list of Object.values(configManager.selectedConfig)) {
@@ -382,7 +379,6 @@
 		padding: 0.6em 1em;
 		background: linear-gradient(135deg, #8a8a99, #5c5c6b);
 	}
-	/* Same footprint as a channel row so the drop targets stay even. */
 	.separator-item .separator-row {
 		display: flex;
 		align-items: center;

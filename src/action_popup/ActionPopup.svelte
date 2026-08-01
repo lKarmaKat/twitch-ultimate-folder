@@ -28,6 +28,7 @@ import { api } from '../browserApi.js';
   // Side the hover title pops up on: true = left. Bound straight to the toggle,
   // unlike `alignment`, whose label reads the other way round.
   let titleSideLeft = $state(false);
+  let skinModern = $state(false);
 
   // TODO: replace with the real Ko-fi account (same placeholder as HelpPage).
   const KOFI_URL = 'https://ko-fi.com/YOUR_KOFI_HANDLE';
@@ -42,6 +43,12 @@ import { api } from '../browserApi.js';
   api.runtime.sendMessage({ type: CST.GET_TITLE_SIDE }, (response) => {
     if (response?.type === CST.TITLE_SIDE) {
       titleSideLeft = response.data;
+    }
+  });
+
+  api.runtime.sendMessage({ type: CST.GET_SKIN }, (response) => {
+    if (response?.type === CST.SKIN) {
+      skinModern = response.data;
     }
   });
 
@@ -74,6 +81,11 @@ import { api } from '../browserApi.js';
   async function onTitleSideChange() {
     const response = await api.runtime.sendMessage({ type: CST.CHANGE_TITLE_SIDE, value: titleSideLeft });
     if (response?.type === CST.TITLE_SIDE) titleSideLeft = response.data;
+  }
+
+  async function onSkinChange() {
+    const response = await api.runtime.sendMessage({ type: CST.CHANGE_SKIN, value: skinModern });
+    if (response?.type === CST.SKIN) skinModern = response.data;
   }
 
   function onLocaleChange() {
@@ -167,6 +179,20 @@ import { api } from '../browserApi.js';
               <span class="track"></span>
               <span class="lbl-on">{$_('actionPopup.left')}</span>
               <span class="lbl-off">{$_('actionPopup.right')}</span>
+              <span class="thumb"></span>
+            </span>
+          </label>
+
+          <label class="row" for="skin">
+            <div class="row-info">
+              <div class="row-label">{$_('actionPopup.skin')}</div>
+              <div class="row-sub">{$_('actionPopup.skinSub')}</div>
+            </div>
+            <input type="checkbox" class="tgl" id="skin" bind:checked={skinModern} onchange={onSkinChange}>
+            <span class="sw">
+              <span class="track"></span>
+              <span class="lbl-on">{$_('actionPopup.skinModern')}</span>
+              <span class="lbl-off">{$_('actionPopup.skinNative')}</span>
               <span class="thumb"></span>
             </span>
           </label>

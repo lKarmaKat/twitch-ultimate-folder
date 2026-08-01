@@ -15,7 +15,11 @@
     "titleSideSub": "Kummalla puolella kanavan otsikko näkyy",
     "right": "Oikea",
     "left": "Vasen",
-    "language": "Kieli"
+    "language": "Kieli",
+    "skin": "Kohdistuskorostus",
+    "skinSub": "Korostuuko kanavarivi, kun osoitat sitä hiirellä",
+    "skinModern": "Moderni",
+    "skinNative": "Twitch"
   },
   "configPopup": {
     "title": "Järjestä suosikkisi",

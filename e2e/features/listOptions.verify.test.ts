@@ -109,6 +109,15 @@ async function isOpen(target: { bodyInner: Locator }) {
 	return (box?.height ?? 0) > 0;
 }
 
+async function sendSkin(page: Page, modern: boolean) {
+	const frame = page.frame({ name: 'inner-iframe' });
+	if (!frame) throw new Error('Frame not found');
+	await frame.waitForFunction(() => typeof (window as any).__portCallbackMap?.['skin'] === 'function');
+	await frame.evaluate((data) => {
+		(window as any).__portCallbackMap['skin']({ data });
+	}, modern);
+}
+
 async function setup(page: Page, conf: any) {
 	await popupPage.sendDefaultConf(conf, channelsRef);
 	await popupPage.sendAuth(CST.AUTH_READY);
@@ -167,6 +176,19 @@ test('tooltip: title on the first line, category on the second', async ({ page }
 	// the bubble is torn down on leave, not left behind
 	await frame.locator('#main-channels-list').hover();
 	await expect(frame.locator('#tooltip')).toHaveCount(0);
+});
+
+test('skinModern: channel rows get a hover background only when the option is on', async ({ page }) => {
+	await setup(page, confTwoLists(false, false));
+	const card = nested(page, 0).bodyInner.locator('.card').first();
+
+	const bgBefore = await card.evaluate(el => getComputedStyle(el).backgroundColor);
+	await card.hover();
+	expect(await card.evaluate(el => getComputedStyle(el).backgroundColor)).toBe(bgBefore);
+
+	await sendSkin(page, true);
+	await card.hover();
+	expect(await card.evaluate(el => getComputedStyle(el).backgroundColor)).not.toBe(bgBefore);
 });
 
 test('separator: shown with its label, dropped when nothing follows it', async ({ page }) => {

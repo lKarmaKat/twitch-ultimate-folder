@@ -14,7 +14,6 @@
         blockNavigation = true,
         showOffline = false,
         greyIfOffline = false,
-        /** Adds the category under the title in the hover bubble. */
         showGameInTooltip = false,
         /** Config entry whose channel is no longer followed: named, but dead. */
         unfollowed = false
@@ -50,6 +49,10 @@
     .card,
     .layout-container {
         max-width: 100%;
+    }
+    .card {
+        border-radius: 4px;
+        transition: background-color 0.15s ease;
     }
     .layout-container {
         width: 100%;

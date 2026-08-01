@@ -23,6 +23,8 @@ export function tooltip(node, params) {
 	let current = params;
 	let child = null;
 
+	// textContent, never innerHTML: a stream title is arbitrary API text and
+	// this node lives on Twitch's document, outside the shadow root.
 	function build() {
 		const wrapper = document.createElement('span');
 		wrapper.setAttribute('id', 'tooltip');
@@ -80,8 +82,7 @@ export function tooltip(node, params) {
 	node.addEventListener('focus', handleFocus)
 
 	return {
-		// The poller rewrites titles and categories every few seconds: without
-		// this the bubble would keep the values it was built with.
+		// The poller rewrites titles and categories every few seconds.
 		update(newParams) {
 			current = newParams;
 			if (child && child.parentNode) {

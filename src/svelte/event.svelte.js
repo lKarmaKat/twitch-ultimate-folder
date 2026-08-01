@@ -15,6 +15,8 @@ export const allOthersChannelSelectedEvent = $state({ current: null });
 export const alignmentLeft = $state({ current: true });
 /** true = channel title pops up on the left of the row. Default: on the right. */
 export const titleSideLeft = $state({ current: false });
+/** true = channel rows highlight on hover. Default false: today's look, unchanged. */
+export const skinModern = $state({ current: false });
 
 /** Port reconnect backoff: 2, 4, 8 then 15 s. */
 export const RECONNECT_BASE_DELAY = 2000;

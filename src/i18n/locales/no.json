@@ -15,7 +15,11 @@
     "titleSideSub": "Hvilken side kanaltittelen vises på",
     "right": "Høyre",
     "left": "Venstre",
-    "language": "Språk"
+    "language": "Språk",
+    "skin": "Hover-fremheving",
+    "skinSub": "Om en kanalrad fremheves når du peker på den",
+    "skinModern": "Moderne",
+    "skinNative": "Twitch"
   },
   "configPopup": {
     "title": "Organiser favorittene dine",

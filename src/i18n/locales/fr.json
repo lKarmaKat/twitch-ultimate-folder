@@ -150,7 +150,11 @@
     "titleSideSub": "De quel côté apparaît le titre de la chaîne",
     "right": "Droite",
     "left": "Gauche",
-    "language": "Langue"
+    "language": "Langue",
+    "skin": "Survol des chaînes",
+    "skinSub": "Si une ligne de chaîne se met en surbrillance au survol",
+    "skinModern": "Moderne",
+    "skinNative": "Twitch"
   },
   "configPopup": {
     "title": "Organisez vos favoris",

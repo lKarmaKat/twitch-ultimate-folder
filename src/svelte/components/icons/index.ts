@@ -51,8 +51,7 @@ import TheDivision2Icon from './TheDivision2Icon.svelte';
 export const ICON_NONE = 0;
 export const ICON_EMPTY_PLACEHOLDER = -1;
 
-// Both already act as an open indicator: they rotate on --icon-open. A list
-// using one of them gets no extra chevron, whatever the chevron option says.
+// Already open indicators: they rotate on --icon-open, so they get no chevron.
 export const ICON_ANGLE = 3;
 export const ICON_CROSS = 4;
 

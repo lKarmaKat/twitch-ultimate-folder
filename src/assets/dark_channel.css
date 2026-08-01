@@ -46,6 +46,10 @@
 #display-container.dark .card {
     background-color: #26262c;
 }
+
+#display-container.dark.skin-modern .card:hover {
+    background-color: #46464f;
+}
 #display-container.dark .channel-name {
     color: rgb(239, 239, 241);
 }
@@ -77,7 +81,6 @@
     color: rgb(173, 173, 184);
 }
 
-/* Falls back to a neutral line when the list has no bar colour. */
 #display-container.dark .list-separator .separator-line {
     background: var(--theme-color, rgb(173, 173, 184));
 }
@@ -125,6 +128,10 @@
 
 #display-container.light .card {
     background-color: #efeff1;
+}
+
+#display-container.light.skin-modern .card:hover {
+    background-color: rgba(201, 201, 202, 0.5);
 }
 #display-container.light .channel-name {
     color: rgb(14, 14, 16);

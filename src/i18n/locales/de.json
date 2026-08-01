@@ -15,7 +15,11 @@
     "titleSideSub": "Auf welcher Seite der Kanaltitel erscheint",
     "right": "Rechts",
     "left": "Links",
-    "language": "Sprache"
+    "language": "Sprache",
+    "skin": "Hover-Hervorhebung",
+    "skinSub": "Ob eine Kanalzeile beim Überfahren mit der Maus hervorgehoben wird",
+    "skinModern": "Modern",
+    "skinNative": "Twitch"
   },
   "configPopup": {
     "title": "Organisiere deine Favoriten",

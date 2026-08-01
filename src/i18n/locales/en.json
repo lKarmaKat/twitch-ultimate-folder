@@ -150,7 +150,11 @@
     "titleSideSub": "Which side the channel title pops up on",
     "right": "Right",
     "left": "Left",
-    "language": "Language"
+    "language": "Language",
+    "skin": "Channel hover effect",
+    "skinSub": "Whether a channel row highlights when you point at it",
+    "skinModern": "Modern",
+    "skinNative": "Twitch"
   },
   "configPopup": {
     "title": "Organize your favorites",

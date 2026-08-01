@@ -6,7 +6,7 @@
   import NoLiveChannels from './NoLiveChannels.svelte';
   import EmptyConfig from './EmptyConfig.svelte';
   import NeedToConnect from './NeedToConnect.svelte';
-  import { alignmentLeft, titleSideLeft, portConnected } from '../event.svelte.js';
+  import { alignmentLeft, titleSideLeft, skinModern, portConnected } from '../event.svelte.js';
   import { hasAnyChannel, hasVisibleContent } from '../listVisibility.js';
   import PortDisconnected from './PortDisconnected.svelte';
   import { applyLocale } from '../../i18n/index.js';
@@ -87,6 +87,11 @@
   }
   let titleSidePort = new PortConnector(titleSideCb, 'titleSide');
 
+  let skinCb = (data) => {
+    skinModern.current = data.data;
+  }
+  let skinPort = new PortConnector(skinCb, 'skin');
+
   let localeCb = (msg) => {
     applyLocale(msg.data);
   }
@@ -115,7 +120,7 @@
 
 </script>
 
-<div id="display-container" class="display-wrapper" class:dark={theme} class:light={!theme} class:al-left={alignmentLeft.current} class:al-right={!alignmentLeft.current}>
+<div id="display-container" class="display-wrapper" class:dark={theme} class:light={!theme} class:al-left={alignmentLeft.current} class:al-right={!alignmentLeft.current} class:skin-modern={skinModern.current}>
   <!-- Strictly false: null means "not connected yet", not a real disconnect. -->
   {#if portConnected.current === false}
     <PortDisconnected />

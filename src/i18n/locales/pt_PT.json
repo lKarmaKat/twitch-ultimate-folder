@@ -15,7 +15,11 @@
     "titleSideSub": "De que lado aparece o título do canal",
     "right": "Direita",
     "left": "Esquerda",
-    "language": "Idioma"
+    "language": "Idioma",
+    "skin": "Destaque ao passar o rato",
+    "skinSub": "Se uma linha de canal se destaca ao passar o rato por cima",
+    "skinModern": "Moderno",
+    "skinNative": "Twitch"
   },
   "configPopup": {
     "title": "Organize os seus favoritos",

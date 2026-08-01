@@ -15,7 +15,11 @@
     "titleSideSub": "Na kojoj se strani prikazuje naslov kanala",
     "right": "Desno",
     "left": "Lijevo",
-    "language": "Jezik"
+    "language": "Jezik",
+    "skin": "Isticanje pri lebdenju",
+    "skinSub": "Hoće li se redak kanala istaknuti kada preko njega prijeđete mišem",
+    "skinModern": "Moderno",
+    "skinNative": "Twitch"
   },
   "configPopup": {
     "title": "Organizirajte svoje favorite",

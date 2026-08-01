@@ -30,8 +30,6 @@
 		width: max-content;
 	}
 
-	/* Two lines built by tooltip.svelte.js. The category is styled here rather
-	   than inline so it stays editable without touching the JS. */
 	/* .tooltip carries white-space: nowrap, so a long title needs the ellipsis
 	   to stop the bubble from growing past the viewport. */
 	:global(#tooltip .tt-title) {
