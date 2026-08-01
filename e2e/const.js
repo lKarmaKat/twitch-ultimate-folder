@@ -35,7 +35,7 @@ export const config = {
             "theme": "SYSTEM"
         },
         "type": {
-            "height": CST.HEADER_TYPE_HEIGHT[1].id,
+            "height": CST.HEADER_HEIGHT_MEDIUM,
             "iconType": 1,
             "barType": CST.BAR_TYPE[0].id,
             "viewerCountType": 1
@@ -79,7 +79,7 @@ export const config = {
             "theme": CST.SYSTEM_STYLE
         },
         type: {
-            height: CST.HEADER_TYPE_HEIGHT[1].id,
+            height: CST.HEADER_HEIGHT_MEDIUM,
             "iconType": 1,
             barType: CST.BAR_TYPE[0].id,
             viewerCountType: 1

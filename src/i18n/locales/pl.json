@@ -37,10 +37,12 @@
     "sortStrategy": "Sortowanie niestandardowe pozwala samodzielnie określić kolejność; alpha/viewer jest wystarczająco jasne. UWAGA: sortowanie ALPHA/VIEWER powinno być używane tylko na liście zawierającej wyłącznie kanały",
     "sortMode": "Tryb sortowania",
     "style": "Styl",
+    "headerSize": "Rozmiar nagłówka",
     "listHeaderIcon": "Ikona nagłówka listy",
     "listHeaderBarColor": "Kolor paska bocznego nagłówka listy",
     "listHeaderBadge": "Styl odznaki nagłówka listy",
     "help": "Pomoc",
+    "headerSizeHelp": "Wysokość nagłówka listy. Mały nagłówek jest kompaktowy i nie pokazuje ikony.",
     "listIconHelp": "Ikona wyświetlana obok nazwy listy",
     "listHeaderBarColorHelp": "Kolor paska bocznego listy",
     "listCounterBadgeHelp": "Styl odznaki pokazującej liczbę kanałów online",
@@ -137,6 +139,10 @@
     "custom": "Sortowanie niestandardowe",
     "viewer": "Sortowanie według liczby widzów",
     "alpha": "Sortowanie alfabetyczne"
+  },
+  "headerHeight": {
+    "medium": "Średni",
+    "small": "Mały (bez ikony)"
   },
   "bar": {
     "purple": "fioletowy",

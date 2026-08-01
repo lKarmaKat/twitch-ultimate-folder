@@ -187,10 +187,12 @@
     "sortStrategy": "custom sort let's you define the sort order, alpha/viewer is explicit enough, CAVEAT you should use ALPHA/VIEWER sort on a list that only contains channels",
     "sortMode": "Sort Mode",
     "style": "Style",
+    "headerSize": "Header size",
     "listHeaderIcon": "List header icon",
     "listHeaderBarColor": "List header side bar color",
     "listHeaderBadge": "List header badge style",
     "help": "Help",
+    "headerSizeHelp": "Height of the list header. A small header is compact and shows no icon.",
     "listIconHelp": "Icon displayed next to the list name",
     "listHeaderBarColorHelp": "Color of the list's side bar",
     "listCounterBadgeHelp": "Style of the badge showing the number of channels online",
@@ -293,6 +295,10 @@
     "custom": "Custom sort",
     "viewer": "Viewer count sort",
     "alpha": "Alpha sort"
+  },
+  "headerHeight": {
+    "medium": "Medium",
+    "small": "Small (no icon)"
   },
   "allOtherHeader": {
     "none": "None",

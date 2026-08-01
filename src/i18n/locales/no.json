@@ -37,10 +37,12 @@
     "sortStrategy": "Egendefinert sortering lar deg selv bestemme rekkefølgen; alpha/viewer er tydelig nok. OBS: bruk ALPHA/VIEWER-sortering kun på en liste som bare inneholder kanaler",
     "sortMode": "Sorteringsmodus",
     "style": "Stil",
+    "headerSize": "Størrelse på listeoverskrift",
     "listHeaderIcon": "Ikon for listeoverskrift",
     "listHeaderBarColor": "Farge på sidefeltet i listeoverskriften",
     "listHeaderBadge": "Merkestil for listeoverskrift",
     "help": "Hjelp",
+    "headerSizeHelp": "Høyden på listeoverskriften. En liten overskrift er kompakt og viser ikke noe ikon.",
     "listIconHelp": "Ikon som vises ved siden av listenavnet",
     "listHeaderBarColorHelp": "Farge på listens sidefelt",
     "listCounterBadgeHelp": "Stil på merket som viser antall kanaler online",
@@ -137,6 +139,10 @@
     "custom": "Egendefinert sortering",
     "viewer": "Sortering etter antall seere",
     "alpha": "Alfabetisk sortering"
+  },
+  "headerHeight": {
+    "medium": "Middels",
+    "small": "Liten (uten ikon)"
   },
   "bar": {
     "purple": "lilla",

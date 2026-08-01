@@ -37,10 +37,12 @@
     "sortStrategy": "L'ordinamento personalizzato ti permette di definire l'ordine; alpha/spettatori è abbastanza esplicito. ATTENZIONE: usa l'ordinamento ALPHA/VIEWER solo su una lista che contiene esclusivamente canali",
     "sortMode": "Modalità di ordinamento",
     "style": "Stile",
+    "headerSize": "Dimensione dell'intestazione",
     "listHeaderIcon": "Icona dell'intestazione della lista",
     "listHeaderBarColor": "Colore della barra laterale dell'intestazione della lista",
     "listHeaderBadge": "Stile del badge dell'intestazione della lista",
     "help": "Aiuto",
+    "headerSizeHelp": "Altezza dell'intestazione della lista. Un'intestazione piccola è compatta e non mostra icone.",
     "listIconHelp": "Icona mostrata accanto al nome della lista",
     "listHeaderBarColorHelp": "Colore della barra laterale della lista",
     "listCounterBadgeHelp": "Stile del badge che mostra il numero di canali online",
@@ -137,6 +139,10 @@
     "custom": "Ordinamento personalizzato",
     "viewer": "Ordinamento per numero di spettatori",
     "alpha": "Ordinamento alfabetico"
+  },
+  "headerHeight": {
+    "medium": "Media",
+    "small": "Piccola (senza icona)"
   },
   "bar": {
     "purple": "viola",

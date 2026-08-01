@@ -25,9 +25,11 @@
                 let group = listConfig?.style?.[opt.group];
                 if (group && group[opt.key] === undefined) group[opt.key] = false;
             }
+            if (listConfig?.type && listConfig.type.height === undefined) listConfig.type.height = CST.HEADER_HEIGHT_MEDIUM;
             let item = listConfig?.items?.find(i => i.channel_id === CST.ALL_OTHER_CHANNELS);
             if (item && item.sort === undefined) item.sort = CST.ALPHA_SORT;
             if (item && item.type === undefined) item.type = CST.ALL_OTHER_HEADER_NONE;
+            if (item && item.height === undefined) item.height = CST.HEADER_HEIGHT_MEDIUM;
             if (item && item.iconType === undefined) item.iconType = ICON_NONE;
             allOtherItem = item;
         } else {
@@ -60,11 +62,20 @@
                     </div>
                     {#if allOtherItem.type === CST.ALL_OTHER_HEADER_SORTABLE}
                         <div class="row">
-                            <p>{$_('configPannel.listHeaderIcon')}</p>
-                            <span class="help-badge" data-tooltip={$_('configPannel.listIconHelp')}>?</span>
-                            <IconSelect
-                                bind:value={allOtherItem.iconType}/>
+                            <p>{$_('configPannel.headerSize')}</p>
+                            <span class="help-badge" data-tooltip={$_('configPannel.headerSizeHelp')}>?</span>
+                            <SortSelect
+                                bind:value={allOtherItem.height}
+                                options={CST.HEADER_HEIGHT_TYPE}/>
                         </div>
+                        {#if allOtherItem.height !== CST.HEADER_HEIGHT_SMALL}
+                            <div class="row">
+                                <p>{$_('configPannel.listHeaderIcon')}</p>
+                                <span class="help-badge" data-tooltip={$_('configPannel.listIconHelp')}>?</span>
+                                <IconSelect
+                                    bind:value={allOtherItem.iconType}/>
+                            </div>
+                        {/if}
                     {/if}
                     <div class="row">
                         <p>{$_('configPannel.sortMode')}</p>
@@ -127,21 +138,25 @@
                             </div>
                         {/each}
                     </div>
-                    <!-- <div class="row">
-                        <select name="header-size" id="header-size" bind:value={config.type.height} onchange={updateConfig}>
-                            {#each CST.HEADER_TYPE_HEIGHT as headerHeight}
-                                <option value={headerHeight.id}>{headerHeight.name}</option>
-                            {/each}
-                        </select>
-                    </div> -->
                     <div class="row">
-                        <p>{$_('configPannel.listHeaderIcon')}</p>
+                        <p>{$_('configPannel.headerSize')}</p>
                         <span
                             class="help-badge"
-                            data-tooltip={$_('configPannel.listIconHelp')}>?</span>
-                        <IconSelect
-                            bind:value={listConfig.type.iconType}/>
+                            data-tooltip={$_('configPannel.headerSizeHelp')}>?</span>
+                        <SortSelect
+                            bind:value={listConfig.type.height}
+                            options={CST.HEADER_HEIGHT_TYPE}/>
                     </div>
+                    {#if listConfig.type.height !== CST.HEADER_HEIGHT_SMALL}
+                        <div class="row">
+                            <p>{$_('configPannel.listHeaderIcon')}</p>
+                            <span
+                                class="help-badge"
+                                data-tooltip={$_('configPannel.listIconHelp')}>?</span>
+                            <IconSelect
+                                bind:value={listConfig.type.iconType}/>
+                        </div>
+                    {/if}
                     <div class="row">
                         <p>{$_('configPannel.listHeaderBarColor')}</p>
                         <span

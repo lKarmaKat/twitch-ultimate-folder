@@ -187,10 +187,12 @@
     "sortStrategy": "le tri personnalisé vous permet de définir l'ordre de tri, alpha/viewer est suffisamment explicite, ATTENTION vous devriez utiliser le tri ALPHA/VIEWER sur une liste qui ne contient que des chaines",
     "sortMode": "Mode de tri",
     "style": "Style",
+    "headerSize": "Taille de l'en-tête",
     "listHeaderIcon": "Icône d'en-tête de liste",
     "listHeaderBarColor": "Couleur de la barre latérale d'en-tête de liste",
     "listHeaderBadge": "Style du badge d'en-tête de liste",
     "help": "Aide",
+    "headerSizeHelp": "Hauteur de l'en-tête de liste. Un en-tête petit est compact et n'affiche pas d'icône.",
     "listIconHelp": "Icone qui s'affiche à côté du nom de la liste",
     "listHeaderBarColorHelp": "Couleur de la bar latérale de la liste",
     "listCounterBadgeHelp": "Style du badge qui affiche le nombre de chaine en ligne",
@@ -293,6 +295,10 @@
     "custom": "Tri personnalisé",
     "viewer": "Tri par nombre de viewers",
     "alpha": "Tri alphabétique"
+  },
+  "headerHeight": {
+    "medium": "Moyen",
+    "small": "Petit (sans icône)"
   },
   "allOtherHeader": {
     "none": "Aucun",

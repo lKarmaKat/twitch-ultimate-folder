@@ -37,10 +37,12 @@
     "sortStrategy": "Mukautetun lajittelun avulla voit määrittää järjestyksen itse; alpha/viewer on riittävän selkeä. HUOM: käytä ALPHA/VIEWER-lajittelua vain listassa, joka sisältää pelkästään kanavia",
     "sortMode": "Lajittelutila",
     "style": "Tyyli",
+    "headerSize": "Otsikon koko",
     "listHeaderIcon": "Listan otsikon kuvake",
     "listHeaderBarColor": "Listan otsikon sivupalkin väri",
     "listHeaderBadge": "Listan otsikon merkin tyyli",
     "help": "Ohje",
+    "headerSizeHelp": "Listan otsikon korkeus. Pieni otsikko on kompakti eikä näytä kuvaketta.",
     "listIconHelp": "Kuvake, joka näytetään listan nimen vieressä",
     "listHeaderBarColorHelp": "Listan sivupalkin väri",
     "listCounterBadgeHelp": "Verkossa olevien kanavien määrää näyttävän merkin tyyli",
@@ -137,6 +139,10 @@
     "custom": "Mukautettu lajittelu",
     "viewer": "Lajittelu katsojamäärän mukaan",
     "alpha": "Aakkosjärjestys"
+  },
+  "headerHeight": {
+    "medium": "Keskikokoinen",
+    "small": "Pieni (ei kuvaketta)"
   },
   "bar": {
     "purple": "violetti",

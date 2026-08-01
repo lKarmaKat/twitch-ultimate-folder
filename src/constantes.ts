@@ -77,12 +77,15 @@ export const PARAM_ALIGNMENT_LEFT = 'alignmentLeft';
 /** chrome.storage.local key, 1/0: 1 = channel title shown on the left. */
 export const PARAM_TITLE_SIDE_LEFT = 'titleSideLeft';
 
-export const HEADER_TYPE_HEIGHT = [ // Not currently used
-  { id: 1, name: 'small' },
-  { id: 2, name: 'medium' },
-  { id: 3, name: 'large' }
+// Medium is 0: every config saved before the option existed already holds
+// `height: 0`, so they stay on the current dimensions without a migration.
+export const HEADER_HEIGHT_MEDIUM = 0;
+export const HEADER_HEIGHT_SMALL = 1;
+export const HEADER_HEIGHT_TYPE = [
+  { id: HEADER_HEIGHT_MEDIUM, name: 'headerHeight.medium' },
+  { id: HEADER_HEIGHT_SMALL, name: 'headerHeight.small' }
 ]
-  
+
 
 // The `label`/`tooltip`/`name` below are i18n keys resolved with $_() in the
 // components ($_ cannot be used from a .ts file).
@@ -272,6 +275,7 @@ export const ALL_OTHER_CHANNELS_ELEMENT = {
         "channel_name": "All others channels",
         "sort": ALPHA_SORT,
         "type": ALL_OTHER_HEADER_NONE,
+        "height": HEADER_HEIGHT_MEDIUM,
         "iconType": 0,
         "isLive": false,
         "profile_image_url": "../../assets/all_other_channels.png",

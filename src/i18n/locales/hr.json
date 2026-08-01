@@ -37,10 +37,12 @@
     "sortStrategy": "Prilagođeno razvrstavanje omogućuje vam da sami odredite redoslijed; alpha/gledatelji je dovoljno jasno. POZOR: razvrstavanje ALPHA/VIEWER koristite samo na popisu koji sadrži isključivo kanale",
     "sortMode": "Način razvrstavanja",
     "style": "Stil",
+    "headerSize": "Veličina zaglavlja",
     "listHeaderIcon": "Ikona zaglavlja popisa",
     "listHeaderBarColor": "Boja bočne trake zaglavlja popisa",
     "listHeaderBadge": "Stil oznake zaglavlja popisa",
     "help": "Pomoć",
+    "headerSizeHelp": "Visina zaglavlja popisa. Malo zaglavlje je kompaktno i ne prikazuje ikonu.",
     "listIconHelp": "Ikona prikazana pored naziva popisa",
     "listHeaderBarColorHelp": "Boja bočne trake popisa",
     "listCounterBadgeHelp": "Stil oznake koja prikazuje broj kanala na mreži",
@@ -137,6 +139,10 @@
     "custom": "Prilagođeno razvrstavanje",
     "viewer": "Razvrstavanje po broju gledatelja",
     "alpha": "Abecedno razvrstavanje"
+  },
+  "headerHeight": {
+    "medium": "Srednje",
+    "small": "Malo (bez ikone)"
   },
   "bar": {
     "purple": "ljubičasta",

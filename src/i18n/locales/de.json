@@ -37,10 +37,12 @@
     "sortStrategy": "Mit der benutzerdefinierten Sortierung kannst du die Reihenfolge selbst festlegen; alpha/viewer ist selbsterklärend. ACHTUNG: verwende die Sortierung ALPHA/VIEWER nur für eine Liste, die ausschließlich Kanäle enthält",
     "sortMode": "Sortiermodus",
     "style": "Stil",
+    "headerSize": "Kopfzeilengröße",
     "listHeaderIcon": "Symbol der Listenkopfzeile",
     "listHeaderBarColor": "Farbe der Seitenleiste der Listenkopfzeile",
     "listHeaderBadge": "Badge-Stil der Listenkopfzeile",
     "help": "Hilfe",
+    "headerSizeHelp": "Höhe der Listenkopfzeile. Eine kleine Kopfzeile ist kompakt und zeigt kein Symbol.",
     "listIconHelp": "Symbol, das neben dem Listennamen angezeigt wird",
     "listHeaderBarColorHelp": "Farbe der Seitenleiste der Liste",
     "listCounterBadgeHelp": "Stil des Badges, das die Anzahl der Online-Kanäle anzeigt",
@@ -137,6 +139,10 @@
     "custom": "Benutzerdefinierte Sortierung",
     "viewer": "Sortierung nach Zuschauerzahl",
     "alpha": "Alphabetische Sortierung"
+  },
+  "headerHeight": {
+    "medium": "Mittel",
+    "small": "Klein (ohne Symbol)"
   },
   "bar": {
     "purple": "lila",

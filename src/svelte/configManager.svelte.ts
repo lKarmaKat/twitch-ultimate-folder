@@ -167,7 +167,7 @@ class ConfigManager {
                 } else {
                     const it = toSaveChannels[listId].items[currentId];
                     toSaveChannels[listId].items[currentId] = (it as any).channel_id < 0
-                        ? {channel_id: (it as any).channel_id, id: (it as any).id, sort: (it as any).sort, type: (it as any).type, iconType: (it as any).iconType}
+                        ? {channel_id: (it as any).channel_id, id: (it as any).id, sort: (it as any).sort, type: (it as any).type, height: (it as any).height, iconType: (it as any).iconType}
                         : {channel_id: (it as any).channel_id, id: (it as any).id}
                     // delete (item as any).channel_name;
                     // delete (item as any).game_name;

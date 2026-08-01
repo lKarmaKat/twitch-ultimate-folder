@@ -37,10 +37,12 @@
     "sortStrategy": "Med anpassad sortering kan du själv bestämma sorteringsordningen; alpha/viewer är tydliga nog. OBS: använd ALPHA/VIEWER-sortering endast på en lista som bara innehåller kanaler",
     "sortMode": "Sorteringsläge",
     "style": "Stil",
+    "headerSize": "Storlek på listhuvud",
     "listHeaderIcon": "Ikon för listhuvud",
     "listHeaderBarColor": "Färg på sidofältet i listhuvudet",
     "listHeaderBadge": "Badge-stil för listhuvud",
     "help": "Hjälp",
+    "headerSizeHelp": "Höjd på listhuvudet. Ett litet listhuvud är kompakt och visar ingen ikon.",
     "listIconHelp": "Ikon som visas bredvid listnamnet",
     "listHeaderBarColorHelp": "Färg på listans sidofält",
     "listCounterBadgeHelp": "Stil på badgen som visar antalet kanaler online",
@@ -137,6 +139,10 @@
     "custom": "Anpassad sortering",
     "viewer": "Sortering efter antal tittare",
     "alpha": "Alfabetisk sortering"
+  },
+  "headerHeight": {
+    "medium": "Mellan",
+    "small": "Litet (ingen ikon)"
   },
   "bar": {
     "purple": "lila",

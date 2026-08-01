@@ -24,6 +24,11 @@
 		return color.color;
 	});
 
+	// A small header has no icon slot, but the stored iconType is kept so that
+	// switching back to medium restores the icon.
+	let smallHeader = $derived(type?.height === CST.HEADER_HEIGHT_SMALL);
+	let headerIconType = $derived(smallHeader ? ICON_NONE : type?.iconType);
+
 	let behavior = $derived(configManager.selectedConfig[listId]?.behavior ?? {});
 	let startupExtended = $derived(behavior[CST.EXTENDED_ON_STARTUP] ?? false);
 	let hoverEnabled = $derived(behavior[CST.EXTENDEDS_ON_HOVER] ?? false);
@@ -267,11 +272,11 @@
 		{#if listId !== 'rootList'}
 		<!-- svelte-ignore a11y_click_events_have_key_events -->
 		<!-- svelte-ignore a11y_no_static_element_interactions -->
-		<div class="list-header" style="--header-color:{header?.headerColor};" class:border={barTypeColor} class:pill={pillHeader} class:clickable={clickEnabled} onclick={toggleAutoCollapse}>
+		<div class="list-header" style="--header-color:{header?.headerColor};" class:border={barTypeColor} class:pill={pillHeader} class:small={smallHeader} class:clickable={clickEnabled} onclick={toggleAutoCollapse}>
 			<div class="left">
 				<div class="flex-row">
-					<span class="display-icon-container" class:extended class:no-icon={type.iconType === ICON_NONE}>
-						<IconPicker iconType={type.iconType} />
+					<span class="display-icon-container" class:extended class:no-icon={headerIconType === ICON_NONE}>
+						<IconPicker iconType={headerIconType} />
 					</span>
 					<!-- <span class="display-icon-container title" class:extended use:maybeTooltip={configManager.selectedConfig[listId]?.name}>
 						<IconPicker iconType={type.iconType} />
@@ -297,11 +302,13 @@
 						<!-- {:else if item.channel_id === CST.ALL_OTHER_CHANNELS} -->
 						{:else if item.channel_id < 0 }
 							{#if item.type === CST.ALL_OTHER_HEADER_SORTABLE}
+								{@const otherSmall = item.height === CST.HEADER_HEIGHT_SMALL}
+								{@const otherIconType = otherSmall ? ICON_NONE : (item.iconType ?? ICON_NONE)}
 								<!-- svelte-ignore a11y_click_events_have_key_events -->
 								<!-- svelte-ignore a11y_no_static_element_interactions -->
-								<div class="list-header all-other-header clickable" onclick={toggleOtherSort}>
-									<span class="display-icon-container extended" class:no-icon={(item.iconType ?? ICON_NONE) === ICON_NONE}>
-										<IconPicker iconType={item.iconType ?? ICON_NONE} />
+								<div class="list-header all-other-header clickable" class:small={otherSmall} onclick={toggleOtherSort}>
+									<span class="display-icon-container extended" class:no-icon={otherIconType === ICON_NONE}>
+										<IconPicker iconType={otherIconType} />
 									</span>
 									<p class="list-title">{$_('display.allOtherChannels')}</p>
 									<span class="all-other-sort-icon"><SortIndicatorIcon sort={otherLiveSort} /></span>
@@ -451,6 +458,12 @@
 	}
 	:global(.al-left) .list-header.border {
 		border-right: 3px solid var(--theme-color);
+	}
+	/* Everything inside the header is sized in em (paddings, icon slot, badge),
+	   so scaling the font shrinks the whole row coherently. */
+	.list-header.small {
+		padding: 0.1em 0 0.1em 0;
+		font-size: 0.85em;
 	}
 	.list-header.pill {
 		border-radius: 6px;
