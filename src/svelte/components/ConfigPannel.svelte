@@ -18,6 +18,9 @@
     const headerOptions = CST.ALL_OTHER_HEADER_TYPE;
     const behaviorTypeOptions = CST.TYPE_OPTIONS.filter(o => o.group === 'behavior');
     const styleTypeOptions = CST.TYPE_OPTIONS.filter(o => o.group === 'style');
+    const layoutOptions = CST.LIST_LAYOUT_OPTIONS;
+    let showsColumns = $derived(listConfig?.type.layout === CST.LIST_LAYOUT_SPLIT || listConfig?.type.layout === CST.LIST_LAYOUT_GRID);
+    let showsRail = $derived(!CST.LIST_LAYOUTS_WITHOUT_RAIL.includes(listConfig?.type.layout));
     $effect(() => {
         listeId = configChangeEvent.current;
         if (listeId) {
@@ -30,6 +33,11 @@
             if (listConfig?.type && listConfig.type.height === undefined) listConfig.type.height = CST.HEADER_HEIGHT_MEDIUM;
             for (const opt of CST.TYPE_OPTIONS) {
                 if (listConfig?.type && listConfig.type[opt.key] === undefined) listConfig.type[opt.key] = false;
+            }
+            if (listConfig?.type) {
+                if (listConfig.type.layout === undefined) listConfig.type.layout = CST.LIST_LAYOUT_STACK;
+                if (listConfig.type.columns === undefined) listConfig.type.columns = 2;
+                if (listConfig.type.maxItems === undefined) listConfig.type.maxItems = 0;
             }
             let item = listConfig?.items?.find(i => i.channel_id === CST.ALL_OTHER_CHANNELS);
             if (item && item.sort === undefined) item.sort = CST.ALPHA_SORT;
@@ -141,18 +149,38 @@
                 </div>
                 <div class="bloc">
                     <p>{$_('configPannel.style')}</p>
+                    <div class="row">
+                        <p>{$_('configPannel.listLayout')}</p>
+                        <span class="help-badge" data-tooltip={$_('configPannel.listLayoutHelp')}>?</span>
+                        <SortSelect
+                            bind:value={listConfig.type.layout}
+                            options={layoutOptions}/>
+                    </div>
+                    {#if showsColumns}
+                        <div class="row">
+                            <p>{$_('configPannel.listColumns')}</p>
+                            <input type="number" min="2" max="6" bind:value={listConfig.type.columns} />
+                        </div>
+                    {/if}
+                    <div class="row">
+                        <p>{$_('configPannel.maxItems')}</p>
+                        <span class="help-badge" data-tooltip={$_('configPannel.maxItemsHelp')}>?</span>
+                        <input type="number" min="0" bind:value={listConfig.type.maxItems} />
+                    </div>
                     <div class="grid">
                         {#each CST.STYLE_OPTIONS as item}
-                            <div class="behavior-item">
-                                <input
-                                    type="checkbox"
-                                    id={item.key}
-                                    bind:checked={listConfig.style[item.group][item.key]}/>
-                                <label for={item.key}>{$_(item.label)}</label>
-                                <span
-                                    class="help-badge"
-                                    data-tooltip={$_(item.tooltip)}>?</span>
-                            </div>
+                            {#if item.key !== CST.STYLE_INDENT_RAIL || showsRail}
+                                <div class="behavior-item">
+                                    <input
+                                        type="checkbox"
+                                        id={item.key}
+                                        bind:checked={listConfig.style[item.group][item.key]}/>
+                                    <label for={item.key}>{$_(item.label)}</label>
+                                    <span
+                                        class="help-badge"
+                                        data-tooltip={$_(item.tooltip)}>?</span>
+                                </div>
+                            {/if}
                         {/each}
                         {#each styleTypeOptions as item}
                             <div class="behavior-item">
@@ -310,6 +338,14 @@
     }
     input[type="text"]:focus {
         outline: none;
+    }
+    input[type="number"] {
+        font: inherit;
+        width: 4em;
+        background: transparent;
+        border: 1px solid grey;
+        border-radius: 0.3em;
+        padding: 0.2em 0.4em;
     }
     .behavior-item,
     .row {

@@ -51,7 +51,12 @@
     "listIconHelp": "Ikona wyświetlana obok nazwy listy",
     "listHeaderBarColorHelp": "Kolor paska bocznego listy",
     "listCounterBadgeHelp": "Styl odznaki pokazującej liczbę kanałów online",
-    "selectListPrompt": "Kliknij nagłówek listy, aby ją dostosować"
+    "selectListPrompt": "Kliknij nagłówek listy, aby ją dostosować",
+    "listLayout": "Układ",
+    "listLayoutHelp": "Jak rozmieszczona jest zawartość tej listy: wiersze, kolumny obok siebie, karty, siatka awatarów lub przewijany pasek.",
+    "listColumns": "Kolumny",
+    "maxItems": "Maks. liczba pokazanych elementów",
+    "maxItemsHelp": "Pokazywane są tylko pierwsze N pozycji, reszta pod rozwijanym wierszem. 0 = bez limitu."
   },
   "configList": {
     "alreadyInList": "Ten element jest już na liście",
@@ -64,7 +69,8 @@
     "noChannels": "Brak kanałów do wyświetlenia"
   },
   "display": {
-    "allOtherChannels": "Wszystkie pozostałe kanały"
+    "allOtherChannels": "Wszystkie pozostałe kanały",
+    "overflowMore": "+{count} więcej"
   },
   "channel": {
     "offline": "Niedostępny",
@@ -231,5 +237,13 @@
     "brawlhalla": "Brawlhalla",
     "forHonor": "For Honor",
     "theDivision2": "The Division 2"
+  },
+  "listLayout": {
+    "stack": "Wiersze (domyślnie)",
+    "split": "Kolumny",
+    "flyout": "Panel wysuwany",
+    "tabs": "Karty",
+    "grid": "Siatka",
+    "dock": "Pasek (same awatary)"
   }
 }

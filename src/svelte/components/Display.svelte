@@ -11,15 +11,20 @@
     import SortIndicatorIcon from './icons/SortIndicatorIcon.svelte';
     import CounterType from './CounterType.svelte';
 	import { hasVisibleContent } from '../listVisibility.js';
+	import { openFlyout, scheduleCloseFlyout } from '../event.svelte.js';
 
     let {
 		listId = "rootList",
 		configManager,
 		/** Set by an exclusive parent: the id of the only child allowed open. */
 		exclusiveOpenId = null,
-		onExclusiveToggle = null
+		onExclusiveToggle = null,
+		/** Rendered by a tabList/splitList parent: own header is skipped, body is always shown. */
+		headless = false,
+		/** Rendered as a splitList column: overrides this list's own layout for the body only. */
+		forceVariant = null
 	} = $props();
-	
+
 	let type = $derived.by(() => {
 		return configManager.selectedConfig[listId]?.type
 	});
@@ -44,6 +49,15 @@
 		&& headerIconType !== ICON_CROSS
 	);
 	let exclusive = $derived(type?.[CST.TYPE_EXCLUSIVE] ?? false);
+	let layout = $derived(type?.layout ?? CST.LIST_LAYOUT_STACK);
+	let columns = $derived(type?.columns || 2);
+	let maxItems = $derived(type?.maxItems ?? 0);
+	let effectiveVariant = $derived(forceVariant ?? (
+		layout === CST.LIST_LAYOUT_GRID ? 'grid' :
+		layout === CST.LIST_LAYOUT_DOCK ? 'dock' : 'row'
+	));
+	// A split column is a narrow list rendered with grid-style cells.
+	let cellVariant = $derived(effectiveVariant === 'split' ? 'grid' : effectiveVariant);
 
 	let behavior = $derived(configManager.selectedConfig[listId]?.behavior ?? {});
 	let startupExtended = $derived(behavior[CST.EXTENDED_ON_STARTUP] ?? false);
@@ -70,6 +84,9 @@
 
 	let ruledByParent = $derived(typeof onExclusiveToggle === 'function');
 	let extended = $derived(ruledByParent ? exclusiveOpenId === listId : openState);
+	// A headless list has no header to click, and a tab panel has the tab row
+	// instead: both always show their body.
+	let effectiveExtended = $derived(headless || layout === CST.LIST_LAYOUT_TABS ? true : extended);
 
 	let openChildId = $state(null);
 	$effect(() => {
@@ -115,6 +132,17 @@
 		else openState = !openState;
     }
 
+	// flyoutList opens on hover instead of click: the body renders in a
+	// separate panel positioned off this header's own rect (see FlyoutPopup.svelte).
+	function onFlyoutEnter(e) {
+		if (layout !== CST.LIST_LAYOUT_FLYOUT) return;
+		openFlyout(listId, e.currentTarget.getBoundingClientRect());
+	}
+	function onFlyoutLeave() {
+		if (layout !== CST.LIST_LAYOUT_FLYOUT) return;
+		scheduleCloseFlyout(listId);
+	}
+
 	function getSetAllChannelsInConfig() {
 		let set = new Set();
 		let c = (listItem) => {
@@ -130,10 +158,10 @@
 		return set;
 	}
 
-	function getChannelsInConfig() {
+	function getChannelsInConfigFor(id) {
 		let set = new Set();
-		let currentList = configManager.selectedConfig[listId];
-		if (currentList.items?.length) {
+		let currentList = configManager.selectedConfig[id];
+		if (currentList?.items?.length) {
 			for (let currentItem of currentList.items) {
 				if (currentItem.channel_id) {
 					set.add(currentItem.channel_id)
@@ -152,8 +180,10 @@
 		return false;
 	}
 
-	let channelsCounters = $derived.by(() => {
-		let set = getChannelsInConfig();
+	// Shared by this list's own header badge and, when this list acts as a
+	// splitList/tabList parent, each child's mini-caption / tab pip.
+	function countsFor(id) {
+		let set = getChannelsInConfigFor(id);
 		if (hasAllOtherChannels(set)) {
 			let item = CST.ALL_OTHER_CHANNELS_ELEMENT;
 			let s = getAllOtherChannels(configManager.channelsPickRef, item);
@@ -169,10 +199,29 @@
 			if (configManager.getLiveChannel(e)) live++;
 		});
 		return { live, total };
-	});
+	}
+
+	let channelsCounters = $derived(countsFor(listId));
 
 	let liveChannelsCounter = $derived(channelsCounters.live);
 	let totalChannelsCount = $derived(channelsCounters.total);
+
+	let childListIds = $derived(
+		(configManager.selectedConfig[listId]?.items ?? [])
+			.filter(i => i.type === CST.TYPE_LIST)
+			.map(i => i.id)
+	);
+
+	let activeChildId = $state(null);
+	$effect(() => {
+		configManager.selectedConfig;
+		if (!childListIds.includes(activeChildId)) activeChildId = childListIds[0] ?? null;
+	});
+
+	function selectTab(e, id) {
+		e.stopPropagation();
+		activeChildId = id;
+	}
 
 	// "Live" sort of the all-others block: session state, seeded from the stored
 	// `sort`. Clicking the header changes it without touching the saved config.
@@ -318,6 +367,20 @@
 			item.type !== CST.TYPE_SEPARATOR || (customSort && hasContentAfter(list, index)));
 	});
 
+	// overflowList: only the first `maxItems` entries render, folded back
+	// behind a "+N" row until clicked open. Session state, like otherLiveSort.
+	let foldExpanded = $state(false);
+	$effect(() => {
+		configManager.selectedConfig;
+		foldExpanded = false;
+	});
+	let overflowCount = $derived(maxItems > 0 && !foldExpanded ? Math.max(0, renderedItems.length - maxItems) : 0);
+	let visibleItems = $derived(overflowCount > 0 ? renderedItems.slice(0, maxItems) : renderedItems);
+	function expandFold(e) {
+		e.stopPropagation();
+		foldExpanded = true;
+	}
+
 </script>
 	<!-- <div class="width-test">
 
@@ -326,108 +389,166 @@
 	<!-- svelte-ignore a11y-click-events-have-key-events -->
 	 {#if visible}
 	<div id="display-component" class="list-container" class:hover-enabled={hoverEnabled} class:tinted={barTypeColor} style={barTypeColor ? `--theme-color:${barTypeColor}` : ''}>
-		{#if listId !== 'rootList'}
+		{#if listId !== 'rootList' && !headless}
 		<!-- svelte-ignore a11y_click_events_have_key_events -->
 		<!-- svelte-ignore a11y_no_static_element_interactions -->
-		<div class="list-header" style="--header-color:{header?.headerColor};" class:border={barTypeColor} class:pill={pillHeader} class:small={smallHeader} class:clickable={clickEnabled} onclick={toggleAutoCollapse}>
-			<div class="left">
-				<div class="flex-row">
-					{#if chevronEnabled}
-						<span class="header-chevron" class:extended>
-							<ChevronIcon />
-						</span>
-					{/if}
-					<span class="display-icon-container" class:extended class:no-icon={headerIconType === ICON_NONE}>
-						<IconPicker iconType={headerIconType} />
-					</span>
-					<!-- <span class="display-icon-container title" class:extended use:maybeTooltip={configManager.selectedConfig[listId]?.name}>
-						<IconPicker iconType={type.iconType} />
-					</span> -->
-					<p class="list-title">{configManager.selectedConfig[listId]?.name}</p>
+		<div class="list-header" style="--header-color:{header?.headerColor};" class:border={barTypeColor} class:pill={pillHeader} class:small={smallHeader} class:clickable={clickEnabled && layout !== CST.LIST_LAYOUT_TABS && layout !== CST.LIST_LAYOUT_FLYOUT} onclick={(layout === CST.LIST_LAYOUT_TABS || layout === CST.LIST_LAYOUT_FLYOUT) ? null : toggleAutoCollapse} onmouseenter={onFlyoutEnter} onmouseleave={onFlyoutLeave}>
+			{#if layout === CST.LIST_LAYOUT_TABS}
+				<div class="tab-row">
+					{#each childListIds as childId (childId)}
+						{@const childType = configManager.selectedConfig[childId]?.type}
+						{@const counts = countsFor(childId)}
+						<button type="button" class="tab" class:active={activeChildId === childId} onclick={(e) => selectTab(e, childId)}>
+							<IconPicker iconType={childType?.iconType ?? ICON_NONE} />
+							{#if counts.live > 0}<span class="tab-pip">{counts.live}</span>{/if}
+						</button>
+					{/each}
+					<span class="tab-total">{liveChannelsCounter}/{totalChannelsCount}</span>
 				</div>
-
-			</div>
-			<div class="right">
-				<CounterType counter={liveChannelsCounter} totalChannels={totalChannelsCount} viewerCountType={type.viewerCountType} />
-			</div>
+			{:else}
+				<div class="left">
+					<div class="flex-row">
+						{#if chevronEnabled}
+							<span class="header-chevron" class:extended>
+								<ChevronIcon />
+							</span>
+						{/if}
+						<span class="display-icon-container" class:extended class:no-icon={headerIconType === ICON_NONE}>
+							<IconPicker iconType={headerIconType} />
+						</span>
+						{#if layout !== CST.LIST_LAYOUT_SPLIT}
+							<p class="list-title">{configManager.selectedConfig[listId]?.name}</p>
+						{/if}
+					</div>
+				</div>
+				<div class="right">
+					<CounterType counter={liveChannelsCounter} totalChannels={totalChannelsCount} viewerCountType={type.viewerCountType} />
+				</div>
+			{/if}
 		</div>
 		{/if}
-		{#if configManager.selectedConfig[listId]?.hasOwnProperty("items")}
-			<div class="list-body" class:extended class:rail={indentRail} style="--content-color:{content?.contentColor};">
-				<div>
-					<!-- {#each configManager.selectedConfig[listId].items as item(item.id)} -->
-					{#each renderedItems as item(item.id)}
-						{#if item.type === CST.TYPE_LIST}
+		{#if configManager.selectedConfig[listId]?.hasOwnProperty("items") && (layout !== CST.LIST_LAYOUT_FLYOUT || headless)}
+			{#if layout === CST.LIST_LAYOUT_TABS}
+				<div class="list-body tabs-body" class:extended={effectiveExtended} style="--content-color:{content?.contentColor};">
+					<div>
+						{#if activeChildId}
 							<div class="nested-list">
-								<Self
-									listId={item.id}
-									configManager={configManager}
-									exclusiveOpenId={exclusive ? openChildId : null}
-									onExclusiveToggle={exclusive ? toggleExclusiveChild : null} />
+								<Self listId={activeChildId} configManager={configManager} headless={true} />
 							</div>
-						{:else if item.type === CST.TYPE_SEPARATOR}
-							<div class="list-separator">
-								{#if item.name}<span class="separator-label">{item.name}</span>{/if}
-								<span class="separator-line"></span>
-							</div>
-						<!-- {:else if item.channel_id === CST.ALL_OTHER_CHANNELS} -->
-						{:else if item.channel_id < 0 }
-							{#if item.type === CST.ALL_OTHER_HEADER_SORTABLE}
-								{@const otherSmall = item.height === CST.HEADER_HEIGHT_SMALL}
-								{@const otherIconType = otherSmall ? ICON_NONE : (item.iconType ?? ICON_NONE)}
-								<!-- svelte-ignore a11y_click_events_have_key_events -->
-								<!-- svelte-ignore a11y_no_static_element_interactions -->
-								<div class="list-header all-other-header clickable" class:small={otherSmall} onclick={toggleOtherSort}>
-									<span class="display-icon-container extended" class:no-icon={otherIconType === ICON_NONE}>
-										<IconPicker iconType={otherIconType} />
-									</span>
-									<p class="list-title">{$_('display.allOtherChannels')}</p>
-									<span class="all-other-sort-icon"><SortIndicatorIcon sort={otherLiveSort} /></span>
-								</div>
-							{/if}
-							{#each getAllOtherChannels(configManager.channelsPickRef, item, otherLiveSort) as other(`${other.channel_id}`)}
-								{@const i = getNode(other)}
-								<div class="channel-overlay li{listId}">
-									<DraggableChannel
-									blockNavigation={false}
-									channelId={i?.channel_id}
-									channelName={i?.channel_name}
-									channelProfilePic={i?.profile_image_url}
-									viewerCount={i?.viewer_count}
-									gameName={i?.game_name}
-									isLive={i?.isLive}
-									idbidon={i?.idbidon}
-									title={i?.title}
-									showGameInTooltip={true}
-									showOffline={true}
-									greyIfOffline={true}/>
+						{/if}
+					</div>
+				</div>
+			{:else if layout === CST.LIST_LAYOUT_SPLIT}
+				<div class="list-body split-body" class:extended={effectiveExtended} class:rail={indentRail} style="--content-color:{content?.contentColor};">
+					<div>
+						<div class="split-columns" style="--split-columns:{columns};">
+							{#each childListIds as childId (childId)}
+								{@const childType = configManager.selectedConfig[childId]?.type}
+								{@const counts = countsFor(childId)}
+								<div class="split-col">
+									<div class="split-col-cap">
+										<span class="split-col-icon"><IconPicker iconType={childType?.iconType ?? ICON_NONE} /></span>
+										<span class="split-col-count">{counts.live}</span>
+									</div>
+									<Self listId={childId} configManager={configManager} headless={true} forceVariant="split" />
 								</div>
 							{/each}
-						{:else if item.channel_id}
-							{@const i = getNodeIfLive(item)}
-							{#if i}
-							<div class="channel-overlay li{listId}">
-									<DraggableChannel
-									blockNavigation={false}
-									channelId={i?.channel_id}
-									channelName={i?.channel_name}
-									channelProfilePic={i?.profile_image_url}
-									viewerCount={i?.viewer_count}
-									gameName={i?.game_name}
-									isLive={i?.isLive}
-									title={i?.title}
-									showGameInTooltip={true}
-									showOffline={true}
-									greyIfOffline={true}/>
-								</div>
-							{/if}
-						{/if}
-					{/each}
+						</div>
+						{@render itemsList(renderedItems.filter(i => i.type !== CST.TYPE_LIST), false)}
+					</div>
 				</div>
-			</div>
+			{:else}
+				<div class="list-body" class:extended={effectiveExtended} class:rail={indentRail} class:grid-body={effectiveVariant === 'grid'} class:dock-body={effectiveVariant === 'dock'} class:split-col-body={effectiveVariant === 'split'} style="--content-color:{content?.contentColor}; --grid-columns:{columns};">
+					<div>
+						{@render itemsList(visibleItems, true)}
+					</div>
+				</div>
+			{/if}
 		{/if}
 	</div>
 	{/if}
+
+{#snippet renderItem(item)}
+	{#if item.type === CST.TYPE_LIST}
+		<div class="nested-list">
+			<Self
+				listId={item.id}
+				configManager={configManager}
+				exclusiveOpenId={exclusive ? openChildId : null}
+				onExclusiveToggle={exclusive ? toggleExclusiveChild : null} />
+		</div>
+	{:else if item.type === CST.TYPE_SEPARATOR}
+		<div class="list-separator">
+			{#if item.name}<span class="separator-label">{item.name}</span>{/if}
+			<span class="separator-line"></span>
+		</div>
+	{:else if item.channel_id < 0 }
+		{#if item.type === CST.ALL_OTHER_HEADER_SORTABLE}
+			{@const otherSmall = item.height === CST.HEADER_HEIGHT_SMALL}
+			{@const otherIconType = otherSmall ? ICON_NONE : (item.iconType ?? ICON_NONE)}
+			<!-- svelte-ignore a11y_click_events_have_key_events -->
+			<!-- svelte-ignore a11y_no_static_element_interactions -->
+			<div class="list-header all-other-header clickable" class:small={otherSmall} onclick={toggleOtherSort}>
+				<span class="display-icon-container extended" class:no-icon={otherIconType === ICON_NONE}>
+					<IconPicker iconType={otherIconType} />
+				</span>
+				<p class="list-title">{$_('display.allOtherChannels')}</p>
+				<span class="all-other-sort-icon"><SortIndicatorIcon sort={otherLiveSort} /></span>
+			</div>
+		{/if}
+		{#each getAllOtherChannels(configManager.channelsPickRef, item, otherLiveSort) as other(`${other.channel_id}`)}
+			{@const i = getNode(other)}
+			<div class="channel-overlay li{listId}">
+				<DraggableChannel
+				blockNavigation={false}
+				channelId={i?.channel_id}
+				channelName={i?.channel_name}
+				channelProfilePic={i?.profile_image_url}
+				viewerCount={i?.viewer_count}
+				gameName={i?.game_name}
+				isLive={i?.isLive}
+				idbidon={i?.idbidon}
+				title={i?.title}
+				showGameInTooltip={true}
+				showOffline={true}
+				greyIfOffline={true}
+				variant={cellVariant}/>
+			</div>
+		{/each}
+	{:else if item.channel_id}
+		{@const i = getNodeIfLive(item)}
+		{#if i}
+		<div class="channel-overlay li{listId}">
+				<DraggableChannel
+				blockNavigation={false}
+				channelId={i?.channel_id}
+				channelName={i?.channel_name}
+				channelProfilePic={i?.profile_image_url}
+				viewerCount={i?.viewer_count}
+				gameName={i?.game_name}
+				isLive={i?.isLive}
+				title={i?.title}
+				showGameInTooltip={true}
+				showOffline={true}
+				greyIfOffline={true}
+				variant={cellVariant}/>
+			</div>
+		{/if}
+	{/if}
+{/snippet}
+
+{#snippet itemsList(items, withFold)}
+	{#each items as item(item.id)}
+		{@render renderItem(item)}
+	{/each}
+	{#if withFold && overflowCount > 0}
+		<!-- svelte-ignore a11y_click_events_have_key_events -->
+		<!-- svelte-ignore a11y_no_static_element_interactions -->
+		<div class="list-overflow-more" onclick={expandFold}>
+			{$_('display.overflowMore', { values: { count: overflowCount } })}
+		</div>
+	{/if}
+{/snippet}
 			
 <style>
 	.display-icon-container {
@@ -682,6 +803,121 @@
 		border-radius: 1px;
 		background: var(--theme-color, currentColor);
 		opacity: 0.45;
+	}
+
+	/* ---- tabList ---- */
+	.tab-row {
+		display: flex;
+		align-items: center;
+		gap: 0.2em;
+		flex: 1 1 auto;
+		min-width: 0;
+	}
+	.tab {
+		position: relative;
+		flex: none;
+		width: 2em;
+		height: 1.8em;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		border: none;
+		background: transparent;
+		border-radius: 4px;
+		cursor: pointer;
+		color: inherit;
+	}
+	.tab.active {
+		box-shadow: inset 0 -2px 0 0 var(--theme-color, currentColor);
+	}
+	.tab-pip {
+		position: absolute;
+		top: 0.1em;
+		right: 0.1em;
+		min-width: 1em;
+		font-size: 0.6em;
+		font-weight: 700;
+		line-height: 1.4;
+		padding: 0 0.3em;
+		border-radius: 999px;
+		background: var(--theme-color, currentColor);
+		color: #fff;
+	}
+	.tab-total {
+		margin-left: auto;
+		flex: none;
+		font-size: 0.75em;
+		opacity: 0.7;
+		padding-right: 0.4em;
+	}
+
+	/* ---- splitList ---- */
+	.split-columns {
+		display: flex;
+		align-items: stretch;
+	}
+	.split-col {
+		flex: 1 1 0;
+		min-width: 0;
+	}
+	.split-col:not(:first-child) {
+		border-left: 1px solid var(--theme-color, currentColor);
+		opacity: 1;
+	}
+	.split-col-cap {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		gap: 0.3em;
+		padding: 0.3em 0;
+		font-size: 0.75em;
+	}
+	.split-col-icon {
+		display: flex;
+		width: 1em;
+		height: 1em;
+	}
+	.split-col-count {
+		font-weight: 700;
+	}
+
+	/* ---- gridList ---- */
+	.grid-body > div {
+		display: grid;
+		grid-template-columns: repeat(var(--grid-columns, 4), 1fr);
+		gap: 0.4em;
+		padding: 0.3em;
+	}
+
+	/* ---- dockList ---- */
+	.dock-body > div {
+		display: flex;
+		flex-direction: row;
+		gap: 0.5em;
+		padding: 0.3em 0.5em;
+		overflow-x: auto;
+		overflow-y: hidden;
+		scrollbar-width: thin;
+		scrollbar-color: var(--theme-color, currentColor) transparent;
+	}
+	.dock-body > div::-webkit-scrollbar {
+		height: 4px;
+	}
+	.dock-body > div::-webkit-scrollbar-thumb {
+		background: var(--theme-color, currentColor);
+		border-radius: 2px;
+	}
+
+	/* ---- overflowList ---- */
+	.list-overflow-more {
+		padding: 0.4em 0.7em;
+		font-size: 0.8em;
+		opacity: 0.7;
+		cursor: pointer;
+		user-select: none;
+	}
+	.list-overflow-more:hover {
+		opacity: 1;
 	}
 </style>
 

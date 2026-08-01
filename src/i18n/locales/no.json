@@ -51,7 +51,12 @@
     "listIconHelp": "Ikon som vises ved siden av listenavnet",
     "listHeaderBarColorHelp": "Farge på listens sidefelt",
     "listCounterBadgeHelp": "Stil på merket som viser antall kanaler online",
-    "selectListPrompt": "Klikk på en listeoverskrift for å tilpasse den"
+    "selectListPrompt": "Klikk på en listeoverskrift for å tilpasse den",
+    "listLayout": "Layout",
+    "listLayoutHelp": "Hvordan innholdet i denne listen er ordnet: rader, kolonner side om side, faner, et rutenett av avatarer eller en rullbar dokk.",
+    "listColumns": "Kolonner",
+    "maxItems": "Maks. antall viste elementer",
+    "maxItemsHelp": "Bare de første N oppføringene vises, med en utvidbar rad for resten. 0 = ubegrenset."
   },
   "configList": {
     "alreadyInList": "Elementet finnes allerede i listen",
@@ -64,7 +69,8 @@
     "noChannels": "Ingen kanaler å vise"
   },
   "display": {
-    "allOtherChannels": "Alle andre kanaler"
+    "allOtherChannels": "Alle andre kanaler",
+    "overflowMore": "+{count} til"
   },
   "channel": {
     "offline": "Frakoblet",
@@ -231,5 +237,13 @@
     "brawlhalla": "Brawlhalla",
     "forHonor": "For Honor",
     "theDivision2": "The Division 2"
+  },
+  "listLayout": {
+    "stack": "Rader (standard)",
+    "split": "Kolonner",
+    "flyout": "Utfellbart panel",
+    "tabs": "Faner",
+    "grid": "Rutenett",
+    "dock": "Dokk (kun avatarer)"
   }
 }

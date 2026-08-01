@@ -40,6 +40,7 @@ function isSideNavCollapsed() {
 
 let sessionUserId = getSessionUserId();
 let sidebarDiv = null;
+let flyoutDiv = null;
 // Replaced by injectScript(). Until something is injected there is nothing to
 // hide nor to hand back.
 let applyVisibility = () => {};
@@ -137,6 +138,25 @@ function placeSidebar(parent) {
   if (section && section.previousElementSibling !== sidebarDiv) section.before(sidebarDiv);
 }
 
+/**
+ * flyoutList's body lives outside the sidebar's own shadow root (see
+ * FlyoutPopup.svelte), so it needs its own host + its own copy of the theme
+ * stylesheet. Reused across re-injections: only the mounted component inside
+ * is torn down and rebuilt, by mountSidebar().
+ */
+function ensureFlyoutHost() {
+  if (flyoutDiv?.isConnected) return flyoutDiv.shadowRoot;
+  flyoutDiv = document.createElement('div');
+  flyoutDiv.id = 'flyout_shadow';
+  document.body.appendChild(flyoutDiv);
+  const shadow = flyoutDiv.attachShadow({ mode: 'open' });
+  const link = document.createElement('link');
+  link.rel = 'stylesheet';
+  link.href = api.runtime.getURL('assets/dark_channel.css');
+  shadow.appendChild(link);
+  return shadow;
+}
+
 function injectScript() {
   let t = document.querySelector("#side-nav .side-nav-section")
   sidebarDiv = document.createElement('div')
@@ -148,7 +168,7 @@ function injectScript() {
   let shadowParent = sidebarDiv.attachShadow({mode:'open'})
   // Montage direct : la sidebar fait partie de ce bundle et tourne donc dans le
   // monde isole, ou api.runtime.connect() et api.storage sont disponibles.
-  whenI18nReady().then(() => mountSidebar(shadowParent));
+  whenI18nReady().then(() => mountSidebar(shadowParent, ensureFlyoutHost()));
   const link = document.createElement('link');
   link.rel = 'stylesheet';
   link.href = api.runtime.getURL('assets/sidebar.css');

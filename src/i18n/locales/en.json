@@ -203,7 +203,12 @@
     "listCounterBadgeHelp": "Style of the badge showing the number of channels online",
     "selectListPrompt": "Please click on a list header to customize it",
     "headerMode": "Header",
-    "headerModeHelp": "Show a clickable header above 'All other channels'. Clicking it toggles the sort (alphabetical / viewer count) for the current session, without changing the saved config."
+    "headerModeHelp": "Show a clickable header above 'All other channels'. Clicking it toggles the sort (alphabetical / viewer count) for the current session, without changing the saved config.",
+    "listLayout": "Layout",
+    "listLayoutHelp": "How this list's content is arranged: rows, side-by-side columns, tabs, a grid of avatars, or a scrolling dock.",
+    "listColumns": "Columns",
+    "maxItems": "Max items shown",
+    "maxItemsHelp": "Only the first N entries show, with a fold-out row for the rest. 0 = unlimited."
   },
   "configList": {
     "alreadyInList": "The item is already in the list",
@@ -216,7 +221,8 @@
     "noChannels": "No channels to display"
   },
   "display": {
-    "allOtherChannels": "All others channels"
+    "allOtherChannels": "All others channels",
+    "overflowMore": "+{count} more"
   },
   "channel": {
     "offline": "Offline",
@@ -391,5 +397,13 @@
     "brawlhalla": "Brawlhalla",
     "forHonor": "For Honor",
     "theDivision2": "The Division 2"
+  },
+  "listLayout": {
+    "stack": "Rows (default)",
+    "split": "Split columns",
+    "flyout": "Flyout panel",
+    "tabs": "Tabs",
+    "grid": "Grid",
+    "dock": "Dock (avatars only)"
   }
 }

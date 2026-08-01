@@ -122,6 +122,26 @@ export const TYPE_OPTIONS = [
 {key: TYPE_EXCLUSIVE, group: 'behavior', label: 'typeOptions.exclusive.label', tooltip: 'typeOptions.exclusive.tooltip'},
 ];
 
+// 0 is today's row-per-channel rendering: a config saved before layouts
+// existed keeps rendering exactly as it did.
+export const LIST_LAYOUT_STACK = 0;
+export const LIST_LAYOUT_SPLIT = 1;
+export const LIST_LAYOUT_FLYOUT = 2;
+export const LIST_LAYOUT_TABS = 3;
+export const LIST_LAYOUT_GRID = 4;
+export const LIST_LAYOUT_DOCK = 5;
+export const LIST_LAYOUT_OPTIONS = [
+  {id: LIST_LAYOUT_STACK, name: 'listLayout.stack'},
+  {id: LIST_LAYOUT_SPLIT, name: 'listLayout.split'},
+  {id: LIST_LAYOUT_FLYOUT, name: 'listLayout.flyout'},
+  {id: LIST_LAYOUT_TABS, name: 'listLayout.tabs'},
+  {id: LIST_LAYOUT_GRID, name: 'listLayout.grid'},
+  {id: LIST_LAYOUT_DOCK, name: 'listLayout.dock'},
+];
+// Layouts whose body isn't a vertical rail, so the indentRail checkbox has
+// nothing to attach to and is hidden in ConfigPannel.
+export const LIST_LAYOUTS_WITHOUT_RAIL = [LIST_LAYOUT_DOCK, LIST_LAYOUT_FLYOUT];
+
 export const SORT_STRATEGY = [
   {id: CUSTOM_SORT, type: 'CUSTOM_SORT', name: 'sort.custom'},
   {id: VIEWER_SORT, type: 'VIEWER_SORT', name: 'sort.viewer'},
@@ -246,7 +266,10 @@ export function createNewList(): t.I_NEW_LIST {
       barType: 0,
       viewerCountType: 2,
       [TYPE_CHEVRON]: false,
-      [TYPE_EXCLUSIVE]: false
+      [TYPE_EXCLUSIVE]: false,
+      layout: LIST_LAYOUT_STACK,
+      columns: 2, // split + grid
+      maxItems: 0 // 0 = unlimited
     }
   };
 }

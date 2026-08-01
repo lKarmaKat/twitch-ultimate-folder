@@ -18,6 +18,41 @@ export const titleSideLeft = $state({ current: false });
 /** true = channel rows highlight on hover. Default false: today's look, unchanged. */
 export const skinModern = $state({ current: false });
 
+/**
+ * flyoutList bridge: the sidebar (inside its own shadow root) and FlyoutPopup
+ * (mounted in a separate one on document.body) share no component tree, so the
+ * hover-open/hover-close handoff between them goes through this module-level
+ * state instead of props.
+ */
+export const flyoutState = $state({ listId: null, top: 0, left: 0, right: 0 });
+let flyoutCloseTimer = null;
+
+export function openFlyout(listId, rect) {
+	clearTimeout(flyoutCloseTimer);
+	flyoutState.listId = listId;
+	flyoutState.top = rect.top;
+	flyoutState.left = rect.left;
+	flyoutState.right = rect.right;
+}
+
+// Grace period: lets the pointer travel from the header to the panel, which
+// sits right next to it, without the panel closing first.
+export function scheduleCloseFlyout(listId) {
+	clearTimeout(flyoutCloseTimer);
+	flyoutCloseTimer = setTimeout(() => {
+		if (flyoutState.listId === listId) flyoutState.listId = null;
+	}, 200);
+}
+
+export function keepFlyoutOpen() {
+	clearTimeout(flyoutCloseTimer);
+}
+
+export function closeFlyout() {
+	clearTimeout(flyoutCloseTimer);
+	flyoutState.listId = null;
+}
+
 /** Port reconnect backoff: 2, 4, 8 then 15 s. */
 export const RECONNECT_BASE_DELAY = 2000;
 export const RECONNECT_MAX_DELAY = 15000;

@@ -51,7 +51,12 @@
     "listIconHelp": "Kuvake, joka näytetään listan nimen vieressä",
     "listHeaderBarColorHelp": "Listan sivupalkin väri",
     "listCounterBadgeHelp": "Verkossa olevien kanavien määrää näyttävän merkin tyyli",
-    "selectListPrompt": "Napsauta listan otsikkoa mukauttaaksesi sitä"
+    "selectListPrompt": "Napsauta listan otsikkoa mukauttaaksesi sitä",
+    "listLayout": "Asettelu",
+    "listLayoutHelp": "Miten tämän listan sisältö on järjestetty: rivit, rinnakkaiset sarakkeet, välilehdet, avatarien ruudukko tai vieritettävä telakka.",
+    "listColumns": "Sarakkeet",
+    "maxItems": "Näytettävien kohteiden enimmäismäärä",
+    "maxItemsHelp": "Vain ensimmäiset N kohdetta näkyvät, loput piilossa laajennettavan rivin takana. 0 = rajoittamaton."
   },
   "configList": {
     "alreadyInList": "Kohde on jo listalla",
@@ -64,7 +69,8 @@
     "noChannels": "Ei näytettäviä kanavia"
   },
   "display": {
-    "allOtherChannels": "Kaikki muut kanavat"
+    "allOtherChannels": "Kaikki muut kanavat",
+    "overflowMore": "+{count} lisää"
   },
   "channel": {
     "offline": "Poissa verkosta",
@@ -231,5 +237,13 @@
     "brawlhalla": "Brawlhalla",
     "forHonor": "For Honor",
     "theDivision2": "The Division 2"
+  },
+  "listLayout": {
+    "stack": "Rivit (oletus)",
+    "split": "Sarakkeet",
+    "flyout": "Ponnahdusruutu",
+    "tabs": "Välilehdet",
+    "grid": "Ruudukko",
+    "dock": "Telakka (vain avatarit)"
   }
 }

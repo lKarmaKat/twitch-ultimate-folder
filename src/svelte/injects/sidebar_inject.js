@@ -1,5 +1,7 @@
 import DisplayWrapper from "../components/DisplayWrapper.svelte";
 import TitlePopup from "../components/TitlePopup.svelte";
+import FlyoutPopup from "../components/FlyoutPopup.svelte";
+import ConfigManager from "../configManager.svelte";
 import { setupI18n } from "../../i18n/index.js";
 import { mount, unmount } from 'svelte'
 
@@ -14,12 +16,24 @@ import { mount, unmount } from 'svelte'
  * supporte par Firefox. Il fait desormais partie du bundle du content script.
  */
 let sidebar = null;
-export function mountSidebar(shadowRoot) {
+let flyout = null;
+/**
+ * flyoutShadowRoot is optional so callers that don't need flyoutList support
+ * (there are none today, but keeps this function usable standalone) aren't
+ * forced to build one.
+ */
+export function mountSidebar(shadowRoot, flyoutShadowRoot) {
   // Une re-injection (Twitch detruit notre noeud en re-rendant son menu) doit
-  // demonter l'instance precedente : chaque DisplayWrapper construit son propre
-  // ConfigManager, donc son propre port vers le service worker.
+  // demonter l'instance precedente : chaque montage construit son propre
+  // ConfigManager, donc son propre port vers le service worker. Le flyout
+  // partage cette instance : deux ports pour la meme sidebar serait absurde.
   if (sidebar) unmount(sidebar);
-  sidebar = mount(DisplayWrapper, { target: shadowRoot });
+  if (flyout) unmount(flyout);
+  const configManager = new ConfigManager(true);
+  sidebar = mount(DisplayWrapper, { target: shadowRoot, props: { configManager } });
+  if (flyoutShadowRoot) {
+    flyout = mount(FlyoutPopup, { target: flyoutShadowRoot, props: { configManager } });
+  }
   return sidebar;
 }
 

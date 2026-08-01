@@ -16,13 +16,17 @@
         greyIfOffline = false,
         showGameInTooltip = false,
         /** Config entry whose channel is no longer followed: named, but dead. */
-        unfollowed = false
+        unfollowed = false,
+        /** 'row' (default) | 'grid' (avatar + name, viewer badge on the corner) | 'dock' (avatar only) */
+        variant = 'row'
     } = $props();
 
     let profilePic = $derived(unfollowed ? UNFOLLOWED_CHANNEL_IMAGE : channelProfilePic);
 
+    // In dock, no name is ever shown: the tooltip is the only place the
+    // channel is identified, so it takes over the title slot.
     let tooltipContent = $derived({
-        title,
+        title: variant === 'dock' ? channelName : title,
         game: showGameInTooltip && isLive ? gameName : null
     });
 
@@ -53,6 +57,53 @@
     .card {
         border-radius: 4px;
         transition: background-color 0.15s ease;
+    }
+    .card.grid-cell {
+        flex-direction: column;
+        align-items: center;
+        gap: 0.2em;
+        text-align: center;
+        padding: 0.4em 0.2em;
+    }
+    .grid-avatar {
+        position: relative;
+        width: 2.4em;
+        height: 2.4em;
+    }
+    .grid-badge {
+        position: absolute;
+        top: -0.3em;
+        right: -0.3em;
+        background: #eb0400;
+        color: #fff;
+        font-size: 0.6em;
+        font-weight: 700;
+        line-height: 1;
+        padding: 0.25em 0.35em;
+        border-radius: 999px;
+    }
+    .grid-name {
+        width: 100%;
+        font-size: 0.72em;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    .card.dock-cell {
+        padding: 0.2em;
+        flex: none;
+    }
+    .dock-avatar {
+        width: 2.15em;
+        height: 2.15em;
+        transition: filter 0.12s ease;
+    }
+    .dock-avatar.live {
+        box-shadow: 0 0 0 2px var(--content-color, transparent), 0 0 0 3.5px #eb0400;
+    }
+    .dock-avatar.offline {
+        filter: grayscale(100%);
+        opacity: 0.6;
     }
     .layout-container {
         width: 100%;
@@ -222,8 +273,18 @@
 		background: inherit;
 		/* clip-path: polygon(0% 0%, 100% 0%, 50% 100%); */
 		clip-path: polygon(0 0, 0 100%, 100% 50%); -->
-<a class="card" id="draggable-channel" class:unfollowed use:maybeTooltip={tooltipContent} href={ !blockNavigation && !unfollowed ? "https://www.twitch.tv/" + channelName : null } onclick={navigate}>
-    <!-- <div class="layout-container" style="background-color: {color};"> -->
+<a class="card" class:grid-cell={variant === 'grid'} class:dock-cell={variant === 'dock'} id="draggable-channel" class:unfollowed use:maybeTooltip={tooltipContent} href={ !blockNavigation && !unfollowed ? "https://www.twitch.tv/" + channelName : null } onclick={navigate}>
+    {#if variant === 'dock'}
+        <div class="profile-picture dock-avatar" class:live={isLive} class:offline={!isLive}>
+            <img class={['profile-picture', greyIfOffline && 'greyIfOffline', !isLive && 'offline']} src={profilePic} alt="" />
+        </div>
+    {:else if variant === 'grid'}
+        <div class="profile-picture grid-avatar">
+            <img class={['profile-picture', greyIfOffline && 'greyIfOffline', !isLive && 'offline']} src={profilePic} alt="" />
+            {#if isLive}<span class="grid-badge">{formatter.format(viewerCount)}</span>{/if}
+        </div>
+        <p class="grid-name">{channelName}</p>
+    {:else}
         <div class="flex-profile-picture">
             <div class="profile-picture">
                 <img class={['profile-picture', greyIfOffline && 'greyIfOffline', !isLive && 'offline']} src={profilePic} alt="" />
@@ -241,21 +302,18 @@
                     </div>
                 </div>
                 <div class="viewer-count-container">
-                    {#if unfollowed}
-                        <!-- ni live, ni offline : la chaine n'est plus suivie -->
-                    {:else if isLive}
+                    {#if isLive}
                         <div class="flex-viewer-count">
                             <div class="live"></div>
-                            <!-- <p class="viewer-count">{viewerCount}</p> -->
                             <p class="viewer-count">{formatter.format(viewerCount)}</p>
                         </div>
-                    {:else if showOffline }
+                    {:else if !unfollowed && showOffline }
                         <div class="offline">{$_('channel.offline')}</div>
                     {/if}
                 </div>
             </div>
         </div>
-    <!-- </div> -->
+    {/if}
 </a>
 
 

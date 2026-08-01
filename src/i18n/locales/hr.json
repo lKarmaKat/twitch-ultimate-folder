@@ -51,7 +51,12 @@
     "listIconHelp": "Ikona prikazana pored naziva popisa",
     "listHeaderBarColorHelp": "Boja bočne trake popisa",
     "listCounterBadgeHelp": "Stil oznake koja prikazuje broj kanala na mreži",
-    "selectListPrompt": "Kliknite na zaglavlje popisa da biste ga prilagodili"
+    "selectListPrompt": "Kliknite na zaglavlje popisa da biste ga prilagodili",
+    "listLayout": "Raspored",
+    "listLayoutHelp": "Kako je raspoređen sadržaj ovog popisa: redovi, stupci jedan pored drugog, kartice, mreža avatara ili traka za pomicanje.",
+    "listColumns": "Stupci",
+    "maxItems": "Najveći broj prikazanih stavki",
+    "maxItemsHelp": "Prikazuju se samo prvih N stavki, s retkom za proširenje ostatka. 0 = neograničeno."
   },
   "configList": {
     "alreadyInList": "Stavka je već na popisu",
@@ -64,7 +69,8 @@
     "noChannels": "Nema kanala za prikaz"
   },
   "display": {
-    "allOtherChannels": "Svi ostali kanali"
+    "allOtherChannels": "Svi ostali kanali",
+    "overflowMore": "+{count} više"
   },
   "channel": {
     "offline": "Izvan mreže",
@@ -231,5 +237,13 @@
     "brawlhalla": "Brawlhalla",
     "forHonor": "For Honor",
     "theDivision2": "The Division 2"
+  },
+  "listLayout": {
+    "stack": "Redovi (zadano)",
+    "split": "Stupci",
+    "flyout": "Skočni panel",
+    "tabs": "Kartice",
+    "grid": "Mreža",
+    "dock": "Traka (samo avatari)"
   }
 }

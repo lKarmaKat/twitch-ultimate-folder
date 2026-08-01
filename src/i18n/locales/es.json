@@ -51,7 +51,12 @@
     "listIconHelp": "Icono que se muestra junto al nombre de la lista",
     "listHeaderBarColorHelp": "Color de la barra lateral de la lista",
     "listCounterBadgeHelp": "Estilo de la insignia que muestra el número de canales en línea",
-    "selectListPrompt": "Haz clic en el encabezado de una lista para personalizarla"
+    "selectListPrompt": "Haz clic en el encabezado de una lista para personalizarla",
+    "listLayout": "Diseño",
+    "listLayoutHelp": "Cómo se organiza el contenido de esta lista: filas, columnas una junto a otra, pestañas, una cuadrícula de avatares o una barra deslizante.",
+    "listColumns": "Columnas",
+    "maxItems": "Máximo de elementos mostrados",
+    "maxItemsHelp": "Solo se muestran las primeras N entradas, con una fila desplegable para el resto. 0 = ilimitado."
   },
   "configList": {
     "alreadyInList": "El elemento ya está en la lista",
@@ -64,7 +69,8 @@
     "noChannels": "No hay canales para mostrar"
   },
   "display": {
-    "allOtherChannels": "Todos los demás canales"
+    "allOtherChannels": "Todos los demás canales",
+    "overflowMore": "+{count} más"
   },
   "channel": {
     "offline": "Sin conexión",
@@ -231,5 +237,13 @@
     "brawlhalla": "Brawlhalla",
     "forHonor": "For Honor",
     "theDivision2": "The Division 2"
+  },
+  "listLayout": {
+    "stack": "Filas (por defecto)",
+    "split": "Columnas",
+    "flyout": "Panel flotante",
+    "tabs": "Pestañas",
+    "grid": "Cuadrícula",
+    "dock": "Barra (solo avatares)"
   }
 }

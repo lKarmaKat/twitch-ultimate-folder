@@ -5,6 +5,7 @@
   import Display from './Display.svelte';
   import DraggableChannel from './DraggableChannel.svelte';
   import DisplayWrapper from './DisplayWrapper.svelte';
+  import FlyoutPopup from './FlyoutPopup.svelte';
   import ConfigTransfer from './ConfigTransfer.svelte';
   import ConfigManager from '../configManager.svelte';
   import PortConnector from '../portConnector.svelte';
@@ -238,6 +239,7 @@ import { api } from '../../browserApi.js';
                 <DisplayWrapper configManager={configManager} />
               </div>
             </div>
+            <FlyoutPopup configManager={configManager} />
             {/if}
           </div>
           {#if configManager.channelsPickRef.length}

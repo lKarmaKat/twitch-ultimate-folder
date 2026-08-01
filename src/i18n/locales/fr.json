@@ -203,7 +203,12 @@
     "listCounterBadgeHelp": "Style du badge qui affiche le nombre de chaine en ligne",
     "selectListPrompt": "Cliquez sur l'en-tête d'une liste pour la personnaliser",
     "headerMode": "En-tête",
-    "headerModeHelp": "Affiche un en-tête cliquable au-dessus de « Toutes les autres chaines ». Un clic bascule le tri (alphabétique / nombre de viewers) pour la session en cours, sans modifier la configuration enregistrée."
+    "headerModeHelp": "Affiche un en-tête cliquable au-dessus de « Toutes les autres chaines ». Un clic bascule le tri (alphabétique / nombre de viewers) pour la session en cours, sans modifier la configuration enregistrée.",
+    "listLayout": "Disposition",
+    "listLayoutHelp": "Comment le contenu de cette liste est disposé : lignes, colonnes côte à côte, onglets, grille d'avatars, ou bande défilante.",
+    "listColumns": "Colonnes",
+    "maxItems": "Nombre maximum affiché",
+    "maxItemsHelp": "Seules les N premières entrées s'affichent, avec une ligne de repli pour le reste. 0 = illimité."
   },
   "configList": {
     "alreadyInList": "L'élément est déjà dans la liste",
@@ -216,7 +221,8 @@
     "noChannels": "Aucune chaine à montrer"
   },
   "display": {
-    "allOtherChannels": "Toutes les autres chaines"
+    "allOtherChannels": "Toutes les autres chaines",
+    "overflowMore": "+{count} autres"
   },
   "channel": {
     "offline": "Hors ligne",
@@ -391,5 +397,13 @@
     "brawlhalla": "Brawlhalla",
     "forHonor": "For Honor",
     "theDivision2": "The Division 2"
+  },
+  "listLayout": {
+    "stack": "Lignes (par défaut)",
+    "split": "Colonnes",
+    "flyout": "Panneau flottant",
+    "tabs": "Onglets",
+    "grid": "Grille",
+    "dock": "Bande (avatars seuls)"
   }
 }
