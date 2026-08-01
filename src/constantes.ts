@@ -108,19 +108,61 @@ export const SORT_STRATEGY = [
   {id: ALPHA_SORT, type: 'ALPHA_SORT', name: 'sort.alpha'},
 ]
 
+/* Every colour holds at least 3.2:1 against both Twitch backgrounds
+   (#18181b and #f7f7f8) so a 3px bar stays visible on either theme. */
 export const BAR_TYPE = [
   {
     id: 1,
     name: 'bar.purple',
-    color: "rgb(145, 71, 255)"
+    color: "#9147FF"
   },{
     id: 2,
     name: 'bar.green',
-    color: "rgb(0, 200, 0)"
+    color: "#009E42"
   },{
     id: 3,
     name: 'bar.orange',
-    color: "rgb(100, 50, 20)"
+    color: "#F05800"
+  },{
+    id: 4,
+    name: 'bar.red',
+    color: "#FF3F38"
+  },{
+    id: 5,
+    name: 'bar.amber',
+    color: "#C27B00"
+  },{
+    id: 6,
+    name: 'bar.teal',
+    color: "#009980"
+  },{
+    id: 7,
+    name: 'bar.cyan',
+    color: "#0093B8"
+  },{
+    id: 8,
+    name: 'bar.blue',
+    color: "#058AFF"
+  },{
+    id: 9,
+    name: 'bar.indigo',
+    color: "#6B7FFF"
+  },{
+    id: 10,
+    name: 'bar.lavender',
+    color: "#A666FF"
+  },{
+    id: 11,
+    name: 'bar.magenta',
+    color: "#E32EFF"
+  },{
+    id: 12,
+    name: 'bar.pink',
+    color: "#FF3388"
+  },{
+    id: 13,
+    name: 'bar.graphite',
+    color: "#7E7E92"
   }
 ]
 

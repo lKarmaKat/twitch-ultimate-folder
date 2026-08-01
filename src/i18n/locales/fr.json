@@ -75,7 +75,7 @@
       "iconsTitle": "En savoir plus sur les icônes d'en-tête",
       "icons1": "Chaque liste peut afficher une icône à gauche de son nom, pour la reconnaître dans la barre latérale sans avoir à la lire.",
       "icons2": "Deux familles sont proposées : des formes neutres — dossier, point, chevron, croix — et une quarantaine de logos de jeux, de Valorant et League of Legends à Counter-Strike 2, Fortnite, Minecraft, GTA, Apex Legends ou Marvel Rivals. Choisissez le logo quand une liste est dédiée à un jeu, et une forme neutre quand elle regroupe des chaînes par communauté ou par humeur.",
-      "icons3": "L'en-tête porte aussi une barre latérale colorée, disponible en violet, vert ou orange. Combinée à l'icône, elle donne à chaque liste une signature repérable d'un coup d'œil dans une longue barre latérale.",
+      "icons3": "L'en-tête porte aussi une barre latérale colorée, disponible en treize couleurs choisies pour rester lisibles sur le thème sombre comme sur le thème clair de Twitch. Combinée à l'icône, elle donne à chaque liste une signature repérable d'un coup d'œil dans une longue barre latérale.",
       "iconsShotCaption": "Le sélecteur d'icône d'en-tête et les couleurs de barre.",
       "iconsShotAlt": "Le sélecteur d'icône et le choix de couleur de la barre",
       "badgesTitle": "En savoir plus sur les badges d'en-tête",
@@ -301,7 +301,17 @@
   "bar": {
     "purple": "violet",
     "green": "vert",
-    "orange": "orange"
+    "orange": "orange",
+    "red": "rouge",
+    "amber": "ambre",
+    "teal": "sarcelle",
+    "cyan": "cyan",
+    "blue": "bleu",
+    "indigo": "indigo",
+    "lavender": "lavande",
+    "magenta": "magenta",
+    "pink": "rose",
+    "graphite": "graphite"
   },
   "counterType": {
     "bareCounter": "Compteur simple",

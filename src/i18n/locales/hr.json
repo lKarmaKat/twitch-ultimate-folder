@@ -141,7 +141,17 @@
   "bar": {
     "purple": "ljubičasta",
     "green": "zelena",
-    "orange": "narančasta"
+    "orange": "narančasta",
+    "red": "crvena",
+    "amber": "jantarna",
+    "teal": "tirkizna",
+    "cyan": "cijan",
+    "blue": "plava",
+    "indigo": "indigo",
+    "lavender": "lavanda",
+    "magenta": "magenta",
+    "pink": "ružičasta",
+    "graphite": "grafitna"
   },
   "counterType": {
     "bareCounter": "jednostavni brojač",

@@ -141,7 +141,17 @@
   "bar": {
     "purple": "lila",
     "green": "grün",
-    "orange": "orange"
+    "orange": "orange",
+    "red": "rot",
+    "amber": "bernstein",
+    "teal": "blaugrün",
+    "cyan": "cyan",
+    "blue": "blau",
+    "indigo": "indigo",
+    "lavender": "lavendel",
+    "magenta": "magenta",
+    "pink": "pink",
+    "graphite": "graphit"
   },
   "counterType": {
     "bareCounter": "einfacher Zähler",

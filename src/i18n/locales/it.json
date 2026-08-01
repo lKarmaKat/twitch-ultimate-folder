@@ -141,7 +141,17 @@
   "bar": {
     "purple": "viola",
     "green": "verde",
-    "orange": "arancione"
+    "orange": "arancione",
+    "red": "rosso",
+    "amber": "ambra",
+    "teal": "verde acqua",
+    "cyan": "ciano",
+    "blue": "blu",
+    "indigo": "indaco",
+    "lavender": "lavanda",
+    "magenta": "magenta",
+    "pink": "rosa",
+    "graphite": "grafite"
   },
   "counterType": {
     "bareCounter": "contatore semplice",

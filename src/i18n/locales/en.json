@@ -75,7 +75,7 @@
       "iconsTitle": "More about list header icons",
       "icons1": "Each list can display an icon to the left of its name, so you recognise it in the sidebar without reading it.",
       "icons2": "Two families are available: neutral shapes — folder, dot, angle, cross — and around forty game logos, from Valorant and League of Legends to Counter-Strike 2, Fortnite, Minecraft, GTA, Apex Legends or Marvel Rivals. Pick the game logo when a list is dedicated to one game, and a neutral shape when the list groups channels by community or by mood.",
-      "icons3": "The header also carries a coloured side bar, available in purple, green or orange. Combined with the icon, it gives each list a signature you can spot at a glance in a long sidebar.",
+      "icons3": "The header also carries a coloured side bar, available in thirteen colours chosen to stay readable on both the dark and the light Twitch theme. Combined with the icon, it gives each list a signature you can spot at a glance in a long sidebar.",
       "iconsShotCaption": "The list header icon picker and the side bar colours.",
       "iconsShotAlt": "The icon picker and the side bar colour selector",
       "badgesTitle": "More about list header badges",
@@ -301,7 +301,17 @@
   "bar": {
     "purple": "purple",
     "green": "green",
-    "orange": "orange"
+    "orange": "orange",
+    "red": "red",
+    "amber": "amber",
+    "teal": "teal",
+    "cyan": "cyan",
+    "blue": "blue",
+    "indigo": "indigo",
+    "lavender": "lavender",
+    "magenta": "magenta",
+    "pink": "pink",
+    "graphite": "graphite"
   },
   "counterType": {
     "bareCounter": "Bare counter",

@@ -1,3 +1,18 @@
+/* Badge and icon follow the list bar colour. The icon takes it raw, to match
+   the bar exactly; the badge takes a lightened variant (darkened on the light
+   theme) because BAR_TYPE is calibrated for a 3px bar, not for text. */
+#display-container.dark .list-container {
+    --bar-accent: #bf94ff;
+    --bar-tint: rgba(145, 71, 255, 0.22);
+    --bar-icon: #bf94ff;
+}
+
+#display-container.dark .list-container.tinted {
+    --bar-accent: color-mix(in srgb, var(--theme-color) 50%, white);
+    --bar-tint: color-mix(in srgb, var(--theme-color) 22%, transparent);
+    --bar-icon: var(--theme-color);
+}
+
 #display-container.dark .list-header {
     /* background-color: #0e0e10; */
     background-color: #393941;
@@ -12,8 +27,8 @@
 }
 
 #display-container.dark .list-header .badge {
-    background: rgba(145, 71, 255, 0.22);
-    color: #bf94ff;
+    background: var(--bar-tint);
+    color: var(--bar-accent);
 }
 
 #display-container.dark .list-header .badge.no-live {
@@ -41,19 +56,35 @@
     color: rgb(239, 239, 241);
 }
 
-#display-container.dark .live-icon svg,
+/* the live wave sits inside the badge, so it follows the badge text */
+#display-container.dark .live-icon svg {
+    fill: var(--bar-accent);
+}
+
 #display-container.dark .icon-container svg {
-    fill: #bf94ff; 
+    fill: var(--bar-icon);
 }
 
 #display-container.dark .icon-container .dot {
-    background: #bf94ff;
+    background: var(--bar-icon);
 }
 
 #display-container.dark .icon-container .cross {
-    stroke: #bf94ff; 
+    stroke: var(--bar-icon);
 }
 /* ************* */
+
+#display-container.light .list-container {
+    --bar-accent: #7b3fc9;
+    --bar-tint: rgba(145, 71, 255, 0.13);
+    --bar-icon: #7b3fc9;
+}
+
+#display-container.light .list-container.tinted {
+    --bar-accent: color-mix(in srgb, var(--theme-color) 60%, black);
+    --bar-tint: color-mix(in srgb, var(--theme-color) 13%, transparent);
+    --bar-icon: var(--theme-color);
+}
 
 #display-container.light .list-header {
     /* background-color: #ffffff; */
@@ -67,8 +98,8 @@
 }
 
 #display-container.light .list-header .badge {
-    background: rgba(145, 71, 255, 0.13);
-    color: #7b3fc9;
+    background: var(--bar-tint);
+    color: var(--bar-accent);
 }
 
 #display-container.light .list-header .badge.no-live {
@@ -96,15 +127,18 @@
     color: rgb(14, 14, 16);
 }
 
-#display-container.light .live-icon svg,
+#display-container.light .live-icon svg {
+    fill: var(--bar-accent);
+}
+
 #display-container.light .icon-container svg {
-    fill: #7b3fc9
+    fill: var(--bar-icon);
 }
 
 #display-container.light .icon-container .dot {
-    background: #7b3fc9;
+    background: var(--bar-icon);
 }
 
 #display-container.light .icon-container .cross {
-    stroke: #7b3fc9;
+    stroke: var(--bar-icon);
 }

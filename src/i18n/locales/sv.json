@@ -141,7 +141,17 @@
   "bar": {
     "purple": "lila",
     "green": "grön",
-    "orange": "orange"
+    "orange": "orange",
+    "red": "röd",
+    "amber": "bärnsten",
+    "teal": "blågrön",
+    "cyan": "cyan",
+    "blue": "blå",
+    "indigo": "indigo",
+    "lavender": "lavendel",
+    "magenta": "magenta",
+    "pink": "rosa",
+    "graphite": "grafit"
   },
   "counterType": {
     "bareCounter": "enkel räknare",

@@ -141,7 +141,17 @@
   "bar": {
     "purple": "violetti",
     "green": "vihreä",
-    "orange": "oranssi"
+    "orange": "oranssi",
+    "red": "punainen",
+    "amber": "meripihka",
+    "teal": "sinivihreä",
+    "cyan": "syaani",
+    "blue": "sininen",
+    "indigo": "indigo",
+    "lavender": "laventeli",
+    "magenta": "magenta",
+    "pink": "pinkki",
+    "graphite": "grafiitti"
   },
   "counterType": {
     "bareCounter": "yksinkertainen laskuri",

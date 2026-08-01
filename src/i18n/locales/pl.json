@@ -141,7 +141,17 @@
   "bar": {
     "purple": "fioletowy",
     "green": "zielony",
-    "orange": "pomarańczowy"
+    "orange": "pomarańczowy",
+    "red": "czerwony",
+    "amber": "bursztynowy",
+    "teal": "morski",
+    "cyan": "cyjan",
+    "blue": "niebieski",
+    "indigo": "indygo",
+    "lavender": "lawendowy",
+    "magenta": "magenta",
+    "pink": "różowy",
+    "graphite": "grafitowy"
   },
   "counterType": {
     "bareCounter": "prosty licznik",

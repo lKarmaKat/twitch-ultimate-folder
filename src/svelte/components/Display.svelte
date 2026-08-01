@@ -263,7 +263,7 @@
 	<!-- svelte-ignore a11y-no-static-element-interactions -->
 	<!-- svelte-ignore a11y-click-events-have-key-events -->
 	 {#if visible}
-	<div id="display-component" class="list-container" class:hover-enabled={hoverEnabled} style={barTypeColor ? `--theme-color:${barTypeColor}` : ''}>
+	<div id="display-component" class="list-container" class:hover-enabled={hoverEnabled} class:tinted={barTypeColor} style={barTypeColor ? `--theme-color:${barTypeColor}` : ''}>
 		{#if listId !== 'rootList'}
 		<!-- svelte-ignore a11y_click_events_have_key_events -->
 		<!-- svelte-ignore a11y_no_static_element_interactions -->
@@ -319,7 +319,9 @@
 									gameName={i?.game_name}
 									isLive={i?.isLive}
 									idbidon={i?.idbidon}
-									title={i?.title}/>
+									title={i?.title}
+									showOffline={true}
+									greyIfOffline={true}/>
 								</div>
 							{/each}
 						{:else if item.channel_id}
@@ -334,7 +336,9 @@
 									viewerCount={i?.viewer_count}
 									gameName={i?.game_name}
 									isLive={i?.isLive}
-									title={i?.title}/>
+									title={i?.title}
+									showOffline={true}
+									greyIfOffline={true}/>
 								</div>
 							{/if}
 						{/if}

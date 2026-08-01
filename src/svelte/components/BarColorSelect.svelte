@@ -6,12 +6,15 @@
 
     const uid = $props.id();
     let selected = $derived(CST.BAR_TYPE.find(o => o.id === value));
+    let selectedName = $derived(selected ? $_(selected.name) : $_('common.none'));
 
     let triggerEl = $state();
     let menuStyle = $state("");
+    let hoveredName = $state("");
 
     function positionMenu(e) {
         if (e.newState !== 'open') return;
+        hoveredName = "";
         const r = triggerEl.getBoundingClientRect();
         menuStyle = `top:${r.bottom + 2}px; left:${r.left}px; width:${r.width}px;`;
     }
@@ -20,30 +23,31 @@
 <div class="custom-select bar-select">
     <button type="button" class="trigger" bind:this={triggerEl} popovertarget="menu-{uid}">
         <span class="swatch" style:background={selected ? selected.color : "transparent"}></span>
-        <span class="label">{selected ? $_(selected.name) : $_('common.none')}</span>
+        <span class="label">{selectedName}</span>
         <span class="caret">▲</span>
     </button>
 
-    <ul class="menu" popover id="menu-{uid}" style={menuStyle} onbeforetoggle={positionMenu}>
-        <li>
-            <button type="button" class="item" class:active={value === ""}
+    <div class="menu" popover id="menu-{uid}" style={menuStyle} onbeforetoggle={positionMenu}>
+        <div class="grid" role="group" aria-label={$_('configPannel.listHeaderBarColor')}
+            onmouseleave={() => hoveredName = ""}>
+            <button type="button" class="dot none" class:active={value === ""}
+                aria-label={$_('common.none')}
                 popovertarget="menu-{uid}" popovertargetaction="hide"
-                onclick={() => value = ""}>
-                <span class="swatch" style:background="transparent"></span>
-                <span class="label">{$_('common.none')}</span>
-            </button>
-        </li>
-        {#each CST.BAR_TYPE as opt}
-            <li>
-                <button type="button" class="item" class:active={value === opt.id}
+                onmouseenter={() => hoveredName = $_('common.none')}
+                onfocus={() => hoveredName = $_('common.none')}
+                onclick={() => value = ""}></button>
+            {#each CST.BAR_TYPE as opt}
+                <button type="button" class="dot" class:active={value === opt.id}
+                    style:background={opt.color}
+                    aria-label={$_(opt.name)}
                     popovertarget="menu-{uid}" popovertargetaction="hide"
-                    onclick={() => value = opt.id}>
-                    <span class="swatch" style:background={opt.color}></span>
-                    <span class="label">{$_(opt.name)}</span>
-                </button>
-            </li>
-        {/each}
-    </ul>
+                    onmouseenter={() => hoveredName = $_(opt.name)}
+                    onfocus={() => hoveredName = $_(opt.name)}
+                    onclick={() => value = opt.id}></button>
+            {/each}
+        </div>
+        <p class="preview">{hoveredName || selectedName}</p>
+    </div>
 </div>
 
 <style>
@@ -74,34 +78,60 @@
 
     .menu {
         position: fixed;
-        max-height: 240px;
-        overflow-y: auto;
         margin: 0;
-        padding: 0.25em;
-        list-style: none;
-        /* background: #1f1f23; */
+        padding: 0.5em;
         border: 1px solid grey;
         border-radius: 0.4em;
         background: inherit;
         color: inherit;
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
     }
-    .item {
-        display: flex;
-        align-items: center;
-        gap: 0.5em;
-        width: 100%;
-        padding: 0.4em 0.5em;
-        background: transparent;
-        border: none;
-        border-radius: 0.3em;
-        cursor: pointer;
-        text-align: left;
-        color: inherit;
+    .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(1.5em, 1fr));
+        gap: 0.4em;
     }
-    .item:hover { background: rgba(145, 71, 255, 0.25); }
-    .item.active { background: rgba(145, 71, 255, 0.45); }
-
+    .dot {
+        width: 100%;
+        aspect-ratio: 1;
+        padding: 0;
+        border: 1px solid rgba(128, 128, 128, 0.45);
+        border-radius: 50%;
+        cursor: pointer;
+        transition: transform 0.1s ease;
+    }
+    .dot:hover { transform: scale(1.15); }
+    .dot.active {
+        outline: 2px solid currentColor;
+        outline-offset: 2px;
+    }
+    .dot:focus-visible {
+        outline: 2px solid rgb(145, 71, 255);
+        outline-offset: 2px;
+    }
+    .dot.none {
+        position: relative;
+        background: transparent;
+        overflow: hidden;
+    }
+    /* diagonal slash, clipped by the round border to mark the empty choice */
+    .dot.none::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(to top left,
+            transparent calc(50% - 1px), currentColor calc(50% - 1px),
+            currentColor calc(50% + 1px), transparent calc(50% + 1px));
+    }
+    .preview {
+        margin: 0.6em 0 0.1em;
+        text-align: center;
+        font-size: 0.85em;
+        opacity: 0.75;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
     .swatch {
         display: inline-block;
         width: 0.35em;
@@ -114,5 +144,9 @@
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
+    }
+    @media (prefers-reduced-motion: reduce) {
+        .dot, .caret { transition: none; }
+        .dot:hover { transform: none; }
     }
 </style>
