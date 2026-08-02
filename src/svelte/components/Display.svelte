@@ -562,7 +562,7 @@
 				isLive={i?.isLive}
 				idbidon={i?.idbidon}
 				title={i?.title}
-				showGameInTooltip={true}
+				showGameInTooltip={effectiveVariant !== 'row'}
 				showOffline={true}
 				greyIfOffline={true}
 				variant={effectiveVariant}/>
@@ -581,7 +581,7 @@
 				gameName={i?.game_name}
 				isLive={i?.isLive}
 				title={i?.title}
-				showGameInTooltip={true}
+				showGameInTooltip={effectiveVariant !== 'row'}
 				showOffline={true}
 				greyIfOffline={true}
 				variant={effectiveVariant}/>

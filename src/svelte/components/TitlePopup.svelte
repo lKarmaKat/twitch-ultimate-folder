@@ -30,13 +30,17 @@
 		width: max-content;
 	}
 
-	/* .tooltip carries white-space: nowrap, so a long title needs the ellipsis
-	   to stop the bubble from growing past the viewport. */
+	/* .tooltip carries white-space: nowrap; override it here so the title can
+	   wrap onto a second line instead of growing past the viewport. */
 	:global(#tooltip .tt-title) {
-		display: block;
+		display: -webkit-box;
+		-webkit-box-orient: vertical;
+		-webkit-line-clamp: 2;
+		line-clamp: 2;
 		max-width: 24rem;
 		overflow: hidden;
 		text-overflow: ellipsis;
+		white-space: normal;
 	}
 
 	:global(#tooltip .tt-game) {
