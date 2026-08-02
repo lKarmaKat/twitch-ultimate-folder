@@ -58,6 +58,12 @@ input[type=text] {
     color: rgb(14, 14, 16);
 }
 
+input[type=number] {
+    color: rgb(14, 14, 16);
+    caret-color: rgb(14, 14, 16);
+    color-scheme: light;
+}
+
 input[type=checkbox] {
     appearance: none;
     -webkit-appearance: none;
@@ -133,6 +139,14 @@ input[type=checkbox]:focus-visible {
 
 #config-list .list-header:hover {
     background-color: rgba(0, 0, 0, 0.045);
+}
+
+#config-list .separator-name {
+    color: rgb(61, 61, 71);
+}
+
+#config-list .separator-dash {
+    background: rgb(83, 83, 95);
 }
 
 /* drag ghost of a list (see transformDraggedElement) keeps the solid header look */

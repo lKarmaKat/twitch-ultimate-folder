@@ -1,7 +1,7 @@
 // Twitch publishes its current theme as a class on <html>. Purement DOM, donc
 // lisible aussi bien depuis le monde isole du content script que depuis une
 // page d'extension : seule la portee JS est isolee, pas le DOM.
-const LIGHT_CLASS = 'tw-root--theme-light';
+export const LIGHT_CLASS = 'tw-root--theme-light';
 
 /** True when Twitch renders in dark mode. Defaults to dark. */
 export function readTwitchDark() {

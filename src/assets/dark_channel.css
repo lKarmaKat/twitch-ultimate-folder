@@ -59,6 +59,9 @@
 #display-container.dark .viewer-count {
     color: rgb(239, 239, 241);
 }
+#display-container.dark .split-col-count {
+    color: rgb(239, 239, 241);
+}
 
 /* the live wave sits inside the badge, so it follows the badge text */
 #display-container.dark .live-icon svg {
@@ -140,6 +143,9 @@
     color: rgb(83, 83, 95);
 }
 #display-container.light .viewer-count {
+    color: rgb(14, 14, 16);
+}
+#display-container.light .split-col-count {
     color: rgb(14, 14, 16);
 }
 

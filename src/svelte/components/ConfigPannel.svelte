@@ -20,7 +20,7 @@
     const behaviorTypeOptions = CST.TYPE_OPTIONS.filter(o => o.group === 'behavior');
     const styleTypeOptions = CST.TYPE_OPTIONS.filter(o => o.group === 'style');
     const layoutOptions = CST.LIST_LAYOUT_OPTIONS;
-    let showsColumns = $derived(listConfig?.type.layout === CST.LIST_LAYOUT_SPLIT || listConfig?.type.layout === CST.LIST_LAYOUT_GRID);
+    let showsColumns = $derived(listConfig?.type.layout === CST.LIST_LAYOUT_GRID);
     let showsRail = $derived(!CST.LIST_LAYOUTS_WITHOUT_RAIL.includes(listConfig?.type.layout));
     // A rule-driven list refills itself: custom sort (drag order) has nothing to act on.
     let isSmartList = $derived((listConfig?.source?.kind ?? CST.SOURCE_KIND_MANUAL) !== CST.SOURCE_KIND_MANUAL);

@@ -57,8 +57,6 @@
 		layout === CST.LIST_LAYOUT_GRID ? 'grid' :
 		layout === CST.LIST_LAYOUT_DOCK ? 'dock' : 'row'
 	));
-	// A split column is a narrow list rendered with grid-style cells.
-	let cellVariant = $derived(effectiveVariant === 'split' ? 'grid' : effectiveVariant);
 
 	let source = $derived(configManager.selectedConfig[listId]?.source ?? { kind: CST.SOURCE_KIND_MANUAL });
 	let isSmartList = $derived(source.kind !== CST.SOURCE_KIND_MANUAL);
@@ -215,8 +213,15 @@
 		return { live, total };
 	}
 
-	let channelsCounters = $derived(countsFor(listId));
-
+	let channelsCounters = $derived.by(() => {
+		if (layout === CST.LIST_LAYOUT_SPLIT || layout === CST.LIST_LAYOUT_TABS) {
+			return childListIds.reduce((acc, id) => {
+				const c = countsFor(id);
+				return { live: acc.live + c.live, total: acc.total + c.total };
+			}, { live: 0, total: 0 });
+		}
+		return countsFor(listId);
+	});
 	let liveChannelsCounter = $derived(channelsCounters.live);
 	let totalChannelsCount = $derived(channelsCounters.total);
 
@@ -397,8 +402,25 @@
 		configManager.selectedConfig;
 		foldExpanded = false;
 	});
-	let overflowCount = $derived(maxItems > 0 && !foldExpanded ? Math.max(0, renderedItems.length - maxItems) : 0);
-	let visibleItems = $derived(overflowCount > 0 ? renderedItems.slice(0, maxItems) : renderedItems);
+	function willRenderItem(item) {
+		if (item.type === CST.TYPE_LIST) return hasVisibleContent(configManager, item.id);
+		if (item.type === CST.TYPE_SEPARATOR) return true;
+		if (item.channel_id < 0) return true;
+		return !!configManager.getLiveChannel(item.channel_id);
+	}
+	let renderableCount = $derived(renderedItems.filter(willRenderItem).length);
+	let overflowCount = $derived(maxItems > 0 && !foldExpanded ? Math.max(0, renderableCount - maxItems) : 0);
+	let visibleItems = $derived.by(() => {
+		if (overflowCount <= 0) return renderedItems;
+		let count = 0;
+		for (let idx = 0; idx < renderedItems.length; idx++) {
+			if (willRenderItem(renderedItems[idx])) {
+				count++;
+				if (count >= maxItems) return renderedItems.slice(0, idx + 1);
+			}
+		}
+		return renderedItems;
+	});
 	function expandFold(e) {
 		e.stopPropagation();
 		foldExpanded = true;
@@ -464,13 +486,13 @@
 			{:else if layout === CST.LIST_LAYOUT_SPLIT}
 				<div class="list-body split-body" class:extended={effectiveExtended} class:rail={indentRail} style="--content-color:{content?.contentColor};">
 					<div>
-						<div class="split-columns" style="--split-columns:{columns};">
+						<div class="split-columns">
 							{#each childListIds as childId (childId)}
 								{@const childType = configManager.selectedConfig[childId]?.type}
 								{@const counts = countsFor(childId)}
 								<div class="split-col">
 									<div class="split-col-cap">
-										<span class="split-col-icon"><IconPicker iconType={childType?.iconType ?? ICON_NONE} /></span>
+										<span class="split-col-icon" class:no-icon={(childType?.iconType ?? ICON_NONE) === ICON_NONE}><IconPicker iconType={childType?.iconType ?? ICON_NONE} /></span>
 										<span class="split-col-count">{counts.live}</span>
 									</div>
 									<Self listId={childId} configManager={configManager} headless={true} forceVariant="split" />
@@ -483,7 +505,13 @@
 			{:else}
 				<div class="list-body" class:extended={effectiveExtended} class:rail={indentRail} class:grid-body={effectiveVariant === 'grid'} class:dock-body={effectiveVariant === 'dock'} class:split-col-body={effectiveVariant === 'split'} style="--content-color:{content?.contentColor}; --grid-columns:{columns};">
 					<div>
-						{@render itemsList(visibleItems, true)}
+						{#if effectiveVariant === 'grid'}
+							<div class="grid-items">
+								{@render itemsList(visibleItems, true)}
+							</div>
+						{:else}
+							{@render itemsList(visibleItems, true)}
+						{/if}
 					</div>
 				</div>
 			{/if}
@@ -535,7 +563,7 @@
 				showGameInTooltip={true}
 				showOffline={true}
 				greyIfOffline={true}
-				variant={cellVariant}/>
+				variant={effectiveVariant}/>
 			</div>
 		{/each}
 	{:else if item.channel_id}
@@ -554,7 +582,7 @@
 				showGameInTooltip={true}
 				showOffline={true}
 				greyIfOffline={true}
-				variant={cellVariant}/>
+				variant={effectiveVariant}/>
 			</div>
 		{/if}
 	{/if}
@@ -630,6 +658,15 @@
 	} */
 	:global(.al-left  .list-container  .list-container .list-container) {
 		margin-right: 0.5em;
+	}
+	/* A split column isn't a nested tree node, it's a side-by-side column:
+	   exclude it from the depth-based indent above regardless of how deep
+	   the splitList itself sits in the tree. */
+	:global(.al-right) .split-col > .list-container {
+		margin-left: 0;
+	}
+	:global(.al-left) .split-col > .list-container {
+		margin-right: 0;
 	}
     :host([collapsed]) * {
         padding: 0 !important;
@@ -900,12 +937,15 @@
 		width: 1em;
 		height: 1em;
 	}
+	.split-col-icon.no-icon {
+		width: 0;
+	}
 	.split-col-count {
 		font-weight: 700;
 	}
 
 	/* ---- gridList ---- */
-	.grid-body > div {
+	.grid-items {
 		display: grid;
 		grid-template-columns: repeat(var(--grid-columns, 4), 1fr);
 		gap: 0.4em;

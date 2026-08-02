@@ -17,7 +17,7 @@
         showGameInTooltip = false,
         /** Config entry whose channel is no longer followed: named, but dead. */
         unfollowed = false,
-        /** 'row' (default) | 'grid' (avatar + name, viewer badge on the corner) | 'dock' (avatar only) */
+        /** 'row' (default) | 'grid' (avatar + name, viewer badge on the corner) | 'split' (avatar + name, viewer count below) | 'dock' (avatar only) */
         variant = 'row'
     } = $props();
 
@@ -64,6 +64,16 @@
         gap: 0.2em;
         text-align: center;
         padding: 0.4em 0.2em;
+    }
+    .split-viewers {
+        display: flex;
+        align-items: center;
+        gap: 0.3em;
+        font-size: 0.7em;
+        opacity: 0.85;
+    }
+    .split-viewers p {
+        margin: 0;
     }
     .grid-avatar {
         position: relative;
@@ -273,7 +283,7 @@
 		background: inherit;
 		/* clip-path: polygon(0% 0%, 100% 0%, 50% 100%); */
 		clip-path: polygon(0 0, 0 100%, 100% 50%); -->
-<a class="card" class:grid-cell={variant === 'grid'} class:dock-cell={variant === 'dock'} id="draggable-channel" class:unfollowed use:maybeTooltip={tooltipContent} href={ !blockNavigation && !unfollowed ? "https://www.twitch.tv/" + channelName : null } onclick={navigate}>
+<a class="card" class:grid-cell={variant === 'grid' || variant === 'split'} class:dock-cell={variant === 'dock'} id="draggable-channel" class:unfollowed use:maybeTooltip={tooltipContent} href={ !blockNavigation && !unfollowed ? "https://www.twitch.tv/" + channelName : null } onclick={navigate}>
     {#if variant === 'dock'}
         <div class="profile-picture dock-avatar" class:live={isLive} class:offline={!isLive}>
             <img class={['profile-picture', greyIfOffline && 'greyIfOffline', !isLive && 'offline']} src={profilePic} alt="" />
@@ -284,6 +294,17 @@
             {#if isLive}<span class="grid-badge">{formatter.format(viewerCount)}</span>{/if}
         </div>
         <p class="grid-name">{channelName}</p>
+    {:else if variant === 'split'}
+        <div class="profile-picture grid-avatar">
+            <img class={['profile-picture', greyIfOffline && 'greyIfOffline', !isLive && 'offline']} src={profilePic} alt="" />
+        </div>
+        <p class="grid-name">{channelName}</p>
+        {#if isLive}
+            <div class="split-viewers">
+                <span class="live"></span>
+                <p>{formatter.format(viewerCount)}</p>
+            </div>
+        {/if}
     {:else}
         <div class="flex-profile-picture">
             <div class="profile-picture">
