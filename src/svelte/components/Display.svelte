@@ -482,7 +482,7 @@
 				<div class="list-body tabs-body" class:extended={effectiveExtended} style="--content-color:{content?.contentColor};">
 					<div>
 						{#if activeChildId}
-							<div class="nested-list">
+							<div class="tab-panel">
 								<Self listId={activeChildId} configManager={configManager} headless={true} />
 							</div>
 						{/if}
@@ -526,7 +526,7 @@
 
 {#snippet renderItem(item)}
 	{#if item.type === CST.TYPE_LIST}
-		<div class="nested-list">
+		<div class="nested-list" class:headless-parent={effectiveHeadless}>
 			<Self
 				listId={item.id}
 				configManager={configManager}
@@ -673,6 +673,22 @@
 	:global(.al-left) .split-col > .list-container {
 		margin-right: 0;
 	}
+	/* A tab panel isn't a nested tree node either: it's the same content the
+	   headless tab list would show inline if it had its own header. */
+	:global(.al-right) .tab-panel > .list-container {
+		margin-left: 0;
+	}
+	:global(.al-left) .tab-panel > .list-container {
+		margin-right: 0;
+	}
+	/* A headless list has no header row of its own either: its children
+	   shouldn't be indented for a level that isn't visually there. */
+	:global(.al-right) .headless-parent > .list-container {
+		margin-left: 0;
+	}
+	:global(.al-left) .headless-parent > .list-container {
+		margin-right: 0;
+	}
     :host([collapsed]) * {
         padding: 0 !important;
         margin: 0 !important;
@@ -799,7 +815,7 @@
 		padding-left: 0.75em;
 	}
 	:global(.al-right .list-body.rail::before) {
-		left: 0.25em;
+		left: 0.10em;
 	}
 	:global(.al-left .list-body.rail) {
 		padding-right: 0.75em;
