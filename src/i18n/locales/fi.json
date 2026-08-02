@@ -44,12 +44,12 @@
     "style": "Tyyli",
     "headerSize": "Otsikon koko",
     "listHeaderIcon": "Listan otsikon kuvake",
-    "listHeaderBarColor": "Listan otsikon sivupalkin väri",
+    "listHeaderBarColor": "Listan teeman väri",
     "listHeaderBadge": "Listan otsikon merkin tyyli",
     "help": "Ohje",
     "headerSizeHelp": "Listan otsikon korkeus. Pieni otsikko on kompakti eikä näytä kuvaketta.",
     "listIconHelp": "Kuvake, joka näytetään listan nimen vieressä",
-    "listHeaderBarColorHelp": "Listan sivupalkin väri",
+    "listHeaderBarColorHelp": "Väritää listan otsikkopalkin, merkin, kuvakkeen ja sisennysviivan",
     "listCounterBadgeHelp": "Verkossa olevien kanavien määrää näyttävän merkin tyyli",
     "selectListPrompt": "Napsauta listan otsikkoa mukauttaaksesi sitä",
     "listLayout": "Asettelu",
@@ -152,11 +152,15 @@
   "styleOptions": {
     "pillHeader": {
       "label": "Pyöristetty otsikko",
-      "tooltip": "Pyöristetty listan otsikko, joka korostuu hiiren osoittimen alla. Sivupalkki seuraa pyöristettyjä kulmia ja piirretään vain, kun sivupalkin väri on valittu."
+      "tooltip": "Pyöristetty listan otsikko, joka korostuu hiiren osoittimen alla. Sivupalkki seuraa pyöristettyjä kulmia, kun \"Palkki\"-asetus on käytössä."
     },
     "indentRail": {
       "label": "Sisennysviiva",
-      "tooltip": "Sisentää listan sisällön ja piirtää pystysuoran viivan marginaaliin. Viiva saa valitun sivupalkin värin ja pysyy näkymättömänä ilman sitä."
+      "tooltip": "Sisentää listan sisällön ja piirtää pystysuoran viivan marginaaliin. Viiva saa valitun teeman värin ja pysyy näkymättömänä ilman sitä."
+    },
+    "hasBar": {
+      "label": "Palkki",
+      "tooltip": "Piirtää värillisen palkin listan otsikon sivuun, valitulla teeman värillä."
     }
   },
   "typeOptions": {

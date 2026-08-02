@@ -164,6 +164,14 @@
                             bind:value={listConfig.type.layout}
                             options={layoutOptions}/>
                     </div>
+                    <div class="row">
+                        <p>{$_('configPannel.listHeaderBarColor')}</p>
+                        <span
+                            class="help-badge"
+                            data-tooltip={$_('configPannel.listHeaderBarColorHelp')}>?</span>
+                        <BarColorSelect
+                            bind:value={listConfig.style.theme}/>
+                    </div>
                     {#if showsColumns}
                         <div class="row">
                             <p>{$_('configPannel.listColumns')}</p>
@@ -223,14 +231,6 @@
                         </div>
                     {/if}
                     <div class="row">
-                        <p>{$_('configPannel.listHeaderBarColor')}</p>
-                        <span
-                            class="help-badge"
-                            data-tooltip={$_('configPannel.listHeaderBarColorHelp')}>?</span>
-                        <BarColorSelect
-                            bind:value={listConfig.type.barType}/>
-                    </div>
-                    <div class="row">
                         <p>{$_('configPannel.listHeaderBadge')}</p>
                         <span
                             class="help-badge"
@@ -238,38 +238,6 @@
                         <CounterTypeSelect
                             bind:value={listConfig.type.viewerCountType}/>
                     </div>
-                    <!-- <div class="row">
-                        <select name="theme" id="theme" bind:value={config.style.theme} onchange={updateConfig}>
-                            <option value={CST.SYSTEM_STYLE}>System theme</option>
-                            <option value={CST.CUSTOM_STYLE}>Custom</option>
-                        </select>
-                    </div> -->
-                    <!-- {#if config.style.theme === CST.CUSTOM_STYLE}
-                    <div class="row">
-                        <p>Header color</p>
-                        <select name="header-color" id="header-color" bind:value={config.style.header.headerColor} onchange={updateConfig}>
-                            {#each colorsList as color}
-                                <option value={color.colorCode}>
-                                    {capitalizeFirstLetter(color.colorName)}
-                                </option>
-                            {/each}
-                        </select>
-                        <input type="color" name="header-color" id="header-color"
-                        bind:value={config.style.header.headerColor} onchange={updateConfig}><label for="header-color"></label>
-                    </div>
-                    <div class="row">
-                        <p>Content color</p>
-                        <select name="header-color" id="header-color" bind:value={config.style.content.contentColor} onchange={updateConfig}>
-                            {#each colorsList as color}
-                            <option value={color.colorCode}>
-                                {capitalizeFirstLetter(color.colorName)}
-                            </option>
-                            {/each}
-                        </select>
-                        <input type="color" name="header-color" id="content-color"
-                        bind:value={config.style.content.contentColor} onchange={updateConfig}><label for="content-color"></label>   
-                    </div>
-                    {/if} -->
                 </div>
             </div>
         {/if}

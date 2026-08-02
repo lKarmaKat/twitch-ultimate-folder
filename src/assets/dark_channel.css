@@ -1,6 +1,6 @@
-/* Badge and icon follow the list bar colour. The icon takes it raw, to match
+/* Badge and icon follow the list theme colour. The icon takes it raw, to match
    the bar exactly; the badge takes a lightened variant (darkened on the light
-   theme) because BAR_TYPE is calibrated for a 3px bar, not for text. */
+   theme) because THEME_COLOR is calibrated for a 3px bar, not for text. */
 #display-container.dark .list-container {
     --bar-accent: #bf94ff;
     --bar-tint: rgba(145, 71, 255, 0.22);

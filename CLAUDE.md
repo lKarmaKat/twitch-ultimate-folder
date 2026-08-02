@@ -6,6 +6,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 **Ultimate Twitch Folders** is a Chrome/Edge/Firefox extension (Manifest v3) that lets users reorganize their followed Twitch channels into custom nested folder structures displayed in the Twitch sidebar.
 
+Still in development, no need to bother with updating existing configurations when making changes.
+
 ## Commands
 
 ```bash
@@ -31,7 +33,7 @@ npm run e2e:firefox      # Firefox only
 1. **Background service worker** (`src/service_worker/`) — runs persistently, owns all Twitch API calls and Chrome storage
 2. **Content script** (`src/content_script/index.js`) — injected into `https://www.twitch.tv/*`, creates shadow DOM containers and iframes
 3. **Svelte UI** (`src/svelte/`) — mounted into those shadow DOM containers by inject scripts
-4. **Action popup** (`src/action_popup/`) — extension toolbar popup for quick toggles (theme, alignment)
+4. **Action popup** (`src/action_popup/`) — extension toolbar popup for quick toggles (channel alignment, title side)
 
 ### Data flow
 
@@ -67,9 +69,23 @@ Svelte stores → Display components
 Config is stored in Chrome local storage keyed by `userId`. The root type is `UserConfigs` → `I_CONFIG` → `I_NEW_LIST`, a flat map of `listId` → list node (nesting is by reference, not containment). Each list node has:
 - `items`: `{id, channel_id}` for a channel, `{id, type: 'list'}` pointing at another entry of the map for a sub-list. `channel_id < 0` is the "All other channels" pseudo-item, which carries its own options (`sort`, `type`, `height`, `iconType`)
 - `behavior`: keyed by the `BEHAVIOUR` ids (expand on startup / hover / click, show even if offline)
-- `style`: `header` / `content` sub-objects — colors, borders, and the `STYLE_OPTIONS` flags (`pillHeader`, `indentRail`)
-- `type`: `height` (`HEADER_HEIGHT_*`), `iconType` (`icons/index.ts`), `barType` (`BAR_TYPE`), `viewerCountType` (`COUNTER_TYPE`)
+- `style`: `header` / `content` sub-objects — colors, borders, and the `STYLE_OPTIONS` flags (`pillHeader`, `indentRail`, `hasBar`); `style.theme` is a `THEME_COLOR` id, coloring the header bar, badge, icon and indent rail (`hasBar` only controls whether the bar itself is drawn)
+- `type`: `height` (`HEADER_HEIGHT_*`), `iconType` (`icons/index.ts`), `viewerCountType` (`COUNTER_TYPE`)
 - `sort`: `CUSTOM_SORT` | `VIEWER_SORT` | `ALPHA_SORT`
+
+### List layouts
+
+`type.layout` (`LIST_LAYOUT_*` in `constantes.ts`) selects how a list renders its body in `Display.svelte`, `LIST_LAYOUT_STACK` (`0`) being the original row-per-channel behaviour so pre-layout configs keep rendering unchanged:
+- `STACK` — default vertical list of rows.
+- `SPLIT` — the list's own `items` hold only sub-list refs (`childListIds`); each child renders as a side-by-side column via `<Self forceVariant="split">`, headless (no own header, body always shown). The column caption (`split-col-cap`) shows that child's icon, name, and live count, sourced from the parent via `countsFor(childId)`.
+- `TABS` — same child-list-refs shape as `SPLIT`, but one child renders at a time (`activeChildId`), selected from a tab row in the header instead of side-by-side.
+- `GRID` — channels render in a CSS grid (`--grid-columns` from `type.columns`) instead of a stack.
+- `DOCK` — channels render as a horizontally scrollable row of avatar-only cells.
+- `FLYOUT` — body renders in a separate floating panel (`FlyoutPopup.svelte`) positioned off the header's bounding rect on hover, instead of inline under the header.
+
+`effectiveVariant` (`forceVariant ?? derived from layout`) picks which cell layout `DraggableChannel` renders: `'row'` (default), `'grid'`, `'split'` (avatar + name, viewer count below, used for `SPLIT` columns), or `'dock'` (avatar only, no name). `forceVariant` is how a `SPLIT` parent overrides its children's own layout for the body only — the child list keeps its own `type.layout` for everything else. The `headless` prop skips a child's own header entirely (used by both `SPLIT` columns and the active `TABS` panel), since the parent already renders the counter/name/tabs.
+
+**Counter gotcha:** a `SPLIT`/`TABS` parent's own `items` hold only child-list refs, never `channel_id`s directly, so `countsFor(listId)` — the manual-set path — always returns `{live: 0, total: 0}` for that parent. The parent header's own badge (`channelsCounters` in `Display.svelte`) must instead sum `countsFor(childId)` over `childListIds` when `layout` is `SPLIT` or `TABS`; only leaf/non-split lists can read `countsFor(listId)` directly.
 
 ### Message types (defined in `src/constantes.ts`)
 

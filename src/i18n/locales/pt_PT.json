@@ -44,12 +44,12 @@
     "style": "Estilo",
     "headerSize": "Tamanho do cabeçalho",
     "listHeaderIcon": "Ícone do cabeçalho da lista",
-    "listHeaderBarColor": "Cor da barra lateral do cabeçalho da lista",
+    "listHeaderBarColor": "Cor do tema da lista",
     "listHeaderBadge": "Estilo do emblema do cabeçalho da lista",
     "help": "Ajuda",
     "headerSizeHelp": "Altura do cabeçalho da lista. Um cabeçalho pequeno é compacto e não mostra ícone.",
     "listIconHelp": "Ícone apresentado junto ao nome da lista",
-    "listHeaderBarColorHelp": "Cor da barra lateral da lista",
+    "listHeaderBarColorHelp": "Colore a barra do cabeçalho, o selo, o ícone e a guia de indentação da lista",
     "listCounterBadgeHelp": "Estilo do emblema que apresenta o número de canais online",
     "selectListPrompt": "Clique no cabeçalho de uma lista para a personalizar",
     "listLayout": "Esquema",
@@ -152,11 +152,15 @@
   "styleOptions": {
     "pillHeader": {
       "label": "Cabeçalho arredondado",
-      "tooltip": "Cabeçalho da lista arredondado, destacado ao passar o rato. A barra lateral acompanha os cantos e só é desenhada quando estiver selecionada uma cor de barra."
+      "tooltip": "Cabeçalho da lista arredondado, destacado ao passar o rato. A barra lateral acompanha os cantos quando a opção \"Barra\" está ativada."
     },
     "indentRail": {
       "label": "Guia de indentação",
-      "tooltip": "Indenta o conteúdo da lista e desenha uma linha vertical na margem. A linha assume a cor de barra selecionada e permanece invisível sem ela."
+      "tooltip": "Indenta o conteúdo da lista e desenha uma linha vertical na margem. A linha assume a cor do tema selecionada e permanece invisível sem ela."
+    },
+    "hasBar": {
+      "label": "Barra",
+      "tooltip": "Desenha uma barra colorida na lateral do cabeçalho da lista, com a cor do tema selecionada."
     }
   },
   "typeOptions": {

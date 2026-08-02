@@ -44,12 +44,12 @@
     "style": "Stil",
     "headerSize": "Storlek på listhuvud",
     "listHeaderIcon": "Ikon för listhuvud",
-    "listHeaderBarColor": "Färg på sidofältet i listhuvudet",
+    "listHeaderBarColor": "Listans temafärg",
     "listHeaderBadge": "Badge-stil för listhuvud",
     "help": "Hjälp",
     "headerSizeHelp": "Höjd på listhuvudet. Ett litet listhuvud är kompakt och visar ingen ikon.",
     "listIconHelp": "Ikon som visas bredvid listnamnet",
-    "listHeaderBarColorHelp": "Färg på listans sidofält",
+    "listHeaderBarColorHelp": "Färgar listans rubrikfält, badge, ikon och indragslinje",
     "listCounterBadgeHelp": "Stil på badgen som visar antalet kanaler online",
     "selectListPrompt": "Klicka på ett listhuvud för att anpassa det",
     "listLayout": "Layout",
@@ -152,11 +152,15 @@
   "styleOptions": {
     "pillHeader": {
       "label": "Rundat listhuvud",
-      "tooltip": "Rundat listhuvud som markeras när muspekaren förs över det. Sidofältet följer hörnen och ritas bara ut när en färg på sidofältet är vald."
+      "tooltip": "Rundat listhuvud som markeras när muspekaren förs över det. Sidofältet följer hörnen när alternativet \"Fält\" är aktiverat."
     },
     "indentRail": {
       "label": "Indragslinje",
-      "tooltip": "Drar in listans innehåll och ritar en lodrät linje i marginalen. Linjen får den valda färgen på sidofältet och förblir osynlig utan den."
+      "tooltip": "Drar in listans innehåll och ritar en lodrät linje i marginalen. Linjen får den valda temafärgen och förblir osynlig utan den."
+    },
+    "hasBar": {
+      "label": "Fält",
+      "tooltip": "Ritar ett färgat fält på sidan av listans rubrik, i den valda temafärgen."
     }
   },
   "typeOptions": {

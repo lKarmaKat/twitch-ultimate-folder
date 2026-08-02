@@ -57,8 +57,6 @@ export const configKey = (userId: string | number) => `config_${userId}`;
 export const CHANNELS_CACHE_KEY = 'channels_cache';
 export const CHANNELS_CACHE_MAX = 2000;
 
-export const SYSTEM_STYLE = 'SYSTEM_STYLE';
-export const CUSTOM_STYLE = 'CUSTOM_STYLE';
 export let TYPE_LIST = 'list'
 /** Item carrying only a label: no channel, no body, no open state. */
 export const TYPE_SEPARATOR = 'separator'
@@ -107,11 +105,13 @@ export const BEHAVIOUR = [
 
 export const STYLE_PILL_HEADER = 'pillHeader';
 export const STYLE_INDENT_RAIL = 'indentRail';
+export const STYLE_HAS_BAR = 'hasBar';
 
 // `group` is the `style` sub-object the flag is stored in.
 export const STYLE_OPTIONS = [
 {key: STYLE_PILL_HEADER, group: 'header', label: 'styleOptions.pillHeader.label', tooltip: 'styleOptions.pillHeader.tooltip'},
 {key: STYLE_INDENT_RAIL, group: 'content', label: 'styleOptions.indentRail.label', tooltip: 'styleOptions.indentRail.tooltip'},
+{key: STYLE_HAS_BAR, group: 'header', label: 'styleOptions.hasBar.label', tooltip: 'styleOptions.hasBar.tooltip'},
 ];
 
 export const TYPE_CHEVRON = 'chevron';
@@ -215,8 +215,9 @@ export function createDefaultSource() {
 }
 
 /* Every colour holds at least 3.2:1 against both Twitch backgrounds
-   (#18181b and #f7f7f8) so a 3px bar stays visible on either theme. */
-export const BAR_TYPE = [
+   (#18181b and #f7f7f8) so it stays legible on either theme. Colors the
+   header bar, badge, icon and indent rail. */
+export const THEME_COLOR = [
   {
     id: 1,
     name: 'bar.purple',
@@ -309,13 +310,14 @@ export function createNewList(): t.I_NEW_LIST {
     sort: SORT_STRATEGY[CUSTOM_SORT].id,
     source: createDefaultSource(),
     style: {
-      theme: SYSTEM_STYLE,
+      theme: 0, // 0 = none, id into THEME_COLOR
       header: {
         headerColor: "#808080",
         borderColor: "#808080",
         borderWidth: null,
         borderRadius: null,
-        [STYLE_PILL_HEADER]: false
+        [STYLE_PILL_HEADER]: false,
+        [STYLE_HAS_BAR]: false
       },
       content: {
         contentColor: "#808080",
@@ -325,12 +327,11 @@ export function createNewList(): t.I_NEW_LIST {
         borderWidth: null,
         borderRadius: null,
         [STYLE_INDENT_RAIL]: false
-      }
+      } 
     },
     type: {
       height: 0,
       iconType: 0, // ICON_NONE (see svelte/components/icons/index.ts): no icon, no reserved space
-      barType: 0,
       viewerCountType: 2,
       [TYPE_CHEVRON]: false,
       [TYPE_EXCLUSIVE]: false,

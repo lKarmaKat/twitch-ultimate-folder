@@ -29,8 +29,11 @@
 	let type = $derived.by(() => {
 		return configManager.selectedConfig[listId]?.type
 	});
-	let barTypeColor = $derived.by(() => {
-		let color = CST.BAR_TYPE.find(e => e.id === type.barType);
+	let listStyle = $derived.by(() => {
+		return configManager.selectedConfig[listId]?.style
+	});
+	let themeColor = $derived.by(() => {
+		let color = CST.THEME_COLOR.find(e => e.id === listStyle?.theme);
 		if (!color || !color.color) {
 			return 0;
 		}
@@ -80,6 +83,7 @@
 
 	let pillHeader = $derived(header?.[CST.STYLE_PILL_HEADER] ?? false);
 	let indentRail = $derived(content?.[CST.STYLE_INDENT_RAIL] ?? false);
+	let hasBar = $derived(header?.[CST.STYLE_HAS_BAR] ?? false);
 
 	// Session state: reset to the startup value whenever the config is reloaded
 	// (save / reset / init) or the startup checkbox is edited live in the popup.
@@ -433,11 +437,11 @@
 	<!-- svelte-ignore a11y-no-static-element-interactions -->
 	<!-- svelte-ignore a11y-click-events-have-key-events -->
 	 {#if visible}
-	<div id="display-component" class="list-container" class:hover-enabled={hoverEnabled} class:tinted={barTypeColor} style={barTypeColor ? `--theme-color:${barTypeColor}` : ''}>
+	<div id="display-component" class="list-container" class:hover-enabled={hoverEnabled} class:tinted={themeColor} style={themeColor ? `--theme-color:${themeColor}` : ''}>
 		{#if listId !== 'rootList' && !headless}
 		<!-- svelte-ignore a11y_click_events_have_key_events -->
 		<!-- svelte-ignore a11y_no_static_element_interactions -->
-		<div class="list-header" style="--header-color:{header?.headerColor};" class:border={barTypeColor} class:pill={pillHeader} class:small={smallHeader} class:clickable={clickEnabled && layout !== CST.LIST_LAYOUT_TABS && layout !== CST.LIST_LAYOUT_FLYOUT} onclick={(layout === CST.LIST_LAYOUT_TABS || layout === CST.LIST_LAYOUT_FLYOUT) ? null : toggleAutoCollapse} onmouseenter={onFlyoutEnter} onmouseleave={onFlyoutLeave}>
+		<div class="list-header" style="--header-color:{header?.headerColor};" class:border={hasBar} class:pill={pillHeader} class:small={smallHeader} class:clickable={clickEnabled && layout !== CST.LIST_LAYOUT_TABS && layout !== CST.LIST_LAYOUT_FLYOUT} onclick={(layout === CST.LIST_LAYOUT_TABS || layout === CST.LIST_LAYOUT_FLYOUT) ? null : toggleAutoCollapse} onmouseenter={onFlyoutEnter} onmouseleave={onFlyoutLeave}>
 			{#if layout === CST.LIST_LAYOUT_TABS}
 				<div class="tab-row">
 					{#each childListIds as childId (childId)}
@@ -461,9 +465,7 @@
 						<span class="display-icon-container" class:extended class:no-icon={headerIconType === ICON_NONE}>
 							<IconPicker iconType={headerIconType} />
 						</span>
-						{#if layout !== CST.LIST_LAYOUT_SPLIT}
-							<p class="list-title">{configManager.selectedConfig[listId]?.name}</p>
-						{/if}
+						<p class="list-title">{configManager.selectedConfig[listId]?.name}</p>
 					</div>
 				</div>
 				<div class="right">
@@ -775,7 +777,7 @@
 	.list-body div {
 		overflow: hidden;
 	}
-	/* The gutter is kept without a barType so the checkbox still indents the
+	/* The gutter is kept without a theme color so the checkbox still indents the
 	   list, the rail itself just stays invisible. */
 	.list-body.rail {
 		position: relative;
@@ -934,8 +936,8 @@
 	}
 	.split-col-icon {
 		display: flex;
-		width: 1em;
-		height: 1em;
+		width: 1.5em;
+		height: 1.5em;
 	}
 	.split-col-icon.no-icon {
 		width: 0;

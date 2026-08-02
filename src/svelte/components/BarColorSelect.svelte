@@ -5,7 +5,7 @@
     let { value = $bindable("") } = $props();
 
     const uid = $props.id();
-    let selected = $derived(CST.BAR_TYPE.find(o => o.id === value));
+    let selected = $derived(CST.THEME_COLOR.find(o => o.id === value));
     let selectedName = $derived(selected ? $_(selected.name) : $_('common.none'));
 
     let triggerEl = $state();
@@ -36,7 +36,7 @@
                 onmouseenter={() => hoveredName = $_('common.none')}
                 onfocus={() => hoveredName = $_('common.none')}
                 onclick={() => value = ""}></button>
-            {#each CST.BAR_TYPE as opt}
+            {#each CST.THEME_COLOR as opt}
                 <button type="button" class="dot" class:active={value === opt.id}
                     style:background={opt.color}
                     aria-label={$_(opt.name)}

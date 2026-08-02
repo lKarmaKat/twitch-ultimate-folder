@@ -30,14 +30,14 @@ export const config = {
                 "borderColor": null,
                 "borderRadius": null,
                 "borderWidth": null,
-                "headerColor": "#808080"
+                "headerColor": "#808080",
+                "hasBar": true
             },
-            "theme": "SYSTEM"
+            "theme": CST.THEME_COLOR[0].id
         },
         "type": {
             "height": CST.HEADER_HEIGHT_MEDIUM,
             "iconType": 1,
-            "barType": CST.BAR_TYPE[0].id,
             "viewerCountType": 1
         }
     },
@@ -74,14 +74,14 @@ export const config = {
                 "backgroundColor": "#808080",
                 "borderColor": "#808080",
                 "borderRadius": 0,
-                "borderWidth": "1px"
+                "borderWidth": "1px",
+                "hasBar": true
             },
-            "theme": CST.SYSTEM_STYLE
+            "theme": CST.THEME_COLOR[0].id
         },
         type: {
             height: CST.HEADER_HEIGHT_MEDIUM,
             "iconType": 1,
-            barType: CST.BAR_TYPE[0].id,
             viewerCountType: 1
         }
     }

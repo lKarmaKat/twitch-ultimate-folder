@@ -44,12 +44,12 @@
     "style": "Styl",
     "headerSize": "Rozmiar nagłówka",
     "listHeaderIcon": "Ikona nagłówka listy",
-    "listHeaderBarColor": "Kolor paska bocznego nagłówka listy",
+    "listHeaderBarColor": "Kolor motywu listy",
     "listHeaderBadge": "Styl odznaki nagłówka listy",
     "help": "Pomoc",
     "headerSizeHelp": "Wysokość nagłówka listy. Mały nagłówek jest kompaktowy i nie pokazuje ikony.",
     "listIconHelp": "Ikona wyświetlana obok nazwy listy",
-    "listHeaderBarColorHelp": "Kolor paska bocznego listy",
+    "listHeaderBarColorHelp": "Koloruje pasek nagłówka, odznakę, ikonę i linię wcięcia listy",
     "listCounterBadgeHelp": "Styl odznaki pokazującej liczbę kanałów online",
     "selectListPrompt": "Kliknij nagłówek listy, aby ją dostosować",
     "listLayout": "Układ",
@@ -152,11 +152,15 @@
   "styleOptions": {
     "pillHeader": {
       "label": "Zaokrąglony nagłówek",
-      "tooltip": "Zaokrąglony nagłówek listy, podświetlany po najechaniu myszą. Pasek boczny podąża za zaokrągleniami i jest rysowany tylko wtedy, gdy wybrano kolor paska."
+      "tooltip": "Zaokrąglony nagłówek listy, podświetlany po najechaniu myszą. Pasek boczny podąża za zaokrągleniami, gdy włączona jest opcja \"Pasek\"."
     },
     "indentRail": {
       "label": "Linia wcięcia",
-      "tooltip": "Wcina zawartość listy i rysuje pionową linię na marginesie. Linia przyjmuje wybrany kolor paska, a bez niego pozostaje niewidoczna."
+      "tooltip": "Wcina zawartość listy i rysuje pionową linię na marginesie. Linia przyjmuje wybrany kolor motywu, a bez niego pozostaje niewidoczna."
+    },
+    "hasBar": {
+      "label": "Pasek",
+      "tooltip": "Rysuje kolorowy pasek z boku nagłówka listy, w wybranym kolorze motywu."
     }
   },
   "typeOptions": {

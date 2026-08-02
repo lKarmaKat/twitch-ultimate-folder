@@ -12,8 +12,8 @@
 	let open = $derived(!!flyoutState.listId && !!configManager.selectedConfig[flyoutState.listId]);
 
 	let barColor = $derived.by(() => {
-		const type = configManager.selectedConfig[flyoutState.listId]?.type;
-		return CST.BAR_TYPE.find(e => e.id === type?.barType)?.color;
+		const style = configManager.selectedConfig[flyoutState.listId]?.style;
+		return CST.THEME_COLOR.find(e => e.id === style?.theme)?.color;
 	});
 
 	// getBoundingClientRect() is viewport-relative and stale the moment the

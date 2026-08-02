@@ -44,12 +44,12 @@
     "style": "Stil",
     "headerSize": "Kopfzeilengröße",
     "listHeaderIcon": "Symbol der Listenkopfzeile",
-    "listHeaderBarColor": "Farbe der Seitenleiste der Listenkopfzeile",
+    "listHeaderBarColor": "Listen-Themenfarbe",
     "listHeaderBadge": "Badge-Stil der Listenkopfzeile",
     "help": "Hilfe",
     "headerSizeHelp": "Höhe der Listenkopfzeile. Eine kleine Kopfzeile ist kompakt und zeigt kein Symbol.",
     "listIconHelp": "Symbol, das neben dem Listennamen angezeigt wird",
-    "listHeaderBarColorHelp": "Farbe der Seitenleiste der Liste",
+    "listHeaderBarColorHelp": "Färbt die Kopfzeilenleiste, das Badge, das Symbol und die Einzugslinie der Liste",
     "listCounterBadgeHelp": "Stil des Badges, das die Anzahl der Online-Kanäle anzeigt",
     "selectListPrompt": "Klicke auf eine Listenkopfzeile, um sie anzupassen",
     "listLayout": "Layout",
@@ -152,11 +152,15 @@
   "styleOptions": {
     "pillHeader": {
       "label": "Abgerundete Kopfzeile",
-      "tooltip": "Abgerundete Listenkopfzeile, die beim Überfahren mit der Maus hervorgehoben wird. Die Seitenleiste folgt den Rundungen und wird nur gezeichnet, wenn eine Farbe für die Seitenleiste ausgewählt ist."
+      "tooltip": "Abgerundete Listenkopfzeile, die beim Überfahren mit der Maus hervorgehoben wird. Die Seitenleiste folgt den Rundungen, wenn die Option „Leiste“ aktiviert ist."
     },
     "indentRail": {
       "label": "Einzugslinie",
-      "tooltip": "Rückt den Listeninhalt ein und zeichnet eine senkrechte Linie in den Rand. Die Linie übernimmt die gewählte Farbe der Seitenleiste und bleibt ohne diese unsichtbar."
+      "tooltip": "Rückt den Listeninhalt ein und zeichnet eine senkrechte Linie in den Rand. Die Linie übernimmt die gewählte Themenfarbe und bleibt ohne diese unsichtbar."
+    },
+    "hasBar": {
+      "label": "Leiste",
+      "tooltip": "Zeichnet eine farbige Leiste seitlich an der Listenkopfzeile, in der gewählten Themenfarbe."
     }
   },
   "typeOptions": {

@@ -194,12 +194,12 @@
     "style": "Style",
     "headerSize": "Header size",
     "listHeaderIcon": "List header icon",
-    "listHeaderBarColor": "List header side bar color",
+    "listHeaderBarColor": "List theme color",
     "listHeaderBadge": "List header badge style",
     "help": "Help",
     "headerSizeHelp": "Height of the list header. A small header is compact and shows no icon.",
     "listIconHelp": "Icon displayed next to the list name",
-    "listHeaderBarColorHelp": "Color of the list's side bar",
+    "listHeaderBarColorHelp": "Colors the list's header bar, badge, icon and indent rail",
     "listCounterBadgeHelp": "Style of the badge showing the number of channels online",
     "selectListPrompt": "Please click on a list header to customize it",
     "headerMode": "Header",
@@ -308,11 +308,15 @@
   "styleOptions": {
     "pillHeader": {
       "label": "Rounded header",
-      "tooltip": "Rounded list header, highlighted on mouse hover. The side bar follows the corners, and is only drawn when a bar color is selected."
+      "tooltip": "Rounded list header, highlighted on mouse hover. The side bar follows the corners when the \"Bar\" option is enabled."
     },
     "indentRail": {
       "label": "Indent rail",
-      "tooltip": "Indents the list content and draws a vertical line in the gutter. The line takes the selected bar color, and stays invisible without one."
+      "tooltip": "Indents the list content and draws a vertical line in the gutter. The line takes the selected theme color, and stays invisible without one."
+    },
+    "hasBar": {
+      "label": "Bar",
+      "tooltip": "Draws a colored bar on the side of the list header, using the selected theme color."
     }
   },
   "typeOptions": {

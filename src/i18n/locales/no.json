@@ -44,12 +44,12 @@
     "style": "Stil",
     "headerSize": "Størrelse på listeoverskrift",
     "listHeaderIcon": "Ikon for listeoverskrift",
-    "listHeaderBarColor": "Farge på sidefeltet i listeoverskriften",
+    "listHeaderBarColor": "Listetemafarge",
     "listHeaderBadge": "Merkestil for listeoverskrift",
     "help": "Hjelp",
     "headerSizeHelp": "Høyden på listeoverskriften. En liten overskrift er kompakt og viser ikke noe ikon.",
     "listIconHelp": "Ikon som vises ved siden av listenavnet",
-    "listHeaderBarColorHelp": "Farge på listens sidefelt",
+    "listHeaderBarColorHelp": "Fargelegger listeoverskriftens felt, merke, ikon og innrykkslinje",
     "listCounterBadgeHelp": "Stil på merket som viser antall kanaler online",
     "selectListPrompt": "Klikk på en listeoverskrift for å tilpasse den",
     "listLayout": "Layout",
@@ -152,11 +152,15 @@
   "styleOptions": {
     "pillHeader": {
       "label": "Avrundet overskrift",
-      "tooltip": "Avrundet listeoverskrift som utheves når musepekeren er over den. Sidefeltet følger hjørnene og tegnes bare når en farge på sidefeltet er valgt."
+      "tooltip": "Avrundet listeoverskrift som utheves når musepekeren er over den. Sidefeltet følger hjørnene når alternativet «Felt» er aktivert."
     },
     "indentRail": {
       "label": "Innrykkslinje",
-      "tooltip": "Rykker inn innholdet i listen og tegner en loddrett linje i margen. Linjen får den valgte fargen på sidefeltet og forblir usynlig uten den."
+      "tooltip": "Rykker inn innholdet i listen og tegner en loddrett linje i margen. Linjen får den valgte temafargen og forblir usynlig uten den."
+    },
+    "hasBar": {
+      "label": "Felt",
+      "tooltip": "Tegner et farget felt på siden av listeoverskriften, i den valgte temafargen."
     }
   },
   "typeOptions": {

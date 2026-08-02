@@ -44,12 +44,12 @@
     "style": "Stil",
     "headerSize": "Veličina zaglavlja",
     "listHeaderIcon": "Ikona zaglavlja popisa",
-    "listHeaderBarColor": "Boja bočne trake zaglavlja popisa",
+    "listHeaderBarColor": "Boja teme popisa",
     "listHeaderBadge": "Stil oznake zaglavlja popisa",
     "help": "Pomoć",
     "headerSizeHelp": "Visina zaglavlja popisa. Malo zaglavlje je kompaktno i ne prikazuje ikonu.",
     "listIconHelp": "Ikona prikazana pored naziva popisa",
-    "listHeaderBarColorHelp": "Boja bočne trake popisa",
+    "listHeaderBarColorHelp": "Boji traku zaglavlja, značku, ikonu i crtu uvlake popisa",
     "listCounterBadgeHelp": "Stil oznake koja prikazuje broj kanala na mreži",
     "selectListPrompt": "Kliknite na zaglavlje popisa da biste ga prilagodili",
     "listLayout": "Raspored",
@@ -152,11 +152,15 @@
   "styleOptions": {
     "pillHeader": {
       "label": "Zaobljeno zaglavlje",
-      "tooltip": "Zaobljeno zaglavlje popisa, istaknuto prelaskom miša. Bočna traka prati zaobljene rubove i iscrtava se samo kada je odabrana boja trake."
+      "tooltip": "Zaobljeno zaglavlje popisa, istaknuto prelaskom miša. Bočna traka prati zaobljene rubove kada je omogućena opcija \"Traka\"."
     },
     "indentRail": {
       "label": "Crta uvlake",
-      "tooltip": "Uvlači sadržaj popisa i iscrtava okomitu crtu uz rub. Crta preuzima odabranu boju trake, a bez nje ostaje nevidljiva."
+      "tooltip": "Uvlači sadržaj popisa i iscrtava okomitu crtu uz rub. Crta preuzima odabranu boju teme, a bez nje ostaje nevidljiva."
+    },
+    "hasBar": {
+      "label": "Traka",
+      "tooltip": "Iscrtava obojenu traku uz rub zaglavlja popisa, u odabranoj boji teme."
     }
   },
   "typeOptions": {
