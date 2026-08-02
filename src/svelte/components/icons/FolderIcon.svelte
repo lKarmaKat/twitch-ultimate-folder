@@ -16,12 +16,12 @@
         margin: 0 0.2em;
     }
     
-    :global(.dark) div {
+    /* :global(.dark) div {
         background: rgba(145, 71, 255, 0.2);
     }
     :global(.light) div {
         background: rgba(145,71,255,0.12);
-    }
+    } */
 </style>
 
 <div class="icon-container">
