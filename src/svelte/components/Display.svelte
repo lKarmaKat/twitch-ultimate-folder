@@ -60,6 +60,9 @@
 		layout === CST.LIST_LAYOUT_GRID ? 'grid' :
 		layout === CST.LIST_LAYOUT_DOCK ? 'dock' : 'row'
 	));
+	// Own headless setting applies to dockList and the classic row stack;
+	// other layouts manage their header visibility differently.
+	let effectiveHeadless = $derived(headless || ([CST.LIST_LAYOUT_DOCK, CST.LIST_LAYOUT_STACK].includes(layout) && (type?.[CST.TYPE_HEADLESS] ?? false)));
 
 	let source = $derived(configManager.selectedConfig[listId]?.source ?? { kind: CST.SOURCE_KIND_MANUAL });
 	let isSmartList = $derived(source.kind !== CST.SOURCE_KIND_MANUAL);
@@ -97,7 +100,7 @@
 	let extended = $derived(ruledByParent ? exclusiveOpenId === listId : openState);
 	// A headless list has no header to click, and a tab panel has the tab row
 	// instead: both always show their body.
-	let effectiveExtended = $derived(headless || layout === CST.LIST_LAYOUT_TABS ? true : extended);
+	let effectiveExtended = $derived(effectiveHeadless || layout === CST.LIST_LAYOUT_TABS ? true : extended);
 
 	let openChildId = $state(null);
 	$effect(() => {
@@ -438,7 +441,7 @@
 	<!-- svelte-ignore a11y-click-events-have-key-events -->
 	 {#if visible}
 	<div id="display-component" class="list-container" class:hover-enabled={hoverEnabled} class:tinted={themeColor} style={themeColor ? `--theme-color:${themeColor}` : ''}>
-		{#if listId !== 'rootList' && !headless}
+		{#if listId !== 'rootList' && !effectiveHeadless}
 		<!-- svelte-ignore a11y_click_events_have_key_events -->
 		<!-- svelte-ignore a11y_no_static_element_interactions -->
 		<div class="list-header" style="--header-color:{header?.headerColor};" class:border={hasBar} class:pill={pillHeader} class:small={smallHeader} class:clickable={clickEnabled && layout !== CST.LIST_LAYOUT_TABS && layout !== CST.LIST_LAYOUT_FLYOUT} onclick={(layout === CST.LIST_LAYOUT_TABS || layout === CST.LIST_LAYOUT_FLYOUT) ? null : toggleAutoCollapse} onmouseenter={onFlyoutEnter} onmouseleave={onFlyoutLeave}>
@@ -963,14 +966,20 @@
 		overflow-x: auto;
 		overflow-y: hidden;
 		scrollbar-width: thin;
-		scrollbar-color: var(--theme-color, currentColor) transparent;
+		scrollbar-color: var(--scrollbar-color, currentColor) transparent;
+	}
+	.dock-body > div > .channel-overlay {
+		flex-shrink: 0;
 	}
 	.dock-body > div::-webkit-scrollbar {
 		height: 4px;
 	}
 	.dock-body > div::-webkit-scrollbar-thumb {
-		background: var(--theme-color, currentColor);
+		background: var(--scrollbar-color, currentColor);
 		border-radius: 2px;
+	}
+	.dock-body > div::-webkit-scrollbar-thumb:hover {
+		background: var(--scrollbar-color-hover, currentColor);
 	}
 
 	/* ---- overflowList ---- */

@@ -59,6 +59,18 @@
 		border-radius: 6px;
 		box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
 		border-right: 3px solid transparent;
+		scrollbar-width: thin;
+		scrollbar-color: var(--scrollbar-color, currentColor) transparent;
+	}
+	.flyout-panel::-webkit-scrollbar {
+		width: 8px;
+	}
+	.flyout-panel::-webkit-scrollbar-thumb {
+		background: var(--scrollbar-color, currentColor);
+		border-radius: 4px;
+	}
+	.flyout-panel::-webkit-scrollbar-thumb:hover {
+		background: var(--scrollbar-color-hover, currentColor);
 	}
 	.flyout-anchor.al-left .flyout-panel {
 		border-right: none;

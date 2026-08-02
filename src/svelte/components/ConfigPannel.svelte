@@ -162,7 +162,11 @@
                         <span class="help-badge" data-tooltip={$_('configPannel.listLayoutHelp')}>?</span>
                         <SortSelect
                             bind:value={listConfig.type.layout}
-                            options={layoutOptions}/>
+                            options={layoutOptions}
+                            onchange={() => {
+                                if (listConfig.type.layout === CST.LIST_LAYOUT_DOCK) listConfig.type[CST.TYPE_HEADLESS] = true;
+                                else if (listConfig.type.layout === CST.LIST_LAYOUT_STACK) listConfig.type[CST.TYPE_HEADLESS] = false;
+                            }}/>
                     </div>
                     <div class="row">
                         <p>{$_('configPannel.listHeaderBarColor')}</p>
@@ -199,16 +203,18 @@
                             {/if}
                         {/each}
                         {#each styleTypeOptions as item}
-                            <div class="behavior-item">
-                                <input
-                                    type="checkbox"
-                                    id={item.key}
-                                    bind:checked={listConfig.type[item.key]}/>
-                                <label for={item.key}>{$_(item.label)}</label>
-                                <span
-                                    class="help-badge"
-                                    data-tooltip={$_(item.tooltip)}>?</span>
-                            </div>
+                            {#if item.key !== CST.TYPE_HEADLESS || listConfig.type.layout === CST.LIST_LAYOUT_DOCK || listConfig.type.layout === CST.LIST_LAYOUT_STACK}
+                                <div class="behavior-item">
+                                    <input
+                                        type="checkbox"
+                                        id={item.key}
+                                        bind:checked={listConfig.type[item.key]}/>
+                                    <label for={item.key}>{$_(item.label)}</label>
+                                    <span
+                                        class="help-badge"
+                                        data-tooltip={$_(item.tooltip)}>?</span>
+                                </div>
+                            {/if}
                         {/each}
                     </div>
                     <div class="row">

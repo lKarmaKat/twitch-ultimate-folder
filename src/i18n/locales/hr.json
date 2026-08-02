@@ -171,6 +171,10 @@
     "exclusive": {
       "label": "Samo jedan podpopis otvoren",
       "tooltip": "Otvaranje jednog podpopisa zatvara ostale. Zadržava punu bočnu traku na jednom otvorenom popisu."
+    },
+    "headless": {
+      "label": "Bez zaglavlja",
+      "tooltip": "Sakriva zaglavlje popisa — prikazuju se samo kanali."
     }
   },
   "sort": {

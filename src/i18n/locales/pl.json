@@ -171,6 +171,10 @@
     "exclusive": {
       "label": "Tylko jedna podlista otwarta",
       "tooltip": "Otwarcie jednej podlisty zamyka pozostałe. Sprowadza zatłoczony pasek boczny do jednej otwartej listy."
+    },
+    "headless": {
+      "label": "Bez nagłówka",
+      "tooltip": "Ukrywa nagłówek listy — widoczne są tylko kanały."
     }
   },
   "sort": {

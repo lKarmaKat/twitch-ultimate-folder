@@ -96,6 +96,29 @@
         border: 1px solid grey;
         border-radius: 0.4em;
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+        scrollbar-width: thin;
+        /* Same grey as the list header background in light theme. */
+        scrollbar-color: rgba(201, 201, 202, 0.25) transparent;
+    }
+    .menu::-webkit-scrollbar {
+        width: 8px;
+    }
+    .menu::-webkit-scrollbar-thumb {
+        background: rgba(201, 201, 202, 0.25);
+        border-radius: 4px;
+    }
+    .menu::-webkit-scrollbar-thumb:hover {
+        background: rgba(201, 201, 202, 0.5);
+    }
+    .lang-select.dark .menu {
+        /* Same thumb colour as the configPopup's own (fixed) scrollbar. */
+        scrollbar-color: #53535f transparent;
+    }
+    .lang-select.dark .menu::-webkit-scrollbar-thumb {
+        background: #53535f;
+    }
+    .lang-select.dark .menu::-webkit-scrollbar-thumb:hover {
+        background: #6b6b7b;
     }
     .item {
         display: flex;

@@ -171,6 +171,10 @@
     "exclusive": {
       "label": "Nur eine Unterliste offen",
       "tooltip": "Das Öffnen einer Unterliste schließt die anderen. Hält eine volle Seitenleiste auf einer einzigen offenen Liste."
+    },
+    "headless": {
+      "label": "Ohne Kopfzeile",
+      "tooltip": "Blendet die Kopfzeile der Liste aus – es werden nur die Kanäle angezeigt."
     }
   },
   "sort": {

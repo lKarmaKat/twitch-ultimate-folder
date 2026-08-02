@@ -116,12 +116,17 @@ export const STYLE_OPTIONS = [
 
 export const TYPE_CHEVRON = 'chevron';
 export const TYPE_EXCLUSIVE = 'exclusive';
+export const TYPE_HEADLESS = 'headless';
 
 // All false by default: a config saved before they existed keeps rendering as
 // it did. `group` is the panel section the checkbox belongs to.
 export const TYPE_OPTIONS = [
 {key: TYPE_CHEVRON, group: 'style', label: 'typeOptions.chevron.label', tooltip: 'typeOptions.chevron.tooltip'},
 {key: TYPE_EXCLUSIVE, group: 'behavior', label: 'typeOptions.exclusive.label', tooltip: 'typeOptions.exclusive.tooltip'},
+// Only ever shown in ConfigPannel for LIST_LAYOUT_DOCK and LIST_LAYOUT_STACK:
+// false by default so an existing list saved before this option existed
+// keeps showing its header.
+{key: TYPE_HEADLESS, group: 'style', label: 'typeOptions.headless.label', tooltip: 'typeOptions.headless.tooltip'},
 ];
 
 // 0 is today's row-per-channel rendering: a config saved before layouts
@@ -335,6 +340,7 @@ export function createNewList(): t.I_NEW_LIST {
       viewerCountType: 2,
       [TYPE_CHEVRON]: false,
       [TYPE_EXCLUSIVE]: false,
+      [TYPE_HEADLESS]: false,
       layout: LIST_LAYOUT_STACK,
       columns: 2, // split + grid
       maxItems: 0 // 0 = unlimited

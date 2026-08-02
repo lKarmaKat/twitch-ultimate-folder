@@ -327,6 +327,10 @@
     "exclusive": {
       "label": "Une seule sous-liste ouverte",
       "tooltip": "Ouvrir une de ses sous-listes referme les autres. Ramène une barre latérale chargée à une seule liste ouverte."
+    },
+    "headless": {
+      "label": "Sans en-tête",
+      "tooltip": "Masque l'en-tête de la liste — seules les chaînes sont affichées."
     }
   },
   "sort": {

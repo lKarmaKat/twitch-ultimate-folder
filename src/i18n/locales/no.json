@@ -171,6 +171,10 @@
     "exclusive": {
       "label": "Bare én underliste åpen",
       "tooltip": "Å åpne en underliste lukker de andre. Holder et fullt sidefelt til én åpen liste."
+    },
+    "headless": {
+      "label": "Uten topptekst",
+      "tooltip": "Skjuler listens topptekst – bare kanalene vises."
     }
   },
   "sort": {

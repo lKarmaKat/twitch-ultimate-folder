@@ -104,12 +104,13 @@
         text-overflow: ellipsis;
     }
     .card.dock-cell {
-        padding: 0.2em;
+        padding: 0.25em;
         flex: none;
     }
-    .dock-avatar {
-        width: 2.15em;
-        height: 2.15em;
+    .profile-picture.dock-avatar {
+        width: 2.5em;
+        height: 2.5em;
+        flex-shrink: 0;
         transition: filter 0.12s ease;
     }
     .dock-avatar.live {

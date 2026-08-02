@@ -171,6 +171,10 @@
     "exclusive": {
       "label": "Una sola sublista abierta",
       "tooltip": "Abrir una de sus sublistas cierra las demás. Reduce una barra lateral cargada a una sola lista abierta."
+    },
+    "headless": {
+      "label": "Sin encabezado",
+      "tooltip": "Oculta el encabezado de la lista; solo se muestran los canales."
     }
   },
   "sort": {

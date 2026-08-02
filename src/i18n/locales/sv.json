@@ -171,6 +171,10 @@
     "exclusive": {
       "label": "Endast en underlista öppen",
       "tooltip": "Att öppna en underlista stänger de andra. Håller ett fullt sidofält till en enda öppen lista."
+    },
+    "headless": {
+      "label": "Utan rubrik",
+      "tooltip": "Döljer listans rubrik – endast kanalerna visas."
     }
   },
   "sort": {

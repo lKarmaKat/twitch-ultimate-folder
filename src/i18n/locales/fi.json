@@ -171,6 +171,10 @@
     "exclusive": {
       "label": "Vain yksi alilista auki",
       "tooltip": "Yhden alilistan avaaminen sulkee muut. Pitää täyden sivupalkin yhdessä avoimessa listassa."
+    },
+    "headless": {
+      "label": "Ilman otsikkoa",
+      "tooltip": "Piilottaa listan otsikon – vain kanavat näytetään."
     }
   },
   "sort": {

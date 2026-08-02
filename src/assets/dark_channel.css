@@ -1,6 +1,12 @@
 /* Badge and icon follow the list theme colour. The icon takes it raw, to match
    the bar exactly; the badge takes a lightened variant (darkened on the light
    theme) because THEME_COLOR is calibrated for a 3px bar, not for text. */
+#display-container.dark {
+    /* Same thumb colour as the configPopup's own (fixed) scrollbar. */
+    --scrollbar-color: #53535f;
+    --scrollbar-color-hover: #6b6b7b;
+}
+
 #display-container.dark .list-container {
     --bar-accent: #bf94ff;
     --bar-tint: rgba(145, 71, 255, 0.22);
@@ -88,6 +94,12 @@
     background: var(--theme-color, rgb(173, 173, 184));
 }
 /* ************* */
+
+#display-container.light {
+    /* Same grey as the list header background in light theme. */
+    --scrollbar-color: rgba(201, 201, 202, 0.25);
+    --scrollbar-color-hover: rgba(201, 201, 202, 0.5);
+}
 
 #display-container.light .list-container {
     --bar-accent: #7b3fc9;
