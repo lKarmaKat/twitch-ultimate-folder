@@ -34,10 +34,10 @@
 	function itemAlreadyInList(e) {
 		let map = new Map();
 		e.detail.items.forEach(i => {
-			if (i.type !== CST.TYPE_LIST)
+			if (i.type !== CST.TYPE_LIST && i.type !== CST.TYPE_SEPARATOR)
 				map.set(i.channel_id, true);
 		});
-		return e.detail.items.filter(i => i.type !== CST.TYPE_LIST).length !== map.size;
+		return e.detail.items.filter(i => i.type !== CST.TYPE_LIST && i.type !== CST.TYPE_SEPARATOR).length !== map.size;
 	}
 
 	function handleDndFinalize(e) {
@@ -382,6 +382,9 @@
 	.add-separator {
 		padding: 0.6em 1em;
 		background: linear-gradient(135deg, #8a8a99, #5c5c6b);
+	}
+	.separator-item {
+		color: #fff;
 	}
 	.separator-item .separator-row {
 		display: flex;
