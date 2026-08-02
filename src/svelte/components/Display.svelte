@@ -509,7 +509,13 @@
 				</div>
 			{:else}
 				<div class="list-body" class:extended={effectiveExtended} class:rail={indentRail} class:grid-body={effectiveVariant === 'grid'} class:dock-body={effectiveVariant === 'dock'} class:split-col-body={effectiveVariant === 'split'} style="--content-color:{content?.contentColor}; --grid-columns:{columns};">
-					<div>
+					<div
+						onwheel={effectiveVariant === 'dock' ? (e) => {
+							if (e.deltaY === 0) return;
+							e.currentTarget.scrollLeft += e.deltaY;
+							e.preventDefault();
+						} : undefined}
+					>
 						{#if effectiveVariant === 'grid'}
 							<div class="grid-items">
 								{@render itemsList(visibleItems, true)}
@@ -981,6 +987,7 @@
 		padding: 0.3em 0.5em;
 		overflow-x: auto;
 		overflow-y: hidden;
+		scroll-behavior: smooth;
 		scrollbar-width: thin;
 		scrollbar-color: var(--scrollbar-color, currentColor) transparent;
 	}
