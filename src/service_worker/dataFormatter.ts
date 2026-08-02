@@ -66,7 +66,9 @@ export class DataFormatter {
                 value.viewer_count = liveChannel.viewer_count;
                 value.language = liveChannel.language;
                 value.isLive = true;
+                value.game_id = liveChannel.game_id;
                 value.game_name = liveChannel.game_name;
+                value.started_at = liveChannel.started_at;
                 value.title = liveChannel.title;
             }
             map.set(key, value);
@@ -133,7 +135,9 @@ export class DataFormatter {
                             id: parseInt(channel.user_id),
                             viewer_count: channel.viewer_count,
                             language: channel.language,
+                            game_id: channel.game_id,
                             game_name: channel.game_name,
+                            started_at: channel.started_at,
                             title: channel.title
                         } as LiveStreamInfos);
                 });

@@ -37,6 +37,8 @@ export const GET_SESSION_USER = 'GET_SESSION_USER';
 export const START_AUTH = 'START_AUTH';
 /** Authentication state broadcast on the `auth` port. */
 export const AUTH_STATE = 'AUTH_STATE';
+/** Config page asks the worker to proxy a Helix category search (needs the shared token). */
+export const SEARCH_CATEGORIES = 'SEARCH_CATEGORIES';
 
 // Auth states: three for the sidebar, four for the action popup, which can be
 // opened from a non-Twitch tab where the session is unknowable.
@@ -148,6 +150,70 @@ export const SORT_STRATEGY = [
   {id: ALPHA_SORT, type: 'ALPHA_SORT', name: 'sort.alpha'},
 ]
 
+// smartList: `items` stops being fixed ids and becomes a rule, re-evaluated on
+// every poll tick against the followed channels. 'manual' is the default so
+// every config saved before this option existed keeps behaving as a plain list.
+export const SOURCE_KIND_MANUAL = 'manual';
+export const SOURCE_KIND_GAME = 'game';
+export const SOURCE_KIND_LANGUAGE = 'language';
+export const SOURCE_KIND_FRESH = 'fresh';
+export const SOURCE_KIND_OPTIONS = [
+  {id: SOURCE_KIND_MANUAL, name: 'sourceKind.manual'},
+  {id: SOURCE_KIND_GAME, name: 'sourceKind.game'},
+  {id: SOURCE_KIND_LANGUAGE, name: 'sourceKind.language'},
+  {id: SOURCE_KIND_FRESH, name: 'sourceKind.fresh'},
+];
+
+// Native names, not i18n keys: matches how Twitch's own directory language
+// filter displays them, and avoids 30 entries x 15 locales for no benefit.
+export const TWITCH_LANGUAGE_CODES = [
+  {id: 'en', label: 'English'},
+  {id: 'fr', label: 'Français'},
+  {id: 'es', label: 'Español'},
+  {id: 'de', label: 'Deutsch'},
+  {id: 'it', label: 'Italiano'},
+  {id: 'pt', label: 'Português'},
+  {id: 'ru', label: 'Русский'},
+  {id: 'ja', label: '日本語'},
+  {id: 'ko', label: '한국어'},
+  {id: 'zh', label: '中文'},
+  {id: 'pl', label: 'Polski'},
+  {id: 'tr', label: 'Türkçe'},
+  {id: 'ar', label: 'العربية'},
+  {id: 'th', label: 'ภาษาไทย'},
+  {id: 'vi', label: 'Tiếng Việt'},
+  {id: 'id', label: 'Bahasa Indonesia'},
+  {id: 'ms', label: 'Bahasa Melayu'},
+  {id: 'nl', label: 'Nederlands'},
+  {id: 'sv', label: 'Svenska'},
+  {id: 'fi', label: 'Suomi'},
+  {id: 'da', label: 'Dansk'},
+  {id: 'no', label: 'Norsk'},
+  {id: 'cs', label: 'Čeština'},
+  {id: 'hu', label: 'Magyar'},
+  {id: 'ro', label: 'Română'},
+  {id: 'sk', label: 'Slovenčina'},
+  {id: 'bg', label: 'български'},
+  {id: 'el', label: 'Ελληνικά'},
+  {id: 'he', label: 'עברית'},
+  {id: 'hi', label: 'हिन्दी'},
+  {id: 'tl', label: 'Filipino'},
+  {id: 'asl', label: 'American Sign Language'},
+  {id: 'other', label: 'Other'},
+];
+
+// Built fresh on every use, like createNewList(): a shared reference would let
+// one list's rule edits corrupt another's default.
+export function createDefaultSource() {
+  return {
+    kind: SOURCE_KIND_MANUAL,
+    game_id: null,
+    game_name: null,
+    language: null,
+    freshMinutes: 10
+  };
+}
+
 /* Every colour holds at least 3.2:1 against both Twitch backgrounds
    (#18181b and #f7f7f8) so a 3px bar stays visible on either theme. */
 export const BAR_TYPE = [
@@ -241,6 +307,7 @@ export function createNewList(): t.I_NEW_LIST {
       [SHOW_EVEN_IF_NO_LIVE]: false
     },
     sort: SORT_STRATEGY[CUSTOM_SORT].id,
+    source: createDefaultSource(),
     style: {
       theme: SYSTEM_STYLE,
       header: {

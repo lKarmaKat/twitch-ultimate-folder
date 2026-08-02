@@ -13,6 +13,10 @@
 
 	let { configManager, listId, requestDeleteToParent, addRootNode = $bindable(), addRootSeparator = $bindable() } = $props()
 
+	// Rule-driven content: dropping a channel here would just be discarded on
+	// the next kind change, so the zone refuses drops from other lists.
+	let isSmartList = $derived((configManager.selectedConfig[listId]?.source?.kind ?? CST.SOURCE_KIND_MANUAL) !== CST.SOURCE_KIND_MANUAL);
+
 
 	// let duplicatedElementError = $derived(!)
 	let duplicatedElementError = $state(false)
@@ -168,9 +172,9 @@
 	<div class="list-body" >
 		<section class="dnd-zone-r"
 		use:dndzone={{items:configManager.selectedConfig[listId].items, flipDurationMs, centreDraggedOnCursor: false, transformDraggedElement,
-			dropTargetClasses: ['increased-drop-margin']
+			dropTargetClasses: ['increased-drop-margin'], dropFromOthersDisabled: isSmartList
 		, morphDisabled: true, useCursorForDetection: true,
-		dropTargetStyle: {outline: 'var(--dnd-outline, rgb(191, 148, 255)) solid 2px'}}} 
+		dropTargetStyle: {outline: 'var(--dnd-outline, rgb(191, 148, 255)) solid 2px'}}}
 		onconsider={handleDndConsider} 
 		onfinalize ={handleDndFinalize}>
 		<!-- style="background-color: {contentColor};">		 -->

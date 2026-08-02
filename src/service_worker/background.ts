@@ -432,6 +432,20 @@ api.runtime.onMessage.addListener((msg, sender, sendResponse) => {
       return true;
     }
 
+    if (msg.type === CST.SEARCH_CATEGORIES) {
+      if (!twitchApi || typeof msg.data !== 'string' || !msg.data.trim()) {
+        sendResponse([]);
+        return false;
+      }
+      twitchApi.searchCategories(msg.data)
+        .then(sendResponse)
+        .catch(err => {
+          logBackgroundError("background:searchCategories", err);
+          sendResponse([]);
+        });
+      return true;
+    }
+
     if (msg.type === CST.GET_CURRENT_CONFIGURATION) {
       if (!configManager) {
         sendResponse(null);

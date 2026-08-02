@@ -16,6 +16,13 @@ export interface UserConfigs {
 export interface I_CONFIG {
   [key: string]: I_NEW_LIST;
 };
+export interface I_SOURCE {
+  kind: string, // 'manual' | 'game' | 'language' | 'fresh'
+  game_id: string | null,
+  game_name: string | null,
+  language: string | null,
+  freshMinutes: number
+}
 export interface I_NEW_LIST {
   id: string,
   name: string,
@@ -23,7 +30,8 @@ export interface I_NEW_LIST {
   sort: number,
   behavior: {},
   style: {},
-  type: {}
+  type: {},
+  source: I_SOURCE
 };
 
 export interface CONFIG { [key: string]: string; }

@@ -56,7 +56,18 @@
     "listLayoutHelp": "Cómo se organiza el contenido de esta lista: filas, columnas una junto a otra, pestañas, una cuadrícula de avatares o una barra deslizante.",
     "listColumns": "Columnas",
     "maxItems": "Máximo de elementos mostrados",
-    "maxItemsHelp": "Solo se muestran las primeras N entradas, con una fila desplegable para el resto. 0 = ilimitado."
+    "maxItemsHelp": "Solo se muestran las primeras N entradas, con una fila desplegable para el resto. 0 = ilimitado.",
+    "sourceContent": "Contenido de la lista",
+    "sourceContentHelp": "Manual: colocas los canales tú mismo. Los demás modos rellenan la lista automáticamente según una regla, reevaluada continuamente.",
+    "sourceGameSearchPlaceholder": "Buscar una categoría…",
+    "sourceGameFollowedGroup": "Entre tus canales seguidos",
+    "sourceGameSearchGroup": "Todas las categorías",
+    "sourceGameSearching": "Buscando…",
+    "sourceGameNoResults": "Sin resultados",
+    "sourceLanguage": "Idioma",
+    "sourceLanguagePlaceholder": "Selecciona un idioma",
+    "sourceFreshMinutes": "Empezado hace menos de (minutos)",
+    "sourceFreshMinutesHelp": "Solo muestra los canales que empezaron a transmitir hace menos de este número de minutos."
   },
   "configList": {
     "alreadyInList": "El elemento ya está en la lista",
@@ -245,5 +256,11 @@
     "tabs": "Pestañas",
     "grid": "Cuadrícula",
     "dock": "Barra (solo avatares)"
+  },
+  "sourceKind": {
+    "manual": "Manual",
+    "game": "Por juego",
+    "language": "Por idioma",
+    "fresh": "Recién empezado"
   }
 }

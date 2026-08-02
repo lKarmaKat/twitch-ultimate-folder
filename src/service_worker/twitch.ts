@@ -118,6 +118,29 @@ export class TwitchApi {
         }
     };
 
+    /**
+     * smartList "by game" free-text search. Not /games/top: that endpoint pages
+     * through thousands of entries, unrelated to a followed-channels list.
+     */
+    async searchCategories(query: string): Promise<{ id: string, name: string, box_art_url: string }[]> {
+        try {
+            const token = await this.tokenManager.getToken();
+            const options = {
+                method: 'GET',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Client-Id': this.CLIENT_ID
+                }
+            };
+            const params = new URLSearchParams({ query, first: '10' });
+            const response = await fetch(`https://api.twitch.tv/helix/search/categories?${params}`, options);
+            const body = await response.json();
+            return body.data ?? [];
+        } catch (error) {
+            throw wrapError("TwitchApi.searchCategories failed", error);
+        }
+    }
+
     getUserInfo(): Promise<User> {
       return new Promise((resolve, reject) => {
         this.tokenManager.getToken().then(token => {

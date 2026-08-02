@@ -132,6 +132,17 @@ class ConfigManager {
         return this.unfollowedInfoMap.get(Number(channelId));
     }
 
+    /** smartList "by game" free-text search, proxied through the worker (it holds the token). */
+    async searchCategories(query: string): Promise<{ id: string, name: string, box_art_url: string }[]> {
+        try {
+            const answer = await api.runtime.sendMessage({ type: CST.SEARCH_CATEGORIES, data: query });
+            return Array.isArray(answer) ? answer : [];
+        } catch (error) {
+            console.error('configManager:searchCategories', error);
+            return [];
+        }
+    }
+
     /**
      * Retire de la config courante les chaines qui ne sont plus suivies. Rien
      * n'est enregistre : l'utilisateur valide avec le bouton de sauvegarde, ou

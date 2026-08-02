@@ -56,7 +56,18 @@
     "listLayoutHelp": "Hur innehållet i listan ordnas: rader, kolumner sida vid sida, flikar, ett rutnät av avatarer eller en rullbar docka.",
     "listColumns": "Kolumner",
     "maxItems": "Max antal visade poster",
-    "maxItemsHelp": "Endast de första N posterna visas, med en utfällbar rad för resten. 0 = obegränsat."
+    "maxItemsHelp": "Endast de första N posterna visas, med en utfällbar rad för resten. 0 = obegränsat.",
+    "sourceContent": "Listinnehåll",
+    "sourceContentHelp": "Manuell: du placerar kanalerna själv. De andra lägena fyller listan automatiskt enligt en regel som utvärderas kontinuerligt.",
+    "sourceGameSearchPlaceholder": "Sök en kategori…",
+    "sourceGameFollowedGroup": "Bland dina följda kanaler",
+    "sourceGameSearchGroup": "Alla kategorier",
+    "sourceGameSearching": "Söker…",
+    "sourceGameNoResults": "Inga träffar",
+    "sourceLanguage": "Språk",
+    "sourceLanguagePlaceholder": "Välj ett språk",
+    "sourceFreshMinutes": "Startade för mindre än (minuter) sedan",
+    "sourceFreshMinutesHelp": "Visar bara kanaler som började sända för mindre än så här många minuter sedan."
   },
   "configList": {
     "alreadyInList": "Objektet finns redan i listan",
@@ -245,5 +256,11 @@
     "tabs": "Flikar",
     "grid": "Rutnät",
     "dock": "Docka (endast avatarer)"
+  },
+  "sourceKind": {
+    "manual": "Manuell",
+    "game": "Efter spel",
+    "language": "Efter språk",
+    "fresh": "Precis startat"
   }
 }

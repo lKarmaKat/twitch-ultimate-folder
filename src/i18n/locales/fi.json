@@ -56,7 +56,18 @@
     "listLayoutHelp": "Miten tämän listan sisältö on järjestetty: rivit, rinnakkaiset sarakkeet, välilehdet, avatarien ruudukko tai vieritettävä telakka.",
     "listColumns": "Sarakkeet",
     "maxItems": "Näytettävien kohteiden enimmäismäärä",
-    "maxItemsHelp": "Vain ensimmäiset N kohdetta näkyvät, loput piilossa laajennettavan rivin takana. 0 = rajoittamaton."
+    "maxItemsHelp": "Vain ensimmäiset N kohdetta näkyvät, loput piilossa laajennettavan rivin takana. 0 = rajoittamaton.",
+    "sourceContent": "Listan sisältö",
+    "sourceContentHelp": "Manuaalinen: sijoitat kanavat itse. Muut tilat täyttävät listan automaattisesti säännön mukaan, joka arvioidaan jatkuvasti uudelleen.",
+    "sourceGameSearchPlaceholder": "Hae kategoriaa…",
+    "sourceGameFollowedGroup": "Seuraamiesi kanavien joukossa",
+    "sourceGameSearchGroup": "Kaikki kategoriat",
+    "sourceGameSearching": "Haetaan…",
+    "sourceGameNoResults": "Ei tuloksia",
+    "sourceLanguage": "Kieli",
+    "sourceLanguagePlaceholder": "Valitse kieli",
+    "sourceFreshMinutes": "Alkanut alle (minuuttia) sitten",
+    "sourceFreshMinutesHelp": "Näyttää vain kanavat, joiden lähetys on alkanut tämän minuuttimäärän sisällä."
   },
   "configList": {
     "alreadyInList": "Kohde on jo listalla",
@@ -245,5 +256,11 @@
     "tabs": "Välilehdet",
     "grid": "Ruudukko",
     "dock": "Telakka (vain avatarit)"
+  },
+  "sourceKind": {
+    "manual": "Manuaalinen",
+    "game": "Pelin mukaan",
+    "language": "Kielen mukaan",
+    "fresh": "Juuri alkanut"
   }
 }

@@ -11,6 +11,7 @@
     import SortIndicatorIcon from './icons/SortIndicatorIcon.svelte';
     import CounterType from './CounterType.svelte';
 	import { hasVisibleContent } from '../listVisibility.js';
+	import { getSmartMatchedChannels } from '../smartList.js';
 	import { openFlyout, scheduleCloseFlyout } from '../event.svelte.js';
 
     let {
@@ -58,6 +59,14 @@
 	));
 	// A split column is a narrow list rendered with grid-style cells.
 	let cellVariant = $derived(effectiveVariant === 'split' ? 'grid' : effectiveVariant);
+
+	let source = $derived(configManager.selectedConfig[listId]?.source ?? { kind: CST.SOURCE_KIND_MANUAL });
+	let isSmartList = $derived(source.kind !== CST.SOURCE_KIND_MANUAL);
+
+	let smartMatchedItems = $derived.by(() => {
+		if (!isSmartList) return [];
+		return getSmartMatchedChannels(configManager, listId).map(ch => ({ id: ch.channel_id, channel_id: ch.channel_id }));
+	});
 
 	let behavior = $derived(configManager.selectedConfig[listId]?.behavior ?? {});
 	let startupExtended = $derived(behavior[CST.EXTENDED_ON_STARTUP] ?? false);
@@ -183,6 +192,11 @@
 	// Shared by this list's own header badge and, when this list acts as a
 	// splitList/tabList parent, each child's mini-caption / tab pip.
 	function countsFor(id) {
+		const rule = configManager.selectedConfig[id]?.source;
+		if (rule && rule.kind !== CST.SOURCE_KIND_MANUAL) {
+			const matched = getSmartMatchedChannels(configManager, id);
+			return { live: matched.filter(ch => ch.isLive).length, total: matched.length };
+		}
 		let set = getChannelsInConfigFor(id);
 		if (hasAllOtherChannels(set)) {
 			let item = CST.ALL_OTHER_CHANNELS_ELEMENT;
@@ -332,20 +346,29 @@
 				return ('' + an).localeCompare(bn)
 			}
 		};
-		// console.log("sortStrategy for", listId, configManager.selectedConfig[listId].sort)
-		if (configManager.selectedConfig[listId].sort === CST.ALPHA_SORT) {
-			// console.log("alpha for", listId)
+		if (effectiveSort === CST.ALPHA_SORT) {
 			sortedList.sort(alphaSortCallback);
 		}
-		else if (configManager.selectedConfig[listId].sort === CST.VIEWER_SORT) {
-			// console.log("viwer for", listId)
-
+		else if (effectiveSort === CST.VIEWER_SORT) {
 			sortedList.sort(viewerCountSortCallback);
 		}
 		return sortedList;
 	}
 
 	let customSort = $derived((configManager.selectedConfig[listId]?.sort ?? CST.CUSTOM_SORT) === CST.CUSTOM_SORT);
+	// A smartList's content isn't draggable, so custom sort has no order to fall
+	// back to: default it to viewer count even if a stale config still has it.
+	let effectiveSort = $derived(
+		isSmartList && customSort ? CST.VIEWER_SORT : configManager.selectedConfig[listId]?.sort
+	);
+
+	// Manual items are cleared on switching kind, but nested sub-lists remain:
+	// they render alongside the rule matches, which never touch `items`.
+	let baseItems = $derived(
+		isSmartList
+			? [...smartMatchedItems, ...configManager.selectedConfig[listId].items.filter(i => i.type === CST.TYPE_LIST)]
+			: configManager.selectedConfig[listId].items
+	);
 
 	function hasContentAfter(list, index) {
 		for (let i = index + 1; i < list.length; i++) {
@@ -362,7 +385,7 @@
 
 	// Any sort but the custom one scatters the items a separator was placed between.
 	let renderedItems = $derived.by(() => {
-		const list = getListChannelsSortedByStrategy(configManager.selectedConfig[listId].items);
+		const list = getListChannelsSortedByStrategy(baseItems);
 		return list.filter((item, index) =>
 			item.type !== CST.TYPE_SEPARATOR || (customSort && hasContentAfter(list, index)));
 	});

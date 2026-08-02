@@ -56,7 +56,18 @@
     "listLayoutHelp": "Kako je raspoređen sadržaj ovog popisa: redovi, stupci jedan pored drugog, kartice, mreža avatara ili traka za pomicanje.",
     "listColumns": "Stupci",
     "maxItems": "Najveći broj prikazanih stavki",
-    "maxItemsHelp": "Prikazuju se samo prvih N stavki, s retkom za proširenje ostatka. 0 = neograničeno."
+    "maxItemsHelp": "Prikazuju se samo prvih N stavki, s retkom za proširenje ostatka. 0 = neograničeno.",
+    "sourceContent": "Sadržaj popisa",
+    "sourceContentHelp": "Ručno: kanale postavljate sami. Ostali načini automatski popunjavaju popis prema pravilu koje se neprestano ponovno procjenjuje.",
+    "sourceGameSearchPlaceholder": "Pretraži kategoriju…",
+    "sourceGameFollowedGroup": "Među kanalima koje pratite",
+    "sourceGameSearchGroup": "Sve kategorije",
+    "sourceGameSearching": "Pretraživanje…",
+    "sourceGameNoResults": "Nema rezultata",
+    "sourceLanguage": "Jezik",
+    "sourceLanguagePlaceholder": "Odaberite jezik",
+    "sourceFreshMinutes": "Počelo prije manje od (minuta)",
+    "sourceFreshMinutesHelp": "Prikazuje samo kanale koji su počeli streamati prije manje od ovog broja minuta."
   },
   "configList": {
     "alreadyInList": "Stavka je već na popisu",
@@ -245,5 +256,11 @@
     "tabs": "Kartice",
     "grid": "Mreža",
     "dock": "Traka (samo avatari)"
+  },
+  "sourceKind": {
+    "manual": "Ručno",
+    "game": "Prema igri",
+    "language": "Prema jeziku",
+    "fresh": "Upravo počelo"
   }
 }

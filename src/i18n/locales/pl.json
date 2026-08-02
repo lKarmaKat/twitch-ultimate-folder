@@ -56,7 +56,18 @@
     "listLayoutHelp": "Jak rozmieszczona jest zawartość tej listy: wiersze, kolumny obok siebie, karty, siatka awatarów lub przewijany pasek.",
     "listColumns": "Kolumny",
     "maxItems": "Maks. liczba pokazanych elementów",
-    "maxItemsHelp": "Pokazywane są tylko pierwsze N pozycji, reszta pod rozwijanym wierszem. 0 = bez limitu."
+    "maxItemsHelp": "Pokazywane są tylko pierwsze N pozycji, reszta pod rozwijanym wierszem. 0 = bez limitu.",
+    "sourceContent": "Zawartość listy",
+    "sourceContentHelp": "Ręcznie: sam umieszczasz kanały. Pozostałe tryby wypełniają listę automatycznie na podstawie reguły, stale weryfikowanej na nowo.",
+    "sourceGameSearchPlaceholder": "Wyszukaj kategorię…",
+    "sourceGameFollowedGroup": "Wśród obserwowanych kanałów",
+    "sourceGameSearchGroup": "Wszystkie kategorie",
+    "sourceGameSearching": "Wyszukiwanie…",
+    "sourceGameNoResults": "Brak wyników",
+    "sourceLanguage": "Język",
+    "sourceLanguagePlaceholder": "Wybierz język",
+    "sourceFreshMinutes": "Rozpoczęto mniej niż (minut) temu",
+    "sourceFreshMinutesHelp": "Pokazuje tylko kanały, które zaczęły transmisję w ciągu tylu minut."
   },
   "configList": {
     "alreadyInList": "Ten element jest już na liście",
@@ -245,5 +256,11 @@
     "tabs": "Karty",
     "grid": "Siatka",
     "dock": "Pasek (same awatary)"
+  },
+  "sourceKind": {
+    "manual": "Ręcznie",
+    "game": "Według gry",
+    "language": "Według języka",
+    "fresh": "Właśnie się zaczęło"
   }
 }

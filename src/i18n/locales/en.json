@@ -208,7 +208,18 @@
     "listLayoutHelp": "How this list's content is arranged: rows, side-by-side columns, tabs, a grid of avatars, or a scrolling dock.",
     "listColumns": "Columns",
     "maxItems": "Max items shown",
-    "maxItemsHelp": "Only the first N entries show, with a fold-out row for the rest. 0 = unlimited."
+    "maxItemsHelp": "Only the first N entries show, with a fold-out row for the rest. 0 = unlimited.",
+    "sourceContent": "List content",
+    "sourceContentHelp": "Manual: you place channels yourself. The other modes fill the list automatically from a rule, re-evaluated continuously.",
+    "sourceGameSearchPlaceholder": "Search a category…",
+    "sourceGameFollowedGroup": "Among your followed channels",
+    "sourceGameSearchGroup": "All categories",
+    "sourceGameSearching": "Searching…",
+    "sourceGameNoResults": "No match",
+    "sourceLanguage": "Language",
+    "sourceLanguagePlaceholder": "Select a language",
+    "sourceFreshMinutes": "Started less than (minutes)",
+    "sourceFreshMinutesHelp": "Only shows channels that started streaming within this many minutes."
   },
   "configList": {
     "alreadyInList": "The item is already in the list",
@@ -405,5 +416,11 @@
     "tabs": "Tabs",
     "grid": "Grid",
     "dock": "Dock (avatars only)"
+  },
+  "sourceKind": {
+    "manual": "Manual",
+    "game": "By game",
+    "language": "By language",
+    "fresh": "Just started"
   }
 }

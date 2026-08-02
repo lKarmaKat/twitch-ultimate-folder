@@ -56,7 +56,18 @@
     "listLayoutHelp": "Hvordan innholdet i denne listen er ordnet: rader, kolonner side om side, faner, et rutenett av avatarer eller en rullbar dokk.",
     "listColumns": "Kolonner",
     "maxItems": "Maks. antall viste elementer",
-    "maxItemsHelp": "Bare de første N oppføringene vises, med en utvidbar rad for resten. 0 = ubegrenset."
+    "maxItemsHelp": "Bare de første N oppføringene vises, med en utvidbar rad for resten. 0 = ubegrenset.",
+    "sourceContent": "Listeinnhold",
+    "sourceContentHelp": "Manuell: du plasserer kanalene selv. De andre modusene fyller listen automatisk basert på en regel som kontinuerlig vurderes på nytt.",
+    "sourceGameSearchPlaceholder": "Søk etter en kategori…",
+    "sourceGameFollowedGroup": "Blant kanalene du følger",
+    "sourceGameSearchGroup": "Alle kategorier",
+    "sourceGameSearching": "Søker…",
+    "sourceGameNoResults": "Ingen treff",
+    "sourceLanguage": "Språk",
+    "sourceLanguagePlaceholder": "Velg et språk",
+    "sourceFreshMinutes": "Startet for mindre enn (minutter) siden",
+    "sourceFreshMinutesHelp": "Viser bare kanaler som begynte å sende for mindre enn dette antallet minutter siden."
   },
   "configList": {
     "alreadyInList": "Elementet finnes allerede i listen",
@@ -245,5 +256,11 @@
     "tabs": "Faner",
     "grid": "Rutenett",
     "dock": "Dokk (kun avatarer)"
+  },
+  "sourceKind": {
+    "manual": "Manuell",
+    "game": "Etter spill",
+    "language": "Etter språk",
+    "fresh": "Nettopp startet"
   }
 }

@@ -8,6 +8,7 @@
     import BarColorSelect from "./BarColorSelect.svelte";
     import CounterTypeSelect from "./CounterTypeSelect.svelte";
     import SortSelect from "./SortSelect.svelte";
+    import SourceRuleEditor from "./SourceRuleEditor.svelte";
     import { ICON_NONE } from './icons/index.js';
 
     let { configManager } = $props();
@@ -21,6 +22,9 @@
     const layoutOptions = CST.LIST_LAYOUT_OPTIONS;
     let showsColumns = $derived(listConfig?.type.layout === CST.LIST_LAYOUT_SPLIT || listConfig?.type.layout === CST.LIST_LAYOUT_GRID);
     let showsRail = $derived(!CST.LIST_LAYOUTS_WITHOUT_RAIL.includes(listConfig?.type.layout));
+    // A rule-driven list refills itself: custom sort (drag order) has nothing to act on.
+    let isSmartList = $derived((listConfig?.source?.kind ?? CST.SOURCE_KIND_MANUAL) !== CST.SOURCE_KIND_MANUAL);
+    let sortSelectOptions = $derived(isSmartList ? sortOptions : CST.SORT_STRATEGY);
     $effect(() => {
         listeId = configChangeEvent.current;
         if (listeId) {
@@ -39,6 +43,7 @@
                 if (listConfig.type.columns === undefined) listConfig.type.columns = 2;
                 if (listConfig.type.maxItems === undefined) listConfig.type.maxItems = 0;
             }
+            if (listConfig && listConfig.source === undefined) listConfig.source = CST.createDefaultSource();
             let item = listConfig?.items?.find(i => i.channel_id === CST.ALL_OTHER_CHANNELS);
             if (item && item.sort === undefined) item.sort = CST.ALPHA_SORT;
             if (item && item.type === undefined) item.type = CST.ALL_OTHER_HEADER_NONE;
@@ -112,6 +117,9 @@
         {#if listConfig.behavior}
             <div class="pannel-body">
                 <div class="bloc">
+                    <SourceRuleEditor listConfig={listConfig} configManager={configManager}/>
+                </div>
+                <div class="bloc">
                     <p>{$_('configPannel.behavior')}</p>
                     <div class="grid">
                         {#each CST.BEHAVIOUR as item}
@@ -144,7 +152,7 @@
                         <span class="help-badge" data-tooltip={$_('configPannel.sortStrategy')}>?</span>
                         <SortSelect
                             bind:value={listConfig.sort}
-                            options={CST.SORT_STRATEGY}/>
+                            options={sortSelectOptions}/>
                     </div>
                 </div>
                 <div class="bloc">

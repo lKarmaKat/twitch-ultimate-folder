@@ -208,7 +208,18 @@
     "listLayoutHelp": "Comment le contenu de cette liste est disposé : lignes, colonnes côte à côte, onglets, grille d'avatars, ou bande défilante.",
     "listColumns": "Colonnes",
     "maxItems": "Nombre maximum affiché",
-    "maxItemsHelp": "Seules les N premières entrées s'affichent, avec une ligne de repli pour le reste. 0 = illimité."
+    "maxItemsHelp": "Seules les N premières entrées s'affichent, avec une ligne de repli pour le reste. 0 = illimité.",
+    "sourceContent": "Contenu de la liste",
+    "sourceContentHelp": "Manuelle : vous placez les chaînes vous-même. Les autres modes remplissent la liste automatiquement selon une règle, réévaluée en continu.",
+    "sourceGameSearchPlaceholder": "Rechercher une catégorie…",
+    "sourceGameFollowedGroup": "Parmi vos chaînes suivies",
+    "sourceGameSearchGroup": "Toutes les catégories",
+    "sourceGameSearching": "Recherche…",
+    "sourceGameNoResults": "Aucun résultat",
+    "sourceLanguage": "Langue",
+    "sourceLanguagePlaceholder": "Sélectionnez une langue",
+    "sourceFreshMinutes": "Démarré depuis moins de (minutes)",
+    "sourceFreshMinutesHelp": "N'affiche que les chaînes dont le direct a commencé il y a moins de ce nombre de minutes."
   },
   "configList": {
     "alreadyInList": "L'élément est déjà dans la liste",
@@ -405,5 +416,11 @@
     "tabs": "Onglets",
     "grid": "Grille",
     "dock": "Bande (avatars seuls)"
+  },
+  "sourceKind": {
+    "manual": "Manuelle",
+    "game": "Par jeu",
+    "language": "Par langue",
+    "fresh": "Vient de commencer"
   }
 }

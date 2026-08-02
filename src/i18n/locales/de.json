@@ -56,7 +56,18 @@
     "listLayoutHelp": "Wie der Inhalt dieser Liste angeordnet wird: Zeilen, nebeneinander liegende Spalten, Reiter, ein Raster aus Avataren oder eine scrollende Leiste.",
     "listColumns": "Spalten",
     "maxItems": "Maximal angezeigte Einträge",
-    "maxItemsHelp": "Nur die ersten N Einträge werden angezeigt, der Rest hinter einer Ausklapp-Zeile. 0 = unbegrenzt."
+    "maxItemsHelp": "Nur die ersten N Einträge werden angezeigt, der Rest hinter einer Ausklapp-Zeile. 0 = unbegrenzt.",
+    "sourceContent": "Listeninhalt",
+    "sourceContentHelp": "Manuell: Sie platzieren die Kanäle selbst. Die anderen Modi füllen die Liste automatisch anhand einer Regel, die fortlaufend neu bewertet wird.",
+    "sourceGameSearchPlaceholder": "Kategorie suchen…",
+    "sourceGameFollowedGroup": "Unter Ihren abonnierten Kanälen",
+    "sourceGameSearchGroup": "Alle Kategorien",
+    "sourceGameSearching": "Suche…",
+    "sourceGameNoResults": "Keine Treffer",
+    "sourceLanguage": "Sprache",
+    "sourceLanguagePlaceholder": "Sprache auswählen",
+    "sourceFreshMinutes": "Gestartet vor weniger als (Minuten)",
+    "sourceFreshMinutesHelp": "Zeigt nur Kanäle, deren Stream vor weniger als dieser Anzahl Minuten begonnen hat."
   },
   "configList": {
     "alreadyInList": "Das Element befindet sich bereits in der Liste",
@@ -245,5 +256,11 @@
     "tabs": "Reiter",
     "grid": "Raster",
     "dock": "Leiste (nur Avatare)"
+  },
+  "sourceKind": {
+    "manual": "Manuell",
+    "game": "Nach Spiel",
+    "language": "Nach Sprache",
+    "fresh": "Gerade gestartet"
   }
 }

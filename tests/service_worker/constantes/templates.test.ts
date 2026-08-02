@@ -71,6 +71,28 @@ describe("templates de configuration", () => {
         expect((list.style as any).content[CST.STYLE_INDENT_RAIL]).toBe(false);
     });
 
+    // Aucune config existante n'a ce champ : le défaut doit rester "manual"
+    // pour qu'elle continue de se comporter comme une liste manuelle.
+    test("la source par défaut est manuelle", () => {
+        const list = CST.createNewList();
+
+        expect(list.source).toEqual({
+            kind: CST.SOURCE_KIND_MANUAL,
+            game_id: null,
+            game_name: null,
+            language: null,
+            freshMinutes: 10
+        });
+    });
+
+    test("createDefaultSource() renvoie un objet distinct à chaque appel", () => {
+        const a = CST.createDefaultSource();
+        const b = CST.createDefaultSource();
+
+        expect(a).not.toBe(b);
+        expect(a).toEqual(b);
+    });
+
     test("les constants exportés sont gelés en profondeur", () => {
         expect(Object.isFrozen(CST.NEW_LIST)).toBe(true);
         expect(Object.isFrozen(CST.NEW_LIST.items)).toBe(true);
