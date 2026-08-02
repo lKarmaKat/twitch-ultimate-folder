@@ -61,7 +61,7 @@
     .card.grid-cell {
         flex-direction: column;
         align-items: center;
-        gap: 0.2em;
+        gap: 0.15em;
         text-align: center;
         padding: 0.4em 0.2em;
     }
@@ -70,10 +70,12 @@
         align-items: center;
         gap: 0.3em;
         font-size: 0.7em;
+        line-height: 1;
         opacity: 0.85;
     }
     .split-viewers p {
         margin: 0;
+        line-height: 1;
     }
     .grid-avatar {
         position: relative;
@@ -94,7 +96,9 @@
     }
     .grid-name {
         width: 100%;
+        margin: 0;
         font-size: 0.72em;
+        line-height: 1.2;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
