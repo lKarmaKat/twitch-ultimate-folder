@@ -447,9 +447,14 @@
 				<div class="tab-row">
 					{#each childListIds as childId (childId)}
 						{@const childType = configManager.selectedConfig[childId]?.type}
+						{@const childIconType = childType?.iconType ?? ICON_NONE}
 						{@const counts = countsFor(childId)}
 						<button type="button" class="tab" class:active={activeChildId === childId} onclick={(e) => selectTab(e, childId)}>
-							<IconPicker iconType={childType?.iconType ?? ICON_NONE} />
+							{#if childIconType === ICON_NONE}
+								<span class="tab-fallback">{(configManager.selectedConfig[childId]?.name ?? '').charAt(0).toUpperCase()}</span>
+							{:else}
+								<IconPicker iconType={childIconType} />
+							{/if}
 							{#if counts.live > 0}<span class="tab-pip">{counts.live}</span>{/if}
 						</button>
 					{/each}
@@ -907,6 +912,9 @@
 		gap: 0.2em;
 		flex: 1 1 auto;
 		min-width: 0;
+		/* Rows get this inset from the icon slot collapsing (.no-icon); tabs have
+		   no per-list icon to condition on, so it's hardcoded here instead. */
+		margin-left: 0.4em;
 	}
 	.tab {
 		position: relative;
@@ -933,6 +941,13 @@
 		bottom: 0;
 		height: 2px;
 		background: var(--bar-accent);
+	}
+	/* ICON_NONE fallback: unlike a row's title, a tab has no text of its own,
+	   so an empty tab is indistinguishable from its neighbours without this. */
+	.tab-fallback {
+		font-size: 0.85em;
+		font-weight: 700;
+		line-height: 1;
 	}
 	.tab-pip {
 		position: absolute;
