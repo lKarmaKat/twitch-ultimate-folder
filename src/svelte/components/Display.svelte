@@ -380,24 +380,10 @@
 			: configManager.selectedConfig[listId].items
 	);
 
-	function hasContentAfter(list, index) {
-		for (let i = index + 1; i < list.length; i++) {
-			const item = list[i];
-			if (item.type === CST.TYPE_SEPARATOR) return false;
-			if (item.type === CST.TYPE_LIST) {
-				if (hasVisibleContent(configManager, item.id)) return true;
-			} else if (item.channel_id < 0 || configManager.getLiveChannel(item.channel_id)) {
-				return true;
-			}
-		}
-		return false;
-	}
-
 	// Any sort but the custom one scatters the items a separator was placed between.
 	let renderedItems = $derived.by(() => {
 		const list = getListChannelsSortedByStrategy(baseItems);
-		return list.filter((item, index) =>
-			item.type !== CST.TYPE_SEPARATOR || (customSort && hasContentAfter(list, index)));
+		return list.filter(item => item.type !== CST.TYPE_SEPARATOR || customSort);
 	});
 
 	// overflowList: only the first `maxItems` entries render, folded back
