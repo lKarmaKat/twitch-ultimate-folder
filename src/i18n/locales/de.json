@@ -52,6 +52,7 @@
     "listHeaderBarColorHelp": "Färbt die Kopfzeilenleiste, das Badge, das Symbol und die Einzugslinie der Liste",
     "listCounterBadgeHelp": "Stil des Badges, das die Anzahl der Online-Kanäle anzeigt",
     "selectListPrompt": "Klicke auf eine Listenkopfzeile, um sie anzupassen",
+    "emptyConfigPrompt": "Füge eine Liste oder das Element „Alle anderen Kanäle“ hinzu, um mit der Anpassung zu beginnen",
     "listLayout": "Layout",
     "listLayoutHelp": "Wie der Inhalt dieser Liste angeordnet wird: Zeilen, nebeneinander liegende Spalten, Reiter, ein Raster aus Avataren oder eine scrollende Leiste.",
     "listColumns": "Spalten",
@@ -73,7 +74,9 @@
     "alreadyInList": "Das Element befindet sich bereits in der Liste",
     "addList": "Neue Liste in {listId} hinzufügen",
     "addSeparator": "Trenner hinzufügen",
-    "separatorPlaceholder": "Beschriftung des Trenners (optional)"
+    "separatorPlaceholder": "Beschriftung des Trenners (optional)",
+    "emptyAddList": "Klicke oben auf +, um eine neue Liste hinzuzufügen",
+    "emptyDragChannel": "Ziehe einen Kanal von links hierher, um ihn hinzuzufügen"
   },
   "mainList": {
     "searchPlaceholder": "Kanäle durchsuchen",

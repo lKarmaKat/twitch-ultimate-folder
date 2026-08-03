@@ -25,6 +25,11 @@
     // A rule-driven list refills itself: custom sort (drag order) has nothing to act on.
     let isSmartList = $derived((listConfig?.source?.kind ?? CST.SOURCE_KIND_MANUAL) !== CST.SOURCE_KIND_MANUAL);
     let sortSelectOptions = $derived(isSmartList ? sortOptions : CST.SORT_STRATEGY);
+    let hasConfigurableItem = $derived(
+        Object.values(configManager.selectedConfig ?? {}).some(list =>
+            (list.items ?? []).some(item => item.type === CST.TYPE_LIST || item.channel_id === CST.ALL_OTHER_CHANNELS)
+        )
+    );
     $effect(() => {
         listeId = configChangeEvent.current;
         if (listeId) {
@@ -249,7 +254,11 @@
         {/if}
     {:else}
         <div class="select-channel-flex">
-            <p class="blinker">{$_('configPannel.selectListPrompt')}</p>
+            <p class="hint-text">
+                {hasConfigurableItem
+                    ? $_('configPannel.selectListPrompt')
+                    : $_('configPannel.emptyConfigPrompt')}
+            </p>
         </div>
     {/if}
 </div>
@@ -264,18 +273,13 @@
         padding: 0;
         height: 100%;
     }
-    .select-channel-flex p {
-        opacity: 1.0;
-        font-size: 1.5em;
+    .select-channel-flex .hint-text {
+        margin: 0;
+        padding: 0 1em;
+        font-size: 1.3em;
+        line-height: 1.4;
         text-align: center;
-    }
-    .blinker {
-    animation: blinker 2s ease-in-out infinite;
-    }
-    @keyframes blinker {
-        from { opacity: 1; }
-        50%   { opacity: 0.6; }
-        to { opacity: 1; }
+        color: var(--empty-hint-text, inherit);
     }
     .pannel-container {
         box-sizing: border-box;

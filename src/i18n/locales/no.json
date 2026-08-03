@@ -52,6 +52,7 @@
     "listHeaderBarColorHelp": "Fargelegger listeoverskriftens felt, merke, ikon og innrykkslinje",
     "listCounterBadgeHelp": "Stil på merket som viser antall kanaler online",
     "selectListPrompt": "Klikk på en listeoverskrift for å tilpasse den",
+    "emptyConfigPrompt": "Legg til en liste eller elementet «Alle andre kanaler» for å begynne å tilpasse",
     "listLayout": "Layout",
     "listLayoutHelp": "Hvordan innholdet i denne listen er ordnet: rader, kolonner side om side, faner, et rutenett av avatarer eller en rullbar dokk.",
     "listColumns": "Kolonner",
@@ -73,7 +74,9 @@
     "alreadyInList": "Elementet finnes allerede i listen",
     "addList": "Legg til ny liste i {listId}",
     "addSeparator": "Legg til et skille",
-    "separatorPlaceholder": "Merkelapp for skillet (valgfritt)"
+    "separatorPlaceholder": "Merkelapp for skillet (valgfritt)",
+    "emptyAddList": "Klikk på + over for å legge til en ny liste",
+    "emptyDragChannel": "Dra en kanal fra venstre for å legge den til her"
   },
   "mainList": {
     "searchPlaceholder": "Søk blant kanaler",

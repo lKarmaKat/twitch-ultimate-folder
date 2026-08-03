@@ -202,6 +202,7 @@
     "listHeaderBarColorHelp": "Colore la barre d'en-tête, le badge, l'icône et le rail d'indentation de la liste",
     "listCounterBadgeHelp": "Style du badge qui affiche le nombre de chaine en ligne",
     "selectListPrompt": "Cliquez sur l'en-tête d'une liste pour la personnaliser",
+    "emptyConfigPrompt": "Ajoutez une liste ou un élément « Toutes les autres chaînes » pour commencer à personnaliser",
     "headerMode": "En-tête",
     "headerModeHelp": "Affiche un en-tête cliquable au-dessus de « Toutes les autres chaines ». Un clic bascule le tri (alphabétique / nombre de viewers) pour la session en cours, sans modifier la configuration enregistrée.",
     "listLayout": "Disposition",
@@ -225,7 +226,9 @@
     "alreadyInList": "L'élément est déjà dans la liste",
     "addList": "Ajouter une nouvelle liste dans {listId}",
     "addSeparator": "Ajouter un séparateur",
-    "separatorPlaceholder": "Libellé du séparateur (facultatif)"
+    "separatorPlaceholder": "Libellé du séparateur (facultatif)",
+    "emptyAddList": "Cliquez sur + ci-dessus pour ajouter une nouvelle liste",
+    "emptyDragChannel": "Glissez une chaîne depuis la gauche pour l'ajouter ici"
   },
   "mainList": {
     "searchPlaceholder": "Rechercher parmi les chaines",

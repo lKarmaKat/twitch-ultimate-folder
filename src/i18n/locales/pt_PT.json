@@ -52,6 +52,7 @@
     "listHeaderBarColorHelp": "Colore a barra do cabeçalho, o selo, o ícone e a guia de indentação da lista",
     "listCounterBadgeHelp": "Estilo do emblema que apresenta o número de canais online",
     "selectListPrompt": "Clique no cabeçalho de uma lista para a personalizar",
+    "emptyConfigPrompt": "Adicione uma lista ou um elemento \"Todos os outros canais\" para começar a personalizar",
     "listLayout": "Esquema",
     "listLayoutHelp": "Como o conteúdo desta lista é organizado: linhas, colunas lado a lado, separadores, uma grelha de avatares ou uma barra deslizante.",
     "listColumns": "Colunas",
@@ -73,7 +74,9 @@
     "alreadyInList": "O elemento já está na lista",
     "addList": "Adicionar nova lista em {listId}",
     "addSeparator": "Adicionar um separador",
-    "separatorPlaceholder": "Etiqueta do separador (opcional)"
+    "separatorPlaceholder": "Etiqueta do separador (opcional)",
+    "emptyAddList": "Clique em + acima para adicionar uma nova lista",
+    "emptyDragChannel": "Arraste um canal da esquerda para adicioná-lo aqui"
   },
   "mainList": {
     "searchPlaceholder": "Pesquisar nos canais",

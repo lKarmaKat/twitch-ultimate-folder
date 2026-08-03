@@ -52,6 +52,7 @@
     "listHeaderBarColorHelp": "Väritää listan otsikkopalkin, merkin, kuvakkeen ja sisennysviivan",
     "listCounterBadgeHelp": "Verkossa olevien kanavien määrää näyttävän merkin tyyli",
     "selectListPrompt": "Napsauta listan otsikkoa mukauttaaksesi sitä",
+    "emptyConfigPrompt": "Lisää lista tai \"Kaikki muut kanavat\" -elementti aloittaaksesi mukauttamisen",
     "listLayout": "Asettelu",
     "listLayoutHelp": "Miten tämän listan sisältö on järjestetty: rivit, rinnakkaiset sarakkeet, välilehdet, avatarien ruudukko tai vieritettävä telakka.",
     "listColumns": "Sarakkeet",
@@ -73,7 +74,9 @@
     "alreadyInList": "Kohde on jo listalla",
     "addList": "Lisää uusi lista kohteeseen {listId}",
     "addSeparator": "Lisää erotin",
-    "separatorPlaceholder": "Erottimen nimi (valinnainen)"
+    "separatorPlaceholder": "Erottimen nimi (valinnainen)",
+    "emptyAddList": "Napsauta ylhäältä +-painiketta lisätäksesi uuden listan",
+    "emptyDragChannel": "Vedä kanava vasemmalta lisätäksesi sen tähän"
   },
   "mainList": {
     "searchPlaceholder": "Hae kanavista",

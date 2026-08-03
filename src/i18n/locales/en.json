@@ -202,6 +202,7 @@
     "listHeaderBarColorHelp": "Colors the list's header bar, badge, icon and indent rail",
     "listCounterBadgeHelp": "Style of the badge showing the number of channels online",
     "selectListPrompt": "Please click on a list header to customize it",
+    "emptyConfigPrompt": "Add a list or an \"All other channels\" element to start customizing",
     "headerMode": "Header",
     "headerModeHelp": "Show a clickable header above 'All other channels'. Clicking it toggles the sort (alphabetical / viewer count) for the current session, without changing the saved config.",
     "listLayout": "Layout",
@@ -225,7 +226,9 @@
     "alreadyInList": "The item is already in the list",
     "addList": "Add new list in {listId}",
     "addSeparator": "Add a separator",
-    "separatorPlaceholder": "Separator label (optional)"
+    "separatorPlaceholder": "Separator label (optional)",
+    "emptyAddList": "Click + above to add a new list",
+    "emptyDragChannel": "Drag a channel from the left to add it here"
   },
   "mainList": {
     "searchPlaceholder": "Search through channels",

@@ -34,6 +34,8 @@
 	// the next kind change, so the zone refuses drops from other lists.
 	let isSmartList = $derived((configManager.selectedConfig[listId]?.source?.kind ?? CST.SOURCE_KIND_MANUAL) !== CST.SOURCE_KIND_MANUAL);
 
+	let showEmptyHint = $derived(listId === 'rootList' && (configManager.selectedConfig[listId]?.items?.length ?? 0) === 0);
+
 
 	// let duplicatedElementError = $derived(!)
 	let duplicatedElementError = $state(false)
@@ -186,7 +188,7 @@
 	</div>
 	{/if}
 	{#if configManager.selectedConfig[listId]?.hasOwnProperty("items")}
-	<div class="list-body" >
+	<div class="list-body" class:is-empty={showEmptyHint}>
 		<section class="dnd-zone-r"
 		use:dndzone={{items:configManager.selectedConfig[listId].items, flipDurationMs, centreDraggedOnCursor: false, transformDraggedElement,
 			dropTargetClasses: ['increased-drop-margin'], dropFromOthersDisabled: isSmartList
@@ -262,6 +264,26 @@
 			{/if}
 			{/each}
 		</section>
+		{#if showEmptyHint}
+		<div class="empty-hint">
+			<div class="empty-hint-grid">
+				<span class="arrow-cell">
+					<svg class="arrow-up" viewBox="0 0 30 60" aria-hidden="true">
+						<path class="arrow-shaft" d="M11 57 C 8 40, 11 26, 16 16 C 18 11, 21 7, 24 4" />
+						<path class="arrow-shaft" d="M22.4 10.8 L24 4 L17.2 5.6" />
+					</svg>
+				</span>
+				<p class="hint-text">{$_('configList.emptyAddList')}</p>
+				<span class="arrow-cell">
+					<svg class="arrow-left" viewBox="0 0 44 32" aria-hidden="true">
+						<path class="arrow-shaft" d="M38 30 C 36 18, 27 10, 5 6" />
+						<path class="arrow-shaft" d="M9.44 10.04 L5 6 L10.58 3.78" />
+					</svg>
+				</span>
+				<p class="hint-text">{$_('configList.emptyDragChannel')}</p>
+			</div>
+		</div>
+		{/if}
 	</div>
 	{/if}
 </div>
@@ -481,6 +503,64 @@
 	}
 	.list-container.is-root > .list-body::before {
 		content: none;
+	}
+	.list-body.is-empty > section {
+		min-height: 12em;
+	}
+	/* overlay, not a child of the dnd zone: svelte-dnd-action maps its children
+	   to items by index and an extra one shifts every drop */
+	.empty-hint {
+		position: absolute;
+		inset: 0;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		padding: 1em 0.8em;
+		pointer-events: none;
+	}
+	.empty-hint-grid {
+		display: grid;
+		grid-template-columns: auto 1fr;
+		align-items: start;
+		column-gap: 0.7em;
+		row-gap: 1.4em;
+		width: auto;
+		max-width: 21em;
+	}
+	.empty-hint .arrow-cell {
+		display: flex;
+		justify-content: center;
+		padding-top: 0.15em;
+	}
+	.empty-hint svg {
+		overflow: visible;
+		flex-shrink: 0;
+	}
+	.empty-hint svg.arrow-up {
+		width: 2em;
+		height: 4em;
+	}
+	/* wider viewBox scale than arrow-up: matching on-screen stroke needs less width */
+	.empty-hint svg.arrow-left {
+		width: 3.6em;
+		height: 2.6em;
+	}
+	.empty-hint svg.arrow-left .arrow-shaft {
+		stroke-width: 2.45;
+	}
+	.empty-hint .arrow-shaft {
+		fill: none;
+		stroke: var(--empty-hint-arrow, rgb(145, 71, 255));
+		stroke-width: 3;
+		stroke-linecap: round;
+		stroke-linejoin: round;
+	}
+	.empty-hint .hint-text {
+		margin: 0;
+		padding: 0;
+		font-size: 0.95em;
+		line-height: 1.4;
+		color: var(--empty-hint-text, inherit);
 	}
 	:global(div.list-container section.increased-drop-margin) {
 		padding-bottom: 1.5em;

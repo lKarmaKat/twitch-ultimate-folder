@@ -52,6 +52,7 @@
     "listHeaderBarColorHelp": "Boji traku zaglavlja, značku, ikonu i crtu uvlake popisa",
     "listCounterBadgeHelp": "Stil oznake koja prikazuje broj kanala na mreži",
     "selectListPrompt": "Kliknite na zaglavlje popisa da biste ga prilagodili",
+    "emptyConfigPrompt": "Dodajte popis ili element \"Svi ostali kanali\" za početak prilagodbe",
     "listLayout": "Raspored",
     "listLayoutHelp": "Kako je raspoređen sadržaj ovog popisa: redovi, stupci jedan pored drugog, kartice, mreža avatara ili traka za pomicanje.",
     "listColumns": "Stupci",
@@ -73,7 +74,9 @@
     "alreadyInList": "Stavka je već na popisu",
     "addList": "Dodaj novi popis u {listId}",
     "addSeparator": "Dodaj razdjelnik",
-    "separatorPlaceholder": "Oznaka razdjelnika (neobavezno)"
+    "separatorPlaceholder": "Oznaka razdjelnika (neobavezno)",
+    "emptyAddList": "Kliknite + iznad da dodate novi popis",
+    "emptyDragChannel": "Povucite kanal s lijeve strane da ga dodate ovdje"
   },
   "mainList": {
     "searchPlaceholder": "Pretraži kanale",

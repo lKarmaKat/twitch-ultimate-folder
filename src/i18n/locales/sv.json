@@ -52,6 +52,7 @@
     "listHeaderBarColorHelp": "Färgar listans rubrikfält, badge, ikon och indragslinje",
     "listCounterBadgeHelp": "Stil på badgen som visar antalet kanaler online",
     "selectListPrompt": "Klicka på ett listhuvud för att anpassa det",
+    "emptyConfigPrompt": "Lägg till en lista eller elementet \"Alla andra kanaler\" för att börja anpassa",
     "listLayout": "Layout",
     "listLayoutHelp": "Hur innehållet i listan ordnas: rader, kolumner sida vid sida, flikar, ett rutnät av avatarer eller en rullbar docka.",
     "listColumns": "Kolumner",
@@ -73,7 +74,9 @@
     "alreadyInList": "Objektet finns redan i listan",
     "addList": "Lägg till ny lista i {listId}",
     "addSeparator": "Lägg till en avdelare",
-    "separatorPlaceholder": "Avdelarens etikett (valfritt)"
+    "separatorPlaceholder": "Avdelarens etikett (valfritt)",
+    "emptyAddList": "Klicka på + ovan för att lägga till en ny lista",
+    "emptyDragChannel": "Dra en kanal från vänster för att lägga till den här"
   },
   "mainList": {
     "searchPlaceholder": "Sök bland kanaler",

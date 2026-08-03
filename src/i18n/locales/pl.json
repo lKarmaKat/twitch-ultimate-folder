@@ -52,6 +52,7 @@
     "listHeaderBarColorHelp": "Koloruje pasek nagłówka, odznakę, ikonę i linię wcięcia listy",
     "listCounterBadgeHelp": "Styl odznaki pokazującej liczbę kanałów online",
     "selectListPrompt": "Kliknij nagłówek listy, aby ją dostosować",
+    "emptyConfigPrompt": "Dodaj listę lub element „Wszystkie pozostałe kanały”, aby rozpocząć personalizację",
     "listLayout": "Układ",
     "listLayoutHelp": "Jak rozmieszczona jest zawartość tej listy: wiersze, kolumny obok siebie, karty, siatka awatarów lub przewijany pasek.",
     "listColumns": "Kolumny",
@@ -73,7 +74,9 @@
     "alreadyInList": "Ten element jest już na liście",
     "addList": "Dodaj nową listę w {listId}",
     "addSeparator": "Dodaj separator",
-    "separatorPlaceholder": "Etykieta separatora (opcjonalnie)"
+    "separatorPlaceholder": "Etykieta separatora (opcjonalnie)",
+    "emptyAddList": "Kliknij + powyżej, aby dodać nową listę",
+    "emptyDragChannel": "Przeciągnij kanał z lewej strony, aby go tutaj dodać"
   },
   "mainList": {
     "searchPlaceholder": "Szukaj wśród kanałów",

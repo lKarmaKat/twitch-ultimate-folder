@@ -10,6 +10,8 @@
     /* cog button of the "all other channels" row: white glyph on a grey plate */
     --cog-btn-bg: rgb(173, 173, 184);
     --cog-btn-fg: #ffffff;
+    --empty-hint-arrow: #7b3fc9;
+    --empty-hint-text: rgb(83, 83, 95);
 }
 
 .popup .header {
