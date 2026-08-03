@@ -128,7 +128,7 @@
                                     type="checkbox"
                                     id={item.id}
                                     bind:checked={listConfig.behavior[item.id]}/>
-                                <label for={item.key}>{$_(item.label)}</label>
+                                <label for={item.id}>{$_(item.label)}</label>
                                 <span
                                     class="help-badge"
                                     data-tooltip={$_(item.tooltip)}>?</span>
