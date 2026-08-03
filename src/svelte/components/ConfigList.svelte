@@ -7,11 +7,28 @@
 	import { get } from 'svelte/store';
 	import Self from './ConfigList.svelte'
     import CogBtn from './CogBtn.svelte';
+    import LayoutStackIcon from './icons/LayoutStackIcon.svelte';
+    import LayoutSplitIcon from './icons/LayoutSplitIcon.svelte';
+    import LayoutFlyoutIcon from './icons/LayoutFlyoutIcon.svelte';
+    import LayoutTabsIcon from './icons/LayoutTabsIcon.svelte';
+    import LayoutGridIcon from './icons/LayoutGridIcon.svelte';
+    import LayoutDockIcon from './icons/LayoutDockIcon.svelte';
 
 
-	  
+
 
 	let { configManager, listId, requestDeleteToParent, addRootNode = $bindable(), addRootSeparator = $bindable() } = $props()
+
+	// type.layout is missing on configs saved before layouts existed: falls back to STACK, same as the renderer.
+	const LAYOUT_ICONS = {
+		[CST.LIST_LAYOUT_STACK]: LayoutStackIcon,
+		[CST.LIST_LAYOUT_SPLIT]: LayoutSplitIcon,
+		[CST.LIST_LAYOUT_FLYOUT]: LayoutFlyoutIcon,
+		[CST.LIST_LAYOUT_TABS]: LayoutTabsIcon,
+		[CST.LIST_LAYOUT_GRID]: LayoutGridIcon,
+		[CST.LIST_LAYOUT_DOCK]: LayoutDockIcon,
+	};
+	let LayoutIcon = $derived(LAYOUT_ICONS[configManager.selectedConfig[listId]?.type?.layout ?? CST.LIST_LAYOUT_STACK] ?? LayoutStackIcon);
 
 	// Rule-driven content: dropping a channel here would just be discarded on
 	// the next kind change, so the zone refuses drops from other lists.
@@ -160,7 +177,7 @@
 	 {#if listId !== 'rootList'}
 	<div class="list-header" onclick={selectConfig}>
 		<!-- <div class="header" style="background-color: {headerColor};"> -->
-		<p class="list-title"><strong>{configManager.selectedConfig[listId]?.name}</strong></p>
+		<p class="list-title"><span class="layout-icon-slot"><LayoutIcon /></span><strong>{configManager.selectedConfig[listId]?.name}</strong></p>
 		<div class="list-side-menu">
 			<button id="add-list-{listId}" class="add-list" onclick={() => addNode()} title={$_('configList.addList', { values: { listId } })}>+</button>
 			<button id="add-separator-{listId}" class="add-separator" onclick={(e)=>{ e.stopPropagation(); addSeparator()}} title={$_('configList.addSeparator')}>—</button>
@@ -350,6 +367,17 @@
 	}
 	.list-header .list-title {
 		padding: 0.3em 0 0.3em 0.4em !important;
+		display: flex;
+		align-items: center;
+	}
+	.layout-icon-slot {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		width: 1.7em;
+		height: 1.7em;
+		flex-shrink: 0;
+		margin-right: 0.4em;
 	}
 	.list-container {
 		border: none;
