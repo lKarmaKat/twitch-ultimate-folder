@@ -20,7 +20,7 @@
     /* --icon-open is set by Display.svelte: 1 when the list is open (chevron
        down, the SVG's natural orientation), 0 when collapsed. */
     div.icon-container {
-        transform: rotate(calc((1 - var(--icon-open, 1)) * (-180deg)));
+        transform: rotate(calc((1 - var(--icon-open, 1)) * (-90deg)));
     }
 
 </style>

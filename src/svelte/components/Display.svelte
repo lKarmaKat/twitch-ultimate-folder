@@ -93,6 +93,13 @@
 		configManager.selectedConfig;
 		openState = startupExtended;
 	});
+	// Disabling "extends on click" while a click-opened list is expanded must
+	// not leave it stuck open with no way to collapse it.
+	$effect(() => {
+		if (!clickEnabled && openState && !startupExtended) {
+			openState = false;
+		}
+	});
 
 	let ruledByParent = $derived(typeof onExclusiveToggle === 'function');
 	let extended = $derived(ruledByParent ? exclusiveOpenId === listId : openState);
