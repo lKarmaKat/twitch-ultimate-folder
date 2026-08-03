@@ -458,7 +458,9 @@
 							{#if counts.live > 0}<span class="tab-pip">{counts.live}</span>{/if}
 						</button>
 					{/each}
-					<span class="tab-total">{liveChannelsCounter}/{totalChannelsCount}</span>
+					<span class="tab-total">
+						<CounterType counter={liveChannelsCounter} totalChannels={totalChannelsCount} viewerCountType={type.viewerCountType} />
+					</span>
 				</div>
 			{:else}
 				<div class="left">
