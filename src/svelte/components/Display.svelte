@@ -982,7 +982,7 @@
 		min-width: 0;
 	}
 	.split-col:not(:first-child) {
-		border-left: 1px solid var(--theme-color, currentColor);
+		border-left: 1px solid var(--header-separator, transparent);
 		opacity: 1;
 	}
 	.split-col-cap {

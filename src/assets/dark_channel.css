@@ -42,6 +42,10 @@
     fill: rgb(173, 173, 184);
 }
 
+#display-container.dark .tab-pip {
+    color: #1a1a1a;
+}
+
 #display-container.dark .list-body {
     background-color: #26262c;
 }
