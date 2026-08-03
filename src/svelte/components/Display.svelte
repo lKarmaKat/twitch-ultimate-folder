@@ -49,8 +49,6 @@
 	// them would show two open indicators for the same list.
 	let chevronEnabled = $derived(
 		(type?.[CST.TYPE_CHEVRON] ?? false)
-		&& headerIconType !== ICON_ANGLE
-		&& headerIconType !== ICON_CROSS
 	);
 	let exclusive = $derived(type?.[CST.TYPE_EXCLUSIVE] ?? false);
 	let layout = $derived(type?.layout ?? CST.LIST_LAYOUT_STACK);
@@ -646,8 +644,8 @@
 	/* Not mirrored on .al-left: only the margins and the rail switch sides
 	   there, the header keeps its children in the same order. */
 	.header-chevron {
-		width: 0.9em;
-		height: 0.9em;
+		width: 1.4em;
+		height: 1.4em;
 		flex: none;
 		margin-left: 0.3em;
 		transform: rotate(calc(var(--icon-open, 0) * 90deg));
@@ -734,6 +732,7 @@
 		width: fit-content;
 	}
 	.list-header {
+		position: relative;
 		display: flex;
 		flex-direction: row;
 		justify-content: space-between;
@@ -746,8 +745,17 @@
 		/* margin: 0; */
 		/* padding: 0; */
 		/* padding: 0.6em 0.3em 0 0.5em; */
+		/* border-bottom: 1px solid var(--header-separator, transparent); */
 		user-select: none;
 		/* border-radius: 7%; */
+	}
+	.list-header::after {
+		content: "";
+		border: 1px solid var(--header-separator, transparent);
+		width: 90%;
+		position: absolute;
+		bottom: 0%;
+		left: 5%;
 	}
 	/* Side mirrored like the nested list margins above */
 	:global(.al-right) .list-header.border {
@@ -915,7 +923,16 @@
 		color: inherit;
 	}
 	.tab.active {
-		box-shadow: inset 0 -2px 0 0 var(--theme-color, currentColor);
+		color: var(--bar-accent);
+	}
+	.tab.active::after {
+		content: '';
+		position: absolute;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		height: 2px;
+		background: var(--bar-accent);
 	}
 	.tab-pip {
 		position: absolute;
@@ -927,7 +944,7 @@
 		line-height: 1.4;
 		padding: 0 0.3em;
 		border-radius: 999px;
-		background: var(--theme-color, currentColor);
+		background: var(--bar-accent);
 		color: #fff;
 	}
 	.tab-total {
@@ -958,6 +975,16 @@
 		gap: 0.3em;
 		padding: 0.3em 0;
 		font-size: 0.75em;
+		/* border-bottom: 1px solid var(--header-separator, transparent); */
+		position: relative;
+	}
+	.split-col-cap::after {
+		content: "";
+		border: 1px solid var(--header-separator, transparent);
+		width: 60%;
+		position: absolute;
+		bottom: 0%;
+		left: 20%;
 	}
 	.split-col-icon {
 		display: flex;

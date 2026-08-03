@@ -44,6 +44,7 @@ import BloodhuntIcon from './BloodhuntIcon.svelte';
 import BrawlhallaIcon from './BrawlhallaIcon.svelte';
 import ForHonorIcon from './ForHonorIcon.svelte';
 import TheDivision2Icon from './TheDivision2Icon.svelte';
+import ChevronIcon from './ChevronIcon.svelte';
 
 // Sentinel values stored in `type.iconType`. They have no component: NONE
 // renders nothing at all, EMPTY_PLACEHOLDER keeps the icon slot so the list
@@ -109,6 +110,7 @@ export const ICONS: IconDef[] = [
   { id: 43, key: 'icon.brawlhalla', component: BrawlhallaIcon },
   { id: 44, key: 'icon.forHonor', component: ForHonorIcon },
   { id: 45, key: 'icon.theDivision2', component: TheDivision2Icon },
+  { id: 45, key: 'icon.theDivision2', component: ChevronIcon },
 ];
 
 export const ICON_BY_ID = new Map<number, IconDef>(ICONS.map((i) => [i.id, i]));

@@ -1,34 +1,31 @@
-/* Badge and icon follow the list theme colour. The icon takes it raw, to match
-   the bar exactly; the badge takes a lightened variant (darkened on the light
-   theme) because THEME_COLOR is calibrated for a 3px bar, not for text. */
+/* Badge and icon share the same accent colour, a lightened variant of
+   THEME_COLOR (darkened on the light theme) since it's calibrated for a
+   3px bar, not for text or small icon glyphs. */
 #display-container.dark {
     /* Same thumb colour as the configPopup's own (fixed) scrollbar. */
     --scrollbar-color: #53535f;
     --scrollbar-color-hover: #6b6b7b;
+    --header-separator: rgba(173, 173, 184, 0.16);
 }
 
 #display-container.dark .list-container {
     --bar-accent: #bf94ff;
     --bar-tint: rgba(145, 71, 255, 0.22);
-    --bar-icon: #bf94ff;
+    --bar-icon: var(--bar-accent);
 }
 
 #display-container.dark .list-container.tinted {
     --bar-accent: color-mix(in srgb, var(--theme-color) 50%, white);
     --bar-tint: color-mix(in srgb, var(--theme-color) 22%, transparent);
-    --bar-icon: var(--theme-color);
+    --bar-icon: var(--bar-accent);
 }
 
 #display-container.dark .list-header {
-    /* background-color: #0e0e10; */
-    background-color: #393941;
-    /* background-color: #26262c; */
-    /* color: rgb(239, 239, 241); */
+    background-color: #26262c;
     color: #adadb8;
-    /* background-color: #18181b; */
 }
 
-#display-container.dark .list-header.pill:hover {
+#display-container.dark .list-header:hover {
     background-color: #46464f;
 }
 
@@ -96,31 +93,30 @@
 /* ************* */
 
 #display-container.light {
-    /* Same grey as the list header background in light theme. */
     --scrollbar-color: rgba(201, 201, 202, 0.25);
     --scrollbar-color-hover: rgba(201, 201, 202, 0.5);
+    --header-separator: rgba(83, 83, 95, 0.16);
 }
 
 #display-container.light .list-container {
     --bar-accent: #7b3fc9;
     --bar-tint: rgba(145, 71, 255, 0.13);
-    --bar-icon: #7b3fc9;
+    --bar-icon: var(--bar-accent);
 }
 
 #display-container.light .list-container.tinted {
     --bar-accent: color-mix(in srgb, var(--theme-color) 60%, black);
     --bar-tint: color-mix(in srgb, var(--theme-color) 13%, transparent);
-    --bar-icon: var(--theme-color);
+    --bar-icon: var(--bar-accent);
 }
 
 #display-container.light .list-header {
-    /* background-color: #ffffff; */
-    background-color: rgba(201, 201, 202, 0.25);
+    background-color: #efeff1;
     color: rgb(14, 14, 16);
 }
 
 
-#display-container.light .list-header.pill:hover {
+#display-container.light .list-header:hover {
     background-color: rgba(201, 201, 202, 0.5);
 }
 
