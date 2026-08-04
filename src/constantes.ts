@@ -308,7 +308,7 @@ export function createNewList(): t.I_NEW_LIST {
     items: [],
     behavior: {
       [EXTENDED_ON_STARTUP]: true,
-      [EXTENDEDS_ON_HOVER]: true,
+      [EXTENDEDS_ON_HOVER]: false,
       [EXTENDEDS_ON_CLICK]: true,
       [SHOW_EVEN_IF_NO_LIVE]: false
     },

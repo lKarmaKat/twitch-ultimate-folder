@@ -759,10 +759,10 @@
 	}
 	/* Side mirrored like the nested list margins above */
 	:global(.al-right) .list-header.border {
-		border-left: 3px solid var(--theme-color);
+		border-left: 3px solid var(--theme-color, #9147FF);
 	}
 	:global(.al-left) .list-header.border {
-		border-right: 3px solid var(--theme-color);
+		border-right: 3px solid var(--theme-color, #9147FF);
 	}
 	/* Everything inside the header is sized in em (paddings, icon slot, badge),
 	   so scaling the font shrinks the whole row coherently. */
@@ -777,11 +777,11 @@
 	/* inset shadow instead of a border: it follows the rounded corners */
 	:global(.al-right) .list-header.pill.border {
 		border-left: none;
-		box-shadow: inset 3px 0 0 var(--theme-color);
+		box-shadow: inset 3px 0 0 var(--theme-color, #9147FF);
 	}
 	:global(.al-left) .list-header.pill.border {
 		border-right: none;
-		box-shadow: inset -3px 0 0 var(--theme-color);
+		box-shadow: inset -3px 0 0 var(--theme-color, #9147FF);
 	}
 	.right {
 		width: auto;
