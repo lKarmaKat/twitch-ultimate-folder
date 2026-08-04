@@ -153,6 +153,7 @@
         display: flex !important;
         -webkit-box-align: center !important;
         align-items: center !important;
+        font-family: Roobert, Tajawal, Inter, "Helvetica Neue", Helvetica, Arial, sans-serif;
     }
     .channel-name p {
         text-overflow: ellipsis;
@@ -163,6 +164,7 @@
     }
     .game-name {
         padding-inline-end: 4px !important;
+        font-family: Roobert, Tajawal, Inter, "Helvetica Neue", Helvetica, Arial, sans-serif;
     }
     .game-name p {
         text-overflow: ellipsis;

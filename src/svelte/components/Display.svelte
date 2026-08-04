@@ -738,6 +738,7 @@
 		justify-content: space-between;
 		align-items: center;
 		padding: 0.4em 0 0.4em 0.0em;
+		font-family: Roobert, Tajawal, Inter, "Helvetica Neue", Helvetica, Arial, sans-serif;
 		background-color: var(--header-color); /* not currently used*/
 		/* position: relative; */
 		/* background-color: rgb(119, 56, 119); */

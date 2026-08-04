@@ -1,3 +1,11 @@
+@font-face {
+    font-family: 'Inter';
+    src: url('font/inter-v20-latin-regular.woff2') format('woff2');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
 :root {
     --panel-surface: #1f1f23;
     --panel-border: #2d2d31;

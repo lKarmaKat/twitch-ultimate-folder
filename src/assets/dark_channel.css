@@ -1,3 +1,11 @@
+@font-face {
+    font-family: 'Inter';
+    src: url('font/inter-v20-latin-regular.woff2') format('woff2');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
 /* Badge and icon share the same accent colour, a lightened variant of
    THEME_COLOR (darkened on the light theme) since it's calibrated for a
    3px bar, not for text or small icon glyphs. */
