@@ -232,6 +232,7 @@
   },
   "mainList": {
     "searchPlaceholder": "Rechercher parmi les chaines",
+    "clearSearch": "Effacer la recherche",
     "noChannels": "Aucune chaine à montrer"
   },
   "display": {

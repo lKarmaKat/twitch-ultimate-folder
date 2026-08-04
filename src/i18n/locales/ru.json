@@ -80,6 +80,7 @@
   },
   "mainList": {
     "searchPlaceholder": "Поиск по каналам",
+    "clearSearch": "Очистить поиск",
     "noChannels": "Нет каналов для отображения"
   },
   "display": {

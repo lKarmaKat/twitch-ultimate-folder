@@ -80,6 +80,7 @@
   },
   "mainList": {
     "searchPlaceholder": "Pretraži kanale",
+    "clearSearch": "Očisti pretragu",
     "noChannels": "Nema kanala za prikaz"
   },
   "display": {

@@ -232,6 +232,7 @@
   },
   "mainList": {
     "searchPlaceholder": "Search through channels",
+    "clearSearch": "Clear search",
     "noChannels": "No channels to display"
   },
   "display": {

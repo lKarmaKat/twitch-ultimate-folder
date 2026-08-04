@@ -80,6 +80,7 @@
   },
   "mainList": {
     "searchPlaceholder": "Buscar entre los canales",
+    "clearSearch": "Borrar búsqueda",
     "noChannels": "No hay canales para mostrar"
   },
   "display": {

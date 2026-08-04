@@ -80,6 +80,7 @@
   },
   "mainList": {
     "searchPlaceholder": "Søk blant kanaler",
+    "clearSearch": "Tøm søk",
     "noChannels": "Ingen kanaler å vise"
   },
   "display": {

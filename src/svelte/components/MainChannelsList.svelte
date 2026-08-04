@@ -100,6 +100,27 @@ function show() {
     input[type="text"]:focus {
         outline: none;
     }
+    .search-wrapper {
+        position: relative;
+        display: flex;
+        align-items: center;
+    }
+    .clear-search-btn {
+        position: absolute;
+        right: 0.25em;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: transparent;
+        border: none;
+        padding: 0.2em;
+        cursor: pointer;
+        color: var(--empty-hint-text);
+        opacity: 0.8;
+    }
+    .clear-search-btn:hover {
+        opacity: 1;
+    }
     :global(section#main-channels-list a) {
       /* border: 1px solid red !important; */
         padding: 0.357em 0em 0.357em 0em;
@@ -111,8 +132,16 @@ function show() {
 
 <div class="channels-list-root">
   <div class="list-header">
-    <!-- <input type="text" name="listFilter" id="listFilter" placeholder="Search through channels" bind:value={searchString} oninput={searchChange} /> -->
-    <input type="text" name="listFilter" id="listFilter" placeholder={$_('mainList.searchPlaceholder')} bind:value={searchString} />
+    <div class="search-wrapper">
+      <input type="text" name="listFilter" id="listFilter" placeholder={$_('mainList.searchPlaceholder')} bind:value={searchString} />
+      {#if searchString.length > 0}
+        <button type="button" class="clear-search-btn" aria-label={$_('mainList.clearSearch')} onclick={() => searchString = ''}>
+          <svg viewBox="0 0 16 16" width="12" height="12">
+            <path d="M2 2 L14 14 M14 2 L2 14" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+          </svg>
+        </button>
+      {/if}
+    </div>
   </div>
   <!-- svelte-ignore a11y_click_events_have_key_events -->
   <!-- svelte-ignore a11y_no_static_element_interactions -->

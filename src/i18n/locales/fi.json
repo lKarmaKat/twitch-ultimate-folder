@@ -80,6 +80,7 @@
   },
   "mainList": {
     "searchPlaceholder": "Hae kanavista",
+    "clearSearch": "Tyhjennä haku",
     "noChannels": "Ei näytettäviä kanavia"
   },
   "display": {

@@ -80,6 +80,7 @@
   },
   "mainList": {
     "searchPlaceholder": "Αναζήτηση στα κανάλια",
+    "clearSearch": "Καθαρισμός αναζήτησης",
     "noChannels": "Δεν υπάρχουν κανάλια για εμφάνιση"
   },
   "display": {
