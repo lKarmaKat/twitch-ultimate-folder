@@ -529,6 +529,10 @@ import { api } from '../browserApi.js';
   }
 
   /* ——— Loader ——— */
+  .loader {
+    min-height: 170px; /* diagonal of the 120px spinner, stable across its rotation */
+  }
+
   .loading-wrapper {
     width: 100%;
     max-width: 100%;

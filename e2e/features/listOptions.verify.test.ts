@@ -32,8 +32,7 @@ function confTwoLists(exclusive: boolean, chevron: boolean) {
 	return wrap(c);
 }
 
-// A labelled separator between two channels, and a trailing one with nothing
-// left under it.
+// A labelled separator between two channels, and a trailing one.
 function confWithSeparators() {
 	let c = deepClone(config);
 	c.rootList.items = [
@@ -42,6 +41,14 @@ function confWithSeparators() {
 		{ id: '10545868269037', channel_id: '105458682' },
 		{ id: 'sep2', type: CST.TYPE_SEPARATOR, name: 'Orphelin' }
 	];
+	return wrap(c);
+}
+
+// list "10" rendered as a grid: channels don't show their game name in the
+// row itself there, so the tooltip carries it on a second line instead.
+function confGridChannel() {
+	let c = deepClone(config);
+	c['10'].type.layout = CST.LIST_LAYOUT_GRID;
 	return wrap(c);
 }
 
@@ -166,7 +173,7 @@ test('chevron: drawn only when the option is on, and turns with the list', async
 });
 
 test('tooltip: title on the first line, category on the second', async ({ page }) => {
-	await setup(page, confTwoLists(false, false));
+	await setup(page, confGridChannel());
 	const frame = page.frameLocator('#iframe-rem iframe');
 
 	await nested(page, 0).bodyInner.locator('a').first().hover();
@@ -191,9 +198,10 @@ test('skinModern: channel rows get a hover background only when the option is on
 	expect(await card.evaluate(el => getComputedStyle(el).backgroundColor)).not.toBe(bgBefore);
 });
 
-test('separator: shown with its label, dropped when nothing follows it', async ({ page }) => {
+test('separator: shown with its label, including a trailing one', async ({ page }) => {
 	await setup(page, confWithSeparators());
 	const separators = display(page).locator('.list-separator');
-	await expect(separators).toHaveCount(1);
-	await expect(separators.locator('.separator-label')).toHaveText('En vrac');
+	await expect(separators).toHaveCount(2);
+	await expect(separators.nth(0).locator('.separator-label')).toHaveText('En vrac');
+	await expect(separators.nth(1).locator('.separator-label')).toHaveText('Orphelin');
 });
