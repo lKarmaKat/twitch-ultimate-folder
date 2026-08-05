@@ -38,7 +38,7 @@ import { api } from '../../browserApi.js';
 
   const ISSUES_URL = 'https://github.com/lKarmaKat/twitch-ultimate-folder/issues/new';
   // TODO: replace with the real Ko-fi account.
-  const KOFI_URL = 'https://ko-fi.com/YOUR_KOFI_HANDLE';
+  const KOFI_URL = 'https://ko-fi.com/karmakat__';
 
   // Lightbox: `lightbox` holds the open video's caption, or null. The thumbnail
   // stays frozen on its first frame; only the enlarged copy plays.

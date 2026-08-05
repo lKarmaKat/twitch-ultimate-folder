@@ -6,7 +6,7 @@
   import NoLiveChannels from './NoLiveChannels.svelte';
   import EmptyConfig from './EmptyConfig.svelte';
   import NeedToConnect from './NeedToConnect.svelte';
-  import { alignmentLeft, titleSideLeft, skinModern, portConnected } from '../event.svelte.js';
+  import { alignmentLeft, titleSideLeft, skinModern, flyoutSide, portConnected } from '../event.svelte.js';
   import { hasAnyChannel, hasVisibleContent } from '../listVisibility.js';
   import PortDisconnected from './PortDisconnected.svelte';
   import { applyLocale } from '../../i18n/index.js';
@@ -91,6 +91,12 @@
     skinModern.current = data.data;
   }
   let skinPort = new PortConnector(skinCb, 'skin');
+
+  // Read by openFlyout (event.svelte.js), which picks the panel's side.
+  let flyoutSideCb = (data) => {
+    flyoutSide.current = data.data;
+  }
+  let flyoutSidePort = new PortConnector(flyoutSideCb, 'flyoutSide');
 
   let localeCb = (msg) => {
     applyLocale(msg.data);

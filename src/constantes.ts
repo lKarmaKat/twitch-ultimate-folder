@@ -26,6 +26,9 @@ export const GET_TITLE_SIDE = 'GET_TITLE_SIDE';
 export const SKIN = 'SKIN';
 export const CHANGE_SKIN = 'CHANGE_SKIN';
 export const GET_SKIN = 'GET_SKIN';
+export const FLYOUT_SIDE = 'FLYOUT_SIDE';
+export const CHANGE_FLYOUT_SIDE = 'CHANGE_FLYOUT_SIDE';
+export const GET_FLYOUT_SIDE = 'GET_FLYOUT_SIDE';
 export const LOCALE = 'LOCALE';
 export const CHANGE_LOCALE = 'CHANGE_LOCALE';
 export const GET_LOCALE = 'GET_LOCALE';
@@ -85,6 +88,21 @@ export const PARAM_ALIGNMENT_LEFT = 'alignmentLeft';
 export const PARAM_TITLE_SIDE_LEFT = 'titleSideLeft';
 /** chrome.storage.local key, 1/0: 1 = channel rows highlight on hover. Default off keeps today's look. */
 export const PARAM_SKIN_MODERN = 'skinModern';
+/** chrome.storage.local key, a FLYOUT_SIDE_* id: side the flyout panel opens on. */
+export const PARAM_FLYOUT_SIDE = 'flyoutSide';
+
+// Auto is 0, so an install that never stored the key measures the free room
+// instead of committing to a side that may sit off-screen.
+export const FLYOUT_SIDE_AUTO = 0;
+export const FLYOUT_SIDE_LEFT = 1;
+export const FLYOUT_SIDE_RIGHT = 2;
+export const FLYOUT_SIDE_TYPE = [
+  { id: FLYOUT_SIDE_AUTO, name: 'actionPopup.flyoutSideAuto' },
+  { id: FLYOUT_SIDE_LEFT, name: 'actionPopup.left' },
+  { id: FLYOUT_SIDE_RIGHT, name: 'actionPopup.right' }
+];
+/** Drives both the auto side pick and the panel's own width (FlyoutPopup.svelte). */
+export const FLYOUT_PANEL_WIDTH = 220;
 
 // Medium is 0: every config saved before the option existed already holds
 // `height: 0`, so they stay on the current dimensions without a migration.

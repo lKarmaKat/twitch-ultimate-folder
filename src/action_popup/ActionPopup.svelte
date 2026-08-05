@@ -29,9 +29,11 @@ import { api } from '../browserApi.js';
   // unlike `alignment`, whose label reads the other way round.
   let titleSideLeft = $state(false);
   let skinModern = $state(false);
+  let flyoutSide = $state(CST.FLYOUT_SIDE_AUTO);
+  const flyoutSides = CST.FLYOUT_SIDE_TYPE;
 
   // TODO: replace with the real Ko-fi account (same placeholder as HelpPage).
-  const KOFI_URL = 'https://ko-fi.com/YOUR_KOFI_HANDLE';
+  const KOFI_URL = 'https://ko-fi.com/karmakat__';
 
   // --- Init (the body of the old popup.js) ---
   api.runtime.sendMessage({ type: CST.GET_ALIGNMENT }, (response) => {
@@ -49,6 +51,12 @@ import { api } from '../browserApi.js';
   api.runtime.sendMessage({ type: CST.GET_SKIN }, (response) => {
     if (response?.type === CST.SKIN) {
       skinModern = response.data;
+    }
+  });
+
+  api.runtime.sendMessage({ type: CST.GET_FLYOUT_SIDE }, (response) => {
+    if (response?.type === CST.FLYOUT_SIDE) {
+      flyoutSide = response.data;
     }
   });
 
@@ -86,6 +94,11 @@ import { api } from '../browserApi.js';
   async function onSkinChange() {
     const response = await api.runtime.sendMessage({ type: CST.CHANGE_SKIN, value: skinModern });
     if (response?.type === CST.SKIN) skinModern = response.data;
+  }
+
+  async function onFlyoutSideChange(value) {
+    const response = await api.runtime.sendMessage({ type: CST.CHANGE_FLYOUT_SIDE, value });
+    if (response?.type === CST.FLYOUT_SIDE) flyoutSide = response.data;
   }
 
   function onLocaleChange() {
@@ -182,6 +195,24 @@ import { api } from '../browserApi.js';
               <span class="thumb"></span>
             </span>
           </label>
+
+          <div class="row">
+            <div class="row-info">
+              <div class="row-label">{$_('actionPopup.flyoutSide')}</div>
+              <div class="row-sub">{$_('actionPopup.flyoutSideSub')}</div>
+            </div>
+            <div class="seg" role="radiogroup" aria-label={$_('actionPopup.flyoutSide')} style="--seg-index:{flyoutSide};">
+              <span class="seg-thumb"></span>
+              {#each flyoutSides as side (side.id)}
+                <button
+                  type="button"
+                  role="radio"
+                  aria-checked={flyoutSide === side.id}
+                  class:on={flyoutSide === side.id}
+                  onclick={() => onFlyoutSideChange(side.id)}>{$_(side.name)}</button>
+              {/each}
+            </div>
+          </div>
 
           <label class="row" for="skin">
             <div class="row-info">
@@ -470,6 +501,55 @@ import { api } from '../browserApi.js';
     opacity: 1;
   }
 
+  /* ——— Segmented control (3 states, same track and thumb as the toggle) ——— */
+  .seg {
+    position: relative;
+    display: flex;
+    flex-shrink: 0;
+    width: 138px;
+    height: 30px;
+    padding: 3px;
+    border-radius: 30px;
+    background: #e5e5ea;
+  }
+
+  .seg .seg-thumb {
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: calc((100% - 6px) / 3);
+    height: 24px;
+    border-radius: 30px;
+    background: #ffffff;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.22), 0 0.5px 1px rgba(0, 0, 0, 0.1);
+    transform: translateX(calc(var(--seg-index) * 100%));
+    transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .seg button {
+    position: relative;
+    z-index: 1;
+    flex: 1;
+    min-width: 0;
+    padding: 0 2px;
+    border: none;
+    background: none;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    color: #8e8e93;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    transition: color 0.2s;
+  }
+
+  .seg button.on {
+    color: #1c1c1e;
+  }
+
   .btn {
     display: inline-flex;
     align-items: center;
@@ -625,6 +705,22 @@ import { api } from '../browserApi.js';
 
   .app.dark .sw .track {
     background: #39393d;
+  }
+
+  .app.dark .seg {
+    background: #39393d;
+  }
+
+  .app.dark .seg .seg-thumb {
+    background: #636366;
+  }
+
+  .app.dark .seg button {
+    color: #98989f;
+  }
+
+  .app.dark .seg button.on {
+    color: #f2f2f7;
   }
 
   .app.dark .kofi {

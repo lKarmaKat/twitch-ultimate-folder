@@ -1,3 +1,9 @@
+* {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+}
+
 @font-face {
     font-family: 'Inter';
     src: url('font/inter-v20-latin-regular.woff2') format('woff2');

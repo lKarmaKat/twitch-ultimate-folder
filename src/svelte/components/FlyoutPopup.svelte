@@ -6,10 +6,19 @@
 
 	let { configManager } = $props();
 
+	const VIEWPORT_MARGIN = 8;
+
 	let theme = $state(readTwitchDark());
 	$effect(() => watchTwitchTheme((dark) => { theme = dark; }));
 
 	let open = $derived(!!flyoutState.listId && !!configManager.selectedConfig[flyoutState.listId]);
+
+	let panelHeight = $state(0);
+	// The header rect alone would let a list sitting low in the sidebar open a
+	// panel running past the bottom edge.
+	let top = $derived(Math.max(VIEWPORT_MARGIN,
+		Math.min(flyoutState.top, window.innerHeight - panelHeight - VIEWPORT_MARGIN)));
+	let left = $derived(flyoutState.side === 'left' ? flyoutState.left : flyoutState.right);
 
 	let barColor = $derived.by(() => {
 		const style = configManager.selectedConfig[flyoutState.listId]?.style;
@@ -31,29 +40,30 @@
 		class="flyout-anchor"
 		class:dark={theme} class:light={!theme}
 		class:al-left={alignmentLeft.current} class:al-right={!alignmentLeft.current}
+		class:flip-left={flyoutState.side === 'left'}
 		class:skin-modern={skinModern.current}
-		style="top:{flyoutState.top}px; left:{alignmentLeft.current ? flyoutState.left : flyoutState.right}px;"
+		style="top:{top}px; left:{left}px; --flyout-width:{CST.FLYOUT_PANEL_WIDTH}px;"
 		onmouseenter={keepFlyoutOpen}
 		onmouseleave={() => scheduleCloseFlyout(flyoutState.listId)}>
-		<div class="flyout-panel" style={barColor ? `border-color:${barColor};` : ''}>
+		<div class="flyout-panel" bind:clientHeight={panelHeight} style={barColor ? `border-color:${barColor};` : ''}>
 			<Display listId={flyoutState.listId} configManager={configManager} headless={true} />
 		</div>
 	</div>
 {/if}
 
 <style>
-	/* The al-left offset lives on the anchor itself, not the panel: a
+	/* The flip offset lives on the anchor itself, not the panel: a
 	   transform on a child never moves its untransformed parent's own
 	   hit-test box, which would otherwise still cover the header underneath. */
 	.flyout-anchor {
 		position: fixed;
 		z-index: 2147483000;
 	}
-	.flyout-anchor.al-left {
+	.flyout-anchor.flip-left {
 		transform: translateX(-100%);
 	}
 	.flyout-panel {
-		width: 220px;
+		width: var(--flyout-width);
 		max-height: 70vh;
 		overflow-y: auto;
 		border-radius: 6px;
@@ -72,7 +82,7 @@
 	.flyout-panel::-webkit-scrollbar-thumb:hover {
 		background: var(--scrollbar-color-hover, currentColor);
 	}
-	.flyout-anchor.al-left .flyout-panel {
+	.flyout-anchor.flip-left .flyout-panel {
 		border-right: none;
 		border-left: 3px solid transparent;
 	}

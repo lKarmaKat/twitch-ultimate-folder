@@ -364,4 +364,4 @@ A short screen recording is often worth more than a long description, especially
 This extension is free, has no ads and collects nothing. If it earned a place in your sidebar and you would like to give something back, a coffee is always welcome — and entirely optional. Starring the repository or reporting a bug helps just as much.
 
 <!-- TODO: replace with the real Ko-fi link -->
-[☕ Support me on Ko-fi](https://ko-fi.com/YOUR_KOFI_HANDLE)
+[☕ Support me on Ko-fi](https://ko-fi.com/karmakat__)

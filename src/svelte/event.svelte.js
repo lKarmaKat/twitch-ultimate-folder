@@ -1,3 +1,5 @@
+import * as CST from '../constantes.js';
+
 /**
  * `null` = no port answered since mount, `true` = connected, `false` = lost.
  * Without the third state, every page load would show the reconnect banner.
@@ -17,6 +19,8 @@ export const alignmentLeft = $state({ current: true });
 export const titleSideLeft = $state({ current: false });
 /** true = channel rows highlight on hover. Default false: today's look, unchanged. */
 export const skinModern = $state({ current: false });
+/** A FLYOUT_SIDE_* id: side the flyout panel opens on, auto by default. */
+export const flyoutSide = $state({ current: CST.FLYOUT_SIDE_AUTO });
 
 /**
  * flyoutList bridge: the sidebar (inside its own shadow root) and FlyoutPopup
@@ -24,7 +28,7 @@ export const skinModern = $state({ current: false });
  * hover-open/hover-close handoff between them goes through this module-level
  * state instead of props.
  */
-export const flyoutState = $state({ listId: null, top: 0, left: 0, right: 0 });
+export const flyoutState = $state({ listId: null, top: 0, left: 0, right: 0, side: 'right' });
 let flyoutCloseTimer = null;
 
 export function openFlyout(listId, rect) {
@@ -33,6 +37,17 @@ export function openFlyout(listId, rect) {
 	flyoutState.top = rect.top;
 	flyoutState.left = rect.left;
 	flyoutState.right = rect.right;
+	flyoutState.side = pickFlyoutSide(rect);
+}
+
+// Auto measures the room around the header instead of reading the alignment: a
+// collapsed or narrow sidebar says nothing about the space left beside it.
+function pickFlyoutSide(rect) {
+	if (flyoutSide.current === CST.FLYOUT_SIDE_LEFT) return 'left';
+	if (flyoutSide.current === CST.FLYOUT_SIDE_RIGHT) return 'right';
+	const roomRight = window.innerWidth - rect.right;
+	if (roomRight >= CST.FLYOUT_PANEL_WIDTH) return 'right';
+	return rect.left >= CST.FLYOUT_PANEL_WIDTH || rect.left > roomRight ? 'left' : 'right';
 }
 
 // Grace period: lets the pointer travel from the header to the panel, which

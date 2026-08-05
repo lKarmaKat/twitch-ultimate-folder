@@ -263,6 +263,24 @@ let sendCurrentSkinOnConnect = (port: chrome.runtime.Port) => {
   }).catch(err => logBackgroundError("background:sendCurrentSkinOnConnect", err));
 }
 
+let currentFlyoutSide: number = CST.FLYOUT_SIDE_AUTO;
+const flyoutSideReady = api.storage.local.get(CST.PARAM_FLYOUT_SIDE).then((data) => {
+  const stored = data[CST.PARAM_FLYOUT_SIDE];
+  currentFlyoutSide = isFlyoutSide(stored) ? stored : CST.FLYOUT_SIDE_AUTO;
+}).catch(err => logBackgroundError("background:readFlyoutSide", err));
+let sendCurrentFlyoutSideOnConnect = (port: chrome.runtime.Port) => {
+  flyoutSideReady.then(() => {
+    port.postMessage({
+      "type": CST.FLYOUT_SIDE,
+      "data": currentFlyoutSide
+    });
+  }).catch(err => logBackgroundError("background:sendCurrentFlyoutSideOnConnect", err));
+}
+
+function isFlyoutSide(value: unknown): value is number {
+  return CST.FLYOUT_SIDE_TYPE.some(side => side.id === value);
+}
+
 let currentLocale: string | undefined;
 api.storage.local.get("local").then((data) => {
   currentLocale = data.local as string | undefined;
@@ -370,6 +388,7 @@ let portManager = new PortManager(sendCurrentConfigOnConnect,
                                 handlePortMessage);
 portManager.registerOnConnect('titleSide', sendCurrentTitleSideOnConnect);
 portManager.registerOnConnect('skin', sendCurrentSkinOnConnect);
+portManager.registerOnConnect('flyoutSide', sendCurrentFlyoutSideOnConnect);
 
 // Pas de teardown sur `beforeunload` : ni le service worker MV3 de Chrome ni
 // l'event page de Firefox ne le declenchent. Les ports meurent de toute facon
@@ -538,6 +557,30 @@ api.runtime.onMessage.addListener((msg, sender, sendResponse) => {
         sendResponse({
           type: CST.SKIN,
           data: currentSkinModern
+        });
+      });
+      return true;
+    }
+
+    if (msg.type === CST.CHANGE_FLYOUT_SIDE) {
+      currentFlyoutSide = isFlyoutSide(msg.value) ? msg.value : CST.FLYOUT_SIDE_AUTO;
+      sendResponse({
+        type: CST.FLYOUT_SIDE,
+        data: currentFlyoutSide
+      });
+      api.storage.local.set({
+        [CST.PARAM_FLYOUT_SIDE]: currentFlyoutSide
+      });
+      portManager.sendMessageToAllTabs(CST.FLYOUT_SIDE, currentFlyoutSide, "flyoutSide");
+
+      return true;
+    }
+
+    if (msg.type === CST.GET_FLYOUT_SIDE) {
+      flyoutSideReady.then(() => {
+        sendResponse({
+          type: CST.FLYOUT_SIDE,
+          data: currentFlyoutSide
         });
       });
       return true;
