@@ -332,6 +332,15 @@ This setting controls which side the channel title appears on when you hover a l
   <!-- <figcaption>Changing the side the channel title is displayed on.</figcaption> -->
 <!-- </figure> -->
 
+**Flyout panel side**
+
+Lists using the flyout panel layout show their content in a floating panel next to their header. This setting decides which side that panel opens on. *Auto* measures the room available beside the sidebar and picks the side where the panel fits, so it stays on screen even when the sidebar sits on the right or the window is narrow. Pick a fixed side only if you want the panel to always open there.
+
+<!-- <figure> -->
+ https://github.com/user-attachments/assets/0ddc5818-8131-472b-aacb-546bbb880ee8
+  <!-- <figcaption>Choosing the side the flyout panel opens on.</figcaption> -->
+<!-- </figure> -->
+
 **Language**
 
 Pick your language from the list. Every open surface — the sidebar, the configuration window, this help page — updates straight away, with no page refresh.

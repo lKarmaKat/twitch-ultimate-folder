@@ -490,6 +490,10 @@ import { api } from '../../browserApi.js';
     <p>{$_('help.actionPopup.titleSide')}</p>
     {@render media($_('help.actionPopup.titleSideCaption'))}
 
+    <h3>{$_('actionPopup.flyoutSide')}</h3>
+    <p>{$_('help.actionPopup.flyoutSide')}</p>
+    {@render media($_('help.actionPopup.flyoutSideCaption'))}
+
     <h3>{$_('actionPopup.language')}</h3>
     <p>{$_('help.actionPopup.language')}</p>
     {@render media($_('help.actionPopup.languageCaption'))}
