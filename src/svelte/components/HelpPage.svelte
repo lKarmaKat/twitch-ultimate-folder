@@ -99,6 +99,9 @@ import { api } from '../../browserApi.js';
     'move-item',
     'all-other',
     'saving',
+    'saving-basic',
+    'transfer',
+    'clean-unfollowed',
     'action-popup',
     'issues',
     'support',
@@ -247,7 +250,14 @@ import { api } from '../../browserApi.js';
             <li><a href="#add-channel">{$_('help.createConfig.addChannelTitle')}</a></li>
             <li><a href="#move-item">{$_('help.createConfig.moveTitle')}</a></li>
             <li><a href="#all-other">{$_('help.createConfig.allOtherTitle')}</a></li>
-            <li><a href="#saving">{$_('help.createConfig.savingTitle')}</a></li>
+            <li>
+              <a href="#saving">{$_('help.createConfig.savingGroupTitle')}</a>
+              <ul>
+                <li><a href="#saving-basic">{$_('help.createConfig.savingTitle')}</a></li>
+                <li><a href="#transfer">{$_('help.createConfig.transferTitle')}</a></li>
+                <li><a href="#clean-unfollowed">{$_('help.createConfig.cleanTitle')}</a></li>
+              </ul>
+            </li>
           </ul>
         </li>
         <li><a href="#action-popup">{$_('help.actionPopup.title')}</a></li>
@@ -476,8 +486,19 @@ import { api } from '../../browserApi.js';
     </ul>
     {@render media($_('help.createConfig.allOtherCaption'))}
 
-    <h3 id="saving">{$_('help.createConfig.savingTitle')}</h3>
+    <h3 id="saving">{$_('help.createConfig.savingGroupTitle')}</h3>
+
+    <h4 id="saving-basic">{$_('help.createConfig.savingTitle')}</h4>
     <p class="callout">{$_('help.createConfig.saving')}</p>
+
+    <h4 id="transfer">{$_('help.createConfig.transferTitle')}</h4>
+    <p>{$_('help.createConfig.transferIntro', { values: { export: $_('configPopup.export'), import: $_('configPopup.import') } })}</p>
+    <p class="warning">{$_('help.createConfig.transferWarning', { values: { save: $_('configPopup.save') } })}</p>
+    {@render screenshot($_('help.createConfig.transferShotAlt'), $_('help.createConfig.transferShotCaption'))}
+
+    <h4 id="clean-unfollowed">{$_('help.createConfig.cleanTitle')}</h4>
+    <p>{$_('help.createConfig.clean', { values: { clean: $_('configPopup.cleanConfig'), save: $_('configPopup.save') } })}</p>
+    {@render screenshot($_('help.createConfig.cleanShotAlt'), $_('help.createConfig.cleanShotCaption'))}
 
     <h2 id="action-popup">{$_('help.actionPopup.title')}</h2>
     <p>{$_('help.actionPopup.intro')}</p>

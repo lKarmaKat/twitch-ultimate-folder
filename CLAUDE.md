@@ -58,6 +58,8 @@ Svelte stores → Display components
 | `src/service_worker/configManage.ts` | Chrome storage read/write for user config |
 | `src/service_worker/portManager.ts` | Port-based messaging between background and pages |
 | `src/svelte/configManager.svelte.ts` | Svelte store mirroring background config state |
+| `src/svelte/configTransfer.ts` | Export/import codec (JSON → gzip → base64, versioned envelope) |
+| `src/svelte/components/ConfigTransfer.svelte` | Export/import buttons and modals in the config popup footer |
 | `src/svelte/components/Display.svelte` | Recursive folder tree renderer |
 | `src/svelte/components/ConfigPopup.svelte` | Full config UI |
 | `src/svelte/components/ConfigPannel.svelte` | Per-list options form (right pane of the config UI) |
@@ -105,15 +107,7 @@ Header internals (paddings, icon slot, badge) are sized in `em`, so changing the
 
 ### Adding a list option
 
-Options are stored in already-saved user configs, so backward compatibility drives the design:
-
-1. **Declare the enum in `constantes.ts`** as an `{id, name}` array, `name` being an i18n key. Give the *current* behaviour `id: 0` so configs saved before the option existed keep rendering the same way and need no migration.
-2. **Add the key to `createNewList()`** if it is a list-level option (under `style` or `type`).
-3. **Bind it in `ConfigPannel.svelte`** with `SortSelect` (generic `{id, name}` select), and backfill the missing key in the existing `$effect` — old configs have no key to `bind:` on.
-4. **Read it in `Display.svelte`** through a `$derived`, and drive rendering with a class + CSS rather than inline styles.
-5. **Whitelist it in `cleanRecursively`** (`configManager.svelte.ts`) if it lives on an *item* rather than on the list node: that function rebuilds each item from an explicit field list on every save, so any field not named there is silently dropped. List-level `style` / `type` objects are saved as-is and need nothing.
-6. **Add the i18n keys to all 15 locales** (see below).
-7. **Check `e2e/const.js`** — its fixtures reference option constants by name.
+Options are stored in already-saved user configs, so this workflow is backward-compat sensitive — see `.claude/skills/add-list-option/SKILL.md` for the full step-by-step.
 
 ### i18n
 
@@ -122,6 +116,8 @@ Options are stored in already-saved user configs, so backward compatibility driv
 Files are **CRLF, 2-space indented, with a trailing newline**, and round-trip exactly through `JSON.stringify(obj, null, 2)`. Scripting a bulk key insertion is safe as long as the CRLF and trailing newline are restored on write.
 
 `$_()` cannot be used from a `.ts` file: constants in `constantes.ts` hold i18n *keys* (`label` / `tooltip` / `name`), resolved by the components.
+
+See `.claude/skills/documentation/SKILL.md` for how README.md and HelpPage.svelte stay in sync when a feature gets a user-facing explanation.
 
 ## Tech stack
 

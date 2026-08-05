@@ -306,9 +306,34 @@ It has its own configuration, reached through its settings button rather than by
   <!-- <figcaption>Dragging the « All other channels » element and setting it up.</figcaption> -->
 <!-- </figure> -->
 
-### Saving
+### Saving, transferring and cleaning up your configuration
+
+#### Saving
 
 Do not forget to save your configuration before closing the window: any change that has not been saved is lost.
+
+#### Exporting and importing a configuration
+
+Use **Export** to turn your current configuration — including any change not yet saved — into a text blob you can copy and store somewhere safe, or send to another machine. Use **Import** to load a blob back in: it replaces the configuration you are currently editing, so save your own work first if you want to keep it.
+
+> [!WARNING]
+> Import overwrites the configuration you are editing. It only replaces it in the window — nothing is saved until you click **Save**, so closing the window instead discards the import.
+
+<!-- TODO screenshot: src/assets/screenshots/export-import.png -->
+<figure>
+  <img src="https://placehold.co/600x400" alt="The export and import buttons and their modals" width="600">
+  <figcaption>Exporting a configuration to a text blob, and importing one back in.</figcaption>
+</figure>
+
+#### Removing channels you no longer follow
+
+A configuration can end up referencing a channel you no longer follow — you unfollowed it on Twitch, or you imported a configuration built from someone else's follows. When this happens, a **Clean up** button appears next to Save, showing how many such channels were found. Clicking it removes them from the configuration you are editing; the lists that held them are kept, since you built them by hand. As with everything else here, nothing is saved until you click **Save**.
+
+<!-- TODO screenshot: src/assets/screenshots/clean-unfollowed.png -->
+<figure>
+  <img src="https://placehold.co/600x400" alt="The clean-up button next to Save" width="600">
+  <figcaption>Removing channels that are no longer followed from the configuration.</figcaption>
+</figure>
 
 ## More details about the action popup
 
