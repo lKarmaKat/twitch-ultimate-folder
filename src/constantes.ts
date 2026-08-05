@@ -3,6 +3,8 @@ import type * as t from 'src/service_worker/models/userStructure';
 // export const CLIENT_ID = '0cccietj726skd2jwlf39ymhmyzbi7';
 export const CLIENT_ID = '1baau10iaxptnjjl9o9yt6kb8ibrv9';
 export const POLLING_INTERVAL = 6000;
+/** Ceiling of the failure backoff applied on top of the rate limit ladder. */
+export const MAX_BACKOFF_INTERVAL = 60000;
 export const ALL_OTHER_CHANNELS = -1;
 export const GET_STREAMS_REF = 'GET_STREAMS_REF';
 export const GET_CURRENT_CONFIGURATION = 'GET_CURRENT_CONFIGURATION';

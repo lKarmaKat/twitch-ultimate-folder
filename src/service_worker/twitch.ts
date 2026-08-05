@@ -1,10 +1,30 @@
 import { TokenManager } from "./token";
-import { wrapError } from "./errors";
+import { HttpError, wrapError } from "./errors";
 import type { ChannelsFollowed } from './models/rest/channels-followed';
 import type { ProfilePicInfos } from './models/profilePicInfos.model';
 import type { StreamsFollowed } from './models/rest/streams-followed';
 import type { User } from "./models/user";
 import { CLIENT_ID } from "../constantes";
+
+/**
+ * Retry-After holds seconds, Ratelimit-Reset a unix epoch in seconds. The
+ * former is authoritative when both are present.
+ */
+export function retryAfterMsFromHeaders(headers: Headers, now: number = Date.now()): number | null {
+    const retryAfter = headers.get('Retry-After');
+    if (retryAfter !== null) {
+        const seconds = Number(retryAfter);
+        if (Number.isFinite(seconds) && seconds > 0) return seconds * 1000;
+    }
+
+    const reset = headers.get('Ratelimit-Reset');
+    if (reset !== null) {
+        const delay = Number(reset) * 1000 - now;
+        if (Number.isFinite(delay) && delay > 0) return delay;
+    }
+
+    return null;
+}
 
 export class TwitchApi {
     tokenManager;
@@ -15,6 +35,24 @@ export class TwitchApi {
 
     constructor(tokenManager: TokenManager) {
       this.tokenManager = tokenManager;
+    }
+
+    private authHeaders(token: string): Record<string, string> {
+      return {
+        Authorization: 'Bearer ' + token,
+        'Client-Id': this.CLIENT_ID
+      };
+    }
+
+    private readRateLimit(response: Response): void {
+      const remaining = parseInt(response.headers.get('Ratelimit-Remaining') ?? '', 10);
+      if (!Number.isNaN(remaining)) this.rateLimitRemaining = remaining;
+    }
+
+    /** Without this a 429 body parses as JSON, and `data` being undefined throws far from the cause. */
+    private assertOk(response: Response, url: string): void {
+      if (response.ok) return;
+      throw new HttpError(response.status, retryAfterMsFromHeaders(response.headers), url);
     }
 
     /*
@@ -83,13 +121,7 @@ export class TwitchApi {
     async getUsersProfilPic(ids: number[]): Promise<ProfilePicInfos[]> {
         try {
           const token = await this.tokenManager.getToken();
-          const options = {
-            method: 'GET',
-            headers: {
-              Authorization: 'Bearer ' + token,
-              'Client-Id': this.CLIENT_ID
-            }
-          };
+          const options = { method: 'GET', headers: this.authHeaders(token) };
 
           const results: ProfilePicInfos[] = [];
           const promiseList = [];
@@ -102,8 +134,13 @@ export class TwitchApi {
               queryParams.append('id', String(subIds[j]));
             }
 
-            const request = fetch(`https://api.twitch.tv/helix/users?${queryParams}`, options)
-              .then((response) => response.json())
+            const url = `https://api.twitch.tv/helix/users?${queryParams}`;
+            const request = fetch(url, options)
+              .then((response) => {
+                this.readRateLimit(response);
+                this.assertOk(response, url);
+                return response.json();
+              })
               .then(resp => {
                 results.push(...resp.data);
               });
@@ -125,15 +162,12 @@ export class TwitchApi {
     async searchCategories(query: string): Promise<{ id: string, name: string, box_art_url: string }[]> {
         try {
             const token = await this.tokenManager.getToken();
-            const options = {
-                method: 'GET',
-                headers: {
-                    Authorization: 'Bearer ' + token,
-                    'Client-Id': this.CLIENT_ID
-                }
-            };
+            const options = { method: 'GET', headers: this.authHeaders(token) };
             const params = new URLSearchParams({ query, first: '10' });
-            const response = await fetch(`https://api.twitch.tv/helix/search/categories?${params}`, options);
+            const url = `https://api.twitch.tv/helix/search/categories?${params}`;
+            const response = await fetch(url, options);
+            this.readRateLimit(response);
+            this.assertOk(response, url);
             const body = await response.json();
             return body.data ?? [];
         } catch (error) {
@@ -144,14 +178,11 @@ export class TwitchApi {
     getUserInfo(): Promise<User> {
       return new Promise((resolve, reject) => {
         this.tokenManager.getToken().then(token => {
-          let options = {
-            method: 'GET',
-            headers: { 
-              Authorization: 'Bearer ' + token,
-              'Client-Id': this.CLIENT_ID
-            }
-          };
-          fetch('https://api.twitch.tv/helix/users?', options).then((response) => {
+          let options = { method: 'GET', headers: this.authHeaders(token) };
+          const url = 'https://api.twitch.tv/helix/users?';
+          fetch(url, options).then((response) => {
+            this.readRateLimit(response);
+            this.assertOk(response, url);
             return response.json();
           }).then(resp => {
             resolve({
@@ -166,14 +197,8 @@ export class TwitchApi {
           
           
     fetchRecursively(token: string, url: string, accumulatedChannels: any[] = [], currentCursor = null): Promise<any> {
-      let options = {
-        method: 'GET',
-        headers: { 
-          Authorization: 'Bearer ' + token,
-          'Client-Id': this.CLIENT_ID
-        }
-      };
-    
+      let options = { method: 'GET', headers: this.authHeaders(token) };
+
       let queryParams = new URLSearchParams({
           user_id: String(this.tokenManager.userId!),
           first: String(100)
@@ -184,8 +209,8 @@ export class TwitchApi {
       }
     
       return fetch(`${url}?${queryParams}`, options).then((response) => {
-          const remaining = response.headers.get('Ratelimit-Remaining');
-          if (remaining !== null) this.rateLimitRemaining = parseInt(remaining, 10);
+          this.readRateLimit(response);
+          this.assertOk(response, url);
           return response.json();
         }).then((response) => {
           let allChannels = [...accumulatedChannels, ...response.data];

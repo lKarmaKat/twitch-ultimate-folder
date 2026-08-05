@@ -45,8 +45,8 @@ import { api } from '../../browserApi.js';
   let lightbox = $state(null);
   let lightboxVideo = $state(null);
 
-  function openLightbox(caption, src) {
-    lightbox = { caption, src };
+  function openLightbox(caption, src, kind = 'video') {
+    lightbox = { caption, src, kind };
   }
 
   function closeLightbox() {
@@ -74,6 +74,7 @@ import { api } from '../../browserApi.js';
     'outside',
     'offline',
     'connect',
+    'revoke',
     'create-config',
     'open-window',
     'find-icon',
@@ -86,8 +87,14 @@ import { api } from '../../browserApi.js';
     'remove-item',
     'rename-list',
     'list-behaviour',
-    'header-icons',
-    'header-badges',
+    'list-style',
+    'style-layout',
+    'style-colors',
+    'style-header-options',
+    'style-header-size',
+    'style-icon',
+    'style-badge',
+    'list-content',
     'add-channel',
     'move-item',
     'all-other',
@@ -168,6 +175,18 @@ import { api } from '../../browserApi.js';
   </figure>
 {/snippet}
 
+<!-- Small, clickable variant of `screenshot`: opens the same lightbox as a
+     video would, minus the replay bar, which makes no sense on a still image. -->
+{#snippet layoutShot(alt, caption)}
+  <figure class="help-media layout-shot">
+    <button class="shot" type="button" onclick={() => openLightbox(caption, null, 'image')}>
+      <div class="shot-todo" role="img" aria-label={alt}>{alt}</div>
+      <span class="shot-hint">{$_('help.media.hint')} ⤢</span>
+    </button>
+    <figcaption>{caption}</figcaption>
+  </figure>
+{/snippet}
+
 <div class="help-layout" class:dark={darkTheme}>
   <aside class="sidebar">
     <div class="lang-wrap">
@@ -186,7 +205,12 @@ import { api } from '../../browserApi.js';
             <li><a href="#offline">{$_('help.purpose.offlineTitle')}</a></li>
           </ul>
         </li>
-        <li><a href="#connect">{$_('help.connect.title')}</a></li>
+        <li>
+          <a href="#connect">{$_('help.connect.title')}</a>
+          <ul>
+            <li><a href="#revoke">{$_('help.connect.revokeTitle')}</a></li>
+          </ul>
+        </li>
         <li>
           <a href="#create-config">{$_('help.createConfig.title')}</a>
           <ul>
@@ -206,8 +230,18 @@ import { api } from '../../browserApi.js';
                 <li><a href="#remove-item">{$_('help.createConfig.removeTitle')}</a></li>
                 <li><a href="#rename-list">{$_('help.createConfig.renameTitle')}</a></li>
                 <li><a href="#list-behaviour">{$_('help.createConfig.behaviourTitle')}</a></li>
-                <li><a href="#header-icons">{$_('help.createConfig.iconsTitle')}</a></li>
-                <li><a href="#header-badges">{$_('help.createConfig.badgesTitle')}</a></li>
+                <li>
+                  <a href="#list-style">{$_('help.createConfig.styleTitle')}</a>
+                  <ul>
+                    <li><a href="#style-layout">{$_('help.createConfig.layoutTitle')}</a></li>
+                    <li><a href="#style-colors">{$_('help.createConfig.colorsTitle')}</a></li>
+                    <li><a href="#style-header-options">{$_('help.createConfig.headerOptionsTitle')}</a></li>
+                    <li><a href="#style-header-size">{$_('help.createConfig.headerSizeTitle')}</a></li>
+                    <li><a href="#style-icon">{$_('help.createConfig.iconsTitle')}</a></li>
+                    <li><a href="#style-badge">{$_('help.createConfig.badgesTitle')}</a></li>
+                  </ul>
+                </li>
+                <li><a href="#list-content">{$_('help.createConfig.contentTitle')}</a></li>
               </ul>
             </li>
             <li><a href="#add-channel">{$_('help.createConfig.addChannelTitle')}</a></li>
@@ -253,6 +287,15 @@ import { api } from '../../browserApi.js';
     </ol>
     {@render media($_('help.connect.caption'))}
     <p>{$_('help.connect.outro')}</p>
+
+    <h3 id="revoke">{$_('help.connect.revokeTitle')}</h3>
+    <p>{$_('help.connect.revokeIntro')}</p>
+    <ol class="defs">
+      <li>{$_('help.connect.revokeStep1')}</li>
+      <li>{$_('help.connect.revokeStep2')}</li>
+      <li>{$_('help.connect.revokeStep3')}</li>
+    </ol>
+    <p>{$_('help.connect.revokeOutro')}</p>
 
     <h2 id="create-config">{$_('help.createConfig.title')}</h2>
 
@@ -312,6 +355,7 @@ import { api } from '../../browserApi.js';
           <li><b>{$_('behaviour.extendsOnHover.label')}</b> — {$_('help.createConfig.behaviourHover')}</li>
           <li><b>{$_('behaviour.extendsOnClick.label')}</b> — {$_('help.createConfig.behaviourClick')}</li>
           <li><b>{$_('behaviour.showEvenIfOffline.label')}</b> — {$_('help.createConfig.behaviourAlways')}</li>
+          <li><b>{$_('typeOptions.exclusive.label')}</b> — {$_('help.createConfig.behaviourExclusive')}</li>
         </ul>
 
         <h5>{$_('help.createConfig.sortModeTitle')}</h5>
@@ -327,19 +371,64 @@ import { api } from '../../browserApi.js';
       </div>
     </details>
 
-    <details id="header-icons">
-      <summary>{$_('help.createConfig.iconsTitle')}</summary>
+    <details id="list-style">
+      <summary>{$_('help.createConfig.styleTitle')}</summary>
       <div class="details-body">
+        <p>{$_('help.createConfig.styleIntro', { values: { style: $_('configPannel.style') } })}</p>
+
+        <h4 id="style-layout">{$_('help.createConfig.layoutTitle')}</h4>
+        <p>{$_('help.createConfig.layoutIntro', { values: { layout: $_('configPannel.listLayout') } })}</p>
+        <ul class="defs">
+          <li>
+            <b>{$_('listLayout.stack')}</b> — {$_('help.createConfig.layoutStack')}
+            {@render layoutShot($_('listLayout.stack'), $_('help.createConfig.layoutStackCaption'))}
+          </li>
+          <li>
+            <b>{$_('listLayout.split')}</b> — {$_('help.createConfig.layoutSplit')}
+            {@render layoutShot($_('listLayout.split'), $_('help.createConfig.layoutSplitCaption'))}
+          </li>
+          <li>
+            <b>{$_('listLayout.flyout')}</b> — {$_('help.createConfig.layoutFlyout')}
+            {@render layoutShot($_('listLayout.flyout'), $_('help.createConfig.layoutFlyoutCaption'))}
+          </li>
+          <li>
+            <b>{$_('listLayout.tabs')}</b> — {$_('help.createConfig.layoutTabs')}
+            {@render layoutShot($_('listLayout.tabs'), $_('help.createConfig.layoutTabsCaption'))}
+          </li>
+          <li>
+            <b>{$_('listLayout.grid')}</b> — {$_('help.createConfig.layoutGrid', { values: { columns: $_('configPannel.listColumns') } })}
+            {@render layoutShot($_('listLayout.grid'), $_('help.createConfig.layoutGridCaption'))}
+          </li>
+          <li>
+            <b>{$_('listLayout.dock')}</b> — {$_('help.createConfig.layoutDock')}
+            {@render layoutShot($_('listLayout.dock'), $_('help.createConfig.layoutDockCaption'))}
+          </li>
+        </ul>
+
+        <h4 id="style-colors">{$_('help.createConfig.colorsTitle')}</h4>
+        <p>{$_('help.createConfig.colorsIntro')}</p>
+        <p>{$_('help.createConfig.colorsDefault', { values: { none: $_('common.none') } })}</p>
+        {@render screenshot($_('help.createConfig.colorsShotAlt'), $_('help.createConfig.colorsShotCaption'))}
+
+        <h4 id="style-header-options">{$_('help.createConfig.headerOptionsTitle')}</h4>
+        <ul class="defs">
+          <li><b>{$_('styleOptions.pillHeader.label')}</b> — {$_('help.createConfig.headerOptionsRounded', { values: { bar: $_('styleOptions.hasBar.label') } })}</li>
+          <li><b>{$_('styleOptions.indentRail.label')}</b> — {$_('help.createConfig.headerOptionsRail')}</li>
+          <li><b>{$_('styleOptions.hasBar.label')}</b> — {$_('help.createConfig.headerOptionsBar')}</li>
+        </ul>
+
+        <h4 id="style-header-size">{$_('help.createConfig.headerSizeTitle')}</h4>
+        <ul class="defs">
+          <li><b>{$_('headerHeight.medium')}</b> — {$_('help.createConfig.headerSizeDefault')}</li>
+          <li><b>{$_('headerHeight.small')}</b> — {$_('help.createConfig.headerSizeSmallDesc')}</li>
+        </ul>
+
+        <h4 id="style-icon">{$_('help.createConfig.iconsTitle')}</h4>
         <p>{$_('help.createConfig.icons1')}</p>
         <p>{$_('help.createConfig.icons2')}</p>
-        <p>{$_('help.createConfig.icons3')}</p>
         {@render screenshot($_('help.createConfig.iconsShotAlt'), $_('help.createConfig.iconsShotCaption'))}
-      </div>
-    </details>
 
-    <details id="header-badges">
-      <summary>{$_('help.createConfig.badgesTitle')}</summary>
-      <div class="details-body">
+        <h4 id="style-badge">{$_('help.createConfig.badgesTitle')}</h4>
         <p>{$_('help.createConfig.badgesIntro')}</p>
         <p>{$_('help.createConfig.badgesCount')}</p>
         <ul class="defs">
@@ -351,6 +440,22 @@ import { api } from '../../browserApi.js';
         </ul>
         <p>{$_('help.createConfig.badgesOutro')}</p>
         {@render screenshot($_('help.createConfig.badgesShotAlt'), $_('help.createConfig.badgesShotCaption'))}
+      </div>
+    </details>
+
+    <details id="list-content">
+      <summary>{$_('help.createConfig.contentTitle')}</summary>
+      <div class="details-body">
+        <p>{$_('help.createConfig.contentIntro', { values: { source: $_('configPannel.sourceContent') } })}</p>
+        <p class="warning">{$_('help.createConfig.contentWarning', { values: { manual: $_('sourceKind.manual') } })}</p>
+        <p>{$_('help.createConfig.contentRulesIntro')}</p>
+        <ul class="defs">
+          <li><b>{$_('sourceKind.game')}</b> — {$_('help.createConfig.contentGame')}</li>
+          <li><b>{$_('sourceKind.language')}</b> — {$_('help.createConfig.contentLanguage')}</li>
+          <li><b>{$_('sourceKind.fresh')}</b> — {$_('help.createConfig.contentFresh')}</li>
+        </ul>
+        <p>{$_('help.createConfig.contentExclusiveNote')}</p>
+        {@render screenshot($_('help.createConfig.contentShotAlt'), $_('help.createConfig.contentShotCaption'))}
       </div>
     </details>
 
@@ -424,9 +529,15 @@ import { api } from '../../browserApi.js';
     <button class="lb-backdrop" type="button" aria-label={$_('help.media.close')} onclick={closeLightbox}></button>
     <div class="lb-panel" role="dialog" aria-modal="true" aria-label={lightbox.caption}>
       <button class="lb-close" type="button" aria-label={$_('help.media.close')} onclick={closeLightbox}>✕</button>
-      <video bind:this={lightboxVideo} src={lightbox.src} autoplay muted playsinline controls></video>
+      {#if lightbox.kind === 'image'}
+        <div class="lb-image-todo" role="img" aria-label={lightbox.caption}>{lightbox.caption}</div>
+      {:else}
+        <video bind:this={lightboxVideo} src={lightbox.src} autoplay muted playsinline controls></video>
+      {/if}
       <div class="lb-bar">
-        <button class="lb-replay" type="button" onclick={replay}>↺ {$_('help.media.replay')}</button>
+        {#if lightbox.kind !== 'image'}
+          <button class="lb-replay" type="button" onclick={replay}>↺ {$_('help.media.replay')}</button>
+        {/if}
         <p class="lb-caption">{lightbox.caption}</p>
       </div>
     </div>
@@ -461,7 +572,8 @@ import { api } from '../../browserApi.js';
   .help-layout.dark {
     --help-bg: #18181b;
     --help-fg: rgb(239, 239, 241);
-    --help-muted: rgb(173, 173, 184);
+    --help-muted: rgb(191, 148, 255);
+    /* --help-muted: rgb(173, 173, 184); */
     --help-accent: rgb(191, 148, 255);
     --help-sidebar-bg: #0e0e10;
     --help-border: #35353b;
@@ -686,6 +798,10 @@ import { api } from '../../browserApi.js';
     font-size: 0.85em;
     text-align: center;
   }
+  /* Small inline variant used next to a layout's description. */
+  .layout-shot {
+    max-width: 220px;
+  }
 
   /* ---- Lightbox ---- */
   .lb {
@@ -718,6 +834,20 @@ import { api } from '../../browserApi.js';
     max-height: 100%;
     border-radius: 0.5em;
     background-color: #000;
+    pointer-events: auto;
+  }
+  .lb-image-todo {
+    place-self: center;
+    display: grid;
+    place-items: center;
+    width: min(72rem, 100%);
+    aspect-ratio: 16 / 10;
+    padding: 2em;
+    border: 1px dashed rgba(255, 255, 255, 0.35);
+    border-radius: 0.5em;
+    background-color: rgba(255, 255, 255, 0.06);
+    color: rgba(255, 255, 255, 0.78);
+    text-align: center;
     pointer-events: auto;
   }
   .lb-bar {
