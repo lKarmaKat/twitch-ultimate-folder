@@ -507,10 +507,6 @@ import { api } from '../../browserApi.js';
     <p>{$_('help.actionPopup.alignment')}</p>
     {@render media($_('help.actionPopup.alignmentCaption'))}
 
-    <h3>{$_('actionPopup.titleSide')}</h3>
-    <p>{$_('help.actionPopup.titleSide')}</p>
-    {@render media($_('help.actionPopup.titleSideCaption'))}
-
     <h3>{$_('actionPopup.flyoutSide')}</h3>
     <p>{$_('help.actionPopup.flyoutSide')}</p>
     {@render media($_('help.actionPopup.flyoutSideCaption'))}

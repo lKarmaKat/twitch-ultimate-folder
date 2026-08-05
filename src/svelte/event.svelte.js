@@ -15,8 +15,6 @@ export const parentFinalizeEvent = $state({ current: false });
 export const configChangeEvent = $state({ current: null });
 export const allOthersChannelSelectedEvent = $state({ current: null });
 export const alignmentLeft = $state({ current: true });
-/** true = channel title pops up on the left of the row. Default: on the right. */
-export const titleSideLeft = $state({ current: false });
 /** true = channel rows highlight on hover. Default false: today's look, unchanged. */
 export const skinModern = $state({ current: false });
 /** A FLYOUT_SIDE_* id: side the flyout panel opens on, auto by default. */

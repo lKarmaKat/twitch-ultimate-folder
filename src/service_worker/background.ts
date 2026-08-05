@@ -234,22 +234,6 @@ let sendCurrentAlignmentOnConnect = (port: chrome.runtime.Port) => {
   });
 }
 
-// Side the channel title pops up on, independent of the list alignment above.
-let currentTitleSideLeft = false;
-const titleSideReady = api.storage.local.get(CST.PARAM_TITLE_SIDE_LEFT).then((data) => {
-  currentTitleSideLeft = data[CST.PARAM_TITLE_SIDE_LEFT] === 1;
-}).catch(err => logBackgroundError("background:readTitleSide", err));
-let sendCurrentTitleSideOnConnect = (port: chrome.runtime.Port) => {
-  // The storage read is async: a port connecting while the worker wakes up
-  // would otherwise be told the default instead of the stored value.
-  titleSideReady.then(() => {
-    port.postMessage({
-      "type": CST.TITLE_SIDE,
-      "data": currentTitleSideLeft
-    });
-  }).catch(err => logBackgroundError("background:sendCurrentTitleSideOnConnect", err));
-}
-
 let currentSkinModern = false;
 const skinReady = api.storage.local.get(CST.PARAM_SKIN_MODERN).then((data) => {
   currentSkinModern = data[CST.PARAM_SKIN_MODERN] === 1;
@@ -386,7 +370,6 @@ let portManager = new PortManager(sendCurrentConfigOnConnect,
                                 sendCurrentAuth,
                                 sendCurrentLocaleOnConnect,
                                 handlePortMessage);
-portManager.registerOnConnect('titleSide', sendCurrentTitleSideOnConnect);
 portManager.registerOnConnect('skin', sendCurrentSkinOnConnect);
 portManager.registerOnConnect('flyoutSide', sendCurrentFlyoutSideOnConnect);
 
@@ -509,32 +492,6 @@ api.runtime.onMessage.addListener((msg, sender, sendResponse) => {
         type: CST.ALIGNMENT, // SENDING THE TYPE BACK IS POINTLESS HERE
         data: currentAlignmentLeft
       })
-      return true;
-    }
-
-    if (msg.type === CST.CHANGE_TITLE_SIDE) {
-      // Explicit value rather than a blind toggle: two popups, or a restarted
-      // worker, would otherwise drift out of sync.
-      currentTitleSideLeft = msg.value === true;
-      sendResponse({
-        type: CST.TITLE_SIDE,
-        data: currentTitleSideLeft
-      });
-      api.storage.local.set({
-        [CST.PARAM_TITLE_SIDE_LEFT]: currentTitleSideLeft ? 1 : 0
-      });
-      portManager.sendMessageToAllTabs(CST.TITLE_SIDE, currentTitleSideLeft, "titleSide");
-
-      return true;
-    }
-
-    if (msg.type === CST.GET_TITLE_SIDE) {
-      titleSideReady.then(() => {
-        sendResponse({
-          type: CST.TITLE_SIDE,
-          data: currentTitleSideLeft
-        });
-      });
       return true;
     }
 

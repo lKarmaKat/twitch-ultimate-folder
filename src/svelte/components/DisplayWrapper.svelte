@@ -6,7 +6,7 @@
   import NoLiveChannels from './NoLiveChannels.svelte';
   import EmptyConfig from './EmptyConfig.svelte';
   import NeedToConnect from './NeedToConnect.svelte';
-  import { alignmentLeft, titleSideLeft, skinModern, flyoutSide, portConnected } from '../event.svelte.js';
+  import { alignmentLeft, skinModern, flyoutSide, portConnected } from '../event.svelte.js';
   import { hasAnyChannel, hasVisibleContent } from '../listVisibility.js';
   import PortDisconnected from './PortDisconnected.svelte';
   import { applyLocale } from '../../i18n/index.js';
@@ -80,12 +80,6 @@
     alignmentLeft.current = data.data;
   }
   let alignmentPort = new PortConnector(alignmentCb, 'alignment');
-
-  // Read by tooltip.svelte.js, which positions the hover title.
-  let titleSideCb = (data) => {
-    titleSideLeft.current = data.data;
-  }
-  let titleSidePort = new PortConnector(titleSideCb, 'titleSide');
 
   let skinCb = (data) => {
     skinModern.current = data.data;

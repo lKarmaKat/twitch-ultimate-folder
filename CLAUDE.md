@@ -33,7 +33,7 @@ npm run e2e:firefox      # Firefox only
 1. **Background service worker** (`src/service_worker/`) — runs persistently, owns all Twitch API calls and Chrome storage
 2. **Content script** (`src/content_script/index.js`) — injected into `https://www.twitch.tv/*`, creates shadow DOM containers and iframes
 3. **Svelte UI** (`src/svelte/`) — mounted into those shadow DOM containers by inject scripts
-4. **Action popup** (`src/action_popup/`) — extension toolbar popup for quick toggles (channel alignment, title side)
+4. **Action popup** (`src/action_popup/`) — extension toolbar popup for quick toggles (channel alignment, flyout side)
 
 ### Data flow
 
@@ -92,7 +92,7 @@ Config is stored in Chrome local storage keyed by `userId`. The root type is `Us
 ### Message types (defined in `src/constantes.ts`)
 
 Config: `GET_STREAMS_REF`, `GET_CURRENT_CONFIGURATION`, `SAVE_CHANNELS_LIST`, `RESET_CONFIG`, `RESOLVE_UNFOLLOWED`.
-UI/params: `DISPLAY_POPUP`, `HIDE_POPUP`, `OPEN_HELP_PAGE`, `ALIGNMENT`, `TITLE_SIDE`, `LOCALE` (each with its `CHANGE_`/`GET_` variants).
+UI/params: `DISPLAY_POPUP`, `HIDE_POPUP`, `OPEN_HELP_PAGE`, `ALIGNMENT`, `LOCALE` (each with its `CHANGE_`/`GET_` variants).
 Auth/session: `START_AUTH`, `AUTH_STATE`, `AUTH_DEVICE_CODE`, `SESSION_USER_CHANGED`, `GET_SESSION_USER`, `IS_USER_LOGGED_IN`, `PORT_READY`.
 
 ### UI injection pattern

@@ -348,15 +348,6 @@ This setting aligns the extension's lists with the side your Twitch sidebar sits
   <!-- <figcaption>Switching the side the lists are aligned to.</figcaption> -->
 <!-- </figure> -->
 
-**Title side**
-
-This setting controls which side the channel title appears on when you hover a live channel in the sidebar. Switch it to the other side if the title ends up under another panel — typically when BTTV has moved the chat layout around.
-
-<!-- <figure> -->
- https://github.com/user-attachments/assets/0ddc5818-8131-472b-aacb-546bbb880ee8
-  <!-- <figcaption>Changing the side the channel title is displayed on.</figcaption> -->
-<!-- </figure> -->
-
 **Flyout panel side**
 
 Lists using the flyout panel layout show their content in a floating panel next to their header. This setting decides which side that panel opens on. *Auto* measures the room available beside the sidebar and picks the side where the panel fits, so it stays on screen even when the sidebar sits on the right or the window is narrow. Pick a fixed side only if you want the panel to always open there.

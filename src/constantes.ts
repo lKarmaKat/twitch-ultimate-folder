@@ -20,9 +20,6 @@ export const HIDE_POPUP = 'HIDE_POPUP';
 export const ALIGNMENT = 'ALIGNMENT';
 export const CHANGE_ALIGNMENT = 'CHANGE_ALIGNMENT';
 export const GET_ALIGNMENT = 'GET_ALIGNMENT';
-export const TITLE_SIDE = 'TITLE_SIDE';
-export const CHANGE_TITLE_SIDE = 'CHANGE_TITLE_SIDE';
-export const GET_TITLE_SIDE = 'GET_TITLE_SIDE';
 export const SKIN = 'SKIN';
 export const CHANGE_SKIN = 'CHANGE_SKIN';
 export const GET_SKIN = 'GET_SKIN';
@@ -84,8 +81,6 @@ export const ALL_OTHER_HEADER_TYPE = [
 ];
 
 export const PARAM_ALIGNMENT_LEFT = 'alignmentLeft';
-/** chrome.storage.local key, 1/0: 1 = channel title shown on the left. */
-export const PARAM_TITLE_SIDE_LEFT = 'titleSideLeft';
 /** chrome.storage.local key, 1/0: 1 = channel rows highlight on hover. Default off keeps today's look. */
 export const PARAM_SKIN_MODERN = 'skinModern';
 /** chrome.storage.local key, a FLYOUT_SIDE_* id: side the flyout panel opens on. */
