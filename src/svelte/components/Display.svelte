@@ -435,7 +435,7 @@
 		{#if listId !== 'rootList' && !effectiveHeadless}
 		<!-- svelte-ignore a11y_click_events_have_key_events -->
 		<!-- svelte-ignore a11y_no_static_element_interactions -->
-		<div class="list-header" style="--header-color:{header?.headerColor};" class:border={hasBar} class:pill={pillHeader} class:small={smallHeader} class:clickable={clickEnabled && layout !== CST.LIST_LAYOUT_TABS && layout !== CST.LIST_LAYOUT_FLYOUT} onclick={(layout === CST.LIST_LAYOUT_TABS || layout === CST.LIST_LAYOUT_FLYOUT) ? null : toggleAutoCollapse} onmouseenter={onFlyoutEnter} onmouseleave={onFlyoutLeave}>
+		<div class="list-header" class:border={hasBar} class:pill={pillHeader} class:small={smallHeader} class:clickable={clickEnabled && layout !== CST.LIST_LAYOUT_TABS && layout !== CST.LIST_LAYOUT_FLYOUT} onclick={(layout === CST.LIST_LAYOUT_TABS || layout === CST.LIST_LAYOUT_FLYOUT) ? null : toggleAutoCollapse} onmouseenter={onFlyoutEnter} onmouseleave={onFlyoutLeave}>
 			{#if layout === CST.LIST_LAYOUT_TABS}
 				<div class="tab-row">
 					{#each childListIds as childId (childId)}
@@ -739,7 +739,6 @@
 		align-items: center;
 		padding: 0.4em 0 0.4em 0.0em;
 		font-family: Roobert, Tajawal, Inter, "Helvetica Neue", Helvetica, Arial, sans-serif;
-		background-color: var(--header-color); /* not currently used*/
 		/* position: relative; */
 		/* background-color: rgb(119, 56, 119); */
 		/* width: 100%; */
@@ -806,7 +805,6 @@
 		transition: grid-template-rows .5s ease;
 		margin: 0;
 		padding: 0;
-		background-color: var(--content-color);
 	}
 	.list-body div {
 		overflow: hidden;

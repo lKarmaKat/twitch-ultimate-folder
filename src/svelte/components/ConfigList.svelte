@@ -178,7 +178,6 @@
 	<!-- svelte-ignore a11y_no_static_element_interactions -->
 	 {#if listId !== 'rootList'}
 	<div class="list-header" onclick={selectConfig}>
-		<!-- <div class="header" style="background-color: {headerColor};"> -->
 		<p class="list-title"><span class="layout-icon-slot"><LayoutIcon /></span><strong>{configManager.selectedConfig[listId]?.name}</strong></p>
 		<div class="list-side-menu">
 			<button id="add-list-{listId}" class="add-list" onclick={() => addNode()} title={$_('configList.addList', { values: { listId } })}>+</button>
@@ -196,7 +195,6 @@
 		dropTargetStyle: {outline: 'var(--dnd-outline, rgb(191, 148, 255)) solid 2px'}}}
 		onconsider={handleDndConsider} 
 		onfinalize ={handleDndFinalize}>
-		<!-- style="background-color: {contentColor};">		 -->
 			{#each configManager.selectedConfig[listId].items as item(item.id)}
 			{#if item.type === CST.TYPE_LIST}
 			<div class="nested-list" id={listId + "nested"}>
@@ -258,8 +256,6 @@
 							unfollowed={!i}
 							greyIfOffline={!!i}
 							showOffline={!!i}/>
-							<!-- <div>chaine</div> -->
-							<!-- color={contentColor}/> -->
 					</div>
 			{/if}
 			{/each}

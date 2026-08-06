@@ -332,22 +332,13 @@ export function createNewList(): t.I_NEW_LIST {
     style: {
       theme: 0, // 0 = none, id into THEME_COLOR
       header: {
-        headerColor: "#808080",
-        borderColor: "#808080",
-        borderWidth: null,
-        borderRadius: null,
         [STYLE_PILL_HEADER]: false,
         [STYLE_HAS_BAR]: false
       },
       content: {
         contentColor: "#808080",
-        contentWidth: null,
-        contentRadius: null,
-        borderColor: "#808080",
-        borderWidth: null,
-        borderRadius: null,
         [STYLE_INDENT_RAIL]: false
-      } 
+      }
     },
     type: {
       height: 0,
