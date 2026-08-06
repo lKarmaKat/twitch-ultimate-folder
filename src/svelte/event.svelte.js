@@ -43,9 +43,9 @@ export function openFlyout(listId, rect) {
 function pickFlyoutSide(rect) {
 	if (flyoutSide.current === CST.FLYOUT_SIDE_LEFT) return 'left';
 	if (flyoutSide.current === CST.FLYOUT_SIDE_RIGHT) return 'right';
-	const roomRight = window.innerWidth - rect.right;
-	if (roomRight >= CST.FLYOUT_PANEL_WIDTH) return 'right';
-	return rect.left >= CST.FLYOUT_PANEL_WIDTH || rect.left > roomRight ? 'left' : 'right';
+	const roomRight = rect.left < window.innerWidth/2;
+	if (roomRight) return 'right';
+	return 'left';
 }
 
 // Grace period: lets the pointer travel from the header to the panel, which

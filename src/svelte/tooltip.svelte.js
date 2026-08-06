@@ -69,9 +69,9 @@ export function tooltip(node, params) {
 	}
 
 	function handleBlur() {
-        let c = tt.querySelector('.content');
-		let shown = c.querySelector('#tooltip');
-		if (shown) c.removeChild(shown);
+		if (child && child.parentNode) {
+			child.parentNode.removeChild(child);
+		}
 		child = null;
 
 		node.removeEventListener('mouseleave', handleBlur)
