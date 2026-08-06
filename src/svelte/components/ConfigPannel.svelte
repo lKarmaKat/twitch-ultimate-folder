@@ -22,6 +22,13 @@
     const layoutOptions = CST.LIST_LAYOUT_OPTIONS;
     let showsColumns = $derived(listConfig?.type.layout === CST.LIST_LAYOUT_GRID);
     let showsRail = $derived(!CST.LIST_LAYOUTS_WITHOUT_RAIL.includes(listConfig?.type.layout));
+    let showsHeadless = $derived(
+        listConfig?.type.layout === CST.LIST_LAYOUT_DOCK || listConfig?.type.layout === CST.LIST_LAYOUT_STACK
+    );
+    // pillHeader/hasBar/chevron only style the list-header, which a headless DOCK list never renders.
+    let hidesHeaderStyle = $derived(
+        listConfig?.type.layout === CST.LIST_LAYOUT_DOCK && listConfig?.type[CST.TYPE_HEADLESS]
+    );
     // A rule-driven list refills itself: custom sort (drag order) has nothing to act on.
     let isSmartList = $derived((listConfig?.source?.kind ?? CST.SOURCE_KIND_MANUAL) !== CST.SOURCE_KIND_MANUAL);
     let sortSelectOptions = $derived(isSmartList ? sortOptions : CST.SORT_STRATEGY);
@@ -193,8 +200,24 @@
                         <input type="number" min="0" bind:value={listConfig.type.maxItems} />
                     </div>
                     <div class="grid">
+                        {#if showsHeadless}
+                            {@const headlessItem = CST.TYPE_OPTIONS.find(o => o.key === CST.TYPE_HEADLESS)}
+                            <div class="behavior-item">
+                                <input
+                                    type="checkbox"
+                                    id={headlessItem.key}
+                                    bind:checked={listConfig.type[headlessItem.key]}/>
+                                <label for={headlessItem.key}>{$_(headlessItem.label)}</label>
+                                <span
+                                    class="help-badge"
+                                    data-tooltip={$_(headlessItem.tooltip)}>?</span>
+                            </div>
+                        {/if}
                         {#each CST.STYLE_OPTIONS as item}
-                            {#if item.key !== CST.STYLE_INDENT_RAIL || showsRail}
+                            {#if (item.key !== CST.STYLE_INDENT_RAIL || showsRail)
+                                && (item.key !== CST.STYLE_DOCK_LIVE_HALO || listConfig.type.layout === CST.LIST_LAYOUT_DOCK)
+                                && (item.key !== CST.STYLE_PILL_HEADER || !hidesHeaderStyle)
+                                && (item.key !== CST.STYLE_HAS_BAR || !hidesHeaderStyle)}
                                 <div class="behavior-item">
                                     <input
                                         type="checkbox"
@@ -208,7 +231,7 @@
                             {/if}
                         {/each}
                         {#each styleTypeOptions as item}
-                            {#if item.key !== CST.TYPE_HEADLESS || listConfig.type.layout === CST.LIST_LAYOUT_DOCK || listConfig.type.layout === CST.LIST_LAYOUT_STACK}
+                            {#if item.key !== CST.TYPE_HEADLESS && (item.key !== CST.TYPE_CHEVRON || !hidesHeaderStyle)}
                                 <div class="behavior-item">
                                     <input
                                         type="checkbox"

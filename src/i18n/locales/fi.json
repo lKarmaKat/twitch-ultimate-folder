@@ -376,6 +376,10 @@
     "hasBar": {
       "label": "Palkki",
       "tooltip": "Piirtää värillisen palkin listan otsikon sivuun, valitulla teeman värillä."
+    },
+    "dockLiveHalo": {
+      "label": "Live-halo",
+      "tooltip": "Piirtää punaisen hehkurenkaan livekanavan profiilikuvan ympärille dock-asettelussa."
     }
   },
   "typeOptions": {

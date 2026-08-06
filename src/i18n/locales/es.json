@@ -376,6 +376,10 @@
     "hasBar": {
       "label": "Barra",
       "tooltip": "Dibuja una barra de color en el lateral del encabezado de la lista, con el color de tema seleccionado."
+    },
+    "dockLiveHalo": {
+      "label": "Halo en directo",
+      "tooltip": "Dibuja un halo rojo alrededor del avatar de un canal en directo en el diseño de dock."
     }
   },
   "typeOptions": {

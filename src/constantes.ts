@@ -121,12 +121,15 @@ export const BEHAVIOUR = [
 export const STYLE_PILL_HEADER = 'pillHeader';
 export const STYLE_INDENT_RAIL = 'indentRail';
 export const STYLE_HAS_BAR = 'hasBar';
+export const STYLE_DOCK_LIVE_HALO = 'dockLiveHalo';
 
 // `group` is the `style` sub-object the flag is stored in.
 export const STYLE_OPTIONS = [
 {key: STYLE_PILL_HEADER, group: 'header', label: 'styleOptions.pillHeader.label', tooltip: 'styleOptions.pillHeader.tooltip'},
 {key: STYLE_INDENT_RAIL, group: 'content', label: 'styleOptions.indentRail.label', tooltip: 'styleOptions.indentRail.tooltip'},
 {key: STYLE_HAS_BAR, group: 'header', label: 'styleOptions.hasBar.label', tooltip: 'styleOptions.hasBar.tooltip'},
+// Only ever shown in ConfigPannel for LIST_LAYOUT_DOCK.
+{key: STYLE_DOCK_LIVE_HALO, group: 'content', label: 'styleOptions.dockLiveHalo.label', tooltip: 'styleOptions.dockLiveHalo.tooltip'},
 ];
 
 export const TYPE_CHEVRON = 'chevron';
@@ -337,7 +340,8 @@ export function createNewList(): t.I_NEW_LIST {
       },
       content: {
         contentColor: "#808080",
-        [STYLE_INDENT_RAIL]: false
+        [STYLE_INDENT_RAIL]: false,
+        [STYLE_DOCK_LIVE_HALO]: false
       }
     },
     type: {

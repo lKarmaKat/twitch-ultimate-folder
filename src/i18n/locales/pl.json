@@ -376,6 +376,10 @@
     "hasBar": {
       "label": "Pasek",
       "tooltip": "Rysuje kolorowy pasek z boku nagłówka listy, w wybranym kolorze motywu."
+    },
+    "dockLiveHalo": {
+      "label": "Aureola live",
+      "tooltip": "Rysuje czerwoną poświatę wokół awatara kanału na żywo w układzie dock."
     }
   },
   "typeOptions": {

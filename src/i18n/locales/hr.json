@@ -376,6 +376,10 @@
     "hasBar": {
       "label": "Traka",
       "tooltip": "Iscrtava obojenu traku uz rub zaglavlja popisa, u odabranoj boji teme."
+    },
+    "dockLiveHalo": {
+      "label": "Halo za live kanale",
+      "tooltip": "Iscrtava crveni sjaj oko avatara kanala uživo u dock rasporedu."
     }
   },
   "typeOptions": {

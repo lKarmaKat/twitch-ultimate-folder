@@ -18,7 +18,9 @@
         /** Config entry whose channel is no longer followed: named, but dead. */
         unfollowed = false,
         /** 'row' (default) | 'grid' (avatar + name, viewer badge on the corner) | 'split' (avatar + name, viewer count below) | 'dock' (avatar only) */
-        variant = 'row'
+        variant = 'row',
+        /** Dock-only: red glow ring around a live avatar. */
+        showLiveHalo = false
     } = $props();
 
     let profilePic = $derived(unfollowed ? UNFOLLOWED_CHANNEL_IMAGE : channelProfilePic);
@@ -293,7 +295,7 @@
 		clip-path: polygon(0 0, 0 100%, 100% 50%); -->
 <a class="card" class:grid-cell={variant === 'grid' || variant === 'split'} class:dock-cell={variant === 'dock'} id="draggable-channel" class:unfollowed use:maybeTooltip={tooltipContent} href={ !blockNavigation && !unfollowed ? "https://www.twitch.tv/" + channelName : null } onclick={navigate}>
     {#if variant === 'dock'}
-        <div class="profile-picture dock-avatar" class:live={isLive} class:offline={!isLive}>
+        <div class="profile-picture dock-avatar" class:live={isLive && showLiveHalo} class:offline={!isLive}>
             <img class={['profile-picture', greyIfOffline && 'greyIfOffline', !isLive && 'offline']} src={profilePic} alt="" />
         </div>
     {:else if variant === 'grid'}

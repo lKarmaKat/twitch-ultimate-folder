@@ -376,6 +376,10 @@
     "hasBar": {
       "label": "Barre",
       "tooltip": "Affiche une barre colorée sur le côté de l'en-tête de liste, avec la couleur de thème sélectionnée."
+    },
+    "dockLiveHalo": {
+      "label": "Halo des chaînes en direct",
+      "tooltip": "Affiche un halo rouge autour de l'avatar des chaînes en direct en layout dock."
     }
   },
   "typeOptions": {

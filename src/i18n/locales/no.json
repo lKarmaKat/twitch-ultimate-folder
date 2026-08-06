@@ -376,6 +376,10 @@
     "hasBar": {
       "label": "Felt",
       "tooltip": "Tegner et farget felt på siden av listeoverskriften, i den valgte temafargen."
+    },
+    "dockLiveHalo": {
+      "label": "Live-glød",
+      "tooltip": "Tegner en rød glød rundt profilbildet til en direktesendt kanal i dock-layout."
     }
   },
   "typeOptions": {

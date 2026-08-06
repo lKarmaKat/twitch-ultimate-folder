@@ -376,6 +376,10 @@
     "hasBar": {
       "label": "Leiste",
       "tooltip": "Zeichnet eine farbige Leiste seitlich an der Listenkopfzeile, in der gewählten Themenfarbe."
+    },
+    "dockLiveHalo": {
+      "label": "Live-Halo",
+      "tooltip": "Zeichnet einen roten Leuchtring um das Profilbild eines Live-Kanals im Dock-Layout."
     }
   },
   "typeOptions": {

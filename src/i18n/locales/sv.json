@@ -376,6 +376,10 @@
     "hasBar": {
       "label": "Fält",
       "tooltip": "Ritar ett färgat fält på sidan av listans rubrik, i den valda temafärgen."
+    },
+    "dockLiveHalo": {
+      "label": "Live-halo",
+      "tooltip": "Ritar en röd glöd runt profilbilden för en livesänd kanal i dock-layouten."
     }
   },
   "typeOptions": {

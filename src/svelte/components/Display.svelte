@@ -85,6 +85,7 @@
 	let pillHeader = $derived(header?.[CST.STYLE_PILL_HEADER] ?? false);
 	let indentRail = $derived(content?.[CST.STYLE_INDENT_RAIL] ?? false);
 	let hasBar = $derived(header?.[CST.STYLE_HAS_BAR] ?? false);
+	let dockLiveHalo = $derived(content?.[CST.STYLE_DOCK_LIVE_HALO] ?? false);
 
 	// Session state: reset to the startup value whenever the config is reloaded
 	// (save / reset / init) or the startup checkbox is edited live in the popup.
@@ -572,7 +573,8 @@
 				showGameInTooltip={effectiveVariant !== 'row'}
 				showOffline={true}
 				greyIfOffline={true}
-				variant={effectiveVariant}/>
+				variant={effectiveVariant}
+				showLiveHalo={dockLiveHalo}/>
 			</div>
 		{/each}
 	{:else if item.channel_id}
@@ -591,7 +593,8 @@
 				showGameInTooltip={effectiveVariant !== 'row'}
 				showOffline={true}
 				greyIfOffline={true}
-				variant={effectiveVariant}/>
+				variant={effectiveVariant}
+				showLiveHalo={dockLiveHalo}/>
 			</div>
 		{/if}
 	{/if}

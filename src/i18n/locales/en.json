@@ -376,6 +376,10 @@
     "hasBar": {
       "label": "Bar",
       "tooltip": "Draws a colored bar on the side of the list header, using the selected theme color."
+    },
+    "dockLiveHalo": {
+      "label": "Live halo",
+      "tooltip": "Draws a red glow ring around a live channel's avatar in dock layout."
     }
   },
   "typeOptions": {
