@@ -68,6 +68,10 @@
     background-color: #26262c;
 }
 
+#display-container.dark .profile-picture img {
+    background-color: #26262c;
+}
+
 #display-container.dark.skin-modern .card:hover {
     background-color: #46464f;
 }
@@ -156,6 +160,10 @@
 }
 
 #display-container.light .card {
+    background-color: #efeff1;
+}
+
+#display-container.light .profile-picture img {
     background-color: #efeff1;
 }
 

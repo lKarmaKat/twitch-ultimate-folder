@@ -108,8 +108,8 @@
         flex: none;
     }
     .profile-picture.dock-avatar {
-        width: 2.5em;
-        height: 2.5em;
+        width: 2.14em;
+        height: 2.14em;
         flex-shrink: 0;
         transition: filter 0.12s ease;
     }
@@ -210,6 +210,7 @@
         width: 100%;
         height: 100%;
         max-width: 100%;
+        object-fit: cover;
         border-radius: 9000px;
         border: none;
         /* vertical-align: top; */
