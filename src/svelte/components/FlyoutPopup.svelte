@@ -27,8 +27,14 @@
 
 	// getBoundingClientRect() is viewport-relative and stale the moment the
 	// sidebar scrolls under it: closing on scroll is simpler than recomputing.
+	// Scoped to the page and the sidebar itself — an unrelated scroll (e.g. a
+	// chat message autoscrolling the chat panel) must not close the panel.
 	$effect(() => {
-		function onScroll() { flyoutState.listId = null; }
+		function onScroll(event) {
+			const target = event.target;
+			if (target !== document && !target.closest?.('.side-nav__scrollable_content')) return;
+			flyoutState.listId = null;
+		}
 		window.addEventListener('scroll', onScroll, { capture: true, passive: true });
 		return () => window.removeEventListener('scroll', onScroll, { capture: true });
 	});
@@ -67,7 +73,7 @@
 		max-height: 70vh;
 		overflow-y: auto;
 		border-radius: 6px;
-		box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+		/* box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45); */
 		border-right: 3px solid transparent;
 		scrollbar-width: thin;
 		scrollbar-color: var(--scrollbar-color, currentColor) transparent;
