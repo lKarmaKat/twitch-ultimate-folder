@@ -26,10 +26,13 @@
         listConfig?.type.layout === CST.LIST_LAYOUT_DOCK
         || listConfig?.type.layout === CST.LIST_LAYOUT_STACK
         || listConfig?.type.layout === CST.LIST_LAYOUT_GRID
+        || listConfig?.type.layout === CST.LIST_LAYOUT_SPLIT
     );
     // pillHeader/hasBar/chevron only style the list-header, which a headless list never renders.
     let hidesHeaderStyle = $derived(
-        (listConfig?.type.layout === CST.LIST_LAYOUT_DOCK || listConfig?.type.layout === CST.LIST_LAYOUT_GRID)
+        (listConfig?.type.layout === CST.LIST_LAYOUT_DOCK
+            || listConfig?.type.layout === CST.LIST_LAYOUT_GRID
+            || listConfig?.type.layout === CST.LIST_LAYOUT_SPLIT)
         && listConfig?.type[CST.TYPE_HEADLESS]
     );
     // A rule-driven list refills itself: custom sort (drag order) has nothing to act on.

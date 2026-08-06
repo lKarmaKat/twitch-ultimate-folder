@@ -58,9 +58,9 @@
 		layout === CST.LIST_LAYOUT_GRID ? 'grid' :
 		layout === CST.LIST_LAYOUT_DOCK ? 'dock' : 'row'
 	));
-	// Own headless setting applies to dockList, the classic row stack and grid;
-	// other layouts manage their header visibility differently.
-	let effectiveHeadless = $derived(headless || ([CST.LIST_LAYOUT_DOCK, CST.LIST_LAYOUT_STACK, CST.LIST_LAYOUT_GRID].includes(layout) && (type?.[CST.TYPE_HEADLESS] ?? false)));
+	// Own headless setting applies to dockList, the classic row stack, grid and
+	// split; other layouts manage their header visibility differently.
+	let effectiveHeadless = $derived(headless || ([CST.LIST_LAYOUT_DOCK, CST.LIST_LAYOUT_STACK, CST.LIST_LAYOUT_GRID, CST.LIST_LAYOUT_SPLIT].includes(layout) && (type?.[CST.TYPE_HEADLESS] ?? false)));
 
 	let source = $derived(configManager.selectedConfig[listId]?.source ?? { kind: CST.SOURCE_KIND_MANUAL });
 	let isSmartList = $derived(source.kind !== CST.SOURCE_KIND_MANUAL);
