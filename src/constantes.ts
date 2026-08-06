@@ -141,9 +141,9 @@ export const TYPE_HEADLESS = 'headless';
 export const TYPE_OPTIONS = [
 {key: TYPE_CHEVRON, group: 'style', label: 'typeOptions.chevron.label', tooltip: 'typeOptions.chevron.tooltip'},
 {key: TYPE_EXCLUSIVE, group: 'behavior', label: 'typeOptions.exclusive.label', tooltip: 'typeOptions.exclusive.tooltip'},
-// Only ever shown in ConfigPannel for LIST_LAYOUT_DOCK and LIST_LAYOUT_STACK:
-// false by default so an existing list saved before this option existed
-// keeps showing its header.
+// Only ever shown in ConfigPannel for LIST_LAYOUT_DOCK, LIST_LAYOUT_STACK and
+// LIST_LAYOUT_GRID: false by default so an existing list saved before this
+// option existed keeps showing its header.
 {key: TYPE_HEADLESS, group: 'style', label: 'typeOptions.headless.label', tooltip: 'typeOptions.headless.tooltip'},
 ];
 

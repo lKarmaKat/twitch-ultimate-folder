@@ -23,11 +23,14 @@
     let showsColumns = $derived(listConfig?.type.layout === CST.LIST_LAYOUT_GRID);
     let showsRail = $derived(!CST.LIST_LAYOUTS_WITHOUT_RAIL.includes(listConfig?.type.layout));
     let showsHeadless = $derived(
-        listConfig?.type.layout === CST.LIST_LAYOUT_DOCK || listConfig?.type.layout === CST.LIST_LAYOUT_STACK
+        listConfig?.type.layout === CST.LIST_LAYOUT_DOCK
+        || listConfig?.type.layout === CST.LIST_LAYOUT_STACK
+        || listConfig?.type.layout === CST.LIST_LAYOUT_GRID
     );
-    // pillHeader/hasBar/chevron only style the list-header, which a headless DOCK list never renders.
+    // pillHeader/hasBar/chevron only style the list-header, which a headless list never renders.
     let hidesHeaderStyle = $derived(
-        listConfig?.type.layout === CST.LIST_LAYOUT_DOCK && listConfig?.type[CST.TYPE_HEADLESS]
+        (listConfig?.type.layout === CST.LIST_LAYOUT_DOCK || listConfig?.type.layout === CST.LIST_LAYOUT_GRID)
+        && listConfig?.type[CST.TYPE_HEADLESS]
     );
     // A rule-driven list refills itself: custom sort (drag order) has nothing to act on.
     let isSmartList = $derived((listConfig?.source?.kind ?? CST.SOURCE_KIND_MANUAL) !== CST.SOURCE_KIND_MANUAL);
