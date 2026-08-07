@@ -292,7 +292,8 @@
   },
   "display": {
     "allOtherChannels": "All others channels",
-    "overflowMore": "+{count} more"
+    "overflowMore": "+{count} more",
+    "overflowLess": "Show less"
   },
   "channel": {
     "offline": "Offline",

@@ -2,11 +2,13 @@
     import * as CST from '../../constantes.js'
     import { _ } from 'svelte-i18n';
     import SortSelect from './SortSelect.svelte';
+    import TwitchLanguageSelect from './TwitchLanguageSelect.svelte';
+    import { TWITCH_LANGUAGE_FLAGS } from '../../i18n/twitchLanguageFlags.js';
 
     let { listConfig, configManager } = $props();
 
     const kindOptions = CST.SOURCE_KIND_OPTIONS;
-    const languageOptions = CST.TWITCH_LANGUAGE_CODES;
+    const languageOptions = CST.TWITCH_LANGUAGE_CODES.map(l => ({ id: l.id, name: l.label, flag: TWITCH_LANGUAGE_FLAGS[l.id] }));
 
     // Rule-driven content replaces manual placement: only nested sub-lists
     // survive the switch (they stay independently manageable in the tree).
@@ -124,12 +126,10 @@
     {:else if listConfig.source.kind === CST.SOURCE_KIND_LANGUAGE}
         <div class="row">
             <p>{$_('configPannel.sourceLanguage')}</p>
-            <select class="source-language-select" bind:value={listConfig.source.language}>
-                <option value={null}>{$_('configPannel.sourceLanguagePlaceholder')}</option>
-                {#each languageOptions as l (l.id)}
-                    <option value={l.id}>{l.label}</option>
-                {/each}
-            </select>
+            <TwitchLanguageSelect
+                bind:value={listConfig.source.language}
+                options={languageOptions}
+                placeholder={$_('configPannel.sourceLanguagePlaceholder')}/>
         </div>
     {:else if listConfig.source.kind === CST.SOURCE_KIND_FRESH}
         <div class="row">
@@ -168,13 +168,6 @@
         border: 1px solid grey;
         border-radius: 0.3em;
         padding: 0.2em 0.4em;
-    }
-    .source-language-select {
-        font: inherit;
-        background: transparent;
-        border: 1px solid grey;
-        border-radius: 0.3em;
-        padding: 0.3em 0.5em;
     }
     .source-block {
         margin: 0.5em 0 1em;

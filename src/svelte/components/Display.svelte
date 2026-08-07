@@ -424,6 +424,10 @@
 		e.stopPropagation();
 		foldExpanded = true;
 	}
+	function collapseFold(e) {
+		e.stopPropagation();
+		foldExpanded = false;
+	}
 
 </script>
 	<!-- <div class="width-test">
@@ -609,6 +613,12 @@
 		<!-- svelte-ignore a11y_no_static_element_interactions -->
 		<div class="list-overflow-more" onclick={expandFold}>
 			{$_('display.overflowMore', { values: { count: overflowCount } })}
+		</div>
+	{:else if withFold && foldExpanded && renderableCount > maxItems}
+		<!-- svelte-ignore a11y_click_events_have_key_events -->
+		<!-- svelte-ignore a11y_no_static_element_interactions -->
+		<div class="list-overflow-more" onclick={collapseFold}>
+			{$_('display.overflowLess')}
 		</div>
 	{/if}
 {/snippet}

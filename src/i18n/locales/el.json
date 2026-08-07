@@ -292,7 +292,8 @@
   },
   "display": {
     "allOtherChannels": "Όλα τα άλλα κανάλια",
-    "overflowMore": "+{count} ακόμα"
+    "overflowMore": "+{count} ακόμα",
+    "overflowLess": "Εμφάνιση λιγότερων"
   },
   "channel": {
     "offline": "Εκτός σύνδεσης",

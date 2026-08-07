@@ -292,7 +292,8 @@
   },
   "display": {
     "allOtherChannels": "Kaikki muut kanavat",
-    "overflowMore": "+{count} lisää"
+    "overflowMore": "+{count} lisää",
+    "overflowLess": "Näytä vähemmän"
   },
   "channel": {
     "offline": "Poissa verkosta",

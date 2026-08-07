@@ -292,7 +292,8 @@
   },
   "display": {
     "allOtherChannels": "Все остальные каналы",
-    "overflowMore": "+{count} ещё"
+    "overflowMore": "+{count} ещё",
+    "overflowLess": "Показать меньше"
   },
   "channel": {
     "offline": "Не в сети",

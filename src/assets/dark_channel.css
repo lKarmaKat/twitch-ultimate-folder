@@ -16,6 +16,7 @@
    THEME_COLOR (darkened on the light theme) since it's calibrated for a
    3px bar, not for text or small icon glyphs. */
 #display-container.dark {
+    color: rgb(239, 239, 241);
     /* Same thumb colour as the configPopup's own (fixed) scrollbar. */
     --scrollbar-color: #53535f;
     --scrollbar-color-hover: #6b6b7b;
@@ -75,17 +76,8 @@
 #display-container.dark.skin-modern .card:hover {
     background-color: #46464f;
 }
-#display-container.dark .channel-name {
-    color: rgb(239, 239, 241);
-}
 #display-container.dark .game-name {
     color: rgb(173, 173, 184);
-}
-#display-container.dark .viewer-count {
-    color: rgb(239, 239, 241);
-}
-#display-container.dark .split-col-count {
-    color: rgb(239, 239, 241);
 }
 
 /* the live wave sits inside the badge, so it follows the badge text */
@@ -109,12 +101,17 @@
     color: rgb(173, 173, 184);
 }
 
+#display-container.dark .list-overflow-more {
+    color: rgb(173, 173, 184);
+}
+
 #display-container.dark .list-separator .separator-line {
     background: var(--theme-color, rgb(173, 173, 184));
 }
 /* ************* */
 
 #display-container.light {
+    color: rgb(14, 14, 16);
     --scrollbar-color: rgba(201, 201, 202, 0.25);
     --scrollbar-color-hover: rgba(201, 201, 202, 0.5);
     --header-separator: rgba(83, 83, 95, 0.16);
@@ -170,17 +167,8 @@
 #display-container.light.skin-modern .card:hover {
     background-color: rgba(201, 201, 202, 0.5);
 }
-#display-container.light .channel-name {
-    color: rgb(14, 14, 16);
-}
 #display-container.light .game-name {
     color: rgb(83, 83, 95);
-}
-#display-container.light .viewer-count {
-    color: rgb(14, 14, 16);
-}
-#display-container.light .split-col-count {
-    color: rgb(14, 14, 16);
 }
 
 #display-container.light .live-icon svg {
@@ -200,6 +188,10 @@
 }
 
 #display-container.light .separator-label {
+    color: rgb(61, 61, 71);
+}
+
+#display-container.light .list-overflow-more {
     color: rgb(61, 61, 71);
 }
 

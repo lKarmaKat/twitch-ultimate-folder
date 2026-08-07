@@ -292,7 +292,8 @@
   },
   "display": {
     "allOtherChannels": "Alle andre kanaler",
-    "overflowMore": "+{count} til"
+    "overflowMore": "+{count} til",
+    "overflowLess": "Vis mindre"
   },
   "channel": {
     "offline": "Frakoblet",

@@ -292,7 +292,8 @@
   },
   "display": {
     "allOtherChannels": "Alla andra kanaler",
-    "overflowMore": "+{count} till"
+    "overflowMore": "+{count} till",
+    "overflowLess": "Visa mindre"
   },
   "channel": {
     "offline": "Frånkopplad",

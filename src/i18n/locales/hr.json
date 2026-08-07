@@ -292,7 +292,8 @@
   },
   "display": {
     "allOtherChannels": "Svi ostali kanali",
-    "overflowMore": "+{count} više"
+    "overflowMore": "+{count} više",
+    "overflowLess": "Prikaži manje"
   },
   "channel": {
     "offline": "Izvan mreže",

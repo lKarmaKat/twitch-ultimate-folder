@@ -292,7 +292,8 @@
   },
   "display": {
     "allOtherChannels": "Всички останали канали",
-    "overflowMore": "+{count} още"
+    "overflowMore": "+{count} още",
+    "overflowLess": "Покажи по-малко"
   },
   "channel": {
     "offline": "Извън линия",
