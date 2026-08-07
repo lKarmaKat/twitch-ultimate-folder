@@ -163,6 +163,7 @@
         overflow: hidden;
         -webkit-box-flex: 1 !important;
         flex-grow: 1 !important;
+        line-height: 1.25;
     }
     .game-name {
         padding-inline-end: 4px !important;
@@ -175,7 +176,7 @@
         /* color: var(--color-text-alt-2) !important; */
         /* font-size: var(--font-size-4) !important; */
         text-align: -webkit-match-parent !important;
-        line-height: var(--line-height-body) !important;
+        line-height: 1.25 !important;
     }
     .viewer-count-container {
         flex-shrink: 0 !important;
