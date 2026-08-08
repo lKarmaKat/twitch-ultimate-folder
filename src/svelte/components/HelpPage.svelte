@@ -792,6 +792,8 @@ import { api } from '../../browserApi.js';
     display: block;
     width: 100%;
     height: auto;
+    aspect-ratio: 16 / 10;
+    object-fit: cover;
   }
   /* Bottom strip: never hides the clip's content. */
   .shot-hint {
