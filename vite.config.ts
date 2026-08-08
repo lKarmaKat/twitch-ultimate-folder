@@ -68,6 +68,7 @@ export default defineConfig(({ command, mode }) => {
     // Le glob ci-dessus n'est pas recursif : les demos de la page d'aide vivent
     // dans un sous-dossier et ont donc besoin de leur propre cible.
     { src: 'src/assets/webm/*.{webm,mp4}', dest: 'assets/webm' },
+    { src: 'src/assets/screenshots/*.png', dest: 'assets/screenshots' },
     { src: 'src/assets/selected_icons/*.png', dest: 'assets' },
     ...(isDev ? [{ src: 'e2e/twitch-copy.html', dest: 'assets' }] : [])
   ]

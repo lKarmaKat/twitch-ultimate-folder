@@ -31,11 +31,6 @@ import { api } from '../../browserApi.js';
     applyLocale(lang);
   }
 
-  // Fallback clip, used by every `media()` call that has no `video_url` yet.
-  // TODO: pass the real per-section file at each call site (see README) once
-  // the captures exist, then drop this.
-  const DEMO = '/assets/webm/Video.webm';
-
   const ISSUES_URL = 'https://github.com/lKarmaKat/twitch-ultimate-folder/issues/new';
   // TODO: replace with the real Ko-fi account.
   const KOFI_URL = 'https://ko-fi.com/karmakat__';
@@ -158,8 +153,7 @@ import { api } from '../../browserApi.js';
 
 <!-- One single definition of the video thumbnail: it repeats a dozen times and
      the lightbox must stay identical everywhere. -->
-{#snippet media(caption, video_url)}
-  {@const src = video_url ?? DEMO}
+{#snippet media(caption, src)}
   <figure class="help-media">
     <button class="shot" type="button" onclick={() => openLightbox(caption, src)}>
       <video {src} preload="metadata" muted playsinline></video>
@@ -169,21 +163,32 @@ import { api } from '../../browserApi.js';
   </figure>
 {/snippet}
 
-<!-- TODO: replace with <img src="/assets/screenshots/…"> once the captures
-     exist. The block holds the space and the ratio meanwhile. -->
-{#snippet screenshot(alt, caption)}
+<!-- `src` unset falls back to the dashed placeholder, which holds the space
+     and the ratio until the capture lands in src/assets/screenshots/. -->
+{#snippet screenshot(alt, caption, src)}
   <figure class="help-media">
-    <div class="shot-todo" role="img" aria-label={alt}>{alt}</div>
+    {#if src}
+      <button class="shot" type="button" onclick={() => openLightbox(caption, src, 'image')}>
+        <img {src} alt={alt} loading="lazy">
+        <span class="shot-hint">{$_('help.media.hint')} ⤢</span>
+      </button>
+    {:else}
+      <div class="shot-todo" role="img" aria-label={alt}>{alt}</div>
+    {/if}
     <figcaption>{caption}</figcaption>
   </figure>
 {/snippet}
 
 <!-- Small, clickable variant of `screenshot`: opens the same lightbox as a
      video would, minus the replay bar, which makes no sense on a still image. -->
-{#snippet layoutShot(alt, caption)}
+{#snippet layoutShot(alt, caption, src)}
   <figure class="help-media layout-shot">
-    <button class="shot" type="button" onclick={() => openLightbox(caption, null, 'image')}>
-      <div class="shot-todo" role="img" aria-label={alt}>{alt}</div>
+    <button class="shot" type="button" onclick={() => openLightbox(caption, src, 'image')}>
+      {#if src}
+        <img {src} alt={alt} loading="lazy">
+      {:else}
+        <div class="shot-todo" role="img" aria-label={alt}>{alt}</div>
+      {/if}
       <span class="shot-hint">{$_('help.media.hint')} ⤢</span>
     </button>
     <figcaption>{caption}</figcaption>
@@ -295,7 +300,7 @@ import { api } from '../../browserApi.js';
       <li>{$_('help.connect.step2')}</li>
       <li>{$_('help.connect.step3')}</li>
     </ol>
-    {@render media($_('help.connect.caption'))}
+    {@render media($_('help.connect.caption'), '/assets/webm/connect-authorize.webm')}
     <p>{$_('help.connect.outro')}</p>
 
     <h3 id="revoke">{$_('help.connect.revokeTitle')}</h3>
@@ -316,12 +321,12 @@ import { api } from '../../browserApi.js';
     <details id="find-icon">
       <summary>{$_('help.createConfig.findIconTitle')}</summary>
       <div class="details-body">
-        {@render media($_('help.createConfig.findIconCaption'))}
+        {@render media($_('help.createConfig.findIconCaption'), '/assets/webm/find-extension-icon.webm')}
         <p>{$_('help.createConfig.findIcon')}</p>
       </div>
     </details>
 
-    {@render media($_('help.createConfig.openCaption'))}
+    {@render media($_('help.createConfig.openCaption'), '/assets/webm/open-config-popup.webm')}
 
     <h3 id="sections">{$_('help.createConfig.sectionsTitle')}</h3>
     <p>{$_('help.createConfig.sectionsIntro')}</p>
@@ -338,21 +343,21 @@ import { api } from '../../browserApi.js';
     <h4 id="sec-preview">{$_('help.createConfig.previewTitle')}</h4>
     <p>{$_('help.createConfig.preview')}</p>
 
-    {@render media($_('help.createConfig.sectionsCaption'))}
+    {@render media($_('help.createConfig.sectionsCaption'), '/assets/webm/config-window-sections.webm')}
 
     <h3 id="add-list">{$_('help.createConfig.addListTitle')}</h3>
     <p>{$_('help.createConfig.addList')}</p>
-    {@render media($_('help.createConfig.addListCaption'))}
+    {@render media($_('help.createConfig.addListCaption'), '/assets/webm/create-list-behaviour.webm')}
 
     <h4 id="remove-item">{$_('help.createConfig.removeTitle')}</h4>
     <p>{$_('help.createConfig.remove')}</p>
-    {@render media($_('help.createConfig.removeCaption'))}
+    {@render media($_('help.createConfig.removeCaption'), '/assets/webm/remove-channel-list.webm')}
 
     <details id="rename-list">
       <summary>{$_('help.createConfig.renameTitle')}</summary>
       <div class="details-body">
         <p>{$_('help.createConfig.rename', { values: { field: $_('configPannel.listName') } })}</p>
-        {@render media($_('help.createConfig.renameCaption'))}
+        {@render media($_('help.createConfig.renameCaption'), '/assets/webm/rename-list.webm')}
       </div>
     </details>
 
@@ -377,7 +382,7 @@ import { api } from '../../browserApi.js';
         <p class="warning">{$_('help.createConfig.sortModeWarning')}</p>
         <p>{$_('help.createConfig.sortModeRule')}</p>
 
-        {@render screenshot($_('help.createConfig.behaviourShotAlt'), $_('help.createConfig.behaviourShotCaption'))}
+        {@render screenshot($_('help.createConfig.behaviourShotAlt'), $_('help.createConfig.behaviourShotCaption'), '/assets/screenshots/list-behaviour.png')}
       </div>
     </details>
 
@@ -391,34 +396,34 @@ import { api } from '../../browserApi.js';
         <ul class="defs">
           <li>
             <b>{$_('listLayout.stack')}</b> — {$_('help.createConfig.layoutStack')}
-            {@render layoutShot($_('listLayout.stack'), $_('help.createConfig.layoutStackCaption'))}
+            {@render layoutShot($_('listLayout.stack'), $_('help.createConfig.layoutStackCaption'), '/assets/screenshots/layout-stack.png')}
           </li>
           <li>
             <b>{$_('listLayout.split')}</b> — {$_('help.createConfig.layoutSplit')}
-            {@render layoutShot($_('listLayout.split'), $_('help.createConfig.layoutSplitCaption'))}
+            {@render layoutShot($_('listLayout.split'), $_('help.createConfig.layoutSplitCaption'), '/assets/screenshots/layout-split.png')}
           </li>
           <li>
             <b>{$_('listLayout.flyout')}</b> — {$_('help.createConfig.layoutFlyout')}
-            {@render layoutShot($_('listLayout.flyout'), $_('help.createConfig.layoutFlyoutCaption'))}
+            {@render layoutShot($_('listLayout.flyout'), $_('help.createConfig.layoutFlyoutCaption'), '/assets/screenshots/layout-flyout.png')}
           </li>
           <li>
             <b>{$_('listLayout.tabs')}</b> — {$_('help.createConfig.layoutTabs')}
-            {@render layoutShot($_('listLayout.tabs'), $_('help.createConfig.layoutTabsCaption'))}
+            {@render layoutShot($_('listLayout.tabs'), $_('help.createConfig.layoutTabsCaption'), '/assets/screenshots/layout-tabs.png')}
           </li>
           <li>
             <b>{$_('listLayout.grid')}</b> — {$_('help.createConfig.layoutGrid', { values: { columns: $_('configPannel.listColumns') } })}
-            {@render layoutShot($_('listLayout.grid'), $_('help.createConfig.layoutGridCaption'))}
+            {@render layoutShot($_('listLayout.grid'), $_('help.createConfig.layoutGridCaption'), '/assets/screenshots/layout-grid.png')}
           </li>
           <li>
             <b>{$_('listLayout.dock')}</b> — {$_('help.createConfig.layoutDock')}
-            {@render layoutShot($_('listLayout.dock'), $_('help.createConfig.layoutDockCaption'))}
+            {@render layoutShot($_('listLayout.dock'), $_('help.createConfig.layoutDockCaption'), '/assets/screenshots/layout-dock.png')}
           </li>
         </ul>
 
         <h4 id="style-colors">{$_('help.createConfig.colorsTitle')}</h4>
         <p>{$_('help.createConfig.colorsIntro')}</p>
         <p>{$_('help.createConfig.colorsDefault', { values: { none: $_('common.none') } })}</p>
-        {@render screenshot($_('help.createConfig.colorsShotAlt'), $_('help.createConfig.colorsShotCaption'))}
+        {@render screenshot($_('help.createConfig.colorsShotAlt'), $_('help.createConfig.colorsShotCaption'), '/assets/screenshots/list-colors.png')}
 
         <h4 id="style-header-options">{$_('help.createConfig.headerOptionsTitle')}</h4>
         <ul class="defs">
@@ -436,7 +441,7 @@ import { api } from '../../browserApi.js';
         <h4 id="style-icon">{$_('help.createConfig.iconsTitle')}</h4>
         <p>{$_('help.createConfig.icons1')}</p>
         <p>{$_('help.createConfig.icons2')}</p>
-        {@render screenshot($_('help.createConfig.iconsShotAlt'), $_('help.createConfig.iconsShotCaption'))}
+        {@render screenshot($_('help.createConfig.iconsShotAlt'), $_('help.createConfig.iconsShotCaption'), '/assets/screenshots/list-header-icons.png')}
 
         <h4 id="style-badge">{$_('help.createConfig.badgesTitle')}</h4>
         <p>{$_('help.createConfig.badgesIntro')}</p>
@@ -449,7 +454,7 @@ import { api } from '../../browserApi.js';
           <li><b>{$_('counterType.withLiveIcon')}</b> — {$_('help.createConfig.badgesLiveIcon')}</li>
         </ul>
         <p>{$_('help.createConfig.badgesOutro')}</p>
-        {@render screenshot($_('help.createConfig.badgesShotAlt'), $_('help.createConfig.badgesShotCaption'))}
+        {@render screenshot($_('help.createConfig.badgesShotAlt'), $_('help.createConfig.badgesShotCaption'), '/assets/screenshots/list-header-badges.png')}
       </div>
     </details>
 
@@ -465,17 +470,17 @@ import { api } from '../../browserApi.js';
           <li><b>{$_('sourceKind.fresh')}</b> — {$_('help.createConfig.contentFresh')}</li>
         </ul>
         <p>{$_('help.createConfig.contentExclusiveNote')}</p>
-        {@render screenshot($_('help.createConfig.contentShotAlt'), $_('help.createConfig.contentShotCaption'))}
+        {@render screenshot($_('help.createConfig.contentShotAlt'), $_('help.createConfig.contentShotCaption'), '/assets/screenshots/list-content.png')}
       </div>
     </details>
 
     <h3 id="add-channel">{$_('help.createConfig.addChannelTitle')}</h3>
     <p>{$_('help.createConfig.addChannel')}</p>
-    {@render media($_('help.createConfig.addChannelCaption'))}
+    {@render media($_('help.createConfig.addChannelCaption'), '/assets/webm/add-channel-to-list.webm')}
 
     <h3 id="move-item">{$_('help.createConfig.moveTitle')}</h3>
     <p>{$_('help.createConfig.move')}</p>
-    {@render media($_('help.createConfig.moveCaption'))}
+    {@render media($_('help.createConfig.moveCaption'), '/assets/webm/move-channel-list.webm')}
 
     <h3 id="all-other">{$_('help.createConfig.allOtherTitle')}</h3>
     <p>{$_('help.createConfig.allOther1')}</p>
@@ -484,7 +489,7 @@ import { api } from '../../browserApi.js';
       <li><b>{$_('allOtherHeader.none')}</b> — {$_('help.createConfig.allOtherNone')}</li>
       <li><b>{$_('allOtherHeader.sortable')}</b> — {$_('help.createConfig.allOtherSortable')}</li>
     </ul>
-    {@render media($_('help.createConfig.allOtherCaption'))}
+    {@render media($_('help.createConfig.allOtherCaption'), '/assets/webm/all-other-channels.webm')}
 
     <h3 id="saving">{$_('help.createConfig.savingGroupTitle')}</h3>
 
@@ -494,26 +499,26 @@ import { api } from '../../browserApi.js';
     <h4 id="transfer">{$_('help.createConfig.transferTitle')}</h4>
     <p>{$_('help.createConfig.transferIntro', { values: { export: $_('configPopup.export'), import: $_('configPopup.import') } })}</p>
     <p class="warning">{$_('help.createConfig.transferWarning', { values: { save: $_('configPopup.save') } })}</p>
-    {@render screenshot($_('help.createConfig.transferShotAlt'), $_('help.createConfig.transferShotCaption'))}
+    {@render screenshot($_('help.createConfig.transferShotAlt'), $_('help.createConfig.transferShotCaption'), '/assets/screenshots/export-import.png')}
 
     <h4 id="clean-unfollowed">{$_('help.createConfig.cleanTitle')}</h4>
     <p>{$_('help.createConfig.clean', { values: { clean: $_('configPopup.cleanConfig'), save: $_('configPopup.save') } })}</p>
-    {@render screenshot($_('help.createConfig.cleanShotAlt'), $_('help.createConfig.cleanShotCaption'))}
+    {@render screenshot($_('help.createConfig.cleanShotAlt'), $_('help.createConfig.cleanShotCaption'), '/assets/screenshots/clean-unfollowed.png')}
 
     <h2 id="action-popup">{$_('help.actionPopup.title')}</h2>
     <p>{$_('help.actionPopup.intro')}</p>
 
     <h3>{$_('actionPopup.alignment')}</h3>
     <p>{$_('help.actionPopup.alignment')}</p>
-    {@render media($_('help.actionPopup.alignmentCaption'))}
+    {@render media($_('help.actionPopup.alignmentCaption'), '/assets/webm/channel-alignment.webm')}
 
     <h3>{$_('actionPopup.flyoutSide')}</h3>
     <p>{$_('help.actionPopup.flyoutSide')}</p>
-    {@render media($_('help.actionPopup.flyoutSideCaption'))}
+    {@render media($_('help.actionPopup.flyoutSideCaption'), '/assets/webm/flyout-panel-side.webm')}
 
     <h3>{$_('actionPopup.language')}</h3>
     <p>{$_('help.actionPopup.language')}</p>
-    {@render media($_('help.actionPopup.languageCaption'))}
+    {@render media($_('help.actionPopup.languageCaption'), '/assets/webm/change-language.webm')}
 
     <h2 id="issues">{$_('help.issues.title')}</h2>
     <p>
@@ -551,7 +556,11 @@ import { api } from '../../browserApi.js';
     <div class="lb-panel" role="dialog" aria-modal="true" aria-label={lightbox.caption}>
       <button class="lb-close" type="button" aria-label={$_('help.media.close')} onclick={closeLightbox}>✕</button>
       {#if lightbox.kind === 'image'}
-        <div class="lb-image-todo" role="img" aria-label={lightbox.caption}>{lightbox.caption}</div>
+        {#if lightbox.src}
+          <img class="lb-image" src={lightbox.src} alt={lightbox.caption}>
+        {:else}
+          <div class="lb-image-todo" role="img" aria-label={lightbox.caption}>{lightbox.caption}</div>
+        {/if}
       {:else}
         <video bind:this={lightboxVideo} src={lightbox.src} autoplay muted playsinline controls></video>
       {/if}
@@ -778,7 +787,8 @@ import { api } from '../../browserApi.js';
     outline: 2px solid var(--help-accent);
     outline-offset: 3px;
   }
-  .shot video {
+  .shot video,
+  .shot img {
     display: block;
     width: 100%;
     height: auto;
@@ -849,13 +859,17 @@ import { api } from '../../browserApi.js';
     padding: 4vh 5vw;
     pointer-events: none;
   }
-  .lb-panel video {
+  .lb-panel video,
+  .lb-image {
     place-self: center;
     width: min(72rem, 100%);
     max-height: 100%;
     border-radius: 0.5em;
     background-color: #000;
     pointer-events: auto;
+  }
+  .lb-image {
+    object-fit: contain;
   }
   .lb-image-todo {
     place-self: center;
