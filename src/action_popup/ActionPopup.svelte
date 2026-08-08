@@ -25,7 +25,7 @@ import { api } from '../browserApi.js';
   // active tab. Read the OS theme now so the first paint is already right.
   let theme = $state(matchMedia('(prefers-color-scheme: dark)').matches);
   let alignment = $state(true);
-  let skinModern = $state(false);
+  let skinModern = $state(true);
   let flyoutSide = $state(CST.FLYOUT_SIDE_AUTO);
   const flyoutSides = CST.FLYOUT_SIDE_TYPE;
 

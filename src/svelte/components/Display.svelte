@@ -617,7 +617,7 @@
 	{:else if withFold && foldExpanded && renderableCount > maxItems}
 		<!-- svelte-ignore a11y_click_events_have_key_events -->
 		<!-- svelte-ignore a11y_no_static_element_interactions -->
-		<div class="list-overflow-more" onclick={collapseFold}>
+		<div class="list-overflow-more list-overflow-less" onclick={collapseFold}>
 			{$_('display.overflowLess')}
 		</div>
 	{/if}

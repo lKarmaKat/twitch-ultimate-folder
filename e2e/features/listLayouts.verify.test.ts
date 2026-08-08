@@ -170,7 +170,8 @@ test('overflowList: only maxItems show, a fold row reveals the rest', async ({ p
 
 	await more.click();
 	await expect(list.container.locator(':scope > .list-body .card')).toHaveCount(3);
-	await expect(list.container.locator('.list-overflow-more')).toHaveCount(0);
+	await expect(list.container.locator('.list-overflow-more:not(.list-overflow-less)')).toHaveCount(0);
+	await expect(list.container.locator('.list-overflow-less')).toHaveCount(1);
 });
 
 test('flyoutList: hovering the header opens a detached panel, leaving closes it', async ({ page }) => {

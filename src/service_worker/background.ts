@@ -234,9 +234,9 @@ let sendCurrentAlignmentOnConnect = (port: chrome.runtime.Port) => {
   });
 }
 
-let currentSkinModern = false;
+let currentSkinModern = true;
 const skinReady = api.storage.local.get(CST.PARAM_SKIN_MODERN).then((data) => {
-  currentSkinModern = data[CST.PARAM_SKIN_MODERN] === 1;
+  currentSkinModern = data[CST.PARAM_SKIN_MODERN] !== 0;
 }).catch(err => logBackgroundError("background:readSkin", err));
 let sendCurrentSkinOnConnect = (port: chrome.runtime.Port) => {
   skinReady.then(() => {
