@@ -45,7 +45,8 @@ export class PopupHelper {
 
     async getListApproachCoord(list: string, pos: number) {
         let elements = this.page.frameLocator('#inner-iframe').locator(`#${list} > div.list-body > section > div:is(.nested-list, .channel)`);
-
+        // let height = await (this.page.frameLocator('#inner-iframe').locator(`#${list} > .list-header`)).boundingBox();
+        // console.log("#######", height?.height);
         let count = await elements.count();
         console.log(count)
 
@@ -54,8 +55,8 @@ export class PopupHelper {
             // console.log(await followingElement.innerText());
             let coord = await followingElement.boundingBox();
             return {
-                x: coord!.x - 10,
-                y: coord!.y + 10
+                x: coord!.x - 50,
+                y: coord!.y + 17
             }
         } else {
             let coord = await this.page.frameLocator('#inner-iframe').locator(`#config-list > #${list}`).boundingBox();
