@@ -23,7 +23,7 @@ export interface StoredToken {
 export class TokenManager {
     TOKEN_URL = 'https://id.twitch.tv/oauth2/token';
     DEVICE_URL = 'https://id.twitch.tv/oauth2/device';
-    SCOPE = 'channel:read:subscriptions user:read:email user:read:follows';
+    SCOPE = 'user:read:follows';
 
     token?: string | null;
     refreshToken?: string | null;
