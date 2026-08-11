@@ -3,6 +3,7 @@
     import { parentFinalizeEvent } from "../event.svelte.js";
     import { _ } from 'svelte-i18n';
     import { derived, writable, get } from 'svelte/store';
+    import * as CST from '../../constantes.js'
     
     import { dndzone, TRIGGERS, SHADOW_ITEM_MARKER_PROPERTY_NAME, DRAGGED_ELEMENT_ID } from "svelte-dnd-action";
 
@@ -149,7 +150,7 @@ function show() {
               {#each filtered as item(item.id)}
               <DraggableChannel
               channelId={item.channel_id}
-              channelName={item.channel_name}
+              channelName={item.channel_id === CST.ALL_OTHER_CHANNELS ? $_('display.allOtherChannels') : item.channel_name}
               channelProfilePic={item.profile_image_url}
               viewerCount={item.viewer_count}
               gameName={item.game_name}
