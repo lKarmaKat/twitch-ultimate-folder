@@ -52,6 +52,9 @@ export class TwitchApi {
     /** Without this a 429 body parses as JSON, and `data` being undefined throws far from the cause. */
     private assertOk(response: Response, url: string): void {
       if (response.ok) return;
+      // A 401 outranks our own 30-min window: without this the poller backs off
+      // on a dead token for up to half an hour.
+      if (response.status === 401) this.tokenManager.invalidateToken();
       throw new HttpError(response.status, retryAfterMsFromHeaders(response.headers), url);
     }
 

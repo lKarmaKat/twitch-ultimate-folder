@@ -1,5 +1,5 @@
-import { retryAfterMsFromHeaders } from "@src/service_worker/twitch.ts";
-import { describe, test, expect } from "@jest/globals";
+import { TwitchApi, retryAfterMsFromHeaders } from "@src/service_worker/twitch.ts";
+import { jest, describe, test, expect } from "@jest/globals";
 
 /**
  * Helix annonce son délai de reprise de deux façons : `Retry-After` en secondes
@@ -39,5 +39,42 @@ describe("retryAfterMsFromHeaders", () => {
     test("sans en-tête exploitable, le backoff de l'appelant décide", () => {
         expect(retryAfterMsFromHeaders(headers({}), NOW)).toBeNull();
         expect(retryAfterMsFromHeaders(headers({ "Retry-After": "bientôt" }), NOW)).toBeNull();
+    });
+});
+
+/**
+ * Our own 30-min validation window would otherwise hide a token Helix already
+ * rejects, leaving the poller to back off on 401s instead of refreshing.
+ */
+describe("Helix error statuses", () => {
+    function apiWithStatus(status: number) {
+        const tokenManager = {
+            getToken: () => Promise.resolve("tok"),
+            invalidateToken: jest.fn(),
+        };
+        global.fetch = jest.fn(() => Promise.resolve({
+            ok: false,
+            status,
+            headers: headers({}),
+            json: () => Promise.resolve({}),
+        })) as unknown as typeof fetch;
+
+        return { twitch: new TwitchApi(tokenManager as any), tokenManager };
+    }
+
+    test("a 401 drops the validation window", async () => {
+        const { twitch, tokenManager } = apiWithStatus(401);
+
+        await expect(twitch.getUserFollowedLiveStream())
+            .rejects.toThrow("getUserFollowedLiveStream failed");
+        expect(tokenManager.invalidateToken).toHaveBeenCalledTimes(1);
+    });
+
+    test("a 429 leaves the validation window alone", async () => {
+        const { twitch, tokenManager } = apiWithStatus(429);
+
+        await expect(twitch.getUserFollowedLiveStream())
+            .rejects.toThrow("getUserFollowedLiveStream failed");
+        expect(tokenManager.invalidateToken).not.toHaveBeenCalled();
     });
 });

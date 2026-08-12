@@ -1,4 +1,4 @@
-import { TokenManager } from "@src/service_worker/token.ts";
+import { TokenManager, isRefreshTokenRejected } from "@src/service_worker/token.ts";
 import { tokenKey } from "@src/constantes.ts";
 import { jest, describe, beforeEach, test, expect, afterEach } from "@jest/globals";
 
@@ -27,24 +27,35 @@ type FakeResponse = {
     json: () => Promise<any>;
 };
 
+/** An Error stands for a rejected fetch (offline, DNS failure). */
+type FetchOutcome = FakeResponse | Error;
+
 /** Construit un faux Response. */
 function res(body: any, ok = true, status = 200): FakeResponse {
     return { ok, status, json: () => Promise.resolve(body) };
 }
+
+/** A 5xx behind Twitch's edge answers HTML, so json() rejects. */
+function resHtml(status: number): FakeResponse {
+    return { ok: false, status, json: () => Promise.reject(new SyntaxError("Unexpected token '<'")) };
+}
+
+/** Twitch's own body for a spent or revoked grant. */
+const REJECTED_GRANT_BODY = { error: 'Bad Request', status: 400, message: 'Invalid refresh token' };
 
 /**
  * Aiguille fetch selon l'URL. Chaque entrée est soit une réponse unique,
  * soit un tableau de réponses consommées dans l'ordre (une par appel).
  */
 function mockFetchByUrl(map: {
-    validate?: FakeResponse | FakeResponse[];
-    device?: FakeResponse | FakeResponse[];
-    token?: FakeResponse | FakeResponse[];
+    validate?: FetchOutcome | FetchOutcome[];
+    device?: FetchOutcome | FetchOutcome[];
+    token?: FetchOutcome | FetchOutcome[];
 }) {
-    const queues: Record<string, FakeResponse[]> = {
-        validate: ([] as FakeResponse[]).concat(map.validate ?? []),
-        device: ([] as FakeResponse[]).concat(map.device ?? []),
-        token: ([] as FakeResponse[]).concat(map.token ?? []),
+    const queues: Record<string, FetchOutcome[]> = {
+        validate: ([] as FetchOutcome[]).concat(map.validate ?? []),
+        device: ([] as FetchOutcome[]).concat(map.device ?? []),
+        token: ([] as FetchOutcome[]).concat(map.token ?? []),
     };
 
     const fn = jest.fn((url: string) => {
@@ -58,7 +69,7 @@ function mockFetchByUrl(map: {
         if (queue.length === 0) return Promise.reject(new Error(`Pas de réponse mockée pour ${key}`));
         // Rejoue la dernière réponse si le mock est épuisé mais qu'une seule a été fournie.
         const next = queue.length > 1 ? queue.shift()! : queue[0];
-        return Promise.resolve(next);
+        return next instanceof Error ? Promise.reject(next) : Promise.resolve(next);
     });
 
     global.fetch = fn as unknown as typeof fetch;
@@ -80,6 +91,20 @@ function lastPersisted(userId: number): any {
         if (arg && tokenKey(userId) in arg) return arg[tokenKey(userId)];
     }
     return undefined;
+}
+
+/** Every object ever written under `token_<userId>`, oldest first. */
+function allPersisted(userId: number): any[] {
+    return (chrome.storage.local.set as unknown as jest.Mock).mock.calls
+        .map(call => (call[0] as Record<string, unknown>)[tokenKey(userId)])
+        .filter(value => value !== undefined);
+}
+
+/** A promise whose settlement the test drives, to park a fetch mid-flight. */
+function deferred<T>() {
+    let resolve!: (value: T) => void;
+    const promise = new Promise<T>(r => { resolve = r; });
+    return { promise, resolve };
 }
 
 const FUTURE = () => Date.now() + 10 * 60 * 1000;
@@ -180,7 +205,7 @@ describe("TokenManager", () => {
             });
         });
 
-        test("validate KO → refresh KO → false, refreshToken purgé du bucket", async () => {
+        test("a refresh rejected as a dead grant clears the bucket on purpose", async () => {
             const manager = new TokenManager();
             mockStoredToken(USER_ID, {
                 twitchToken: "stale_token",
@@ -190,12 +215,124 @@ describe("TokenManager", () => {
             });
             mockFetchByUrl({
                 validate: res(null, false, 401),
-                token: res({}, false, 400),
+                token: res(REJECTED_GRANT_BODY, false, 400),
             });
 
             await expect(manager.switchUser(USER_ID)).resolves.toBe(false);
             expect(manager.refreshToken).toBeNull();
-            expect(lastPersisted(USER_ID)).toMatchObject({ refreshToken: null });
+            expect(lastPersisted(USER_ID)).toMatchObject({ twitchToken: null, refreshToken: null });
+        });
+
+        test.each([
+            ["a 500", res({}, false, 500)],
+            ["a 429", res({}, false, 429)],
+            ["an ambiguous 400", res({}, false, 400)],
+            ["an HTML error body", resHtml(502)],
+            ["an unreachable host", new Error("Failed to fetch")],
+        ])("a refresh failing on %s leaves the stored credentials untouched", async (_label, outcome) => {
+            const manager = new TokenManager();
+            mockStoredToken(USER_ID, {
+                twitchToken: "stale_token",
+                refreshToken: "refresh_1",
+                tokenExpirationDate: PAST(),
+                nextValidationDate: PAST(),
+            });
+            mockFetchByUrl({
+                validate: res(null, false, 401),
+                token: outcome as any,
+            });
+
+            await expect(manager.switchUser(USER_ID)).resolves.toBe(false);
+            expect(manager.refreshToken).toBe("refresh_1");
+            expect(allPersisted(USER_ID)).toEqual([]);
+        });
+
+        test("an unreachable validation endpoint never spends the refresh token", async () => {
+            const manager = new TokenManager();
+            mockStoredToken(USER_ID, {
+                twitchToken: "stored_token",
+                refreshToken: "refresh_1",
+                tokenExpirationDate: PAST(),
+                nextValidationDate: PAST(),
+            });
+            mockFetchByUrl({
+                validate: new Error("Failed to fetch"),
+                token: new Error("Failed to fetch"),
+            });
+
+            await expect(manager.switchUser(USER_ID)).resolves.toBe(false);
+            expect(manager.refreshToken).toBe("refresh_1");
+            expect(allPersisted(USER_ID)).toEqual([]);
+        });
+
+        test("a 5xx on validation keeps the token instead of nulling it", async () => {
+            const manager = new TokenManager();
+            mockStoredToken(USER_ID, {
+                twitchToken: "stored_token",
+                refreshToken: "refresh_1",
+                tokenExpirationDate: PAST(),
+                nextValidationDate: PAST(),
+            });
+            mockFetchByUrl({
+                validate: res({}, false, 503),
+                token: res({}, false, 503),
+            });
+
+            await expect(manager.switchUser(USER_ID)).resolves.toBe(false);
+            expect(manager.token).toBe("stored_token");
+            expect(allPersisted(USER_ID)).toEqual([]);
+        });
+
+        test("two switches for the same account share one flow and never persist nulls", async () => {
+            // The reported bug: the second switch's reset() blanked the state the
+            // first was about to persist after a SUCCESSFUL validation.
+            const manager = new TokenManager();
+            mockStoredToken(USER_ID, {
+                twitchToken: "stored_token",
+                refreshToken: "refresh_1",
+                tokenExpirationDate: PAST(),
+                nextValidationDate: PAST(),
+            });
+            const validate = deferred<FakeResponse>();
+            const fetchFn = jest.fn(() => validate.promise);
+            global.fetch = fetchFn as unknown as typeof fetch;
+
+            const first = manager.switchUser(USER_ID);
+            await flushMicrotasks();                    // parked on validate
+            const second = manager.switchUser(USER_ID); // the duplicate tab report
+            validate.resolve(res({ user_id: USER_ID, expires_in: 3600 }));
+
+            await expect(Promise.all([first, second])).resolves.toEqual([true, true]);
+            expect(fetchFn).toHaveBeenCalledTimes(1);
+            expect(manager.refreshToken).toBe("refresh_1");
+            expect(allPersisted(USER_ID).filter(bucket => bucket.refreshToken === null)).toEqual([]);
+            expect(lastPersisted(USER_ID)).toMatchObject({
+                twitchToken: "stored_token",
+                refreshToken: "refresh_1",
+            });
+        });
+
+        test("a switch superseded by another account writes nothing under the old key", async () => {
+            const manager = new TokenManager();
+            mockStoredToken(1, {
+                twitchToken: "token_a",
+                refreshToken: "refresh_a",
+                tokenExpirationDate: PAST(),
+                nextValidationDate: PAST(),
+            });
+            const validateA = deferred<FakeResponse>();
+            global.fetch = jest.fn(() => validateA.promise) as unknown as typeof fetch;
+
+            const first = manager.switchUser(1);
+            await flushMicrotasks();
+
+            mockStoredToken(2, undefined);
+            const second = manager.switchUser(2);
+            validateA.resolve(res({ user_id: 1, expires_in: 3600 }));
+
+            await expect(first).resolves.toBe(false);
+            await expect(second).resolves.toBe(false);
+            expect(allPersisted(1)).toEqual([]);
         });
 
         test("bucket contenant le token d'un AUTRE compte → false", async () => {
@@ -518,7 +655,7 @@ describe("TokenManager", () => {
             expect(manager.refreshToken).toBe("refresh_2");
         });
 
-        test("invalide, validate KO, refresh KO → throw + onAuthLost", async () => {
+        test("invalide, validate KO, refresh rejeté → throw + onAuthLost", async () => {
             const manager = new TokenManager();
             const onAuthLost = jest.fn();
             manager.onAuthLost = onAuthLost;
@@ -529,11 +666,66 @@ describe("TokenManager", () => {
             manager.nextValidationDate = PAST();
             mockFetchByUrl({
                 validate: res(null, false, 401),
-                token: res({}, false, 400),
+                token: res(REJECTED_GRANT_BODY, false, 400),
             });
 
             await expect(manager.getToken()).rejects.toThrow("failed to refresh token");
             expect(onAuthLost).toHaveBeenCalledTimes(1);
+        });
+
+        test.each([
+            ["an unreachable host", new Error("Failed to fetch")],
+            ["a 503", res({}, false, 503)],
+            ["an ambiguous 400", res({}, false, 400)],
+        ])("%s on refresh is not reported as a lost authorization", async (_label, outcome) => {
+            const manager = new TokenManager();
+            const onAuthLost = jest.fn();
+            manager.onAuthLost = onAuthLost;
+            manager.userId = USER_ID;
+            manager.token = "old_token";
+            manager.refreshToken = "refresh_1";
+            manager.tokenExpirationDate = FUTURE();
+            manager.nextValidationDate = PAST();
+            mockFetchByUrl({
+                validate: res(null, false, 401),
+                token: outcome as any,
+            });
+
+            await expect(manager.getToken()).rejects.toThrow("failed to refresh token");
+            expect(onAuthLost).not.toHaveBeenCalled();
+            expect(manager.refreshToken).toBe("refresh_1");
+            expect(chrome.storage.local.set).not.toHaveBeenCalled();
+        });
+
+        test("un 503 sur validate sans refreshToken n'est pas une autorisation perdue", async () => {
+            const manager = new TokenManager();
+            const onAuthLost = jest.fn();
+            manager.onAuthLost = onAuthLost;
+            manager.userId = USER_ID;
+            manager.token = "old_token";
+            manager.refreshToken = null;
+            manager.tokenExpirationDate = FUTURE();
+            manager.nextValidationDate = PAST();
+            mockFetchByUrl({ validate: res({}, false, 503) });
+
+            await expect(manager.getToken()).rejects.toThrow("no refresh token available");
+            expect(onAuthLost).not.toHaveBeenCalled();
+        });
+
+        test("invalidateToken force la revalidation au prochain getToken", async () => {
+            const manager = new TokenManager();
+            manager.userId = USER_ID;
+            manager.token = "valid_token";
+            manager.tokenExpirationDate = FUTURE();
+            manager.nextValidationDate = FUTURE();
+            const fetchFn = mockFetchByUrl({ validate: res({ user_id: USER_ID, expires_in: 3600 }) });
+
+            await manager.getToken();
+            expect(fetchFn).not.toHaveBeenCalled(); // fenêtre encore ouverte
+
+            manager.invalidateToken();
+            await manager.getToken();
+            expect(fetchFn).toHaveBeenCalledTimes(1);
         });
 
         test("pas de refreshToken → throw SANS lancer de device flow", async () => {
@@ -593,6 +785,25 @@ describe("TokenManager", () => {
             expect(manager.userId).toBeUndefined();
             expect(chrome.storage.local.remove).not.toHaveBeenCalled();
             expect(chrome.storage.local.set).not.toHaveBeenCalled();
+        });
+    });
+
+    // =====================================================================
+    // isRefreshTokenRejected()
+    // =====================================================================
+    describe("isRefreshTokenRejected", () => {
+        test.each([
+            [400, { message: 'Invalid refresh token' }, true],
+            [400, { error: 'invalid_grant' }, true],
+            [401, { message: 'Unauthorized' }, true],
+            [400, { error_description: 'Token was revoked' }, true],
+            [400, null, false],
+            [400, {}, false],
+            [400, { message: 'missing client id' }, false],
+            [429, { message: 'Invalid refresh token' }, false],
+            [503, { message: 'Invalid refresh token' }, false],
+        ])("status %s with %o → %s", (status, body, expected) => {
+            expect(isRefreshTokenRejected(status as number, body)).toBe(expected);
         });
     });
 });

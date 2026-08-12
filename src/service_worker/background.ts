@@ -54,6 +54,10 @@ function teardown() {
   twitchApi = null;
 }
 
+// A rebuild in flight: duplicate reports await it instead of starting a second
+// one, which would blank the token state the first is still using.
+let sessionSwitchPromise: Promise<void> | null = null;
+
 /**
  * Single entry point for Twitch session changes (login, logout, switch). The
  * whole pipeline is rebuilt here, never anywhere else.
@@ -61,30 +65,46 @@ function teardown() {
 async function onSessionUserChanged(sessionUserId: number | null) {
   // Idempotent: every tab reports the same session. The currentAuthState test
   // still lets the very first call through, "no session" (null) included.
-  if (sessionUserId === currentUserId && currentAuthState !== null) return;
+  if (sessionUserId === currentUserId) {
+    if (sessionSwitchPromise) return sessionSwitchPromise;
+    // NEED_AUTH is not latched: a transient failure must stay retryable. Not
+    // during a device flow though, whose state a switchUser would wipe.
+    const retryable = currentAuthState === CST.AUTH_NEED_AUTH
+      && tokenManager.authInProgressPromise === null;
+    if (currentAuthState !== null && !retryable) return;
+  }
+
   const epoch = ++switchEpoch;
+  const run = (async () => {
+    teardown();
+    currentUserId = sessionUserId;
 
-  teardown();
-  currentUserId = sessionUserId;
+    if (sessionUserId === null) {
+      tokenManager.clear();
+      broadcastAuth(CST.AUTH_NO_SESSION);
+      return;
+    }
 
-  if (sessionUserId === null) {
-    tokenManager.clear();
-    broadcastAuth(CST.AUTH_NO_SESSION);
-    return;
+    const hasToken = await tokenManager.switchUser(sessionUserId);
+    if (epoch !== switchEpoch) return; // a more recent switch took over
+
+    if (!hasToken) {
+      broadcastAuth(CST.AUTH_NEED_AUTH);
+      return;
+    }
+
+    // READY as soon as the token works, WITHOUT waiting for initServices: its
+    // first full Helix load takes seconds, and pages already show "pending data".
+    broadcastAuth(CST.AUTH_READY);
+    await initServices(sessionUserId);
+  })();
+
+  sessionSwitchPromise = run;
+  try {
+    await run;
+  } finally {
+    if (sessionSwitchPromise === run) sessionSwitchPromise = null;
   }
-
-  const hasToken = await tokenManager.switchUser(sessionUserId);
-  if (epoch !== switchEpoch) return; // a more recent switch took over
-
-  if (!hasToken) {
-    broadcastAuth(CST.AUTH_NEED_AUTH);
-    return;
-  }
-
-  // READY as soon as the token works, WITHOUT waiting for initServices: its
-  // first full Helix load takes seconds, and pages already show "pending data".
-  broadcastAuth(CST.AUTH_READY);
-  await initServices(sessionUserId);
 }
 
 // Token became unrecoverable mid-session (revoked from Twitch settings, say):
@@ -186,7 +206,9 @@ async function resolveActiveTabSession(): Promise<{ state: string; sideNavCollap
   }
 
   return {
-    state: currentUserId !== null && tokenManager.token ? CST.AUTH_READY : CST.AUTH_NEED_AUTH,
+    // Not tokenManager.token: it is null after any failed validation, including
+    // a transient one, which would demand an authorization we already have.
+    state: currentAuthState === CST.AUTH_READY ? CST.AUTH_READY : CST.AUTH_NEED_AUTH,
     sideNavCollapsed: session.sideNavCollapsed,
     twitchDark: session.twitchDark
   };

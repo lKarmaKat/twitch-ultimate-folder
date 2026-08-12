@@ -1,6 +1,26 @@
-import { logErrorChain, wrapError } from "./errors";
+import { AuthRevokedError, TransientAuthError, findCause, logErrorChain, wrapError } from "./errors";
 import { CLIENT_ID, tokenKey } from "../constantes";
 import { api } from "../browserApi";
+
+/** id.twitch.tv's own trouble, never a verdict on the token. */
+function isTransientStatus(status: number): boolean {
+    return status === 429 || status >= 500;
+}
+
+const REJECTED_GRANT = /invalid[_ ]?(grant|refresh[_ ]?token)|unauthorized|revoked/i;
+
+/**
+ * Only a 400/401 naming the grant is permanent: Twitch answers 400 for a
+ * malformed request too, and an unreadable body proves nothing.
+ */
+export function isRefreshTokenRejected(status: number, body: unknown): boolean {
+    if (status !== 400 && status !== 401) return false;
+    const data = (body ?? {}) as { message?: unknown; error?: unknown; error_description?: unknown };
+    const detail = [data.message, data.error, data.error_description]
+        .filter((part): part is string => typeof part === 'string')
+        .join(' ');
+    return REJECTED_GRANT.test(detail);
+}
 
 export interface DeviceCodeInfo {
     user_code: string;
@@ -34,6 +54,13 @@ export class TokenManager {
     nextValidationDate = 0;
     authInProgressPromise: Promise<void> | null = null;
     currentDeviceCodeInfo: DeviceCodeInfo | null = null;
+    switchPromise: Promise<boolean> | null = null;
+    private switchingUserId?: number;
+    private refreshingPromise: Promise<string> | null = null;
+    private refreshingEpoch = -1;
+    // Bumped by every account change and every new authorization: a write from a
+    // superseded operation is dropped instead of overwriting live state.
+    private switchEpoch = 0;
 
     /** Set by the background: the current account's token is unrecoverable. */
     onAuthLost?: () => void;
@@ -42,15 +69,30 @@ export class TokenManager {
      * Repoints the manager at `userId` and tries to make its token usable.
      * @returns true if a valid token is available, false if authorization is needed.
      */
-    async switchUser(userId: number): Promise<boolean> {
+    switchUser(userId: number): Promise<boolean> {
+        // Every Twitch tab reports the same session after a worker wake: the
+        // duplicates await the running switch instead of resetting its state.
+        if (this.switchPromise && this.switchingUserId === userId) return this.switchPromise;
+
+        const epoch = this.beginNewOperation();
+        this.switchingUserId = userId;
+        this.switchPromise = this.restoreUser(userId, epoch).finally(() => {
+            if (epoch !== this.switchEpoch) return;
+            this.switchPromise = null;
+            this.switchingUserId = undefined;
+        });
+        return this.switchPromise;
+    }
+
+    private async restoreUser(userId: number, epoch: number): Promise<boolean> {
         this.reset();
         this.userId = userId;
 
         const key = tokenKey(userId);
         const stored = (await api.storage.local.get(key))[key] as StoredToken | undefined;
-        // A more recent switch happened while reading storage: going on would
+        // A more recent operation took over while reading storage: going on would
         // overwrite its state with this user's.
-        if (this.userId !== userId) return false;
+        if (epoch !== this.switchEpoch) return false;
         if (!stored?.refreshToken) return false;
 
         this.token = stored.twitchToken ?? null;
@@ -59,13 +101,13 @@ export class TokenManager {
         this.nextValidationDate = stored.nextValidationDate ?? 0;
 
         try {
-            await this.validateAuthToken();
-            return this.userId === userId;
+            await this.validateAuthToken(epoch);
+            return epoch === this.switchEpoch;
         } catch {
             try {
-                await this.refreshAccessToken();
-                await this.validateAuthToken();
-                return this.userId === userId;
+                await this.refreshAccessToken(epoch);
+                await this.validateAuthToken(epoch);
+                return epoch === this.switchEpoch;
             } catch (error) {
                 logErrorChain("TokenManager.switchUser", wrapError(
                     `TokenManager.switchUser could not restore a token for ${userId}`, error));
@@ -85,10 +127,11 @@ export class TokenManager {
             return this.token!;
         }
 
+        const epoch = this.beginNewOperation();
         this.reset();
         this.userId = userId;
         try {
-            return await this.getNewTokenAndValidate(callback, userId);
+            return await this.getNewTokenAndValidate(callback, userId, epoch);
         } catch (error) {
             throw wrapError("TokenManager.startAuthFor failed to obtain a token", error);
         }
@@ -96,8 +139,17 @@ export class TokenManager {
 
     /** Twitch logout: drop the in-memory state, never the storage. */
     clear(): void {
+        this.beginNewOperation();
         this.reset();
         this.userId = undefined;
+    }
+
+    /**
+     * Helix rejected the token before its 30-min window elapsed: force the next
+     * getToken through validation instead of trusting nextValidationDate.
+     */
+    invalidateToken(): void {
+        this.nextValidationDate = 0;
     }
 
     getToken(): Promise<string> {
@@ -107,22 +159,25 @@ export class TokenManager {
 
         if (this.fetchingPromise) return this.fetchingPromise;
 
+        const epoch = this.switchEpoch;
         this.fetchingPromise = (async () => {
             try {
-                await this.validateAuthToken();
+                await this.validateAuthToken(epoch);
                 return this.token!;
-            } catch {
+            } catch (validationError) {
                 // No fallback to the device flow: authorization only starts on
                 // an explicit user action. Report the loss instead.
                 if (!this.refreshToken) {
-                    this.notifyAuthLost();
-                    throw new Error("TokenManager.getToken no refresh token available");
+                    if (findCause(validationError, AuthRevokedError)) this.notifyAuthLost();
+                    throw wrapError("TokenManager.getToken no refresh token available", validationError);
                 }
                 try {
-                    await this.refreshAccessToken();
+                    await this.refreshAccessToken(epoch);
                     return this.token!;
                 } catch (error) {
-                    this.notifyAuthLost();
+                    // Only a rejected grant is unrecoverable: network and 5xx must
+                    // be retried, not answered with a re-auth prompt.
+                    if (findCause(error, AuthRevokedError)) this.notifyAuthLost();
                     throw wrapError("TokenManager.getToken failed to refresh token", error);
                 }
             }
@@ -152,8 +207,25 @@ export class TokenManager {
         this.onAuthLost?.();
     }
 
-    private async persist(): Promise<void> {
+    /**
+     * Invalidates in-flight operations: their writes and their coalescing slots
+     * describe a state that no longer exists.
+     */
+    private beginNewOperation(): number {
+        this.switchPromise = null;
+        this.switchingUserId = undefined;
+        return ++this.switchEpoch;
+    }
+
+    /**
+     * `authoritative` is the ONLY way a null refreshToken reaches storage: a
+     * fresh grant, or a grant Twitch rejected. Every other path refuses.
+     */
+    private async persist(epoch: number, authoritative = false): Promise<void> {
         if (!this.userId) return;
+        if (epoch !== this.switchEpoch) return;
+        if (!this.refreshToken && !authoritative) return;
+
         const stored: StoredToken = {
             twitchToken: this.token ?? null,
             refreshToken: this.refreshToken ?? null,
@@ -164,23 +236,26 @@ export class TokenManager {
     }
 
     private isTokenValid(): boolean {
+        // A blanked bucket can still carry a future nextValidationDate, which
+        // would otherwise hand a null token to TwitchApi.
+        if (!this.token) return false;
         if (this.nextValidationDate && this.tokenExpirationDate) {
             return Date.now() < this.nextValidationDate && Date.now() < this.tokenExpirationDate;
         }
         return false;
     }
 
-    private async getNewTokenAndValidate(callback: any, authUserId: number): Promise<string> {
+    private async getNewTokenAndValidate(callback: any, authUserId: number, epoch: number): Promise<string> {
         try {
-            await this.getNewAuthToken(callback, authUserId);
-            await this.validateAuthToken();
+            await this.getNewAuthToken(callback, authUserId, epoch);
+            await this.validateAuthToken(epoch);
             return this.token!;
         } catch (error) {
             throw wrapError("TokenManager.getNewTokenAndValidate failed to get new token or validate", error);
         }
     }
 
-    private async getNewAuthToken(callback: any, authUserId: number): Promise<void> {
+    private async getNewAuthToken(callback: any, authUserId: number, epoch: number): Promise<void> {
         if (this.authInProgressPromise) return this.authInProgressPromise;
 
         this.authInProgressPromise = (async () => {
@@ -192,7 +267,7 @@ export class TokenManager {
                     verification_uri
                 }
                 if (callback) callback({ user_code, verification_uri });
-                await this.pollForDeviceToken(device_code, interval, Date.now() + expires_in * 1000, authUserId);
+                await this.pollForDeviceToken(device_code, interval, Date.now() + expires_in * 1000, authUserId, epoch);
             } catch (error) {
                 throw wrapError("TokenManager.getNewAuthToken device flow failed", error);
             }
@@ -226,7 +301,8 @@ export class TokenManager {
         device_code: string,
         interval: number,
         expiresAt: number,
-        authUserId: number
+        authUserId: number,
+        epoch: number
     ): Promise<void> {
         const body = new URLSearchParams({
             client_id: CLIENT_ID,
@@ -243,14 +319,14 @@ export class TokenManager {
             if (data.access_token) {
                 // Polling lasts tens of seconds, so the account may have changed.
                 // reset() drops the promise, but this loop keeps running.
-                if (this.userId !== authUserId) {
+                if (this.userId !== authUserId || epoch !== this.switchEpoch) {
                     throw new Error(
                         `TokenManager.pollForDeviceToken user switched away from ${authUserId} during authorization`);
                 }
                 this.token = data.access_token;
                 this.refreshToken = data.refresh_token ?? null;
                 this.setTokenExpirationDate(data.expires_in);
-                await this.persist();
+                await this.persist(epoch, true);
                 return;
             }
             if (data.message === 'slow_down') interval += 5;
@@ -261,14 +337,27 @@ export class TokenManager {
         throw new Error('TokenManager.pollForDeviceToken token expired before user authorized');
     }
 
-    private async validateAuthToken(): Promise<void> {
-        const response = await fetch("https://id.twitch.tv/oauth2/validate", {
-            method: 'GET',
-            headers: { Authorization: 'OAuth ' + this.token }
-        });
+    private async validateAuthToken(epoch: number): Promise<void> {
+        let response: Response;
+        try {
+            response = await fetch("https://id.twitch.tv/oauth2/validate", {
+                method: 'GET',
+                headers: { Authorization: 'OAuth ' + this.token }
+            });
+        } catch (error) {
+            throw new TransientAuthError("TokenManager.validateAuthToken unreachable", { cause: error });
+        }
+
         if (!response.ok) {
+            // 429/5xx is id.twitch.tv's own trouble: keeping the token lets the
+            // next tick retry instead of spending the refresh token.
+            if (isTransientStatus(response.status)) {
+                throw new TransientAuthError(
+                    `TokenManager.validateAuthToken unavailable (${response.status})`);
+            }
             this.token = null;
-            throw new Error("TokenManager.validateAuthToken Token validation failed");
+            throw new AuthRevokedError(
+                `TokenManager.validateAuthToken token rejected (${response.status})`);
         }
         const data = await response.json();
         const validatedUserId = Number(data.user_id);
@@ -277,17 +366,29 @@ export class TokenManager {
         // corrupted bucket would serve one account's channels under another's.
         if (this.userId !== undefined && validatedUserId !== this.userId) {
             this.token = null;
-            throw new Error(
+            throw new AuthRevokedError(
                 `TokenManager.validateAuthToken token belongs to ${validatedUserId}, expected ${this.userId}`);
         }
 
         this.userId = validatedUserId;
         this.setTokenExpirationDate(data.expires_in);
-        await this.persist();
+        await this.persist(epoch);
     }
 
-    private async refreshAccessToken(): Promise<string> {
-        if (!this.refreshToken) throw new Error('TokenManager.refreshAccessToken No refresh token');
+    private refreshAccessToken(epoch: number): Promise<string> {
+        // Twitch rotates the refresh token: a second POST with the spent one
+        // comes back 400, indistinguishable from a revoked grant.
+        if (this.refreshingPromise && this.refreshingEpoch === epoch) return this.refreshingPromise;
+
+        this.refreshingEpoch = epoch;
+        this.refreshingPromise = this.requestRefreshedToken(epoch).finally(() => {
+            if (this.refreshingEpoch === epoch) this.refreshingPromise = null;
+        });
+        return this.refreshingPromise;
+    }
+
+    private async requestRefreshedToken(epoch: number): Promise<string> {
+        if (!this.refreshToken) throw new AuthRevokedError('TokenManager.refreshAccessToken No refresh token');
 
         const body = new URLSearchParams({
             client_id: CLIENT_ID,
@@ -295,19 +396,33 @@ export class TokenManager {
             refresh_token: this.refreshToken,
         });
 
-        const response = await fetch(this.TOKEN_URL, { method: 'POST', body });
-        const data = await response.json();
+        let response: Response;
+        try {
+            response = await fetch(this.TOKEN_URL, { method: 'POST', body });
+        } catch (error) {
+            throw new TransientAuthError('TokenManager.refreshAccessToken unreachable', { cause: error });
+        }
 
-        if (!response.ok || !data.access_token) {
-            this.refreshToken = null;
-            await this.persist();
-            throw new Error('TokenManager.refreshAccessToken Token refresh failed');
+        // A 5xx behind Twitch's edge answers HTML: a parse failure is not a
+        // verdict on the grant.
+        const data = await response.json().catch(() => null);
+
+        if (!response.ok || !data?.access_token) {
+            if (isRefreshTokenRejected(response.status, data)) {
+                this.token = null;
+                this.refreshToken = null;
+                await this.persist(epoch, true);
+                throw new AuthRevokedError(
+                    `TokenManager.refreshAccessToken refresh token rejected (${response.status})`);
+            }
+            throw new TransientAuthError(
+                `TokenManager.refreshAccessToken failed (${response.status})`);
         }
 
         this.token = data.access_token;
         this.refreshToken = data.refresh_token ?? this.refreshToken;
         this.setTokenExpirationDate(data.expires_in);
-        await this.persist();
+        await this.persist(epoch);
         return this.token!;
     }
 

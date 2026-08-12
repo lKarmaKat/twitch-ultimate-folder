@@ -10,6 +10,22 @@ export class HttpError extends Error {
     }
 }
 
+/** The grant itself is dead (revoked, spent): only a new authorization fixes it. */
+export class AuthRevokedError extends Error {
+    constructor(message: string, options?: ErrorOptions) {
+        super(message, options);
+        this.name = 'AuthRevokedError';
+    }
+}
+
+/** Auth call failed for a reason that may pass: network, 429, 5xx, unreadable body. */
+export class TransientAuthError extends Error {
+    constructor(message: string, options?: ErrorOptions) {
+        super(message, options);
+        this.name = 'TransientAuthError';
+    }
+}
+
 /** Walks the `cause` chain, since callers rewrap every error with wrapError. */
 export function findCause<T>(error: unknown, ctor: new (...args: any[]) => T): T | undefined {
     let current: unknown = error;
