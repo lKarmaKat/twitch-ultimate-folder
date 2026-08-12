@@ -1,0 +1,48 @@
+name: Publish to Firefox Add-ons
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      skip_version_check:
+        description: 'Ne pas vérifier la version déjà publiée'
+        type: boolean
+        default: false
+
+jobs:
+  publish-amo:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check published version
+        id: check
+        if: vars.SKIP_VERSION_CHECK != 'true' && inputs.skip_version_check != true
+        run: |
+          LOCAL_VERSION=$(jq -r .version package.json)
+          REMOTE_VERSION=$(curl -s "https://addons.mozilla.org/api/v5/addons/addon/twitch-ultimate-folder@karmakat/" | jq -r '.current_version.version // empty')
+          echo "local=$LOCAL_VERSION"   >> "$GITHUB_OUTPUT"
+          echo "remote=$REMOTE_VERSION" >> "$GITHUB_OUTPUT"
+          [ "$LOCAL_VERSION" = "$REMOTE_VERSION" ] && echo "skip=true" >> "$GITHUB_OUTPUT" || echo "skip=false" >> "$GITHUB_OUTPUT"
+
+      - name: Download release asset
+        if: steps.check.outputs.skip != 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ github.event.release.tag_name }}
+        run: |
+          gh release download ${TAG:+"$TAG"} \
+            --repo ${{ github.repository }} \
+            --pattern 'twitch-ultimate-folder-firefox-*.zip' \
+            --output extension-firefox.zip
+
+      - name: web-ext sign (submit to AMO)
+        if: steps.check.outputs.skip != 'true'
+        uses: kewisch/action-web-ext@v2
+        with:
+          cmd: sign
+          source: extension-firefox.zip
+          channel: listed
+          apiKey: ${{ secrets.AMO_JWT_ISSUER }}
+          apiSecret: ${{ secrets.AMO_JWT_SECRET }}

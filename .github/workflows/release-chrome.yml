@@ -1,0 +1,70 @@
+name: Publish to Chrome Web Store
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      skip_version_check:
+        description: 'Ne pas vérifier la version déjà publiée'
+        type: boolean
+        default: false
+
+jobs:
+  publish-cws:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check published version
+        id: check
+        if: vars.SKIP_VERSION_CHECK != 'true' && inputs.skip_version_check != true
+        env:
+          CLIENT_ID: ${{ secrets.CWS_CLIENT_ID }}
+          CLIENT_SECRET: ${{ secrets.CWS_CLIENT_SECRET }}
+          REFRESH_TOKEN: ${{ secrets.CWS_REFRESH_TOKEN }}
+          EXTENSION_ID: ${{ secrets.CWS_EXTENSION_ID }}
+        run: |
+          LOCAL_VERSION=$(jq -r .version package.json)
+
+          ACCESS_TOKEN=$(curl -s -X POST https://oauth2.googleapis.com/token \
+            -d client_id="$CLIENT_ID" -d client_secret="$CLIENT_SECRET" \
+            -d refresh_token="$REFRESH_TOKEN" -d grant_type=refresh_token \
+            | jq -r '.access_token')
+
+          REMOTE_VERSION=$(curl -s \
+            -H "Authorization: Bearer $ACCESS_TOKEN" -H "x-goog-api-version: 2" \
+            "https://www.googleapis.com/chromewebstore/v1.1/items/$EXTENSION_ID?projection=DRAFT" \
+            | jq -r '.crxVersion // empty')
+
+          echo "local=$LOCAL_VERSION"   >> "$GITHUB_OUTPUT"
+          echo "remote=$REMOTE_VERSION" >> "$GITHUB_OUTPUT"
+          [ "$LOCAL_VERSION" = "$REMOTE_VERSION" ] && echo "skip=true" >> "$GITHUB_OUTPUT" || echo "skip=false" >> "$GITHUB_OUTPUT"
+
+      - name: Download release asset
+        if: steps.check.outputs.skip != 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ github.event.release.tag_name }}
+        run: |
+          gh release download ${TAG:+"$TAG"} \
+            --repo ${{ github.repository }} \
+            --pattern 'twitch-ultimate-folder-chrome-*.zip' \
+            --output extension-chrome.zip
+
+      - name: Upload to Chrome Web Store
+        if: steps.check.outputs.skip != 'true'
+        run: npx chrome-webstore-upload-cli@3 upload
+          --source extension-chrome.zip
+          --extension-id ${{ secrets.CWS_EXTENSION_ID }}
+          --client-id ${{ secrets.CWS_CLIENT_ID }}
+          --client-secret ${{ secrets.CWS_CLIENT_SECRET }}
+          --refresh-token ${{ secrets.CWS_REFRESH_TOKEN }}
+
+      - name: Publish on Chrome Web Store
+        if: steps.check.outputs.skip != 'true'
+        run: npx chrome-webstore-upload-cli@3 publish
+          --extension-id ${{ secrets.CWS_EXTENSION_ID }}
+          --client-id ${{ secrets.CWS_CLIENT_ID }}
+          --client-secret ${{ secrets.CWS_CLIENT_SECRET }}
+          --refresh-token ${{ secrets.CWS_REFRESH_TOKEN }}
