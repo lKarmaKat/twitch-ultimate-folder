@@ -37,6 +37,10 @@ jobs:
             --pattern 'twitch-ultimate-folder-firefox-*.zip' \
             --output extension-firefox.zip
 
+      - name: Package source code for review
+        if: steps.check.outputs.skip != 'true'
+        run: git archive --format=zip -o source-code.zip HEAD
+
       - name: web-ext sign (submit to AMO)
         if: steps.check.outputs.skip != 'true'
         uses: kewisch/action-web-ext@v2
@@ -44,5 +48,10 @@ jobs:
           cmd: sign
           source: extension-firefox.zip
           channel: listed
+          sourceCode: source-code.zip
+          approvalNotes: |
+            Build: npm ci && npm run build:firefox
+            Output: dist/firefox/
+            Node version: see .nvmrc
           apiKey: ${{ secrets.AMO_JWT_ISSUER }}
           apiSecret: ${{ secrets.AMO_JWT_SECRET }}
