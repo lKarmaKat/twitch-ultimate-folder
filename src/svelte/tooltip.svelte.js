@@ -9,10 +9,6 @@ function hasContent(params) {
 	return !!(title || game);
 }
 
-export function maybeTooltip(node, params) {
-    if (!hasContent(params)) return;
-    return tooltip(node, params);
-  }
 export function tooltip(node, params) {
     let tt = document.querySelector("#custom-tooltip");
     if (tt)
@@ -43,6 +39,10 @@ export function tooltip(node, params) {
 	}
 
 	function handleFocus() {
+		// An offline channel has no title yet: return before the listener swap
+		// below, or a later hover would never fire again.
+		if (!hasContent(current)) return;
+
 		child = build();
         let c = tt.querySelector('.content');
 		c.appendChild(child);
@@ -87,11 +87,11 @@ export function tooltip(node, params) {
 		// The poller rewrites titles and categories every few seconds.
 		update(newParams) {
 			current = newParams;
-			if (child && child.parentNode) {
-				const next = build();
-				child.parentNode.replaceChild(next, child);
-				child = next;
-			}
+			if (!child) return;
+			if (!hasContent(current)) { handleBlur(); return; }
+			const next = build();
+			child.parentNode.replaceChild(next, child);
+			child = next;
 		},
 		destroy() {
 			handleBlur();

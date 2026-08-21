@@ -1,5 +1,5 @@
 <script>
-    import { maybeTooltip, tooltip } from "../tooltip.svelte";
+    import { tooltip } from "../tooltip.svelte";
     import { _ } from 'svelte-i18n';
     import { UNFOLLOWED_CHANNEL_IMAGE } from '../../constantes.js';
 
@@ -294,7 +294,7 @@
 		background: inherit;
 		/* clip-path: polygon(0% 0%, 100% 0%, 50% 100%); */
 		clip-path: polygon(0 0, 0 100%, 100% 50%); -->
-<a class="card" class:grid-cell={variant === 'grid' || variant === 'split'} class:dock-cell={variant === 'dock'} id="draggable-channel" class:unfollowed use:maybeTooltip={tooltipContent} href={ !blockNavigation && !unfollowed ? "https://www.twitch.tv/" + channelName : null } onclick={navigate}>
+<a class="card" class:grid-cell={variant === 'grid' || variant === 'split'} class:dock-cell={variant === 'dock'} id="draggable-channel" class:unfollowed use:tooltip={tooltipContent} href={ !blockNavigation && !unfollowed ? "https://www.twitch.tv/" + channelName : null } onclick={navigate}>
     {#if variant === 'dock'}
         <div class="profile-picture dock-avatar" class:live={isLive && showLiveHalo} class:offline={!isLive}>
             <img class={['profile-picture', greyIfOffline && 'greyIfOffline', !isLive && 'offline']} src={profilePic} alt="" />
