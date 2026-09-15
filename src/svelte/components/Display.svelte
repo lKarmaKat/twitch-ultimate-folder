@@ -689,6 +689,7 @@
 			
 <style>
 	.display-icon-container {
+		flex: none;
 		width: 1.5em;
 		height: 1.5em;
 		margin-right: .28em;
@@ -710,13 +711,30 @@
 		margin-left: 0.4em;
 	}
 	.display-icon-container,
-	.header-chevron,
-	.flex-row {
+	.header-chevron {
 		display: flex;
 		flex-direction: row;
 		justify-content: center;
 		align-items: center;
 
+	}
+	/* A flex item defaults to min-width:auto and would rather grow the header
+	   than clip: the whole chain must shrink for the ellipsis to kick in. */
+	.left {
+		flex: 1 1 auto;
+		min-width: 0;
+	}
+	.flex-row {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		min-width: 0;
+	}
+	.list-title {
+		min-width: 0;
+		overflow: hidden;
+		white-space: nowrap;
+		text-overflow: ellipsis;
 	}
 	/* Not mirrored on .al-left: only the margins and the rail switch sides
 	   there, the header keeps its children in the same order. */
@@ -862,6 +880,7 @@
 	}
 	.right {
 		display: flex;
+		flex: none;
 		align-items: center;
 		gap: 0.3em;
 		width: auto;
@@ -1026,6 +1045,7 @@
 	}
 	.all-other-sort-icon {
 		display: flex;
+		flex: none;
 		align-items: center;
 		justify-content: center;
 		width: 1.2em;
