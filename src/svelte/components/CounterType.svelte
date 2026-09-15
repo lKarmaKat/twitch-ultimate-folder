@@ -63,12 +63,13 @@
     }
     .badge {
         font-weight: 500;
-        padding: 2px 8px;
+        padding: 0.1em 0.6em;
+        line-height: 1.15;
         border-radius: 99px;
         display: flex;
         flex-direction: row;
         align-items: center;
-        gap: 4px;
+        gap: 0.3em;
     }
     .live-icon,
     .nolive-icon {

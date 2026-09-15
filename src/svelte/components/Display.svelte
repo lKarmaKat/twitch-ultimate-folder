@@ -862,7 +862,7 @@
 	/* Everything inside the header is sized in em (paddings, icon slot, badge),
 	   so scaling the font shrinks the whole row coherently. */
 	.list-header.small {
-		padding: 0.1em 0 0.1em 0;
+		padding: 0.2em 0 0.2em 0;
 		font-size: 0.85em;
 	}
 	.list-header.pill {
