@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 **Ultimate Twitch Folders** is a Chrome/Edge/Firefox extension (Manifest v3) that lets users reorganize their followed Twitch channels into custom nested folder structures displayed in the Twitch sidebar.
 
-Still in development, no need to bother with updating existing configurations when making changes.
+Published on the Chrome Web Store and on AMO, so configs saved by earlier versions are in the wild and must keep working. When the config model changes: never drop an existing field, read new fields with `?? default` at the point of use rather than migrating storage (that is already how `source` is handled), and keep a superseded field mirrored on save — `ENVELOPE_VERSION` in `configTransfer.ts` stays at `1`, so an export made by a newer version still imports into an older install.
 
 ## Commands
 

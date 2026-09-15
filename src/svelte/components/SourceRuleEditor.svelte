@@ -4,11 +4,23 @@
     import SortSelect from './SortSelect.svelte';
     import TwitchLanguageSelect from './TwitchLanguageSelect.svelte';
     import { TWITCH_LANGUAGE_FLAGS } from '../../i18n/twitchLanguageFlags.js';
+    import { getSourceGames, mirrorLegacyGame } from '../smartList.js';
 
     let { listConfig, configManager } = $props();
 
     const kindOptions = CST.SOURCE_KIND_OPTIONS;
     const languageOptions = CST.TWITCH_LANGUAGE_CODES.map(l => ({ id: l.id, name: l.label, flag: TWITCH_LANGUAGE_FLAGS[l.id] }));
+
+    // A rule saved before the cycle existed carries a single inline category:
+    // normalising it here is the only migration, and it happens on opening.
+    $effect(() => {
+        if (!Array.isArray(listConfig.source.games)) {
+            listConfig.source.games = getSourceGames(listConfig.source);
+        }
+    });
+
+    let selectedGames = $derived(listConfig.source.games ?? []);
+    let selectedIds = $derived(new Set(selectedGames.map(g => String(g.id))));
 
     // Rule-driven content replaces manual placement: only nested sub-lists
     // survive the switch (they stay independently manageable in the tree).
@@ -55,16 +67,27 @@
         }, 300);
     });
 
-    function pickGame(game_id, game_name) {
-        listConfig.source.game_id = game_id;
-        listConfig.source.game_name = game_name;
-        gameQuery = '';
-        searchResults = [];
+    let query = $derived(gameQuery.trim().toLowerCase());
+    let followedSuggestions = $derived(followedGames.filter(g =>
+        !selectedIds.has(String(g.game_id))
+        && (!query || (g.game_name ?? '').toLowerCase().includes(query))));
+    let remoteSuggestions = $derived(searchResults.filter(r => !selectedIds.has(String(r.id))));
+
+    function toggleGame(id, name) {
+        const key = String(id);
+        listConfig.source.games = selectedIds.has(key)
+            ? selectedGames.filter(g => String(g.id) !== key)
+            : [...selectedGames, { id: key, name }];
+        mirrorLegacyGame(listConfig.source);
     }
 
-    function clearGame() {
-        listConfig.source.game_id = null;
-        listConfig.source.game_name = null;
+    function moveGame(index, delta) {
+        const target = index + delta;
+        if (target < 0 || target >= selectedGames.length) return;
+        const games = [...selectedGames];
+        [games[index], games[target]] = [games[target], games[index]];
+        listConfig.source.games = games;
+        mirrorLegacyGame(listConfig.source);
     }
 </script>
 
@@ -80,46 +103,94 @@
 
     {#if listConfig.source.kind === CST.SOURCE_KIND_GAME}
         <div class="source-block">
-            {#if listConfig.source.game_id}
-                <div class="source-chip">
-                    <span>{listConfig.source.game_name}</span>
-                    <button type="button" class="source-chip-clear" onclick={clearGame}>×</button>
-                </div>
-            {:else}
-                <input
-                    type="text"
-                    bind:value={gameQuery}
-                    placeholder={$_('configPannel.sourceGameSearchPlaceholder')}/>
-                {#if followedGames.length > 0}
-                    <p class="source-group-label">{$_('configPannel.sourceGameFollowedGroup')}</p>
-                    <ul class="source-suggestions">
-                        {#each followedGames as g (g.game_id)}
-                            <li>
-                                <button type="button" onclick={() => pickGame(g.game_id, g.game_name)}>
-                                    <span class="source-suggestion-name">{g.game_name}</span>
-                                    <span class="source-suggestion-count">{g.count}</span>
-                                </button>
-                            </li>
-                        {/each}
-                    </ul>
+            <input
+                type="text"
+                bind:value={gameQuery}
+                placeholder={$_('configPannel.sourceGameSearchPlaceholder')}/>
+            <ul class="source-suggestions">
+                {#if selectedGames.length > 0}
+                    <li class="source-group-label">{$_('configPannel.sourceGameCycleGroup')} — {selectedGames.length}</li>
+                    {#each selectedGames as game, index (game.id)}
+                        <li class="selected">
+                            <span class="source-rank">{index + 1}</span>
+                            <input
+                                type="checkbox"
+                                id="cycle-{game.id}"
+                                checked
+                                onchange={() => toggleGame(game.id, game.name)}/>
+                            <label class="source-suggestion-name" for="cycle-{game.id}">{game.name}</label>
+                            <button
+                                type="button"
+                                class="source-move"
+                                disabled={index === 0}
+                                aria-label={$_('configPannel.sourceMoveUp')}
+                                onclick={() => moveGame(index, -1)}>▲</button>
+                            <button
+                                type="button"
+                                class="source-move"
+                                disabled={index === selectedGames.length - 1}
+                                aria-label={$_('configPannel.sourceMoveDown')}
+                                onclick={() => moveGame(index, 1)}>▼</button>
+                        </li>
+                    {/each}
                 {/if}
-                {#if gameQuery.trim().length >= 2}
-                    <p class="source-group-label">{$_('configPannel.sourceGameSearchGroup')}</p>
+
+                <li class="source-group-label">{$_('configPannel.sourceGameFollowedGroup')}</li>
+                {#each followedSuggestions as g (g.game_id)}
+                    <li>
+                        <span class="source-rank"></span>
+                        <input
+                            type="checkbox"
+                            id="cycle-{g.game_id}"
+                            onchange={() => toggleGame(g.game_id, g.game_name)}/>
+                        <label class="source-suggestion-name" for="cycle-{g.game_id}">{g.game_name}</label>
+                        <span class="source-suggestion-count">{g.count}</span>
+                    </li>
+                {:else}
+                    <li class="source-empty">{$_('configPannel.sourceGameNoResults')}</li>
+                {/each}
+
+                {#if query.length >= 2}
+                    <li class="source-group-label">{$_('configPannel.sourceGameSearchGroup')}</li>
                     {#if searching}
-                        <p class="source-empty">{$_('configPannel.sourceGameSearching')}</p>
-                    {:else if searchResults.length === 0}
-                        <p class="source-empty">{$_('configPannel.sourceGameNoResults')}</p>
+                        <li class="source-empty">{$_('configPannel.sourceGameSearching')}</li>
                     {:else}
-                        <ul class="source-suggestions">
-                            {#each searchResults as r (r.id)}
-                                <li>
-                                    <button type="button" onclick={() => pickGame(r.id, r.name)}>
-                                        <span class="source-suggestion-name">{r.name}</span>
-                                    </button>
-                                </li>
-                            {/each}
-                        </ul>
+                        {#each remoteSuggestions as r (r.id)}
+                            <li>
+                                <span class="source-rank"></span>
+                                <input
+                                    type="checkbox"
+                                    id="cycle-{r.id}"
+                                    onchange={() => toggleGame(r.id, r.name)}/>
+                                <label class="source-suggestion-name" for="cycle-{r.id}">{r.name}</label>
+                            </li>
+                        {:else}
+                            <li class="source-empty">{$_('configPannel.sourceGameNoResults')}</li>
+                        {/each}
                     {/if}
+                {/if}
+            </ul>
+
+            {#if selectedGames.length > 1}
+                <div class="behavior-item">
+                    <input
+                        type="checkbox"
+                        id="sourceAutoRotate"
+                        bind:checked={listConfig.source.autoRotate}
+                        onchange={() => {
+                            if (listConfig.source.rotateSeconds == null) listConfig.source.rotateSeconds = CST.DEFAULT_ROTATE_SECONDS;
+                        }}/>
+                    <label for="sourceAutoRotate">{$_('configPannel.sourceAutoRotate')}</label>
+                    <span class="help-badge" data-tooltip={$_('configPannel.sourceAutoRotateHelp')}>?</span>
+                </div>
+                {#if listConfig.source.autoRotate}
+                    <div class="row">
+                        <p>{$_('configPannel.sourceRotateSeconds')}</p>
+                        <input
+                            type="number"
+                            min={CST.MIN_ROTATE_SECONDS}
+                            bind:value={listConfig.source.rotateSeconds}/>
+                    </div>
                 {/if}
             {/if}
         </div>
@@ -141,12 +212,18 @@
 </div>
 
 <style>
-    .row {
+    .row,
+    .behavior-item {
         display: flex;
         align-items: center;
         gap: 0.4em;
+    }
+    .row {
         margin: 1em 0;
         flex-wrap: wrap;
+    }
+    .behavior-item {
+        margin-top: 0.9em;
     }
     p {
         font-size: 1em;
@@ -172,71 +249,75 @@
     .source-block {
         margin: 0.5em 0 1em;
     }
-    .source-group-label {
-        font-size: 0.8em;
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
-        opacity: 0.7;
-        margin: 0.7em 0 0.2em;
-    }
     .source-suggestions {
         list-style: none;
-        margin: 0;
+        margin: 0.5em 0 0;
         padding: 0;
-        max-height: 12em;
+        max-height: 16em;
         overflow-y: auto;
         border: 1px solid grey;
         border-radius: 0.3em;
     }
+    .source-suggestions li {
+        display: flex;
+        align-items: center;
+        gap: 0.5em;
+        padding: 0.35em 0.6em;
+    }
     .source-suggestions li + li {
         border-top: 1px solid rgba(128, 128, 128, 0.35);
     }
-    .source-suggestions button {
-        display: flex;
-        width: 100%;
-        align-items: center;
-        justify-content: space-between;
-        gap: 0.5em;
-        padding: 0.4em 0.6em;
-        background: transparent;
-        border: none;
-        cursor: pointer;
-        color: inherit;
-        font: inherit;
-        text-align: left;
+    .source-suggestions li.selected {
+        background: rgba(145, 71, 255, 0.18);
     }
-    .source-suggestions button:hover {
-        background: rgba(145, 71, 255, 0.25);
+    /* Sticky so the group a row belongs to stays named while scrolling. */
+    .source-group-label {
+        position: sticky;
+        top: 0;
+        z-index: 1;
+        background: var(--panel-surface, inherit);
+        font-size: 0.8em;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        opacity: 0.7;
+    }
+    .source-rank {
+        flex: none;
+        width: 1.1em;
+        text-align: center;
+        font-size: 0.8em;
+        font-weight: 700;
+        font-variant-numeric: tabular-nums;
     }
     .source-suggestion-name {
+        flex: 1 1 auto;
+        min-width: 0;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
+        cursor: pointer;
     }
     .source-suggestion-count {
         opacity: 0.7;
         flex: none;
     }
+    .source-move {
+        flex: none;
+        font: inherit;
+        font-size: 0.7em;
+        line-height: 1;
+        padding: 0.2em;
+        background: transparent;
+        border: none;
+        color: inherit;
+        cursor: pointer;
+    }
+    .source-move[disabled] {
+        opacity: 0.25;
+        cursor: default;
+    }
     .source-empty {
         font-size: 0.9em;
         opacity: 0.7;
-        margin: 0.2em 0;
-    }
-    .source-chip {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.5em;
-        padding: 0.3em 0.6em;
-        border: 1px solid grey;
-        border-radius: 999px;
-    }
-    .source-chip-clear {
-        background: transparent;
-        border: none;
-        cursor: pointer;
-        color: inherit;
-        font: inherit;
-        line-height: 1;
-        padding: 0;
     }
 </style>

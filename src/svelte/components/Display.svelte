@@ -10,7 +10,7 @@
     import SortIndicatorIcon from './icons/SortIndicatorIcon.svelte';
     import CounterType from './CounterType.svelte';
 	import { hasVisibleContent } from '../listVisibility.js';
-	import { getSmartMatchedChannels } from '../smartList.js';
+	import { getSmartMatchedChannels, getSourceGames } from '../smartList.js';
 	import { openFlyout, scheduleCloseFlyout } from '../event.svelte.js';
 
     let {
@@ -64,10 +64,44 @@
 	let source = $derived(configManager.selectedConfig[listId]?.source ?? { kind: CST.SOURCE_KIND_MANUAL });
 	let isSmartList = $derived(source.kind !== CST.SOURCE_KIND_MANUAL);
 
+	let sourceGames = $derived(source.kind === CST.SOURCE_KIND_GAME ? getSourceGames(source) : []);
+	let cycleEnabled = $derived(sourceGames.length > 1);
+	// Session state like openState: the cycle always restarts on the first
+	// category, and clamps itself when one is removed while the list is open.
+	let categoryIndex = $state(0);
+	$effect(() => {
+		configManager.selectedConfig;
+		categoryIndex = 0;
+	});
+	let activeCategoryIndex = $derived(sourceGames.length ? Math.min(categoryIndex, sourceGames.length - 1) : 0);
+	let activeCategory = $derived(sourceGames[activeCategoryIndex] ?? null);
+
+	let autoRotate = $derived(cycleEnabled && (source.autoRotate ?? false));
+	let rotateSeconds = $derived(Math.max(CST.MIN_ROTATE_SECONDS, source.rotateSeconds ?? CST.DEFAULT_ROTATE_SECONDS));
+
+	function stepCategory(e, step) {
+		e.stopPropagation();
+		categoryIndex = (activeCategoryIndex + step + sourceGames.length) % sourceGames.length;
+	}
+	function nextCategory() {
+		categoryIndex = (activeCategoryIndex + 1) % sourceGames.length;
+	}
+
+	// The progress bar is the clock, so pausing it on hover pauses the cycle.
+	// Reduced motion kills the animation, hence the timer fallback.
+	const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+	$effect(() => {
+		if (!autoRotate || !reducedMotion) return;
+		const handle = setInterval(nextCategory, rotateSeconds * 1000);
+		return () => clearInterval(handle);
+	});
+
 	let smartMatchedItems = $derived.by(() => {
 		if (!isSmartList) return [];
-		return getSmartMatchedChannels(configManager, listId).map(ch => ({ id: ch.channel_id, channel_id: ch.channel_id }));
+		return getSmartMatchedChannels(configManager, listId, activeCategory?.id ?? null)
+			.map(ch => ({ id: ch.channel_id, channel_id: ch.channel_id }));
 	});
+	let emptyCategory = $derived(cycleEnabled && smartMatchedItems.length === 0);
 
 	let behavior = $derived(configManager.selectedConfig[listId]?.behavior ?? {});
 	let startupExtended = $derived(behavior[CST.EXTENDED_ON_STARTUP] ?? false);
@@ -204,7 +238,9 @@
 	function countsFor(id) {
 		const rule = configManager.selectedConfig[id]?.source;
 		if (rule && rule.kind !== CST.SOURCE_KIND_MANUAL) {
-			const matched = getSmartMatchedChannels(configManager, id);
+			// Own badge counts the displayed category only; a child's caption has
+			// no cycle state to read from here and falls back to the whole rule.
+			const matched = getSmartMatchedChannels(configManager, id, id === listId ? (activeCategory?.id ?? null) : null);
 			return { live: matched.filter(ch => ch.isLive).length, total: matched.length };
 		}
 		let set = getChannelsInConfigFor(id);
@@ -470,12 +506,29 @@
 						<span class="display-icon-container" class:extended class:no-icon={headerIconType === ICON_NONE}>
 							<IconPicker iconType={headerIconType} />
 						</span>
-						<p class="list-title">{configManager.selectedConfig[listId]?.name}</p>
+						<p class="list-title">{cycleEnabled ? activeCategory?.name : configManager.selectedConfig[listId]?.name}</p>
 					</div>
 				</div>
 				<div class="right">
+					{#if cycleEnabled}
+						<span class="cycle-stepper">
+							<button type="button" class="cycle-btn prev" aria-label={$_('display.previousCategory')} onclick={(e) => stepCategory(e, -1)}>
+								<ChevronIcon />
+							</button>
+							<span class="cycle-rank">{activeCategoryIndex + 1}/{sourceGames.length}</span>
+							<button type="button" class="cycle-btn" aria-label={$_('display.nextCategory')} onclick={(e) => stepCategory(e, 1)}>
+								<ChevronIcon />
+							</button>
+						</span>
+					{/if}
 					<CounterType counter={liveChannelsCounter} totalChannels={totalChannelsCount} viewerCountType={type.viewerCountType} />
 				</div>
+			{/if}
+			{#if autoRotate}
+				<!-- Keyed so a manual step restarts the bar, and with it the timer. -->
+				{#key activeCategoryIndex}
+					<span class="cycle-progress" style="--cycle-duration:{rotateSeconds}s" onanimationiteration={nextCategory}></span>
+				{/key}
 			{/if}
 		</div>
 		{/if}
@@ -518,6 +571,18 @@
 							e.preventDefault();
 						} : undefined}
 					>
+						{#if emptyCategory}
+							<div class="category-empty">
+								<span class="icon-plate" aria-hidden="true">
+									<!-- Twitch's "live" dot, switched off, as in NoLiveChannels. -->
+									<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+										<circle cx="12" cy="12" r="4.5" />
+										<path d="M5.6 5.6a9 9 0 0 0 0 12.8M18.4 5.6a9 9 0 0 1 0 12.8" opacity="0.45" stroke-linecap="round" />
+									</svg>
+								</span>
+								<p>{$_('display.noLiveInCategory', { values: { category: activeCategory?.name } })}</p>
+							</div>
+						{/if}
 						{#if effectiveVariant === 'grid'}
 							<div class="grid-items">
 								{@render itemsList(visibleItems, true)}
@@ -796,8 +861,97 @@
 		box-shadow: inset -3px 0 0 var(--theme-color, #9147FF);
 	}
 	.right {
+		display: flex;
+		align-items: center;
+		gap: 0.3em;
 		width: auto;
 		padding-right: 4px;
+	}
+	/* Chevrons and rank welded into one pill: no gaps to pay for, and the
+	   negative block margin borrows the header padding so narrow buttons keep
+	   a tall click target without making the header taller. */
+	.cycle-stepper {
+		display: flex;
+		align-items: stretch;
+		flex: none;
+		height: 1.75em;
+		margin-block: -0.2em;
+		border-radius: 5px;
+		overflow: hidden;
+	}
+	/* The icon fills the button, so its size is set by the padding around it. */
+	.cycle-btn {
+		width: 1.1em;
+		display: grid;
+		place-items: center;
+		padding: 0.45em 0.19em;
+		border: none;
+		background: transparent;
+		color: inherit;
+		cursor: pointer;
+	}
+	.cycle-btn.prev {
+		transform: rotate(180deg);
+	}
+	.cycle-rank {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		min-width: 1.2em;
+		padding: 0 0.08em;
+		font-size: 0.72em;
+		font-weight: 700;
+		font-variant-numeric: tabular-nums;
+		letter-spacing: -0.02em;
+		color: var(--bar-accent);
+	}
+	.cycle-progress {
+		position: absolute;
+		left: 0;
+		bottom: 0;
+		height: 2px;
+		width: 0;
+		border-radius: 0 2px 2px 0;
+		background: var(--bar-accent);
+		animation: cycle-fill var(--cycle-duration, 7s) linear infinite;
+	}
+	.list-header:hover .cycle-progress {
+		animation-play-state: paused;
+	}
+	@keyframes cycle-fill {
+		from { width: 0; }
+		to { width: 100%; }
+	}
+	/* No animation to drive the cycle: a timer takes over, and a bar frozen
+	   at 0 would only lie about what is happening. */
+	@media (prefers-reduced-motion: reduce) {
+		.cycle-progress {
+			display: none;
+		}
+	}
+	.category-empty {
+		display: flex;
+		align-items: center;
+		gap: 0.6em;
+		padding: 0.7em 0.6em;
+	}
+	.category-empty .icon-plate {
+		flex: none;
+		width: 2em;
+		height: 2em;
+		border-radius: 0.45em;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+	.category-empty .icon-plate svg {
+		width: 1.15em;
+		height: 1.15em;
+	}
+	.category-empty p {
+		font-size: 0.95em;
+		line-height: 1.35;
+		text-wrap: balance;
 	}
 	.list-container {
 		/* padding: 0 0 0 .1em; */

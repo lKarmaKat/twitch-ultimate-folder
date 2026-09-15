@@ -64,6 +64,23 @@ function confSmartByGame() {
 	return wrap({ rootList, '10': smart, '20': manual, '30': nested });
 }
 
+// Three categories in the cycle, the last one with nobody live: the list shows
+// one at a time and never skips the empty one.
+function confSmartCycle(games: any[]) {
+	const smart = makeList({
+		id: 'list10', name: 'Watch list',
+		source: { kind: CST.SOURCE_KIND_GAME, games, game_id: games[0]?.id ?? null, game_name: games[0]?.name ?? null, language: null, freshMinutes: 10 }
+	});
+	const rootList = makeList({ id: 'rootList', name: 'liste principale', items: [{ id: 10, type: CST.TYPE_LIST }] });
+	return wrap({ rootList, '10': smart });
+}
+
+const cycleGames = [
+	{ id: '509658', name: 'ARC Raiders' },
+	{ id: '509642', name: "Baldur's Gate 3" },
+	{ id: '000009', name: 'Trackmania' }
+];
+
 function confSmartByLanguage() {
 	const smart = makeList({
 		id: 'list10', name: 'English',
@@ -163,6 +180,67 @@ test('smartList: nested sub-list survives and a manually placed duplicate still 
 	// chowh1 is placed manually in list "20" AND matched by the game rule in
 	// list "10": a smartList ignores where a channel is already placed.
 	await expect(manual.locator(':scope > .list-body > div > .channel-overlay')).toContainText('chowh1');
+});
+
+// The cycle renames the header as it goes, so listByTitle() would stop
+// matching after a click: the only list of this config is located structurally.
+function onlyList(page: Page) {
+	return display(page).locator('.nested-list > .list-container');
+}
+
+test('category cycle: the arrows show one category at a time, rank and badge follow', async ({ page }) => {
+	await setup(page, confSmartCycle(cycleGames), smartChannelsRef);
+	const list = onlyList(page);
+	const header = list.locator(':scope > .list-header');
+	const ownChannels = list.locator(':scope > .list-body > div > .channel-overlay');
+
+	// The category name takes the header over from the list name ("Watch list").
+	await expect(header.locator('.list-title')).toHaveText('ARC Raiders');
+	await expect(header.locator('.cycle-rank')).toHaveText('1/3');
+	await expect(ownChannels).toHaveCount(2);
+	await expect(header.locator('.counter')).toHaveText(/2\s*live/);
+
+	await header.locator('.cycle-btn').nth(1).click();
+	await expect(header.locator('.list-title')).toHaveText("Baldur's Gate 3");
+	await expect(header.locator('.cycle-rank')).toHaveText('2/3');
+	await expect(ownChannels).toHaveCount(1);
+	await expect(ownChannels.nth(0)).toContainText('AVAMind');
+
+	// Backwards from the first category wraps to the last one.
+	await header.locator('.cycle-btn').nth(0).click();
+	await expect(header.locator('.cycle-rank')).toHaveText('1/3');
+	await header.locator('.cycle-btn').nth(0).click();
+	await expect(header.locator('.cycle-rank')).toHaveText('3/3');
+});
+
+test('category cycle: an empty category is shown, not skipped', async ({ page }) => {
+	await setup(page, confSmartCycle(cycleGames), smartChannelsRef);
+	const list = onlyList(page);
+	const header = list.locator(':scope > .list-header');
+
+	await header.locator('.cycle-btn').nth(0).click(); // wraps to Trackmania
+	await expect(header.locator('.cycle-rank')).toHaveText('3/3');
+	await expect(list.locator('.category-empty')).toContainText('Trackmania');
+	await expect(list.locator(':scope > .list-body > div > .channel-overlay')).toHaveCount(0);
+});
+
+test('category cycle: auto rotation moves to the next category on its own', async ({ page }) => {
+	const conf = confSmartCycle(cycleGames);
+	conf.configsList[0]['10'].source.autoRotate = true;
+	conf.configsList[0]['10'].source.rotateSeconds = CST.MIN_ROTATE_SECONDS;
+	await setup(page, conf, smartChannelsRef);
+	const header = onlyList(page).locator(':scope > .list-header');
+
+	await expect(header.locator('.cycle-rank')).toHaveText('1/3');
+	await expect(header.locator('.cycle-rank')).toHaveText('2/3', { timeout: 8000 });
+});
+
+test('a single category keeps the list name and shows no cycle control', async ({ page }) => {
+	await setup(page, confSmartCycle([cycleGames[0]]), smartChannelsRef);
+	const list = listByTitle(page, 'Watch list');
+
+	await expect(list.locator(':scope > .list-header .cycle-stepper')).toHaveCount(0);
+	await expect(list.locator(':scope > .list-body > div > .channel-overlay')).toHaveCount(2);
 });
 
 test('smartList by language: matches only live channels streaming in that language', async ({ page }) => {

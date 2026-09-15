@@ -154,7 +154,9 @@
       "allOther2": "Il a sa propre configuration, accessible par son bouton de réglages plutôt qu'en cliquant sur un en-tête. Vous y choisissez son ordre de tri, et s'il affiche un en-tête :",
       "allOtherNone": "les chaînes s'affichent directement, sans en-tête au-dessus.",
       "allOtherSortable": "un en-tête cliquable apparaît. Un clic bascule le tri entre alphabétique et nombre de viewers pour la session en cours seulement, sans toucher à votre configuration enregistrée.",
-      "allOtherCaption": "Glisser l'élément « All other channels » et le configurer."
+      "allOtherCaption": "Glisser l'élément « All other channels » et le configurer.",
+      "contentCycle": "Une liste « {game} » peut contenir plusieurs catégories, mais n'en affiche qu'une à la fois. Son nom remplace celui de la liste dans le bandeau, et deux flèches encadrant un compteur « 2/4 » permettent d'en changer. Le badge ne compte que les chaînes de la catégorie affichée.",
+      "contentCycleAuto": "Cochez « {autoRotate} » pour que la liste passe à la suivante toute seule après un nombre de secondes au choix. Une fine barre en bas du bandeau indique le temps restant, et tout se met en pause tant que le pointeur reste sur le bandeau. Une catégorie où personne n'est en live reste dans le cycle et l'annonce."
     },
     "actionPopup": {
       "title": "En savoir plus sur la popup de l'extension",
@@ -275,7 +277,13 @@
     "sourceLanguage": "Langue",
     "sourceLanguagePlaceholder": "Sélectionnez une langue",
     "sourceFreshMinutes": "Démarré depuis moins de (minutes)",
-    "sourceFreshMinutesHelp": "N'affiche que les chaînes dont le direct a commencé il y a moins de ce nombre de minutes."
+    "sourceFreshMinutesHelp": "N'affiche que les chaînes dont le direct a commencé il y a moins de ce nombre de minutes.",
+    "sourceGameCycleGroup": "Dans le cycle",
+    "sourceMoveUp": "Monter dans le cycle",
+    "sourceMoveDown": "Descendre dans le cycle",
+    "sourceAutoRotate": "Défilement automatique",
+    "sourceAutoRotateHelp": "Passe à la catégorie suivante toute seule. En pause tant que le pointeur est sur le bandeau.",
+    "sourceRotateSeconds": "Toutes les (secondes)"
   },
   "configList": {
     "alreadyInList": "L'élément est déjà dans la liste",
@@ -293,7 +301,10 @@
   "display": {
     "allOtherChannels": "Toutes les autres chaînes",
     "overflowMore": "+{count} autres",
-    "overflowLess": "Afficher moins"
+    "overflowLess": "Afficher moins",
+    "noLiveInCategory": "Personne en live dans {category}",
+    "previousCategory": "Catégorie précédente",
+    "nextCategory": "Catégorie suivante"
   },
   "channel": {
     "offline": "Hors ligne",

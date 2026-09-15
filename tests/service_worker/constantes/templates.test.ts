@@ -78,10 +78,13 @@ describe("templates de configuration", () => {
 
         expect(list.source).toEqual({
             kind: CST.SOURCE_KIND_MANUAL,
+            games: [],
             game_id: null,
             game_name: null,
             language: null,
-            freshMinutes: 10
+            freshMinutes: 10,
+            autoRotate: false,
+            rotateSeconds: CST.DEFAULT_ROTATE_SECONDS
         });
     });
 

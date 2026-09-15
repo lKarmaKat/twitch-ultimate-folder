@@ -225,15 +225,22 @@ export const TWITCH_LANGUAGE_CODES = [
   {id: 'other', label: 'Other'},
 ];
 
+export const DEFAULT_ROTATE_SECONDS = 7;
+export const MIN_ROTATE_SECONDS = 3;
+
 // Built fresh on every use, like createNewList(): a shared reference would let
 // one list's rule edits corrupt another's default.
 export function createDefaultSource() {
   return {
     kind: SOURCE_KIND_MANUAL,
+    games: [],
+    // Mirror of games[0], kept so a version without the cycle reads the rule.
     game_id: null,
     game_name: null,
     language: null,
-    freshMinutes: 10
+    freshMinutes: 10,
+    autoRotate: false,
+    rotateSeconds: DEFAULT_ROTATE_SECONDS
   };
 }
 

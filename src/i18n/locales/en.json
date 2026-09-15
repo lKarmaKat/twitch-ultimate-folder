@@ -154,7 +154,9 @@
       "allOther2": "It has its own configuration, reached through its settings button rather than by clicking a header. You choose its sort order, and whether it shows a header:",
       "allOtherNone": "the channels are displayed directly, with no header above them.",
       "allOtherSortable": "a clickable header appears. Clicking it switches the sort between alphabetical and viewer count for the current session only, without touching your saved configuration.",
-      "allOtherCaption": "Dragging the « All other channels » element and setting it up."
+      "allOtherCaption": "Dragging the « All other channels » element and setting it up.",
+      "contentCycle": "A « {game} » list can hold several categories, but shows only one at a time. Its name replaces the list name in the header, and two arrows around a « 2/4 » counter move through them. The badge counts the channels of the displayed category only.",
+      "contentCycleAuto": "Tick « {autoRotate} » to let the list move on by itself after a chosen number of seconds. A thin bar along the bottom of the header shows the time left, and everything pauses while the pointer is over the header. A category with nobody live stays in the cycle and says so."
     },
     "actionPopup": {
       "title": "More details about the action popup",
@@ -275,7 +277,13 @@
     "sourceLanguage": "Language",
     "sourceLanguagePlaceholder": "Select a language",
     "sourceFreshMinutes": "Started less than (minutes)",
-    "sourceFreshMinutesHelp": "Only shows channels that started streaming within this many minutes."
+    "sourceFreshMinutesHelp": "Only shows channels that started streaming within this many minutes.",
+    "sourceGameCycleGroup": "In the cycle",
+    "sourceMoveUp": "Move up in the cycle",
+    "sourceMoveDown": "Move down in the cycle",
+    "sourceAutoRotate": "Cycle automatically",
+    "sourceAutoRotateHelp": "Moves to the next category on its own. Pauses while the pointer is over the header.",
+    "sourceRotateSeconds": "Every (seconds)"
   },
   "configList": {
     "alreadyInList": "The item is already in the list",
@@ -293,7 +301,10 @@
   "display": {
     "allOtherChannels": "All others channels",
     "overflowMore": "+{count} more",
-    "overflowLess": "Show less"
+    "overflowLess": "Show less",
+    "noLiveInCategory": "No one live in {category}",
+    "previousCategory": "Previous category",
+    "nextCategory": "Next category"
   },
   "channel": {
     "offline": "Offline",

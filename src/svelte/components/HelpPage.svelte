@@ -470,6 +470,8 @@ import { api } from '../../browserApi.js';
           <li><b>{$_('sourceKind.fresh')}</b> — {$_('help.createConfig.contentFresh')}</li>
         </ul>
         <p>{$_('help.createConfig.contentExclusiveNote')}</p>
+        <p>{$_('help.createConfig.contentCycle', { values: { game: $_('sourceKind.game') } })}</p>
+        <p>{$_('help.createConfig.contentCycleAuto', { values: { autoRotate: $_('configPannel.sourceAutoRotate') } })}</p>
         {@render screenshot($_('help.createConfig.contentShotAlt'), $_('help.createConfig.contentShotCaption'), '/assets/screenshots/list-content.png')}
       </div>
     </details>
