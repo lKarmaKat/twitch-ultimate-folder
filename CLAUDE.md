@@ -140,9 +140,9 @@ One E2E test fails on a clean checkout: `demo.test.ts` › *"dragging an element
 ## Code conventions
 
 - All code in English: identifiers, function names, strings, and comments. No French anywhere in the codebase.
-- Minimal comments. Prefer self-explanatory naming over explanation.
-- Only comment non-obvious logic (workarounds, Twitch DOM quirks, algorithmic tricks) — 2 lines maximum, and only for the most complex cases.
-- Never write comments that restate what the code already says.
+- **Do not write comments.** The default is no comment at all: make the code self-explanatory through naming instead.
+- The only exception is genuinely complicated logic that naming cannot carry — a workaround, a Twitch DOM quirk, a non-obvious algorithm. 2 lines maximum. A guard, a handler, an event listener or a CSS rule is not complicated: it gets no comment.
+- Never write comments that restate what the code already says, and never add one just to justify a change.
 
 ## Default mode
 

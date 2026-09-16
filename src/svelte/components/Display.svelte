@@ -180,6 +180,8 @@
 
     function toggleAutoCollapse(e) {
         e.stopPropagation();
+        // Rank wedged between the two arrows: clicking it must not collapse the list.
+        if (e.target.closest('.cycle-stepper')) return;
         if (!clickEnabled) return;
 		if (ruledByParent) onExclusiveToggle(listId);
 		else openState = !openState;
@@ -923,6 +925,7 @@
 		font-variant-numeric: tabular-nums;
 		letter-spacing: -0.02em;
 		color: var(--bar-accent);
+		cursor: default;
 	}
 	.cycle-progress {
 		position: absolute;
