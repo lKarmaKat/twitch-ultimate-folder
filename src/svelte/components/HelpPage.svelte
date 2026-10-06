@@ -289,6 +289,7 @@ import { api } from '../../browserApi.js';
 
     <h3 id="offline">{$_('help.purpose.offlineTitle')}</h3>
     <p>{$_('help.purpose.offline')}</p>
+    <p>{$_('help.purpose.offlineAllOther', { values: { allOther: $_('display.allOtherChannels') } })}</p>
     <p>{$_('help.purpose.offlineAlwaysShow', { values: { behaviour: $_('behaviour.showEvenIfOffline.label') } })}</p>
 
     <h2 id="connect">{$_('help.connect.title')}</h2>
@@ -381,6 +382,11 @@ import { api } from '../../browserApi.js';
         </p>
         <p class="warning">{$_('help.createConfig.sortModeWarning')}</p>
         <p>{$_('help.createConfig.sortModeRule')}</p>
+        <p>
+          {$_('help.createConfig.sortModeSmart', { values: {
+            content: $_('help.createConfig.contentTitle'), custom: $_('sort.custom'), viewer: $_('sort.viewer')
+          } })}
+        </p>
 
         {@render screenshot($_('help.createConfig.behaviourShotAlt'), $_('help.createConfig.behaviourShotCaption'), '/assets/screenshots/list-behaviour.png')}
       </div>
@@ -392,7 +398,11 @@ import { api } from '../../browserApi.js';
         <p>{$_('help.createConfig.styleIntro', { values: { style: $_('configPannel.style') } })}</p>
 
         <h4 id="style-layout">{$_('help.createConfig.layoutTitle')}</h4>
-        <p>{$_('help.createConfig.layoutIntro', { values: { layout: $_('configPannel.listLayout') } })}</p>
+        <p>
+          {$_('help.createConfig.layoutIntro', { values: {
+            layout: $_('configPannel.listLayout'), split: $_('listLayout.split'), tabs: $_('listLayout.tabs')
+          } })}
+        </p>
         <ul class="defs">
           <li>
             <b>{$_('listLayout.stack')}</b> — {$_('help.createConfig.layoutStack')}
@@ -403,11 +413,18 @@ import { api } from '../../browserApi.js';
             {@render layoutShot($_('listLayout.split'), $_('help.createConfig.layoutSplitCaption'), '/assets/screenshots/layout-split.png')}
           </li>
           <li>
-            <b>{$_('listLayout.flyout')}</b> — {$_('help.createConfig.layoutFlyout')}
+            <b>{$_('listLayout.flyout')}</b> — {$_('help.createConfig.layoutFlyout', { values: {
+              startup: $_('behaviour.extendedOnStartup.label'), flyoutSide: $_('actionPopup.flyoutSide')
+            } })}
             {@render layoutShot($_('listLayout.flyout'), $_('help.createConfig.layoutFlyoutCaption'), '/assets/screenshots/layout-flyout.png')}
           </li>
           <li>
-            <b>{$_('listLayout.tabs')}</b> — {$_('help.createConfig.layoutTabs')}
+            <b>{$_('listLayout.tabs')}</b> — {$_('help.createConfig.layoutTabs', { values: {
+              split: $_('listLayout.split'),
+              startup: $_('behaviour.extendedOnStartup.label'),
+              click: $_('behaviour.extendsOnClick.label'),
+              hover: $_('behaviour.extendsOnHover.label')
+            } })}
             {@render layoutShot($_('listLayout.tabs'), $_('help.createConfig.layoutTabsCaption'), '/assets/screenshots/layout-tabs.png')}
           </li>
           <li>
@@ -462,7 +479,7 @@ import { api } from '../../browserApi.js';
       <summary>{$_('help.createConfig.contentTitle')}</summary>
       <div class="details-body">
         <p>{$_('help.createConfig.contentIntro', { values: { source: $_('configPannel.sourceContent') } })}</p>
-        <p class="warning">{$_('help.createConfig.contentWarning', { values: { manual: $_('sourceKind.manual') } })}</p>
+        <p class="warning">{$_('help.createConfig.contentWarning', { values: { manual: $_('sourceKind.manual'), allOther: $_('display.allOtherChannels') } })}</p>
         <p>{$_('help.createConfig.contentRulesIntro')}</p>
         <ul class="defs">
           <li><b>{$_('sourceKind.game')}</b> — {$_('help.createConfig.contentGame')}</li>
@@ -537,7 +554,13 @@ import { api } from '../../browserApi.js';
     <p>{$_('help.issues.logsIntro')}</p>
     <ul class="defs">
       <li>{$_('help.issues.logsPage')}</li>
-      <li>{$_('help.issues.logsWorker')}</li>
+      <li>
+        {$_('help.issues.logsWorker')}
+        <ul>
+          <li>{$_('help.issues.logsWorkerChrome')}</li>
+          <li>{$_('help.issues.logsWorkerFirefox')}</li>
+        </ul>
+      </li>
     </ul>
     <p>{$_('help.issues.recording')}</p>
 
