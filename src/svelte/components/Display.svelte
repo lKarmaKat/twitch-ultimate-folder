@@ -180,7 +180,6 @@
 
     function toggleAutoCollapse(e) {
         e.stopPropagation();
-        // Rank wedged between the two arrows: clicking it must not collapse the list.
         if (e.target.closest('.cycle-stepper')) return;
         if (!clickEnabled) return;
 		if (ruledByParent) onExclusiveToggle(listId);
