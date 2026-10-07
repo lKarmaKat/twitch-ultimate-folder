@@ -137,7 +137,7 @@
       "badgesShotAlt": "Los cinco estilos de insignia uno junto a otro",
       "contentTitle": "Más sobre el contenido de las listas",
       "contentIntro": "Por defecto, los canales de una lista son los que colocas en ella a mano. Una lista puede, en cambio, convertirse en una smartlist: se rellena automáticamente a partir de una regla, reevaluada continuamente a medida que los canales se conectan o desconectan. Elige la regla en la opción «{source}» del panel de configuración.",
-      "contentWarning": "Convertir una lista en smartlist elimina al instante lo que habías colocado en ella a mano —canales, separadores y el elemento «{allOther}»— y volver a ponerla en «{manual}» no los recupera: cierra la ventana sin guardar si cambias de opinión. Sus sublistas se conservan: se muestran junto a los canales que encuentra la regla y siguen aceptando canales. La smartlist en sí rechaza todo lo que se suelte en ella, canales y listas por igual, pero su botón + sigue creando sublistas dentro de ella.",
+      "contentWarning": "Convertir una lista en smartlist, o cambiar después su tipo de contenido, la vacía al instante: canales, separadores, sublistas y el elemento «{allOther}» se eliminan, y volver a ponerla en «{manual}» no los recupera: cierra la ventana sin guardar si cambias de opinión. Una smartlist solo contiene lo que encuentra su regla: no se puede soltar nada en ella y sus botones + y — están desactivados.",
       "contentRulesIntro": "Hay tres reglas disponibles, y las tres solo seleccionan canales que sigues y que están en directo en el momento en que se comprueban:",
       "contentGame": "la lista sigue una categoría de Twitch. Busca entre las categorías en las que están emitiendo ahora los canales que sigues, o en el directorio completo de Twitch, y todos los canales que sigues y estén en directo en esa categoría aparecerán aquí.",
       "contentLanguage": "la lista sigue un idioma de emisión. Todos los canales que sigues y estén en directo en ese idioma aparecerán aquí.",
@@ -286,6 +286,7 @@
     "addList": "Añadir nueva lista en {listId}",
     "addSeparator": "Añadir un separador",
     "separatorPlaceholder": "Etiqueta del separador (opcional)",
+    "smartListLocked": "Smartlist: su contenido proviene de su regla, no se puede añadir nada a mano",
     "emptyAddList": "Haz clic en + arriba para añadir una nueva lista",
     "emptyDragChannel": "Arrastra un canal desde la izquierda para añadirlo aquí"
   },

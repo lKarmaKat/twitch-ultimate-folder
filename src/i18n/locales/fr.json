@@ -137,7 +137,7 @@
       "badgesShotAlt": "Les cinq styles de pastille côte à côte",
       "contentTitle": "En savoir plus sur le contenu des listes",
       "contentIntro": "Par défaut, les chaînes d'une liste sont celles que vous y placez à la main. Une liste peut à la place devenir une smartlist : elle se remplit automatiquement à partir d'une règle, réévaluée en continu à mesure que les chaînes passent en direct ou hors ligne. Choisissez la règle depuis l'option « {source} » du panneau de configuration.",
-      "contentWarning": "Transformer une liste en smartlist supprime aussitôt ce que vous y aviez placé à la main — chaînes, séparateurs et élément « {allOther} » — et la remettre sur « {manual} » ne les fait pas revenir : fermez la fenêtre sans sauvegarder si vous changez d'avis. Ses sous-listes sont conservées : elles s'affichent à côté des chaînes trouvées par la règle, et acceptent toujours des chaînes. La smartlist elle-même refuse tout ce qu'on y dépose, chaînes comme listes, mais son bouton + permet toujours d'y créer des sous-listes.",
+      "contentWarning": "Transformer une liste en smartlist, ou changer ensuite son type de contenu, la vide aussitôt : chaînes, séparateurs, sous-listes et élément « {allOther} » sont tous supprimés, et la remettre sur « {manual} » ne les fait pas revenir : fermez la fenêtre sans sauvegarder si vous changez d'avis. Une smartlist ne contient ensuite que ce que trouve sa règle : on ne peut rien y déposer, et ses boutons + et — sont désactivés.",
       "contentRulesIntro": "Trois règles sont disponibles, et toutes trois ne retiennent que des chaînes que vous suivez, en direct au moment où elles sont évaluées :",
       "contentGame": "la liste suit une catégorie Twitch. Cherchez parmi les catégories dans lesquelles vos chaînes suivies diffusent actuellement, ou dans l'annuaire complet de Twitch, et toutes les chaînes suivies en direct dans cette catégorie apparaissent ici.",
       "contentLanguage": "la liste suit une langue de diffusion. Toutes les chaînes suivies actuellement en direct dans cette langue apparaissent ici.",
@@ -294,6 +294,7 @@
     "addList": "Ajouter une nouvelle liste dans {listId}",
     "addSeparator": "Ajouter un séparateur",
     "separatorPlaceholder": "Libellé du séparateur (facultatif)",
+    "smartListLocked": "Smartlist : son contenu vient de sa règle, on ne peut rien y ajouter à la main",
     "emptyAddList": "Cliquez sur + ci-dessus pour ajouter une nouvelle liste",
     "emptyDragChannel": "Glissez une chaîne depuis la gauche pour l'ajouter ici"
   },

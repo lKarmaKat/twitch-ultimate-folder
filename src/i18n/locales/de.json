@@ -137,7 +137,7 @@
       "badgesShotAlt": "Die fünf Badge-Stile nebeneinander",
       "contentTitle": "Mehr zum Inhalt von Listen",
       "contentIntro": "Standardmäßig sind die Kanäle einer Liste genau die, die Sie von Hand hineinlegen. Eine Liste kann stattdessen zur Smartlist werden: Sie füllt sich automatisch anhand einer Regel, die fortlaufend neu ausgewertet wird, während Kanäle live oder offline gehen. Wählen Sie die Regel über die Option „{source}“ im Konfigurationsfeld.",
-      "contentWarning": "Wird eine Liste zur Smartlist, wird sofort entfernt, was Sie von Hand hineingelegt haben – Kanäle, Trenner und das Element „{allOther}“ –, und ein Zurückstellen auf „{manual}“ bringt sie nicht zurück: Schließen Sie das Fenster ohne zu speichern, wenn Sie es sich anders überlegen. Ihre Unterlisten bleiben erhalten: Sie werden neben den von der Regel gefundenen Kanälen angezeigt und nehmen weiterhin Kanäle auf. Die Smartlist selbst nimmt nichts an, was darauf gezogen wird, weder Kanäle noch Listen, aber über ihre +-Schaltfläche lassen sich weiterhin Unterlisten darin anlegen.",
+      "contentWarning": "Wird eine Liste zur Smartlist – oder ihr Inhaltstyp danach geändert –, wird sie sofort geleert: Kanäle, Trenner, Unterlisten und das Element „{allOther}“ werden alle entfernt, und ein Zurückstellen auf „{manual}“ bringt sie nicht zurück: Schließen Sie das Fenster ohne zu speichern, wenn Sie es sich anders überlegen. Eine Smartlist enthält danach nur noch, was ihre Regel findet: Es lässt sich nichts darauf ziehen, und ihre Schaltflächen + und — sind deaktiviert.",
       "contentRulesIntro": "Drei Regeln stehen zur Verfügung, und alle drei erfassen nur Kanäle, denen Sie folgen und die zum Zeitpunkt der Prüfung live sind:",
       "contentGame": "die Liste folgt einer Twitch-Kategorie. Suchen Sie unter den Kategorien, in denen Ihre gefolgten Kanäle gerade streamen, oder im gesamten Twitch-Verzeichnis, und jeder gefolgte Kanal, der in dieser Kategorie live ist, erscheint hier.",
       "contentLanguage": "die Liste folgt einer Stream-Sprache. Jeder gefolgte Kanal, der gerade in dieser Sprache live ist, erscheint hier.",
@@ -286,6 +286,7 @@
     "addList": "Neue Liste in {listId} hinzufügen",
     "addSeparator": "Trenner hinzufügen",
     "separatorPlaceholder": "Beschriftung des Trenners (optional)",
+    "smartListLocked": "Smartlist: Der Inhalt stammt aus der Regel, von Hand lässt sich nichts hinzufügen",
     "emptyAddList": "Klicke oben auf +, um eine neue Liste hinzuzufügen",
     "emptyDragChannel": "Ziehe einen Kanal von links hierher, um ihn hinzuzufügen"
   },

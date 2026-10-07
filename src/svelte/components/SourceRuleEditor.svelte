@@ -22,11 +22,9 @@
     let selectedGames = $derived(listConfig.source.games ?? []);
     let selectedIds = $derived(new Set(selectedGames.map(g => String(g.id))));
 
-    // Rule-driven content replaces manual placement: only nested sub-lists
-    // survive the switch (they stay independently manageable in the tree).
     function onKindChange() {
         if (listConfig.source.kind === CST.SOURCE_KIND_MANUAL) return;
-        listConfig.items = listConfig.items.filter(i => i.type === CST.TYPE_LIST);
+        listConfig.items = [];
         if (listConfig.sort === CST.CUSTOM_SORT) listConfig.sort = CST.VIEWER_SORT;
     }
 

@@ -137,7 +137,7 @@
       "badgesShotAlt": "Viisi merkkityyliä vierekkäin",
       "contentTitle": "Lisää listojen sisällöstä",
       "contentIntro": "Oletuksena listan kanavat ovat ne, jotka asetat siihen käsin. Listasta voi sen sijaan tulla smartlist: se täyttyy automaattisesti säännön perusteella, jota arvioidaan jatkuvasti uudelleen kanavien mennessä liveen tai poistuessa. Valitse sääntö asetuspaneelin kohdasta ”{source}”.",
-      "contentWarning": "Kun listasta tehdään smartlist, siihen käsin sijoitetut asiat poistetaan heti – kanavat, erottimet ja elementti ”{allOther}” – eikä takaisin vaihtaminen asetukseen ”{manual}” palauta niitä: sulje ikkuna tallentamatta, jos muutat mielesi. Sen alilistat säilyvät: ne näytetään säännön löytämien kanavien rinnalla, ja niihin voi yhä lisätä kanavia. Smartlist itse ei ota vastaan mitään siihen pudotettua, ei kanavia eikä listoja, mutta sen +-painikkeella voi yhä luoda sen sisään alilistoja.",
+      "contentWarning": "Kun listasta tehdään smartlist – tai sen sisältötyyppiä vaihdetaan myöhemmin – se tyhjennetään heti: kanavat, erottimet, alilistat ja elementti ”{allOther}” poistetaan kaikki, eikä takaisin vaihtaminen asetukseen ”{manual}” palauta niitä: sulje ikkuna tallentamatta, jos muutat mielesi. Smartlist sisältää sen jälkeen vain sen, minkä sen sääntö löytää: siihen ei voi pudottaa mitään, ja sen painikkeet + ja — ovat pois käytöstä.",
       "contentRulesIntro": "Käytettävissä on kolme sääntöä, ja kaikki kolme osuvat vain seuraamiisi kanaviin, jotka ovat livenä tarkistushetkellä:",
       "contentGame": "lista seuraa Twitch-kategoriaa. Hae niiden kategorioiden joukosta, joissa seuraamasi kanavat parhaillaan lähettävät, tai koko Twitchin hakemistosta, ja jokainen seuraamasi kanava, joka on livenä siinä kategoriassa, ilmestyy tänne.",
       "contentLanguage": "lista seuraa lähetyksen kieltä. Jokainen seuraamasi kanava, joka on parhaillaan livenä sillä kielellä, ilmestyy tänne.",
@@ -286,6 +286,7 @@
     "addList": "Lisää uusi lista kohteeseen {listId}",
     "addSeparator": "Lisää erotin",
     "separatorPlaceholder": "Erottimen nimi (valinnainen)",
+    "smartListLocked": "Smartlist: sen sisältö tulee säännöstä, käsin ei voi lisätä mitään",
     "emptyAddList": "Napsauta ylhäältä +-painiketta lisätäksesi uuden listan",
     "emptyDragChannel": "Vedä kanava vasemmalta lisätäksesi sen tähän"
   },

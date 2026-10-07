@@ -137,7 +137,7 @@
       "badgesShotAlt": "De fem badge-stilarna sida vid sida",
       "contentTitle": "Mer om listornas innehåll",
       "contentIntro": "Som standard är en listas kanaler de du placerar i den för hand. En lista kan i stället bli en smartlist: den fyller sig själv utifrån en regel, som räknas om löpande allteftersom kanaler går live eller slutar sända. Välj regeln i alternativet ”{source}” i konfigurationspanelen.",
-      "contentWarning": "Att göra en lista till en smartlist tar omedelbart bort det du placerat i den för hand – kanaler, avdelare och elementet ”{allOther}” – och att ställa tillbaka den på ”{manual}” ger dem inte tillbaka: stäng fönstret utan att spara om du ångrar dig. Dess underlistor behålls: de visas bredvid kanalerna som regeln hittar och tar fortfarande emot kanaler. Själva smartlisten tar inte emot något som släpps på den, varken kanaler eller listor, men dess +-knapp skapar fortfarande underlistor i den.",
+      "contentWarning": "Att göra en lista till en smartlist – eller byta dess innehållstyp efteråt – tömmer den omedelbart: kanaler, avdelare, underlistor och elementet ”{allOther}” tas alla bort, och att ställa tillbaka den på ”{manual}” ger dem inte tillbaka: stäng fönstret utan att spara om du ångrar dig. En smartlist innehåller sedan bara det som regeln hittar: inget kan släppas på den, och knapparna + och — är inaktiverade.",
       "contentRulesIntro": "Tre regler finns, och alla tre matchar enbart kanaler du följer som är live i det ögonblick de kontrolleras:",
       "contentGame": "listan följer en Twitch-kategori. Sök bland de kategorier som kanalerna du följer sänder i just nu, eller i hela Twitch-katalogen, så dyker varje följd kanal som är live i den kategorin upp här.",
       "contentLanguage": "listan följer ett sändningsspråk. Varje följd kanal som just nu är live på det språket dyker upp här.",
@@ -286,6 +286,7 @@
     "addList": "Lägg till ny lista i {listId}",
     "addSeparator": "Lägg till en avdelare",
     "separatorPlaceholder": "Avdelarens etikett (valfritt)",
+    "smartListLocked": "Smartlist: innehållet kommer från regeln, inget kan läggas till för hand",
     "emptyAddList": "Klicka på + ovan för att lägga till en ny lista",
     "emptyDragChannel": "Dra en kanal från vänster för att lägga till den här"
   },

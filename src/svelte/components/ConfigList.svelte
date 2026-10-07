@@ -180,8 +180,8 @@
 	<div class="list-header" onclick={selectConfig}>
 		<p class="list-title"><span class="layout-icon-slot"><LayoutIcon /></span><strong>{configManager.selectedConfig[listId]?.name}</strong></p>
 		<div class="list-side-menu">
-			<button id="add-list-{listId}" class="add-list" onclick={() => addNode()} title={$_('configList.addList', { values: { listId } })}>+</button>
-			<button id="add-separator-{listId}" class="add-separator" onclick={(e)=>{ e.stopPropagation(); addSeparator()}} title={$_('configList.addSeparator')}>—</button>
+			<button id="add-list-{listId}" class="add-list" disabled={isSmartList} onclick={() => addNode()} title={isSmartList ? $_('configList.smartListLocked') : $_('configList.addList', { values: { listId } })}>+</button>
+			<button id="add-separator-{listId}" class="add-separator" disabled={isSmartList} onclick={(e)=>{ e.stopPropagation(); addSeparator()}} title={isSmartList ? $_('configList.smartListLocked') : $_('configList.addSeparator')}>—</button>
 			<button class="delete delete-list" onclick={(e)=>{  e.stopPropagation(); requestDeleteToParent(listId)}}>x</button>
 		</div>
 	</div>
@@ -428,6 +428,11 @@
 	.add-separator {
 		padding: 0.6em 1em;
 		background: linear-gradient(135deg, #8a8a99, #5c5c6b);
+	}
+	.add-list:disabled,
+	.add-separator:disabled {
+		opacity: 0.4;
+		cursor: not-allowed;
 	}
 	.separator-item {
 		color: #fff;

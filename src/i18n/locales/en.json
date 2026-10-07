@@ -137,7 +137,7 @@
       "badgesShotAlt": "The five badge styles side by side",
       "contentTitle": "More about list content",
       "contentIntro": "By default, a list's channels are whatever you place in it by hand. A list can instead become a smartlist: it fills itself automatically from a rule, re-evaluated continuously as channels go live or offline. Pick the rule from the « {source} » option in the configuration panel.",
-      "contentWarning": "Turning a list into a smartlist immediately removes what you placed in it by hand — channels, separators and the « {allOther} » element — and setting it back to « {manual} » does not bring them back: close the window without saving if you change your mind. Its sub-lists are kept: they are shown alongside the channels the rule finds, and they still accept channels. The smartlist itself refuses anything dropped onto it, channels and lists alike, but its + button still creates sub-lists inside it.",
+      "contentWarning": "Turning a list into a smartlist — or changing its content type afterwards — empties it immediately: channels, separators, sub-lists and the « {allOther} » element are all removed, and setting it back to « {manual} » does not bring them back: close the window without saving if you change your mind. A smartlist then contains only what its rule finds: nothing can be dropped onto it, and its + and — buttons are disabled.",
       "contentRulesIntro": "Three rules are available, and all three only ever match channels you follow, live at the moment they are checked:",
       "contentGame": "the list follows a Twitch category. Search among the categories your followed channels are currently streaming in, or search the full Twitch directory, and every followed channel live in that category shows up here.",
       "contentLanguage": "the list follows a stream language. Every followed channel currently live in that language shows up here.",
@@ -294,6 +294,7 @@
     "addList": "Add new list in {listId}",
     "addSeparator": "Add a separator",
     "separatorPlaceholder": "Separator label (optional)",
+    "smartListLocked": "Smartlist: its content comes from its rule, nothing can be added by hand",
     "emptyAddList": "Click + above to add a new list",
     "emptyDragChannel": "Drag a channel from the left to add it here"
   },

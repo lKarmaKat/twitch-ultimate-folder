@@ -137,7 +137,7 @@
       "badgesShotAlt": "Pięć stylów odznaki obok siebie",
       "contentTitle": "Więcej o zawartości list",
       "contentIntro": "Domyślnie kanały listy to te, które umieszczasz w niej ręcznie. Lista może zamiast tego stać się smartlist: wypełnia się automatycznie według reguły, przeliczanej na bieżąco w miarę jak kanały wchodzą na żywo lub kończą. Wybierz regułę w opcji «{source}» w panelu konfiguracji.",
-      "contentWarning": "Zamiana listy w smartlist natychmiast usuwa to, co umieściłeś w niej ręcznie — kanały, separatory i element «{allOther}» — a przywrócenie «{manual}» ich nie odzyskuje: jeśli zmienisz zdanie, zamknij okno bez zapisywania. Jej podlisty zostają zachowane: są pokazywane obok kanałów znalezionych przez regułę i nadal przyjmują kanały. Sama smartlist odrzuca wszystko, co się na nią upuści, zarówno kanały, jak i listy, ale jej przycisk + nadal tworzy w niej podlisty.",
+      "contentWarning": "Zamiana listy w smartlist, a także późniejsza zmiana jej typu zawartości, natychmiast ją opróżnia: kanały, separatory, podlisty i element «{allOther}» zostają usunięte, a przywrócenie «{manual}» ich nie odzyskuje: jeśli zmienisz zdanie, zamknij okno bez zapisywania. Smartlist zawiera odtąd tylko to, co znajdzie jej reguła: nic nie można na nią upuścić, a przyciski + i — są wyłączone.",
       "contentRulesIntro": "Dostępne są trzy reguły i wszystkie trzy obejmują wyłącznie kanały, które obserwujesz i które są na żywo w chwili sprawdzania:",
       "contentGame": "lista podąża za kategorią Twitcha. Szukaj wśród kategorii, w których obserwowane kanały właśnie nadają, albo w pełnym katalogu Twitcha, a każdy obserwowany kanał nadający na żywo w tej kategorii pojawi się tutaj.",
       "contentLanguage": "lista podąża za językiem transmisji. Każdy obserwowany kanał aktualnie nadający w tym języku pojawi się tutaj.",
@@ -286,6 +286,7 @@
     "addList": "Dodaj nową listę w {listId}",
     "addSeparator": "Dodaj separator",
     "separatorPlaceholder": "Etykieta separatora (opcjonalnie)",
+    "smartListLocked": "Smartlist: jej zawartość pochodzi z reguły, nic nie można dodać ręcznie",
     "emptyAddList": "Kliknij + powyżej, aby dodać nową listę",
     "emptyDragChannel": "Przeciągnij kanał z lewej strony, aby go tutaj dodać"
   },

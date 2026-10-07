@@ -137,7 +137,7 @@
       "badgesShotAlt": "Os cinco estilos de selo lado a lado",
       "contentTitle": "Mais sobre o conteúdo das listas",
       "contentIntro": "Por padrão, os canais de uma lista são os que você coloca nela manualmente. Uma lista pode, em vez disso, virar uma smartlist: ela se preenche automaticamente a partir de uma regra, reavaliada continuamente conforme os canais ficam ao vivo ou saem do ar. Escolha a regra na opção «{source}» do painel de configuração.",
-      "contentWarning": "Transformar uma lista em smartlist remove na hora o que você tinha colocado nela manualmente — canais, separadores e o elemento «{allOther}» — e voltar para «{manual}» não os traz de volta: feche a janela sem salvar se mudar de ideia. As sublistas dela são mantidas: aparecem ao lado dos canais encontrados pela regra e continuam aceitando canais. A smartlist em si recusa tudo o que for solto nela, canais e listas, mas o botão + dela continua criando sublistas dentro dela.",
+      "contentWarning": "Transformar uma lista em smartlist, ou mudar depois o tipo de conteúdo dela, a esvazia na hora: canais, separadores, sublistas e o elemento «{allOther}» são todos removidos, e voltar para «{manual}» não os traz de volta: feche a janela sem salvar se mudar de ideia. Uma smartlist passa a conter só o que a regra dela encontra: não dá para soltar nada nela e os botões + e — ficam desativados.",
       "contentRulesIntro": "Três regras estão disponíveis, e todas as três só selecionam canais que você segue e que estão ao vivo no momento em que são verificadas:",
       "contentGame": "a lista segue uma categoria da Twitch. Procure entre as categorias em que os canais que você segue estão transmitindo agora, ou no diretório completo da Twitch, e todo canal seguido que estiver ao vivo naquela categoria aparece aqui.",
       "contentLanguage": "a lista segue um idioma de transmissão. Todo canal seguido que estiver ao vivo naquele idioma aparece aqui.",
@@ -286,6 +286,7 @@
     "addList": "Adicionar nova lista em {listId}",
     "addSeparator": "Adicionar um separador",
     "separatorPlaceholder": "Rótulo do separador (opcional)",
+    "smartListLocked": "Smartlist: o conteúdo vem da regra, não é possível adicionar nada manualmente",
     "emptyAddList": "Clique em + acima para adicionar uma nova lista",
     "emptyDragChannel": "Arraste um canal da esquerda para adicioná-lo aqui"
   },

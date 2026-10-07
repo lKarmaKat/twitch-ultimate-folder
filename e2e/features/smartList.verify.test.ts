@@ -254,3 +254,88 @@ test('smartList by language: matches only live channels streaming in that langua
 	await expect(ownChannels.nth(0)).toContainText('AVAMind'); // 3361 viewers, first
 	await expect(ownChannels.nth(1)).toContainText('BobRoss'); // 675 viewers, second
 });
+
+function popupFrame(page: Page) {
+	return page.frameLocator('#iframe-rem iframe');
+}
+
+function configList(page: Page, listId: string) {
+	return popupFrame(page).locator(`#config-list #list-${listId}`);
+}
+
+function configItems(page: Page, listId: string) {
+	return configList(page, listId).locator(':scope > .list-body > section > div:is(.nested-list, .channel)');
+}
+
+// list "20" (manual): a channel, a separator and a sub-list holding a channel.
+// list "10" (smartList by game, saved before kind changes emptied it): still nests list "30".
+function confManualAndLegacySmart() {
+	const conf = confSmartByGame();
+	const lists = conf.configsList[0] as any;
+	lists['20'].items.push({ id: 'sep1', type: CST.TYPE_SEPARATOR, name: '' }, { id: 40, type: CST.TYPE_LIST });
+	lists['40'] = makeList({ id: 'list40', name: 'Inner', items: [{ id: 'x3', channel_id: '91122178' }] });
+	return conf;
+}
+
+async function openList(page: Page, listId: string) {
+	await configList(page, listId).locator(':scope > .list-header .list-title').click();
+	await popupFrame(page).locator('.source-editor').waitFor();
+}
+
+async function pickContentKind(page: Page, label: string) {
+	const row = popupFrame(page).locator('.source-editor > .row').first();
+	await row.locator('.trigger').click();
+	await row.locator('.menu .item').filter({ hasText: new RegExp(`^\\s*${label}\\s*$`) }).click();
+}
+
+test('config: a smartList cannot receive lists or separators, a manual list can', async ({ page }) => {
+	await setup(page, confManualAndLegacySmart(), smartChannelsRef);
+	const frame = popupFrame(page);
+
+	await expect(frame.locator('#add-list-10')).toBeDisabled();
+	await expect(frame.locator('#add-separator-10')).toBeDisabled();
+	await expect(frame.locator('#add-list-20')).toBeEnabled();
+	await expect(frame.locator('#add-separator-20')).toBeEnabled();
+});
+
+test('config: turning a manual list into a smartList empties it, sub-lists included', async ({ page }) => {
+	await setup(page, confManualAndLegacySmart(), smartChannelsRef);
+	await expect(configItems(page, '20')).toHaveCount(3);
+
+	await openList(page, '20');
+	await pickContentKind(page, 'By game');
+
+	await expect(configItems(page, '20')).toHaveCount(0);
+	await expect(popupFrame(page).locator('#add-list-20')).toBeDisabled();
+	await expect(popupFrame(page).locator('#add-separator-20')).toBeDisabled();
+});
+
+test('config: changing the content type of a smartList empties it too', async ({ page }) => {
+	await setup(page, confManualAndLegacySmart(), smartChannelsRef);
+	await expect(configItems(page, '10')).toHaveCount(1);
+
+	await openList(page, '10');
+	await pickContentKind(page, 'By language');
+
+	await expect(configItems(page, '10')).toHaveCount(0);
+});
+
+test('config: picking the content type already selected keeps the list as it is', async ({ page }) => {
+	await setup(page, confManualAndLegacySmart(), smartChannelsRef);
+
+	await openList(page, '10');
+	await pickContentKind(page, 'By game');
+
+	await expect(configItems(page, '10')).toHaveCount(1);
+});
+
+test('config: putting a smartList back on manual does not bring its content back', async ({ page }) => {
+	await setup(page, confManualAndLegacySmart(), smartChannelsRef);
+
+	await openList(page, '20');
+	await pickContentKind(page, 'By game');
+	await pickContentKind(page, 'Manual');
+
+	await expect(configItems(page, '20')).toHaveCount(0);
+	await expect(popupFrame(page).locator('#add-list-20')).toBeEnabled();
+});

@@ -416,8 +416,8 @@
 		isSmartList && customSort ? CST.VIEWER_SORT : configManager.selectedConfig[listId]?.sort
 	);
 
-	// Manual items are cleared on switching kind, but nested sub-lists remain:
-	// they render alongside the rule matches, which never touch `items`.
+	// Smartlists saved before switching kind emptied `items` may still nest
+	// sub-lists: they keep rendering alongside the rule matches.
 	let baseItems = $derived(
 		isSmartList
 			? [...smartMatchedItems, ...configManager.selectedConfig[listId].items.filter(i => i.type === CST.TYPE_LIST)]

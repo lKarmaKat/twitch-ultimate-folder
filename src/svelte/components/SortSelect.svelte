@@ -11,6 +11,7 @@
     let menuStyle = $state("");
 
     function choose(id) {
+        if (value === id) return;
         value = id;
         onchange?.();
     }

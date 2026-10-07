@@ -137,7 +137,7 @@
       "badgesShotAlt": "Pet stilova oznake jedan pored drugoga",
       "contentTitle": "Više o sadržaju popisa",
       "contentIntro": "Prema zadanome, kanali popisa oni su koje u njega ručno stavite. Popis umjesto toga može postati smartlist: automatski se popunjava prema pravilu, koje se neprekidno preispituje dok kanali odlaze uživo ili izvan mreže. Odaberite pravilo u opciji «{source}» u ploči za konfiguraciju.",
-      "contentWarning": "Pretvaranje popisa u smartlist odmah uklanja ono što ste u njega ručno stavili — kanale, razdjelnike i element «{allOther}» — a vraćanje na «{manual}» ne vraća ih: ako se predomislite, zatvorite prozor bez spremanja. Njegovi podpopisi se zadržavaju: prikazuju se uz kanale koje pronađe pravilo i i dalje primaju kanale. Sam smartlist odbija sve što se na njega ispusti, i kanale i popise, ali njegov gumb + i dalje stvara podpopise u njemu.",
+      "contentWarning": "Pretvaranje popisa u smartlist, kao i kasnija promjena vrste sadržaja, odmah ga isprazni: kanali, razdjelnici, podpopisi i element «{allOther}» svi se uklanjaju, a vraćanje na «{manual}» ne vraća ih: ako se predomislite, zatvorite prozor bez spremanja. Smartlist zatim sadrži samo ono što pronađe njegovo pravilo: na njega se ništa ne može ispustiti, a gumbi + i — onemogućeni su.",
       "contentRulesIntro": "Dostupna su tri pravila i sva tri obuhvaćaju samo kanale koje pratite i koji su uživo u trenutku provjere:",
       "contentGame": "popis prati Twitch kategoriju. Pretražujte među kategorijama u kojima kanali koje pratite trenutačno emitiraju, ili cijeli Twitchev direktorij, i svaki praćeni kanal uživo u toj kategoriji pojavljuje se ovdje.",
       "contentLanguage": "popis prati jezik emitiranja. Svaki praćeni kanal koji je trenutačno uživo na tom jeziku pojavljuje se ovdje.",
@@ -286,6 +286,7 @@
     "addList": "Dodaj novi popis u {listId}",
     "addSeparator": "Dodaj razdjelnik",
     "separatorPlaceholder": "Oznaka razdjelnika (neobavezno)",
+    "smartListLocked": "Smartlist: sadržaj dolazi iz pravila, ništa se ne može dodati ručno",
     "emptyAddList": "Kliknite + iznad da dodate novi popis",
     "emptyDragChannel": "Povucite kanal s lijeve strane da ga dodate ovdje"
   },

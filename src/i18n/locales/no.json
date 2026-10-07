@@ -137,7 +137,7 @@
       "badgesShotAlt": "De fem merkestilene side om side",
       "contentTitle": "Mer om listers innhold",
       "contentIntro": "Som standard er kanalene i en liste de du plasserer der for hånd. En liste kan i stedet bli en smartlist: den fylles automatisk fra en regel, som vurderes på nytt fortløpende etter hvert som kanaler går direkte eller frakoblet. Velg regelen fra alternativet «{source}» i konfigurasjonspanelet.",
-      "contentWarning": "Å gjøre en liste om til en smartlist fjerner straks det du har plassert i den for hånd – kanaler, skiller og elementet «{allOther}» – og å sette den tilbake til «{manual}» henter dem ikke tilbake: lukk vinduet uten å lagre hvis du ombestemmer deg. Underlistene dens beholdes: de vises ved siden av kanalene regelen finner, og tar fortsatt imot kanaler. Selve smartlisten tar ikke imot noe som slippes på den, verken kanaler eller lister, men +-knappen dens oppretter fortsatt underlister i den.",
+      "contentWarning": "Å gjøre en liste om til en smartlist – eller endre innholdstypen senere – tømmer den straks: kanaler, skiller, underlister og elementet «{allOther}» fjernes alle, og å sette den tilbake til «{manual}» henter dem ikke tilbake: lukk vinduet uten å lagre hvis du ombestemmer deg. En smartlist inneholder deretter bare det regelen finner: ingenting kan slippes på den, og knappene + og — er deaktivert.",
       "contentRulesIntro": "Tre regler er tilgjengelige, og alle tre treffer bare kanaler du følger som er direkte i det øyeblikket de sjekkes:",
       "contentGame": "listen følger en Twitch-kategori. Søk blant kategoriene kanalene du følger, sender i akkurat nå, eller søk i hele Twitch-katalogen, og hver fulgte kanal som er direkte i den kategorien, dukker opp her.",
       "contentLanguage": "listen følger et sendespråk. Hver fulgte kanal som for øyeblikket er direkte på det språket, dukker opp her.",
@@ -286,6 +286,7 @@
     "addList": "Legg til ny liste i {listId}",
     "addSeparator": "Legg til et skille",
     "separatorPlaceholder": "Merkelapp for skillet (valgfritt)",
+    "smartListLocked": "Smartlist: innholdet kommer fra regelen, ingenting kan legges til for hånd",
     "emptyAddList": "Klikk på + over for å legge til en ny liste",
     "emptyDragChannel": "Dra en kanal fra venstre for å legge den til her"
   },
