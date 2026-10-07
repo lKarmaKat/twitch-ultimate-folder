@@ -3,7 +3,7 @@ import * as CST from '../constantes';
 import type { UserConfigs } from './models/userStructure';
 import { buildSnapshot } from './telemetrySnapshot';
 
-const ENDPOINT = 'https://ut-folders-stats.<subdomain>.workers.dev/v1/snapshot';
+const ENDPOINT = 'https://ut-folders-stats.karmakat.workers.dev/v1/snapshot';
 const SEND_INTERVAL_MS = 7 * 24 * 3600 * 1000;
 
 export function startTelemetry() {

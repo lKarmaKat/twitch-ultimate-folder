@@ -12,4 +12,4 @@ crons = ["0 3 * * *"]
 [[d1_databases]]
 binding = "DB"
 database_name = "ut-folders-stats"
-database_id = "00000000-0000-0000-0000-000000000000"
+database_id = "5da34825-7a70-47b6-955a-e1b75e6d7322"
