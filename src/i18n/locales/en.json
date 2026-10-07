@@ -168,7 +168,8 @@
       "flyoutSide": "Lists using the flyout panel layout show their content in a floating panel next to their header. This setting decides which side that panel opens on. Auto measures the room available beside the sidebar and picks the side where the panel fits, so it stays on screen even when the sidebar sits on the right or the window is narrow. Pick a fixed side only if you want the panel to always open there.",
       "flyoutSideCaption": "Choosing the side the flyout panel opens on.",
       "language": "Pick your language from the list. Every open surface — the sidebar, the configuration window, this help page — updates straight away, with no page refresh.",
-      "languageCaption": "Changing the language, applied live without a refresh."
+      "languageCaption": "Changing the language, applied live without a refresh.",
+      "telemetry": "On Chrome, the extension sends an anonymous snapshot of how your lists are organised, at most once a week: each list's layout, sort order and source, how deeply it is nested, and how many channels and sub-lists it holds, along with the extension version and the month it was installed. It never sends your Twitch account, the channels you follow or the names of your lists, and nothing links one snapshot to the next. These figures show which features are actually used. Turn the switch off to stop sending them."
     },
     "issues": {
       "title": "How to report issues",
@@ -215,7 +216,12 @@
     "skin": "Channel hover effect",
     "skinSub": "Whether a channel row highlights when you point at it",
     "skinModern": "Modern",
-    "skinNative": "Twitch"
+    "skinNative": "Twitch",
+    "telemetry": "Anonymous usage statistics",
+    "telemetrySub": "List types and counts, never your channels.",
+    "telemetryDetails": "Details",
+    "on": "On",
+    "off": "Off"
   },
   "configPopup": {
     "title": "Organize your favorites",

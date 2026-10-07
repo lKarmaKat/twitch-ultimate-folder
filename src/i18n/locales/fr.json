@@ -168,7 +168,8 @@
       "flyoutSide": "Les listes en disposition « Panneau flottant » affichent leur contenu dans un panneau flottant à côté de leur en-tête. Ce réglage détermine de quel côté ce panneau s'ouvre. « Auto » mesure la place disponible à côté de la barre latérale et choisit le côté où le panneau tient, afin qu'il reste visible même quand la barre latérale est à droite ou que la fenêtre est étroite. Ne fixez un côté que si vous voulez que le panneau s'ouvre toujours là.",
       "flyoutSideCaption": "Choix du côté d'ouverture du panneau flottant.",
       "language": "Choisissez votre langue dans la liste. Toutes les surfaces ouvertes — la barre latérale, la fenêtre de configuration, cette page d'aide — se mettent à jour immédiatement, sans rechargement.",
-      "languageCaption": "Changement de langue, appliqué en direct sans rechargement."
+      "languageCaption": "Changement de langue, appliqué en direct sans rechargement.",
+      "telemetry": "Sur Chrome, l'extension envoie au plus une fois par semaine une photo anonyme de l'organisation de vos listes : la disposition, le tri et la source de chaque liste, son niveau d'imbrication et le nombre de chaînes et de sous-listes qu'elle contient, avec la version de l'extension et le mois de son installation. Elle n'envoie jamais votre compte Twitch, les chaînes que vous suivez ni les noms de vos listes, et rien ne relie un envoi au suivant. Ces chiffres montrent quelles fonctionnalités sont vraiment utilisées. Désactivez l'interrupteur pour ne plus rien envoyer."
     },
     "issues": {
       "title": "Comment signaler un problème",
@@ -215,7 +216,12 @@
     "skin": "Survol des chaînes",
     "skinSub": "Si une ligne de chaîne se met en surbrillance au survol",
     "skinModern": "Moderne",
-    "skinNative": "Twitch"
+    "skinNative": "Twitch",
+    "telemetry": "Statistiques d'utilisation anonymes",
+    "telemetrySub": "Type et nombre de listes, jamais vos chaînes.",
+    "telemetryDetails": "Détails",
+    "on": "Oui",
+    "off": "Non"
   },
   "configPopup": {
     "title": "Organisez vos favoris",

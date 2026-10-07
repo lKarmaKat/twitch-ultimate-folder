@@ -166,7 +166,8 @@
       "flyoutSide": "Lister med oppsettet «Utfellbart panel» viser innholdet sitt i et flytende panel ved siden av overskriften. Denne innstillingen bestemmer hvilken side panelet åpnes på. «Auto» måler ledig plass ved siden av sidepanelet og velger siden der panelet får plass, slik at det forblir synlig selv når sidepanelet ligger til høyre eller vinduet er smalt. Velg en fast side bare hvis du vil at panelet alltid skal åpnes der.",
       "flyoutSideCaption": "Valg av hvilken side det utfellbare panelet åpnes på.",
       "language": "Velg språket ditt fra listen. Hver åpen flate — sidefeltet, konfigurasjonsvinduet, denne hjelpesiden — oppdateres umiddelbart, uten sideoppdatering.",
-      "languageCaption": "Bytte språk, brukt direkte uten oppdatering."
+      "languageCaption": "Bytte språk, brukt direkte uten oppdatering.",
+      "telemetry": "I Chrome sender utvidelsen høyst én gang i uken et anonymt øyeblikksbilde av hvordan listene dine er organisert: oppsett, sortering og kilde for hver liste, hvor dypt den er nestet og hvor mange kanaler og underlister den inneholder, sammen med utvidelsens versjon og måneden den ble installert. Den sender aldri Twitch-kontoen din, kanalene du følger eller navnene på listene dine, og ingenting knytter én sending til den neste. Tallene viser hvilke funksjoner som faktisk brukes. Slå av bryteren for å slutte å sende dem."
     },
     "issues": {
       "title": "Slik rapporterer du problemer",
@@ -213,7 +214,12 @@
     "skin": "Hover-fremheving",
     "skinSub": "Om en kanalrad fremheves når du peker på den",
     "skinModern": "Moderne",
-    "skinNative": "Twitch"
+    "skinNative": "Twitch",
+    "telemetry": "Anonym bruksstatistikk",
+    "telemetrySub": "Type og antall lister, aldri kanalene dine.",
+    "telemetryDetails": "Detaljer",
+    "on": "På",
+    "off": "Av"
   },
   "configPopup": {
     "title": "Organiser favorittene dine",

@@ -166,7 +166,8 @@
       "flyoutSide": "Listen mit dem Layout „Ausklappfeld“ zeigen ihren Inhalt in einem schwebenden Feld neben der Kopfzeile. Diese Einstellung legt fest, auf welcher Seite sich dieses Feld öffnet. „Auto“ misst den verfügbaren Platz neben der Seitenleiste und wählt die Seite, auf der das Feld hineinpasst, sodass es auch dann sichtbar bleibt, wenn die Seitenleiste rechts liegt oder das Fenster schmal ist. Legen Sie eine feste Seite nur fest, wenn sich das Feld immer dort öffnen soll.",
       "flyoutSideCaption": "Auswahl der Seite, auf der sich das Ausklappfeld öffnet.",
       "language": "Wählen Sie Ihre Sprache aus der Liste. Jede geöffnete Oberfläche — die Seitenleiste, das Konfigurationsfenster, diese Hilfeseite — aktualisiert sich sofort, ohne die Seite neu zu laden.",
-      "languageCaption": "Die Sprache wechseln, live übernommen ohne Neuladen."
+      "languageCaption": "Die Sprache wechseln, live übernommen ohne Neuladen.",
+      "telemetry": "In Chrome sendet die Erweiterung höchstens einmal pro Woche eine anonyme Momentaufnahme davon, wie Ihre Listen organisiert sind: Layout, Sortierung und Quelle jeder Liste, wie tief sie verschachtelt ist und wie viele Kanäle und Unterlisten sie enthält, zusammen mit der Version der Erweiterung und dem Monat ihrer Installation. Sie sendet niemals Ihr Twitch-Konto, die Kanäle, denen Sie folgen, oder die Namen Ihrer Listen, und nichts verknüpft eine Übermittlung mit der nächsten. Diese Zahlen zeigen, welche Funktionen tatsächlich genutzt werden. Schalten Sie den Schalter aus, um keine Daten mehr zu senden."
     },
     "issues": {
       "title": "So melden Sie Probleme",
@@ -213,7 +214,12 @@
     "skin": "Hover-Hervorhebung",
     "skinSub": "Ob eine Kanalzeile beim Überfahren mit der Maus hervorgehoben wird",
     "skinModern": "Modern",
-    "skinNative": "Twitch"
+    "skinNative": "Twitch",
+    "telemetry": "Anonyme Nutzungsstatistiken",
+    "telemetrySub": "Art und Anzahl der Listen, nie Ihre Kanäle.",
+    "telemetryDetails": "Details",
+    "on": "An",
+    "off": "Aus"
   },
   "configPopup": {
     "title": "Organisiere deine Favoriten",

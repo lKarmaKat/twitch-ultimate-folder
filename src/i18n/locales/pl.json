@@ -166,7 +166,8 @@
       "flyoutSide": "Listy w układzie «Panel wysuwany» pokazują swoją zawartość w pływającym panelu obok nagłówka. To ustawienie decyduje, po której stronie otwiera się ten panel. «Auto» mierzy wolne miejsce obok paska bocznego i wybiera stronę, po której panel się mieści, dzięki czemu pozostaje widoczny nawet wtedy, gdy pasek boczny jest po prawej lub okno jest wąskie. Ustaw stałą stronę tylko wtedy, gdy chcesz, aby panel zawsze otwierał się właśnie tam.",
       "flyoutSideCaption": "Wybór strony, po której otwiera się panel wysuwany.",
       "language": "Wybierz swój język z listy. Wszystkie otwarte powierzchnie — pasek boczny, okno konfiguracji, ta strona pomocy — aktualizują się od razu, bez odświeżania strony.",
-      "languageCaption": "Zmiana języka, stosowana na żywo bez odświeżania."
+      "languageCaption": "Zmiana języka, stosowana na żywo bez odświeżania.",
+      "telemetry": "W Chrome rozszerzenie najwyżej raz w tygodniu wysyła anonimowy obraz tego, jak zorganizowane są twoje listy: układ, sortowanie i źródło każdej listy, poziom zagnieżdżenia oraz liczbę kanałów i podlist, które zawiera, a także wersję rozszerzenia i miesiąc jego instalacji. Nigdy nie wysyła twojego konta Twitch, obserwowanych kanałów ani nazw twoich list, a nic nie łączy jednej wysyłki z kolejną. Te liczby pokazują, które funkcje są naprawdę używane. Wyłącz przełącznik, aby przestać je wysyłać."
     },
     "issues": {
       "title": "Jak zgłaszać problemy",
@@ -213,7 +214,12 @@
     "skin": "Podświetlenie po najechaniu",
     "skinSub": "Czy wiersz kanału podświetla się po najechaniu na niego myszą",
     "skinModern": "Nowoczesny",
-    "skinNative": "Twitch"
+    "skinNative": "Twitch",
+    "telemetry": "Anonimowe statystyki użycia",
+    "telemetrySub": "Rodzaj i liczba list, nigdy twoje kanały.",
+    "telemetryDetails": "Szczegóły",
+    "on": "Wł.",
+    "off": "Wył."
   },
   "configPopup": {
     "title": "Zorganizuj swoje ulubione",

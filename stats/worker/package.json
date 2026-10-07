@@ -1,0 +1,17 @@
+{
+  "name": "ut-folders-stats",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "db:init": "wrangler d1 execute ut-folders-stats --remote --file schema.sql",
+    "db:init:local": "wrangler d1 execute ut-folders-stats --local --file schema.sql",
+    "check": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^5.20261007.1",
+    "typescript": "~5.9.3",
+    "wrangler": "^4.148.0"
+  }
+}

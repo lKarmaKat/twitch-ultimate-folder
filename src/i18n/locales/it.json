@@ -166,7 +166,8 @@
       "flyoutSide": "Le liste con il layout «Pannello a comparsa» mostrano il loro contenuto in un pannello flottante accanto all'intestazione. Questa impostazione decide da che lato si apre il pannello. «Auto» misura lo spazio disponibile accanto alla barra laterale e sceglie il lato in cui il pannello ci sta, così resta visibile anche quando la barra laterale è a destra o la finestra è stretta. Fissa un lato solo se vuoi che il pannello si apra sempre lì.",
       "flyoutSideCaption": "Scelta del lato di apertura del pannello a comparsa.",
       "language": "Scegli la tua lingua dall'elenco. Ogni superficie aperta — la barra laterale, la finestra di configurazione, questa pagina di guida — si aggiorna subito, senza ricaricare la pagina.",
-      "languageCaption": "Cambiare la lingua, applicata dal vivo senza ricaricare."
+      "languageCaption": "Cambiare la lingua, applicata dal vivo senza ricaricare.",
+      "telemetry": "Su Chrome, l'estensione invia al massimo una volta a settimana un'istantanea anonima di come sono organizzate le tue liste: il layout, l'ordinamento e l'origine di ogni lista, il suo livello di annidamento e quanti canali e sottoliste contiene, insieme alla versione dell'estensione e al mese in cui è stata installata. Non invia mai il tuo account Twitch, i canali che segui né i nomi delle tue liste, e nulla collega un invio al successivo. Questi dati mostrano quali funzioni vengono davvero usate. Disattiva l'interruttore per non inviare più nulla."
     },
     "issues": {
       "title": "Come segnalare problemi",
@@ -213,7 +214,12 @@
     "skin": "Evidenziazione al passaggio",
     "skinSub": "Se una riga canale si evidenzia al passaggio del mouse",
     "skinModern": "Moderno",
-    "skinNative": "Twitch"
+    "skinNative": "Twitch",
+    "telemetry": "Statistiche d'uso anonime",
+    "telemetrySub": "Tipo e numero di liste, mai i tuoi canali.",
+    "telemetryDetails": "Dettagli",
+    "on": "Sì",
+    "off": "No"
   },
   "configPopup": {
     "title": "Organizza i tuoi preferiti",

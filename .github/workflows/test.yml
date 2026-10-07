@@ -30,6 +30,13 @@ jobs:
       - run: npm run build:chrome
         # Just making sure that firefox build passes
       - run: npm run build:firefox
+      - name: Usage statistics ship in the Chrome build only
+        run: |
+          grep -rq "ut-folders-stats" dist/chrome
+          if grep -rq "ut-folders-stats" dist/firefox; then
+            echo "Usage statistics code leaked into dist/firefox"
+            exit 1
+          fi
 
   e2e:
     name: E2E (chromium)

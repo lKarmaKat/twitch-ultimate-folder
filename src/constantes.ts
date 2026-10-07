@@ -85,6 +85,9 @@ export const PARAM_ALIGNMENT_LEFT = 'alignmentLeft';
 export const PARAM_SKIN_MODERN = 'skinModern';
 /** chrome.storage.local key, a FLYOUT_SIDE_* id: side the flyout panel opens on. */
 export const PARAM_FLYOUT_SIDE = 'flyoutSide';
+export const PARAM_TELEMETRY_ENABLED = 'telemetryEnabled';
+export const PARAM_TELEMETRY_LAST_SENT = 'telemetryLastSentAt';
+export const PARAM_INSTALLED_AT = 'installedAt';
 
 // Auto is 0, so an install that never stored the key measures the free room
 // instead of committing to a side that may sit off-screen.

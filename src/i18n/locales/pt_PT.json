@@ -166,7 +166,8 @@
       "flyoutSide": "As listas com o esquema «Painel flutuante» mostram o seu conteúdo num painel flutuante ao lado do cabeçalho. Esta definição decide de que lado esse painel abre. «Auto» mede o espaço disponível ao lado da barra lateral e escolhe o lado onde o painel cabe, para que continue visível mesmo quando a barra lateral está à direita ou a janela é estreita. Fixe um lado apenas se quiser que o painel abra sempre aí.",
       "flyoutSideCaption": "Escolha do lado em que o painel flutuante abre.",
       "language": "Escolha o seu idioma na lista. Todas as superfícies abertas — a barra lateral, a janela de configuração, esta página de ajuda — são atualizadas de imediato, sem recarregar a página.",
-      "languageCaption": "Mudar o idioma, aplicado em direto sem recarregar."
+      "languageCaption": "Mudar o idioma, aplicado em direto sem recarregar.",
+      "telemetry": "No Chrome, a extensão envia no máximo uma vez por semana um retrato anónimo da forma como as suas listas estão organizadas: o esquema, a ordenação e a origem de cada lista, o nível de aninhamento e quantos canais e sublistas contém, juntamente com a versão da extensão e o mês em que foi instalada. Nunca envia a sua conta Twitch, os canais que segue nem os nomes das suas listas, e nada liga um envio ao seguinte. Estes números mostram que funcionalidades são realmente utilizadas. Desative o interruptor para deixar de os enviar."
     },
     "issues": {
       "title": "Como comunicar problemas",
@@ -213,7 +214,12 @@
     "skin": "Destaque ao passar o rato",
     "skinSub": "Se uma linha de canal se destaca ao passar o rato por cima",
     "skinModern": "Moderno",
-    "skinNative": "Twitch"
+    "skinNative": "Twitch",
+    "telemetry": "Estatísticas de utilização anónimas",
+    "telemetrySub": "Tipo e número de listas, nunca os seus canais.",
+    "telemetryDetails": "Detalhes",
+    "on": "Sim",
+    "off": "Não"
   },
   "configPopup": {
     "title": "Organize os seus favoritos",

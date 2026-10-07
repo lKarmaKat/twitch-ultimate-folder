@@ -33,3 +33,7 @@ dist.crx
 *.pem
 
 .claude/*
+
+.observablehq/cache
+.wrangler
+stats/exports

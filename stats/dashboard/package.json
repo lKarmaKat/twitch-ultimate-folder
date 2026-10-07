@@ -1,0 +1,16 @@
+{
+  "name": "ut-folders-stats-dashboard",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "observable preview",
+    "dev:local": "cross-env STATS_DB=local observable preview",
+    "build": "observable build"
+  },
+  "dependencies": {
+    "@observablehq/framework": "^1.13.4"
+  },
+  "devDependencies": {
+    "cross-env": "^10.1.0"
+  }
+}

@@ -124,6 +124,9 @@ export default defineConfig(({ command, mode }) => {
     // deja produit par buildManifest() ci-dessous, et _locales a sa propre
     // cible de copie : plus rien n'a besoin de publicDir.
     publicDir: false,
+    define: {
+      __TELEMETRY__: JSON.stringify(browser === 'chrome' && !isDev)
+    },
     plugins,
     build: {
       // Un dossier par cible : chaque navigateur charge son propre unpacked

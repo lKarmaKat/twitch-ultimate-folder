@@ -539,6 +539,11 @@ import { api } from '../../browserApi.js';
     <p>{$_('help.actionPopup.language')}</p>
     {@render media($_('help.actionPopup.languageCaption'), '/assets/webm/change-language.webm')}
 
+    {#if __TELEMETRY__}
+      <h3>{$_('actionPopup.telemetry')}</h3>
+      <p>{$_('help.actionPopup.telemetry')}</p>
+    {/if}
+
     <h2 id="issues">{$_('help.issues.title')}</h2>
     <p>
       {$_('help.issues.intro')}

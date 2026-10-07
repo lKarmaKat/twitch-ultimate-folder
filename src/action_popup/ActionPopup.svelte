@@ -28,6 +28,10 @@ import { api } from '../browserApi.js';
   let skinModern = $state(true);
   let flyoutSide = $state(CST.FLYOUT_SIDE_AUTO);
   const flyoutSides = CST.FLYOUT_SIDE_TYPE;
+  let telemetryEnabled = $state(true);
+
+  const PRIVACY_POLICY_URL = 'https://lkarmakat.github.io/twitch-ultimate-folder/';
+  let privacyPolicyUrl = $derived(PRIVACY_POLICY_URL + (lang === 'fr' ? 'privacy-policy' : 'privacy-policy-en'));
 
   // TODO: replace with the real Ko-fi account (same placeholder as HelpPage).
   const KOFI_URL = 'https://ko-fi.com/karmakat__';
@@ -50,6 +54,12 @@ import { api } from '../browserApi.js';
       flyoutSide = response.data;
     }
   });
+
+  if (__TELEMETRY__) {
+    api.storage.local.get(CST.PARAM_TELEMETRY_ENABLED).then((data) => {
+      telemetryEnabled = data[CST.PARAM_TELEMETRY_ENABLED] !== false;
+    });
+  }
 
   api.runtime.sendMessage({ type: CST.IS_USER_LOGGED_IN }, (response) => {
     authState = response?.state ?? CST.AUTH_NOT_ON_TWITCH;
@@ -85,6 +95,10 @@ import { api } from '../browserApi.js';
   async function onFlyoutSideChange(value) {
     const response = await api.runtime.sendMessage({ type: CST.CHANGE_FLYOUT_SIDE, value });
     if (response?.type === CST.FLYOUT_SIDE) flyoutSide = response.data;
+  }
+
+  function onTelemetryChange() {
+    api.storage.local.set({ [CST.PARAM_TELEMETRY_ENABLED]: telemetryEnabled });
   }
 
   function onLocaleChange() {
@@ -208,6 +222,25 @@ import { api } from '../browserApi.js';
               <LanguageSelect bind:value={lang} options={languages} onchange={onLocaleChange} dark={theme}/>
             </div>
           </div>
+
+          {#if __TELEMETRY__}
+            <label class="row" for="telemetry">
+              <div class="row-info">
+                <div class="row-label">{$_('actionPopup.telemetry')}</div>
+                <div class="row-sub">
+                  {$_('actionPopup.telemetrySub')}
+                  <a class="row-link" href={privacyPolicyUrl} target="_blank" rel="noopener noreferrer">{$_('actionPopup.telemetryDetails')}</a>
+                </div>
+              </div>
+              <input type="checkbox" class="tgl" id="telemetry" bind:checked={telemetryEnabled} onchange={onTelemetryChange}>
+              <span class="sw">
+                <span class="track"></span>
+                <span class="lbl-on">{$_('actionPopup.on')}</span>
+                <span class="lbl-off">{$_('actionPopup.off')}</span>
+                <span class="thumb"></span>
+              </span>
+            </label>
+          {/if}
         </div>
 
         <!-- Outside the card, so it shows in the authorization state too. Same
@@ -377,6 +410,15 @@ import { api } from '../browserApi.js';
     font-size: 12px;
     color: #8e8e93;
     margin-top: 2px;
+  }
+
+  .row-link {
+    color: #7b3fc9;
+    text-decoration: none;
+  }
+
+  .row-link:hover {
+    text-decoration: underline;
   }
 
   /* Waiting message (off Twitch / logged out): takes the button's place
@@ -673,6 +715,10 @@ import { api } from '../browserApi.js';
 
   .app.dark .row-notice {
     color: #98989f;
+  }
+
+  .app.dark .row-link {
+    color: #a970ff;
   }
 
   .app.dark .sw .track {

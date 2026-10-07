@@ -166,7 +166,8 @@
       "flyoutSide": "Ponnahdusruutu-asettelua käyttävät listat näyttävät sisältönsä kelluvassa ruudussa otsikkonsa vieressä. Tämä asetus määrittää, kummalle puolelle ruutu avautuu. ”Auto” mittaa sivupalkin viereen jäävän tilan ja valitsee puolen, jolle ruutu mahtuu, joten se pysyy näkyvissä silloinkin, kun sivupalkki on oikealla tai ikkuna on kapea. Valitse kiinteä puoli vain, jos haluat ruudun avautuvan aina sinne.",
       "flyoutSideCaption": "Ponnahdusruudun avautumispuolen valinta.",
       "language": "Valitse kielesi listalta. Kaikki avoimet pinnat — sivupalkki, asetusikkuna, tämä ohjesivu — päivittyvät heti ilman sivun uudelleenlatausta.",
-      "languageCaption": "Kielen vaihtaminen, joka tulee voimaan heti ilman uudelleenlatausta."
+      "languageCaption": "Kielen vaihtaminen, joka tulee voimaan heti ilman uudelleenlatausta.",
+      "telemetry": "Chromessa laajennus lähettää enintään kerran viikossa nimettömän tilannekuvan siitä, miten listasi on järjestetty: kunkin listan asettelun, lajittelun ja lähteen, sen sisäkkäisyystason sekä sen sisältämien kanavien ja alilistojen määrän, laajennuksen version ja asennuskuukauden kanssa. Se ei koskaan lähetä Twitch-tiliäsi, seuraamiasi kanavia tai listojesi nimiä, eikä mikään yhdistä yhtä lähetystä seuraavaan. Luvut näyttävät, mitä ominaisuuksia todella käytetään. Kytke kytkin pois päältä lopettaaksesi lähettämisen."
     },
     "issues": {
       "title": "Näin ilmoitat ongelmista",
@@ -213,7 +214,12 @@
     "skin": "Kohdistuskorostus",
     "skinSub": "Korostuuko kanavarivi, kun osoitat sitä hiirellä",
     "skinModern": "Moderni",
-    "skinNative": "Twitch"
+    "skinNative": "Twitch",
+    "telemetry": "Anonyymit käyttötilastot",
+    "telemetrySub": "Listojen tyyppi ja määrä, ei koskaan kanaviasi.",
+    "telemetryDetails": "Lisätietoja",
+    "on": "Päällä",
+    "off": "Pois"
   },
   "configPopup": {
     "title": "Järjestä suosikkisi",

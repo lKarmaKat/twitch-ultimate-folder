@@ -6,6 +6,7 @@ import { logErrorChain, wrapError } from "./errors";
 import * as CST from '../constantes.js'
 import { DataPusher } from './dataPusher';
 import { api } from '../browserApi';
+import { startTelemetry } from './telemetry';
 
 const logBackgroundError = (context: string, error: unknown) => {
   logErrorChain(context, error);
@@ -244,6 +245,8 @@ let sendCurrentConfigOnConnect = (port: chrome.runtime.Port) => {
 
 // The theme is no longer a preference: drop the key older versions stored.
 api.storage.local.remove("theme");
+
+if (__TELEMETRY__) startTelemetry();
 
 let currentAlignmentLeft = true;
 api.storage.local.get("alignmentLeft").then((data) => {

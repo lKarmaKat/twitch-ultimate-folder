@@ -53,5 +53,6 @@ jobs:
             Build: npm ci && npm run build:firefox
             Output: dist/firefox/
             Node version: see .nvmrc
+            Usage statistics (src/service_worker/telemetry*.ts) are Chrome-only: the Vite define __TELEMETRY__ is false for this build, so that code is not in the package.
           apiKey: ${{ secrets.AMO_JWT_ISSUER }}
           apiSecret: ${{ secrets.AMO_JWT_SECRET }}

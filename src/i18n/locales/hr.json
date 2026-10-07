@@ -166,7 +166,8 @@
       "flyoutSide": "Popisi s izgledom «Skočni panel» prikazuju svoj sadržaj u lebdećem panelu pokraj zaglavlja. Ova postavka određuje s koje se strane panel otvara. «Auto» mjeri slobodan prostor pokraj bočne trake i bira stranu na kojoj panel stane, tako da ostaje vidljiv čak i kada je bočna traka desno ili je prozor uzak. Postavite fiksnu stranu samo ako želite da se panel uvijek otvara ondje.",
       "flyoutSideCaption": "Odabir strane s koje se otvara skočni panel.",
       "language": "Odaberite svoj jezik s popisa. Sve otvorene površine — bočna traka, prozor za konfiguraciju, ova stranica pomoći — ažuriraju se odmah, bez osvježavanja stranice.",
-      "languageCaption": "Promjena jezika, primijenjena uživo bez osvježavanja."
+      "languageCaption": "Promjena jezika, primijenjena uživo bez osvježavanja.",
+      "telemetry": "U Chromeu proširenje najviše jednom tjedno šalje anonimnu snimku organizacije vaših popisa: raspored, sortiranje i izvor svakog popisa, razinu ugniježđenosti te broj kanala i podpopisa koje sadrži, zajedno s verzijom proširenja i mjesecom instalacije. Nikada ne šalje vaš Twitch račun, kanale koje pratite ni nazive vaših popisa, a ništa ne povezuje jedno slanje sa sljedećim. Ti brojevi pokazuju koje se značajke stvarno koriste. Isključite prekidač kako biste prestali slati podatke."
     },
     "issues": {
       "title": "Kako prijaviti probleme",
@@ -213,7 +214,12 @@
     "skin": "Isticanje pri lebdenju",
     "skinSub": "Hoće li se redak kanala istaknuti kada preko njega prijeđete mišem",
     "skinModern": "Moderno",
-    "skinNative": "Twitch"
+    "skinNative": "Twitch",
+    "telemetry": "Anonimna statistika korištenja",
+    "telemetrySub": "Vrsta i broj popisa, nikad vaši kanali.",
+    "telemetryDetails": "Detalji",
+    "on": "Da",
+    "off": "Ne"
   },
   "configPopup": {
     "title": "Organizirajte svoje favorite",
