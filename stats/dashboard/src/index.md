@@ -5,7 +5,11 @@ toc: false
 
 # Usage statistics
 
-Each Chrome install sends at most one snapshot a week, with no identifier. Only complete weeks are counted, so every snapshot of a given week comes from a different install.
+Each Chrome install sends at most one snapshot a week, with no identifier, so every snapshot of a given week comes from a different install. By default only complete weeks are counted: the current week only holds the installs that have already sent theirs.
+
+```js
+const includeCurrentWeek = view(Inputs.toggle({label: "Include the current, incomplete week", value: false}));
+```
 
 ```js
 const snapshots = await FileAttachment("data/snapshots.json").json();
@@ -17,12 +21,12 @@ const CHANNEL_BINS = [[0, 0, "0"], [1, 4, "1–4"], [5, 9, "5–9"], [10, 19, "1
 const LEGACY = "Before statistics";
 
 const currentWeek = d3.utcMonday.floor(new Date());
-const complete = snapshots
+const counted = snapshots
   .map((s) => ({...s, week: d3.utcMonday.floor(new Date(s.receivedAt)), period: periodOf(s.cohort)}))
-  .filter((s) => s.week < currentWeek);
-const lastWeek = d3.max(complete, (s) => s.week);
-const latest = complete.filter((s) => +s.week === +lastWeek);
-const periods = [LEGACY, ...d3.sort(new Set(complete.map((s) => s.period).filter((p) => p !== LEGACY)))];
+  .filter((s) => includeCurrentWeek || s.week < currentWeek);
+const lastWeek = d3.max(counted, (s) => s.week);
+const latest = counted.filter((s) => +s.week === +lastWeek);
+const periods = [LEGACY, ...d3.sort(new Set(counted.map((s) => s.period).filter((p) => p !== LEGACY)))];
 
 function periodOf(cohort) {
   if (cohort === "legacy") return LEGACY;
@@ -47,9 +51,10 @@ function seniority(snapshot) {
 ```
 
 ```js
+const lastWeekLabel = +lastWeek === +currentWeek ? "Current week, still incomplete" : "Latest complete week";
 display(latest.length
-  ? html`<p>Latest complete week: <strong>${d3.utcFormat("%B %-d, %Y")(lastWeek)}</strong>, ${latest.length.toLocaleString("en-US")} active installs.</p>`
-  : html`<p><strong>No complete week of data yet.</strong></p>`);
+  ? html`<p>${lastWeekLabel}: <strong>week of ${d3.utcFormat("%B %-d, %Y")(lastWeek)}</strong>, ${latest.length.toLocaleString("en-US")} active installs.</p>`
+  : html`<p><strong>No ${includeCurrentWeek ? "" : "complete "}week of data yet.</strong></p>`);
 ```
 
 ## Who makes up the active base
@@ -62,7 +67,7 @@ Plot.plot({
   y: {grid: true, label: "Active installs"},
   color: {legend: true, domain: periods, range: ["#9aa5b4", ...d3.quantize(d3.interpolateBlues, Math.max(periods.length, 2)).slice(1)]},
   marks: [
-    Plot.rectY(complete, Plot.binX({y: "count"}, {x: (s) => new Date(s.receivedAt), interval: d3.utcMonday, fill: "period", order: periods, tip: true})),
+    Plot.rectY(counted, Plot.binX({y: "count"}, {x: (s) => new Date(s.receivedAt), interval: d3.utcMonday, fill: "period", order: periods, tip: true})),
     Plot.ruleY([0])
   ]
 })
@@ -158,13 +163,13 @@ const adoptionLayout = view(Inputs.select(LAYOUTS, {label: "Layout", value: "spl
 
 ```js
 const adoption = d3.flatRollup(
-  complete,
+  counted,
   (group) => ({share: d3.mean(group, (s) => usesLayout(s, adoptionLayout) ? 1 : 0), installs: group.length}),
   (s) => s.week,
   (s) => seniority(s)
 ).map(([week, group, {share, installs}]) => ({week, group, share, installs})).filter((d) => d.installs >= 10);
 
-display(resize((width) => Plot.plot({
+display(adoption.length ? resize((width) => Plot.plot({
   width,
   height: 300,
   x: {label: null},
@@ -174,7 +179,7 @@ display(resize((width) => Plot.plot({
     Plot.lineY(adoption, {x: "week", y: "share", stroke: "group", marker: "circle-stroke", tip: true}),
     Plot.ruleY([0])
   ]
-})));
+})) : html`<p><em>No group reaches 10 installs in a week yet.</em></p>`);
 ```
 
 Groups with fewer than 10 installs in a week are left out.
